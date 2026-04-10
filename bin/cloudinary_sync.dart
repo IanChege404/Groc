@@ -63,10 +63,12 @@ void main(List<String> args) async {
     final previous = existingByPath[image.localPath];
     final fileStat = File(image.localPath).statSync();
     final sizeChanged = previous != null && previous.sizeBytes != fileStat.size;
-    final mtimeChanged = previous != null &&
+    final mtimeChanged =
+        previous != null &&
         previous.modifiedAt != fileStat.modified.toUtc().toIso8601String();
 
-    final shouldUpload = previous == null || config.overwrite || sizeChanged || mtimeChanged;
+    final shouldUpload =
+        previous == null || config.overwrite || sizeChanged || mtimeChanged;
 
     if (!shouldUpload && previous != null) {
       reusedCount++;
@@ -155,7 +157,8 @@ class _Config {
   factory _Config.fromArgs(List<String> args) {
     final defaults = _Config(
       assetsDir: 'assets/images',
-      folder: Platform.environment['CLOUDINARY_FOLDER']?.trim().isNotEmpty == true
+      folder:
+          Platform.environment['CLOUDINARY_FOLDER']?.trim().isNotEmpty == true
           ? Platform.environment['CLOUDINARY_FOLDER']!.trim()
           : 'pro-grocery',
       overwrite: _envBool('CLOUDINARY_OVERWRITE', fallback: false),
@@ -231,7 +234,7 @@ class _Config {
       applyRewrites: applyRewrites ?? this.applyRewrites,
       rewriteRemoteByBasename:
           rewriteRemoteByBasename ?? this.rewriteRemoteByBasename,
-        includeViewTargets: includeViewTargets ?? this.includeViewTargets,
+      includeViewTargets: includeViewTargets ?? this.includeViewTargets,
       mapFilePath: mapFilePath ?? this.mapFilePath,
       targets: targets ?? this.targets,
       showHelp: showHelp ?? this.showHelp,
@@ -243,20 +246,14 @@ class _ImageAsset {
   final String localPath;
   final String relativePath;
 
-  const _ImageAsset({
-    required this.localPath,
-    required this.relativePath,
-  });
+  const _ImageAsset({required this.localPath, required this.relativePath});
 }
 
 class _UploadResult {
   final String publicId;
   final String secureUrl;
 
-  const _UploadResult({
-    required this.publicId,
-    required this.secureUrl,
-  });
+  const _UploadResult({required this.publicId, required this.secureUrl});
 }
 
 class _CloudinaryUploader {
@@ -281,15 +278,18 @@ class _CloudinaryUploader {
     final normalizedFolder = folder.trim();
 
     if (dryRun) {
-      final dryRunPath =
-          normalizedFolder.isEmpty ? publicId : '$normalizedFolder/$publicId';
+      final dryRunPath = normalizedFolder.isEmpty
+          ? publicId
+          : '$normalizedFolder/$publicId';
       return _UploadResult(
         publicId: publicId,
-        secureUrl: 'https://res.cloudinary.com/$cloudName/image/upload/$dryRunPath',
+        secureUrl:
+            'https://res.cloudinary.com/$cloudName/image/upload/$dryRunPath',
       );
     }
 
-    final timestamp = (DateTime.now().millisecondsSinceEpoch ~/ 1000).toString();
+    final timestamp = (DateTime.now().millisecondsSinceEpoch ~/ 1000)
+        .toString();
     final overwriteParam = overwrite ? 'true' : 'false';
 
     final signatureParams = <String, String>{
@@ -303,7 +303,9 @@ class _CloudinaryUploader {
 
     final signature = _cloudinarySignature(signatureParams, apiSecret);
 
-    final uri = Uri.parse('https://api.cloudinary.com/v1_1/$cloudName/image/upload');
+    final uri = Uri.parse(
+      'https://api.cloudinary.com/v1_1/$cloudName/image/upload',
+    );
 
     final request = http.MultipartRequest('POST', uri)
       ..fields['api_key'] = apiKey
@@ -327,7 +329,9 @@ class _CloudinaryUploader {
           'Tip: verify CLOUDINARY_API_KEY/CLOUDINARY_API_SECRET exactly (common issue: letter I vs number 1), and ensure no trailing spaces/newlines in .env values.',
         );
       }
-      throw Exception('Cloudinary upload failed (${streamed.statusCode}): $body');
+      throw Exception(
+        'Cloudinary upload failed (${streamed.statusCode}): $body',
+      );
     }
 
     final decoded = jsonDecode(body) as Map<String, dynamic>;
@@ -335,13 +339,12 @@ class _CloudinaryUploader {
     final resolvedPublicId = decoded['public_id'] as String?;
 
     if (secureUrl == null || resolvedPublicId == null) {
-      throw Exception('Cloudinary response missing secure_url/public_id: $body');
+      throw Exception(
+        'Cloudinary response missing secure_url/public_id: $body',
+      );
     }
 
-    return _UploadResult(
-      publicId: resolvedPublicId,
-      secureUrl: secureUrl,
-    );
+    return _UploadResult(publicId: resolvedPublicId, secureUrl: secureUrl);
   }
 }
 
@@ -428,10 +431,7 @@ class _RewriteChange {
   final String path;
   final int replacements;
 
-  const _RewriteChange({
-    required this.path,
-    required this.replacements,
-  });
+  const _RewriteChange({required this.path, required this.replacements});
 }
 
 List<_RewriteChange> _applyRewrites({
@@ -443,7 +443,8 @@ List<_RewriteChange> _applyRewrites({
   final changes = <_RewriteChange>[];
 
   final localPathMap = {
-    for (final entry in entries) entry.localPath.replaceAll('\\', '/'): entry.secureUrl,
+    for (final entry in entries)
+      entry.localPath.replaceAll('\\', '/'): entry.secureUrl,
   };
 
   final basenameCandidates = <String, List<String>>{};
@@ -513,7 +514,10 @@ List<String> _resolveRewriteTargets(_Config config) {
 
   final viewsDir = Directory('lib/views');
   if (viewsDir.existsSync()) {
-    for (final entity in viewsDir.listSync(recursive: true, followLinks: false)) {
+    for (final entity in viewsDir.listSync(
+      recursive: true,
+      followLinks: false,
+    )) {
       if (entity is! File) continue;
       if (!entity.path.endsWith('.dart')) continue;
       targetSet.add(entity.path.replaceAll('\\', '/'));
@@ -537,14 +541,7 @@ List<String> _resolveRewriteTargets(_Config config) {
 }
 
 List<_ImageAsset> _discoverImageFiles(Directory rootDir, String rootPath) {
-  const allowedExt = {
-    '.png',
-    '.jpg',
-    '.jpeg',
-    '.webp',
-    '.gif',
-    '.svg',
-  };
+  const allowedExt = {'.png', '.jpg', '.jpeg', '.webp', '.gif', '.svg'};
 
   final entries = <_ImageAsset>[];
 
@@ -556,13 +553,12 @@ List<_ImageAsset> _discoverImageFiles(Directory rootDir, String rootPath) {
 
     final normalizedFull = entity.path.replaceAll('\\', '/');
     final normalizedRoot = rootPath.replaceAll('\\', '/');
-    final relativeFromRoot = p.relative(normalizedFull, from: normalizedRoot).replaceAll('\\', '/');
+    final relativeFromRoot = p
+        .relative(normalizedFull, from: normalizedRoot)
+        .replaceAll('\\', '/');
 
     entries.add(
-      _ImageAsset(
-        localPath: normalizedFull,
-        relativePath: relativeFromRoot,
-      ),
+      _ImageAsset(localPath: normalizedFull, relativePath: relativeFromRoot),
     );
   }
 
@@ -636,12 +632,22 @@ void _printUsage() {
   stdout.writeln('Options:');
   stdout.writeln('  --assets-dir=<path>                Default: assets/images');
   stdout.writeln('  --folder=<folder>                  Cloudinary folder name');
-  stdout.writeln('  --map-file=<path>                  Default: .cloudinary-map.json');
-  stdout.writeln('  --overwrite                        Force upload even if unchanged');
+  stdout.writeln(
+    '  --map-file=<path>                  Default: .cloudinary-map.json',
+  );
+  stdout.writeln(
+    '  --overwrite                        Force upload even if unchanged',
+  );
   stdout.writeln('  --dry-run                          Print actions only');
-  stdout.writeln('  --apply                            Apply rewrites to target files');
+  stdout.writeln(
+    '  --apply                            Apply rewrites to target files',
+  );
   stdout.writeln('  --targets=<csv paths>              Rewrite targets');
-  stdout.writeln('  --include-view-targets             Also rewrite all lib/views/**/*.dart');
-  stdout.writeln('  --rewrite-remote-by-basename       Replace remote URLs by filename match');
+  stdout.writeln(
+    '  --include-view-targets             Also rewrite all lib/views/**/*.dart',
+  );
+  stdout.writeln(
+    '  --rewrite-remote-by-basename       Replace remote URLs by filename match',
+  );
   stdout.writeln('  --help, -h                         Show this help');
 }

@@ -218,7 +218,8 @@ class PaginatedProducts {
   });
 
   factory PaginatedProducts.fromJson(Map<String, dynamic> json) {
-    final productsList = (json['data'] as List<dynamic>?)
+    final productsList =
+        (json['data'] as List<dynamic>?)
             ?.map((item) => Product.fromJson(item as Map<String, dynamic>))
             .toList() ??
         [];

@@ -11,10 +11,7 @@ class AuthService {
   }) async {
     final response = await _apiClient.post<LoginResponse>(
       ApiEndpoints.login,
-      body: {
-        'email': email,
-        'password': password,
-      },
+      body: {'email': email, 'password': password},
       includeAuth: false,
       fromJson: (json) => LoginResponse.fromJson(json),
     );
@@ -50,9 +47,7 @@ class AuthService {
   }
 
   /// Send OTP to email
-  Future<ApiResponse<void>> sendOtp({
-    required String email,
-  }) {
+  Future<ApiResponse<void>> sendOtp({required String email}) {
     return _apiClient.post<void>(
       ApiEndpoints.verifyOtp,
       body: {'email': email},
@@ -67,10 +62,7 @@ class AuthService {
   }) {
     return _apiClient.post<AuthResponse>(
       ApiEndpoints.verifyOtp,
-      body: {
-        'email': email,
-        'otp': otp,
-      },
+      body: {'email': email, 'otp': otp},
       includeAuth: false,
       fromJson: (json) => AuthResponse.fromJson(json),
     );
@@ -95,9 +87,7 @@ class AuthService {
 
   /// Logout (clears token)
   Future<ApiResponse<void>> logout() async {
-    final response = await _apiClient.post<void>(
-      ApiEndpoints.logout,
-    );
+    final response = await _apiClient.post<void>(ApiEndpoints.logout);
 
     _apiClient.clearAuthToken();
     return response;
@@ -149,10 +139,7 @@ class AuthResponse {
   final UserData user;
   final String? message;
 
-  AuthResponse({
-    required this.user,
-    this.message,
-  });
+  AuthResponse({required this.user, this.message});
 
   factory AuthResponse.fromJson(Map<String, dynamic> json) {
     return AuthResponse(
@@ -162,10 +149,7 @@ class AuthResponse {
   }
 
   Map<String, dynamic> toJson() {
-    return {
-      'user': user.toJson(),
-      'message': message,
-    };
+    return {'user': user.toJson(), 'message': message};
   }
 }
 
