@@ -1,0 +1,57 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // Public read access to products, categories, and bundles
+    match /products/{document=**} {
+      allow read: if true;
+      allow create, update, delete: if false;
+    }
+
+    match /categories/{document=**} {
+      allow read: if true;
+      allow create, update, delete: if false;
+    }
+
+    match /bundles/{document=**} {
+      allow read: if true;
+      allow create, update, delete: if false;
+    }
+
+    // Users can read/write their own user document
+    match /users/{userId} {
+      allow read: if request.auth.uid == userId;
+      allow create: if request.auth.uid == userId;
+      allow update: if request.auth.uid == userId;
+      allow delete: if false;
+    }
+
+    // Cart: users can manage their own cart
+    match /cart/{userId}/{document=**} {
+      allow read, write: if request.auth.uid == userId;
+    }
+
+    // Wishlist: users can manage their own wishlist
+    match /wishlist/{userId}/{document=**} {
+      allow read, write: if request.auth.uid == userId;
+    }
+
+    // Orders: users can read their own orders, admin creates them on checkout
+    match /orders/{orderId} {
+      allow read: if request.auth.uid == resource.data.userId;
+      allow create: if request.auth.uid != null;
+      allow update, delete: if false;
+    }
+
+    // Reviews: public read, authenticated users can create
+    match /reviews/{reviewId} {
+      allow read: if true;
+      allow create: if request.auth.uid != null;
+      allow update, delete: if request.auth.uid == resource.data.userId;
+    }
+
+    // Default deny all other access
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}

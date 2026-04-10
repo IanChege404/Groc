@@ -1,0 +1,140 @@
+mutation CreateDemoData @transaction @auth(level: USER, insecureReason: "This operation is for seeding demo data and should only be run by authenticated users with appropriate permissions.") {
+  user_insertMany(data: [
+    {
+      id: "550e8400-e29b-41d4-a716-446655440000",
+      displayName: "John Doe",
+      email: "john.doe@example.com",
+      passwordHash: "hashed_password_john",
+      createdAt: "2024-01-01T10:00:00Z",
+      shippingAddress: "123 Main St, Anytown, USA",
+      billingAddress: "123 Main St, Anytown, USA",
+      phoneNumber: "555-123-4567"
+    },
+    {
+      id: "550e8400-e29b-41d4-a716-446655440001",
+      displayName: "Jane Smith",
+      email: "jane.smith@example.com",
+      passwordHash: "hashed_password_jane",
+      createdAt: "2024-01-02T11:00:00Z",
+      shippingAddress: "456 Oak Ave, Otherville, USA",
+      billingAddress: "456 Oak Ave, Otherville, USA",
+      phoneNumber: "555-987-6543"
+    }
+  ])
+  category_insertMany(data: [
+    {
+      id: "550e8400-e29b-41d4-a716-446655440002",
+      name: "Fruits",
+      description: "Fresh fruits for a healthy diet",
+      createdAt: "2024-01-01T09:00:00Z"
+    },
+    {
+      id: "550e8400-e29b-41d4-a716-446655440003",
+      name: "Vegetables",
+      description: "Organic vegetables for all your cooking needs",
+      createdAt: "2024-01-01T09:05:00Z"
+    }
+  ])
+  product_insertMany(data: [
+    {
+      id: "550e8400-e29b-41d4-a716-446655440004",
+      name: "Apple",
+      description: "Crisp red apples",
+      price: 1.50,
+      stock: 100,
+      categoryId: "550e8400-e29b-41d4-a716-446655440002",
+      createdAt: "2024-01-01T12:00:00Z",
+      imageUrl: "https://example.com/apple.jpg",
+      weight: 0.2,
+      dimensions: "8x8x8 cm"
+    },
+    {
+      id: "550e8400-e29b-41d4-a716-446655440005",
+      name: "Banana",
+      description: "Sweet yellow bananas",
+      price: 0.75,
+      stock: 150,
+      categoryId: "550e8400-e29b-41d4-a716-446655440002",
+      createdAt: "2024-01-01T12:05:00Z",
+      imageUrl: "https://example.com/banana.jpg",
+      weight: 0.15,
+      dimensions: "15x3x3 cm"
+    },
+    {
+      id: "550e8400-e29b-41d4-a716-446655440006",
+      name: "Carrot",
+      description: "Fresh organic carrots",
+      price: 1.00,
+      stock: 200,
+      categoryId: "550e8400-e29b-41d4-a716-446655440003",
+      createdAt: "2024-01-01T12:10:00Z",
+      imageUrl: "https://example.com/carrot.jpg",
+      weight: 0.1,
+      dimensions: "10x2x2 cm"
+    }
+  ])
+  cartItem_insertMany(data: [
+    {
+      userId: "550e8400-e29b-41d4-a716-446655440000",
+      productId: "550e8400-e29b-41d4-a716-446655440004",
+      quantity: 2,
+      createdAt: "2024-01-03T09:00:00Z"
+    },
+    {
+      userId: "550e8400-e29b-41d4-a716-446655440000",
+      productId: "550e8400-e29b-41d4-a716-446655440006",
+      quantity: 3,
+      createdAt: "2024-01-03T09:05:00Z"
+    },
+    {
+      userId: "550e8400-e29b-41d4-a716-446655440001",
+      productId: "550e8400-e29b-41d4-a716-446655440005",
+      quantity: 5,
+      createdAt: "2024-01-03T10:00:00Z"
+    }
+  ])
+  order_insertMany(data: [
+    {
+      id: "550e8400-e29b-41d4-a716-446655440007",
+      userId: "550e8400-e29b-41d4-a716-446655440000",
+      orderDate: "2024-01-04T10:00:00Z",
+      totalAmount: 4.00,
+      shippingAddress: "123 Main St, Anytown, USA",
+      status: "Processing",
+      createdAt: "2024-01-04T09:50:00Z",
+      billingAddress: "123 Main St, Anytown, USA",
+      paymentMethod: "Credit Card"
+    },
+    {
+      id: "550e8400-e29b-41d4-a716-446655440008",
+      userId: "550e8400-e29b-41d4-a716-446655440001",
+      orderDate: "2024-01-04T11:00:00Z",
+      totalAmount: 3.75,
+      shippingAddress: "456 Oak Ave, Otherville, USA",
+      status: "Shipped",
+      createdAt: "2024-01-04T10:50:00Z",
+      billingAddress: "456 Oak Ave, Otherville, USA",
+      paymentMethod: "PayPal"
+    }
+  ])
+  orderItem_insertMany(data: [
+    {
+      orderId: "550e8400-e29b-41d4-a716-446655440007",
+      productId: "550e8400-e29b-41d4-a716-446655440004",
+      quantity: 2,
+      priceAtTimeOfPurchase: 1.50
+    },
+    {
+      orderId: "550e8400-e29b-41d4-a716-446655440007",
+      productId: "550e8400-e29b-41d4-a716-446655440006",
+      quantity: 1,
+      priceAtTimeOfPurchase: 1.00
+    },
+    {
+      orderId: "550e8400-e29b-41d4-a716-446655440008",
+      productId: "550e8400-e29b-41d4-a716-446655440005",
+      quantity: 5,
+      priceAtTimeOfPurchase: 0.75
+    }
+  ])
+}

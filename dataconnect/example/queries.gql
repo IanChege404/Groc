@@ -1,0 +1,51 @@
+# 1. Query for a user's current shopping cart items
+query GetUserCart @auth(level: USER, insecureReason: "This operation is safe to expose to all logged in users.") {
+  cartItems(where: {user: {id_expr: "auth.uid"}}) {
+    product {
+      id
+      name
+      price
+      imageUrl
+    }
+    quantity
+  }
+}
+
+# 2. Mutation to add a product to the user's cart
+mutation AddProductToCart($productId: UUID!, $quantity: Int!) @auth(level: USER) {
+  cartItem_upsert(
+    data: {
+      userId_expr: "auth.uid",
+      productId: $productId,
+      quantity: $quantity
+    }
+  ) {
+    userId
+    productId
+  }
+}
+
+# 3. Query to list all available product categories
+query GetAllCategories @auth(level: PUBLIC, insecureReason: "This operation is safe to expose to the public") {
+  categories {
+    id
+    name
+    description
+  }
+}
+
+# 4. Query to retrieve a specific product's details by its ID
+query GetProductById($id: UUID!) @auth(level: PUBLIC, insecureReason: "This operation is safe to expose to the public") {
+  product(id: $id) {
+    id
+    name
+    description
+    price
+    stock
+    imageUrl
+    category {
+      id
+      name
+    }
+  }
+}
