@@ -8,6 +8,7 @@ import '../../views/auth/login_page.dart';
 import '../../views/auth/number_verification_page.dart';
 import '../../views/auth/password_reset_page.dart';
 import '../../views/auth/sign_up_page.dart';
+import '../../views/splash/splash_screen.dart';
 import '../../views/cart/cart_page.dart';
 import '../../views/cart/checkout_page.dart';
 import '../../views/cart/delivery_method_screen.dart';
@@ -59,6 +60,9 @@ class RouteGenerator {
     final route = settings.name;
 
     switch (route) {
+      case AppRoutes.splash:
+        return CupertinoPageRoute(builder: (_) => const SplashScreen());
+
       case AppRoutes.introLogin:
         return CupertinoPageRoute(builder: (_) => const IntroLoginPage());
 

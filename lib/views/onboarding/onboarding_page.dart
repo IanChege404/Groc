@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../core/constants/constants.dart';
 import '../../core/routes/app_routes.dart';
@@ -35,8 +36,15 @@ class _OnboardingPageState extends State<OnboardingPage> {
     }
   }
 
-  _gotoLoginSignUp() {
-    Navigator.pushNamed(context, AppRoutes.introLogin);
+  _gotoLoginSignUp() async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setBool('onboarding_completed', true);
+    if (!mounted) return;
+    Navigator.pushNamedAndRemoveUntil(
+      context,
+      AppRoutes.introLogin,
+      (route) => false,
+    );
   }
 
   @override
