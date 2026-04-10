@@ -1,4 +1,7 @@
 class AppRoutes {
+  /// Splash / startup route — determines initial destination dynamically
+  static const splash = '/';
+
   /// The Initial Page
   static const introLogin = '/intro_login';
   static const onboarding = '/onboarding';

@@ -43,7 +43,11 @@ class _LoginPageFormState extends State<LoginPageForm> {
   onLogin() {
     final bool isFormOkay = _key.currentState?.validate() ?? false;
     if (isFormOkay) {
-      Navigator.pushNamed(context, AppRoutes.entryPoint);
+      Navigator.pushNamedAndRemoveUntil(
+        context,
+        AppRoutes.entryPoint,
+        (route) => false,
+      );
     }
   }
 

@@ -60,7 +60,7 @@ class MyApp extends StatelessWidget {
           ],
 
           onGenerateRoute: RouteGenerator.onGenerate,
-          initialRoute: AppRoutes.onboarding,
+          initialRoute: AppRoutes.splash,
         );
       },
     );

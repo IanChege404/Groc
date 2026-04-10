@@ -47,8 +47,11 @@ class VerifiedDialog extends StatelessWidget {
             SizedBox(
               width: double.infinity,
               child: ElevatedButton(
-                onPressed: () =>
-                    Navigator.pushNamed(context, AppRoutes.entryPoint),
+                onPressed: () => Navigator.pushNamedAndRemoveUntil(
+                  context,
+                  AppRoutes.entryPoint,
+                  (route) => false,
+                ),
                 child: const Text('Browse Home'),
               ),
             ),
