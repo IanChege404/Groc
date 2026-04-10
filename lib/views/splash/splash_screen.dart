@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../core/constants/app_colors.dart';
+import '../../core/constants/app_defaults.dart';
 import '../../core/routes/app_routes.dart';
 
 class SplashScreen extends StatefulWidget {
@@ -17,7 +18,7 @@ class _SplashScreenState extends State<SplashScreen>
   late AnimationController _animationController;
   late Animation<double> _fadeAnimation;
 
-  static const String _onboardingKey = 'onboarding_completed';
+  static const String _onboardingKey = AppPreferenceKeys.onboardingCompleted;
 
   @override
   void initState() {
@@ -42,7 +43,7 @@ class _SplashScreenState extends State<SplashScreen>
 
   Future<void> _determineInitialRoute() async {
     // Allow the splash animation to play briefly
-    await Future.delayed(const Duration(milliseconds: 1200));
+    await Future.delayed(const Duration(milliseconds: 800));
 
     if (!mounted) return;
 

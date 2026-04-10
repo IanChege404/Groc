@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import '../../core/constants/app_defaults.dart';
 import '../../core/constants/constants.dart';
 import '../../core/routes/app_routes.dart';
 import 'components/onboarding_view.dart';
@@ -38,7 +39,7 @@ class _OnboardingPageState extends State<OnboardingPage> {
 
   _gotoLoginSignUp() async {
     final prefs = await SharedPreferences.getInstance();
-    await prefs.setBool('onboarding_completed', true);
+    await prefs.setBool(AppPreferenceKeys.onboardingCompleted, true);
     if (!mounted) return;
     Navigator.pushNamedAndRemoveUntil(
       context,

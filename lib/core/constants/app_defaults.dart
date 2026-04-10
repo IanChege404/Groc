@@ -94,3 +94,8 @@ class AppDefaults {
   /// Legacy duration
   static const Duration durationDefault = duration;
 }
+
+/// SharedPreferences keys used across the app
+class AppPreferenceKeys {
+  static const String onboardingCompleted = 'onboarding_completed';
+}
