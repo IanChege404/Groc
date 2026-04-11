@@ -48,6 +48,12 @@ class WishlistNotifier extends StateNotifier<AsyncValue<List<WishlistModel>>> {
     _initializeWishlist();
   }
 
+  @override
+  void dispose() {
+    _wishlistSubscription?.cancel();
+    super.dispose();
+  }
+
   Future<void> _initializeWishlist() async {
     try {
       final userId = authState.maybeWhen(
@@ -164,8 +170,10 @@ class WishlistNotifier extends StateNotifier<AsyncValue<List<WishlistModel>>> {
         _setupRealtimeListener(userId);
       }
 
-      // Create a new item with the userId set
-      final itemWithUserId = item.copyWith(userId: userId);
+      // Use a deterministic document ID: userId_productId.
+      // This prevents duplicates and keeps isProductInWishlist checks consistent.
+      final docId = '${userId}_${item.productId}';
+      final itemWithUserId = item.copyWith(id: docId, userId: userId);
       Logger.info(
         'Saving to Firestore - itemId: ${itemWithUserId.id}, userId: ${itemWithUserId.userId}',
         'WishlistNotifier.addToWishlist',

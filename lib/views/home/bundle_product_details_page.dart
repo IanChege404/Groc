@@ -44,7 +44,7 @@ class _BundleProductDetailsPageState
     final quantity = _quantityKey.currentState?.quantity ?? 1;
 
     final cartItem = CartItemModel(
-      id: '${widget.bundle!.id}_${DateTime.now().millisecondsSinceEpoch}',
+      id: '', // Deterministic ID (userId_productId) is set by the provider
       userId: '', // Will be set by the provider
       productId: widget.bundle!.id,
       quantity: quantity,

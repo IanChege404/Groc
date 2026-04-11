@@ -40,7 +40,7 @@ class _ProductDetailsPageState extends ConsumerState<ProductDetailsPage> {
     final quantity = _quantityKey.currentState?.quantity ?? 1;
 
     final cartItem = CartItemModel(
-      id: '${widget.product!.id}_${DateTime.now().millisecondsSinceEpoch}',
+      id: '', // Deterministic ID (userId_productId) is set by the provider
       userId: '', // Will be set by the provider
       productId: widget.product!.id,
       quantity: quantity,
