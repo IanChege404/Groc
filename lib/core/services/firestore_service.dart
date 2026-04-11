@@ -377,7 +377,10 @@ class FirestoreService {
 
       return <String, dynamic>{...(doc.data() ?? {}), 'id': doc.id};
     } catch (e) {
-      Logger.error('Error fetching profile: $e', 'FirestoreService.getUserProfile');
+      Logger.error(
+        'Error fetching profile: $e',
+        'FirestoreService.getUserProfile',
+      );
       return null;
     }
   }
@@ -387,13 +390,10 @@ class FirestoreService {
     Map<String, dynamic> data,
   ) async {
     try {
-      await _firestore.collection('users').doc(userId).set(
-            {
-              ...data,
-              'updatedAt': FieldValue.serverTimestamp(),
-            },
-            SetOptions(merge: true),
-          );
+      await _firestore.collection('users').doc(userId).set({
+        ...data,
+        'updatedAt': FieldValue.serverTimestamp(),
+      }, SetOptions(merge: true));
     } catch (e) {
       Logger.error(
         'Error updating profile: $e',
@@ -426,10 +426,7 @@ class FirestoreService {
     }
   }
 
-  Future<void> addUserAddress(
-    String userId,
-    Map<String, dynamic> data,
-  ) async {
+  Future<void> addUserAddress(String userId, Map<String, dynamic> data) async {
     try {
       final docRef = _firestore
           .collection('users')
@@ -478,13 +475,10 @@ class FirestoreService {
           .doc(userId)
           .collection('addresses')
           .doc(addressId)
-          .set(
-            {
-              ...data,
-              'updatedAt': FieldValue.serverTimestamp(),
-            },
-            SetOptions(merge: true),
-          );
+          .set({
+            ...data,
+            'updatedAt': FieldValue.serverTimestamp(),
+          }, SetOptions(merge: true));
     } catch (e) {
       Logger.error(
         'Error updating address: $e',
@@ -637,17 +631,17 @@ class FirestoreService {
           .doc(item.id)
           .set(item.toFirestore());
     } catch (e) {
-      Logger.error('Error adding to wishlist: $e', 'FirestoreService.addToWishlist');
+      Logger.error(
+        'Error adding to wishlist: $e',
+        'FirestoreService.addToWishlist',
+      );
       rethrow;
     }
   }
 
   Future<void> removeFromWishlist(String userId, String wishlistItemId) async {
     try {
-      await _firestore
-          .collection('wishlist')
-          .doc(wishlistItemId)
-          .delete();
+      await _firestore.collection('wishlist').doc(wishlistItemId).delete();
     } catch (e) {
       Logger.error(
         'Error removing from wishlist: $e',
@@ -668,7 +662,10 @@ class FirestoreService {
         await doc.reference.delete();
       }
     } catch (e) {
-      Logger.error('Error clearing wishlist: $e', 'FirestoreService.clearWishlist');
+      Logger.error(
+        'Error clearing wishlist: $e',
+        'FirestoreService.clearWishlist',
+      );
       rethrow;
     }
   }
