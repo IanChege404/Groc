@@ -27,7 +27,7 @@ class FirestoreProductService {
       Query query = _firestore.collection('products');
 
       if (category != null && category.isNotEmpty) {
-        query = query.where('category', isEqualTo: category);
+        query = query.where('categoryId', isEqualTo: category);
       }
 
       if (search != null && search.isNotEmpty) {
@@ -147,12 +147,12 @@ class FirestoreProductService {
 
   /// Get products by category
   Future<ApiResponse<List<ProductModel>>> getProductsByCategory(
-    String categoryName,
+    String categoryId,
   ) async {
     try {
       final snapshot = await _firestore
           .collection('products')
-          .where('category', isEqualTo: categoryName)
+          .where('categoryId', isEqualTo: categoryId)
           .get();
 
       final products = snapshot.docs

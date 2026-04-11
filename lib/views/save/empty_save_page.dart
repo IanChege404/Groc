@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../../core/components/network_image.dart';
 import '../../core/constants/app_defaults.dart';
+import '../../core/routes/app_routes.dart';
 
 class EmptySavePage extends StatelessWidget {
   const EmptySavePage({super.key});
@@ -20,17 +21,18 @@ class EmptySavePage extends StatelessWidget {
               padding: EdgeInsets.all(AppDefaults.padding * 2),
               child: AspectRatio(
                 aspectRatio: 1 / 1,
-                child:
-                    NetworkImageWithLoader('https://i.imgur.com/mbjap7k.png'),
+                child: NetworkImageWithLoader(
+                  'https://i.imgur.com/mbjap7k.png',
+                ),
               ),
             ),
           ),
           Text(
             'Oppss!',
-            style: Theme.of(context)
-                .textTheme
-                .titleLarge
-                ?.copyWith(fontWeight: FontWeight.bold, color: Colors.black),
+            style: Theme.of(context).textTheme.titleLarge?.copyWith(
+              fontWeight: FontWeight.bold,
+              color: Colors.black,
+            ),
           ),
           const SizedBox(height: 8),
           const Text('Sorry, you have no product in your wishlist'),
@@ -40,7 +42,9 @@ class EmptySavePage extends StatelessWidget {
             child: Padding(
               padding: const EdgeInsets.all(AppDefaults.padding * 2),
               child: ElevatedButton(
-                onPressed: () {},
+                onPressed: () {
+                  Navigator.pushNamed(context, AppRoutes.entryPoint);
+                },
                 child: const Text('Start Adding'),
               ),
             ),

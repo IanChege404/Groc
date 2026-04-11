@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../models/cart_item_model.dart';
 import '../services/firestore_product_service.dart';
@@ -36,37 +37,79 @@ final cartCountProvider = Provider((ref) {
 class CartNotifier extends StateNotifier<AsyncValue<List<CartItemModel>>> {
   final FirestoreService firestore;
   final AsyncValue<String?> authState;
+  final _firestore = FirebaseFirestore.instance;
+
+  // For managing real-time subscription
+  dynamic _cartSubscription;
 
   CartNotifier({required this.firestore, required this.authState})
     : super(const AsyncValue.loading()) {
-    _loadCart();
+    _initializeCart();
   }
 
-  Future<void> _loadCart() async {
+  Future<void> _initializeCart() async {
     try {
       final userId = authState.maybeWhen(
         data: (uid) => uid,
         orElse: () => null,
       );
 
-      if (userId == null) {
+      if (userId == null || userId.isEmpty) {
         state = const AsyncValue.data([]);
         return;
       }
 
-      final items = await firestore.getCartItems(userId);
-      state = AsyncValue.data(items);
+      // Listen to real-time updates instead of one-time fetch
+      _setupRealtimeListener(userId);
     } catch (e) {
       state = AsyncValue.error(e, StackTrace.current);
     }
   }
 
+  void _setupRealtimeListener(String userId) {
+    // Cancel previous subscription if any
+    _cartSubscription?.cancel();
+
+    _cartSubscription = _firestore
+        .collection('cart')
+        .doc(userId)
+        .collection('items')
+        .snapshots()
+        .listen(
+          (snapshot) {
+            try {
+              final items = snapshot.docs
+                  .map((doc) => CartItemModel.fromFirestore(doc))
+                  .toList();
+              state = AsyncValue.data(items);
+            } catch (e) {
+              state = AsyncValue.error(e, StackTrace.current);
+            }
+          },
+          onError: (error) {
+            state = AsyncValue.error(error, StackTrace.current);
+          },
+        );
+  }
+
   Future<void> addToCart(CartItemModel item) async {
     try {
-      await firestore.addToCart(item);
-      await _loadCart();
+      final userId = authState.maybeWhen(
+        data: (uid) => uid,
+        orElse: () => null,
+      );
+
+      if (userId == null || userId.isEmpty) {
+        throw Exception('User not authenticated');
+      }
+
+      // Create a new item with the userId set
+      final itemWithUserId = item.copyWith(userId: userId);
+      await firestore.addToCart(itemWithUserId);
+      // Real-time listener will automatically update state
     } catch (e) {
       state = AsyncValue.error(e, StackTrace.current);
+      rethrow;
     }
   }
 
@@ -82,7 +125,7 @@ class CartNotifier extends StateNotifier<AsyncValue<List<CartItemModel>>> {
       }
 
       await firestore.removeCartItem(userId, cartItemId);
-      await _loadCart();
+      // Real-time listener will automatically update state
     } catch (e) {
       state = AsyncValue.error(e, StackTrace.current);
     }
@@ -100,7 +143,7 @@ class CartNotifier extends StateNotifier<AsyncValue<List<CartItemModel>>> {
       }
 
       await firestore.updateCartItemQuantity(userId, cartItemId, quantity);
-      await _loadCart();
+      // Real-time listener will automatically update state
     } catch (e) {
       state = AsyncValue.error(e, StackTrace.current);
     }
@@ -112,9 +155,9 @@ class CartNotifier extends StateNotifier<AsyncValue<List<CartItemModel>>> {
         data: (uid) => uid,
         orElse: () => null,
       );
-      if (userId != null) {
+      if (userId != null && userId.isNotEmpty) {
         await firestore.clearCart(userId);
-        await _loadCart();
+        // Real-time listener will automatically update state
       }
     } catch (e) {
       state = AsyncValue.error(e, StackTrace.current);

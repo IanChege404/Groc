@@ -16,10 +16,10 @@ class PriceAndQuantityRow extends StatefulWidget {
   final int quantity;
 
   @override
-  State<PriceAndQuantityRow> createState() => _PriceAndQuantityRowState();
+  State<PriceAndQuantityRow> createState() => PriceAndQuantityRowState();
 }
 
-class _PriceAndQuantityRowState extends State<PriceAndQuantityRow> {
+class PriceAndQuantityRowState extends State<PriceAndQuantityRow> {
   int quantity = 1;
 
   onQuantityIncrease() {

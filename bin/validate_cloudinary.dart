@@ -51,6 +51,10 @@ void main(List<String> args) async {
     exit(1);
   }
 
+  final safeCloudName = cloudName!;
+  final safeApiKey = apiKey!;
+  final safeApiSecret = apiSecret!;
+
   print('\n✓ All environment variables present');
 
   // Check for whitespace issues
@@ -58,17 +62,17 @@ void main(List<String> args) async {
   final rawKey = Platform.environment['CLOUDINARY_API_KEY'] ?? '';
   final rawSecret = Platform.environment['CLOUDINARY_API_SECRET'] ?? '';
 
-  if (rawKey != apiKey!) {
+  if (rawKey != safeApiKey) {
     print(
-      '⚠ API_KEY has leading/trailing whitespace (${rawKey.length} vs ${apiKey.length} after trim)',
+      '⚠ API_KEY has leading/trailing whitespace (${rawKey.length} vs ${safeApiKey.length} after trim)',
     );
   } else {
     print('✓ API_KEY has no whitespace issues');
   }
 
-  if (rawSecret != apiSecret!) {
+  if (rawSecret != safeApiSecret) {
     print(
-      '⚠ API_SECRET has leading/trailing whitespace (${rawSecret.length} vs ${apiSecret.length} after trim)',
+      '⚠ API_SECRET has leading/trailing whitespace (${rawSecret.length} vs ${safeApiSecret.length} after trim)',
     );
   } else {
     print('✓ API_SECRET has no whitespace issues');
@@ -81,7 +85,7 @@ void main(List<String> args) async {
       'public_id': 'test_validation',
       'timestamp': '1234567890',
     };
-    final signature = _generateSignature(testParams, apiSecret!);
+    final signature = _generateSignature(testParams, safeApiSecret);
     print('✓ Signature generated successfully: $signature');
   } catch (e) {
     print('✗ Signature generation failed: $e');
@@ -90,7 +94,7 @@ void main(List<String> args) async {
 
   // Test actual upload attempt (what the sync script does)
   print('\n--- Testing with Actual Upload Method ---');
-  await _testActualUpload(cloudName!, apiKey!, apiSecret!);
+  await _testActualUpload(safeCloudName, safeApiKey, safeApiSecret);
 }
 
 String _generateSignature(Map<String, String> params, String apiSecret) {

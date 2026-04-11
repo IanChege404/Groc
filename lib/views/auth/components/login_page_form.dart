@@ -3,6 +3,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 
 import '../../../core/constants/constants.dart';
 import '../../../core/routes/app_routes.dart';
+import '../../../core/services/firestore_auth_service.dart';
 import '../../../core/themes/app_themes.dart';
 import '../../../core/utils/validators.dart';
 import 'login_button.dart';
@@ -16,21 +17,23 @@ class LoginPageForm extends StatefulWidget {
 
 class _LoginPageFormState extends State<LoginPageForm> {
   final _key = GlobalKey<FormState>();
-  late TextEditingController phoneController;
+  final FirestoreAuthService _authService = FirestoreAuthService();
+  late TextEditingController emailController;
   late TextEditingController passwordController;
 
   bool isPasswordShown = false;
+  bool isSubmitting = false;
 
   @override
   void initState() {
     super.initState();
-    phoneController = TextEditingController();
+    emailController = TextEditingController();
     passwordController = TextEditingController();
   }
 
   @override
   void dispose() {
-    phoneController.dispose();
+    emailController.dispose();
     passwordController.dispose();
     super.dispose();
   }
@@ -40,15 +43,41 @@ class _LoginPageFormState extends State<LoginPageForm> {
     setState(() {});
   }
 
-  onLogin() {
+  Future<void> onLogin() async {
     final bool isFormOkay = _key.currentState?.validate() ?? false;
-    if (isFormOkay) {
+    if (!isFormOkay || isSubmitting) {
+      return;
+    }
+
+    setState(() {
+      isSubmitting = true;
+    });
+
+    final result = await _authService.login(
+      email: emailController.text.trim(),
+      password: passwordController.text,
+    );
+
+    if (!mounted) {
+      return;
+    }
+
+    setState(() {
+      isSubmitting = false;
+    });
+
+    if (result.success) {
       Navigator.pushNamedAndRemoveUntil(
         context,
         AppRoutes.entryPoint,
         (route) => false,
       );
+      return;
     }
+
+    ScaffoldMessenger.of(
+      context,
+    ).showSnackBar(SnackBar(content: Text(result.message ?? 'Login failed')));
   }
 
   @override
@@ -64,13 +93,13 @@ class _LoginPageFormState extends State<LoginPageForm> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              // Phone Field
-              const Text("Phone Number"),
+              // Email Field
+              const Text("Email"),
               const SizedBox(height: 8),
               TextFormField(
-                controller: phoneController,
-                keyboardType: TextInputType.number,
-                validator: Validators.requiredWithFieldName('Phone').call,
+                controller: emailController,
+                keyboardType: TextInputType.emailAddress,
+                validator: Validators.email.call,
                 textInputAction: TextInputAction.next,
               ),
               const SizedBox(height: AppDefaults.padding),
@@ -107,7 +136,7 @@ class _LoginPageFormState extends State<LoginPageForm> {
               ),
 
               // Login labelLarge
-              LoginButton(onPressed: onLogin),
+              LoginButton(onPressed: isSubmitting ? null : onLogin),
             ],
           ),
         ),

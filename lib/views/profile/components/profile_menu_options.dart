@@ -2,12 +2,23 @@ import 'package:flutter/material.dart';
 
 import '../../../core/constants/constants.dart';
 import '../../../core/routes/app_routes.dart';
+import '../../../core/services/firestore_auth_service.dart';
 import 'profile_list_tile.dart';
 
 class ProfileMenuOptions extends StatelessWidget {
-  const ProfileMenuOptions({
-    super.key,
-  });
+  const ProfileMenuOptions({super.key});
+
+  Future<void> _logout(BuildContext context) async {
+    await FirestoreAuthService().logout();
+    if (!context.mounted) {
+      return;
+    }
+    Navigator.pushNamedAndRemoveUntil(
+      context,
+      AppRoutes.loginOrSignup,
+      (route) => false,
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -48,7 +59,7 @@ class ProfileMenuOptions extends StatelessWidget {
           ProfileListTile(
             title: 'Logout',
             icon: AppIcons.profileLogout,
-            onTap: () => Navigator.pushNamed(context, AppRoutes.loginOrSignup),
+            onTap: () => _logout(context),
           ),
         ],
       ),

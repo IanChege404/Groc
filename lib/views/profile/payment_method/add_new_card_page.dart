@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_credit_card/flutter_credit_card.dart';
@@ -6,6 +7,7 @@ import '../../../core/constants/app_colors.dart';
 import '../../../core/constants/app_defaults.dart';
 
 import '../../../core/components/app_back_button.dart';
+import '../../../core/services/firestore_service.dart';
 
 class AddNewCardPage extends StatefulWidget {
   const AddNewCardPage({super.key});
@@ -15,12 +17,14 @@ class AddNewCardPage extends StatefulWidget {
 }
 
 class _AddNewCardPageState extends State<AddNewCardPage> {
+  final _firestoreService = FirestoreService();
   late TextEditingController cardNumber;
   late TextEditingController expireDate;
   late TextEditingController cvv;
   late TextEditingController holderName;
 
   bool rememberMyCard = false;
+  bool _isSaving = false;
 
   onTextChanged(v) {
     if (mounted) setState(() {});
@@ -42,6 +46,39 @@ class _AddNewCardPageState extends State<AddNewCardPage> {
     holderName.dispose();
     cvv.dispose();
     super.dispose();
+  }
+
+  String _brandFromNumber(String number) {
+    final cleaned = number.replaceAll(RegExp(r'\D'), '');
+    if (cleaned.startsWith('5')) return 'mastercard';
+    if (cleaned.startsWith('4')) return 'visa';
+    if (cleaned.startsWith('3')) return 'amex';
+    return 'card';
+  }
+
+  Future<void> _saveCard() async {
+    final user = FirebaseAuth.instance.currentUser;
+    final number = cardNumber.text.replaceAll(RegExp(r'\D'), '');
+    if (user == null || number.length < 4 || holderName.text.trim().isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Enter card holder name and card number')),
+      );
+      return;
+    }
+
+    setState(() => _isSaving = true);
+    final last4 = number.substring(number.length - 4);
+    await _firestoreService.addPaymentMethod(user.uid, {
+      'label': holderName.text.trim(),
+      'brand': _brandFromNumber(number),
+      'last4': last4,
+      'expiryDate': expireDate.text.trim(),
+      'isDefault': rememberMyCard,
+    });
+
+    if (!mounted) return;
+    setState(() => _isSaving = false);
+    Navigator.pop(context, true);
   }
 
   @override
@@ -74,12 +111,14 @@ class _AddNewCardPageState extends State<AddNewCardPage> {
               cvv: cvv,
               holderName: holderName,
               rememberMyCard: rememberMyCard,
+              isSaving: _isSaving,
               onTextChanged: onTextChanged,
               onRememberMyCardChanged: (v) {
-                rememberMyCard = !rememberMyCard;
+                rememberMyCard = v;
                 if (mounted) setState(() {});
               },
-            )
+              onSave: _saveCard,
+            ),
           ],
         ),
       ),
@@ -95,8 +134,10 @@ class CreditCardForm extends StatelessWidget {
     required this.cvv,
     required this.holderName,
     required this.rememberMyCard,
+    required this.isSaving,
     required this.onTextChanged,
     required this.onRememberMyCardChanged,
+    required this.onSave,
   });
 
   final TextEditingController cardNumber;
@@ -104,8 +145,10 @@ class CreditCardForm extends StatelessWidget {
   final TextEditingController cvv;
   final TextEditingController holderName;
   final bool rememberMyCard;
+  final bool isSaving;
   final void Function(String?) onTextChanged;
   final void Function(bool v) onRememberMyCardChanged;
+  final Future<void> Function() onSave;
 
   @override
   Widget build(BuildContext context) {
@@ -177,9 +220,9 @@ class CreditCardForm extends StatelessWidget {
             children: [
               Text(
                 'Remember My Card Details',
-                style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                      color: Colors.black,
-                    ),
+                style: Theme.of(
+                  context,
+                ).textTheme.bodyLarge?.copyWith(color: Colors.black),
               ),
               const Spacer(),
               Transform.scale(
@@ -188,15 +231,15 @@ class CreditCardForm extends StatelessWidget {
                   value: rememberMyCard,
                   onChanged: onRememberMyCardChanged,
                 ),
-              )
+              ),
             ],
           ),
           const SizedBox(height: AppDefaults.padding),
           SizedBox(
             width: double.infinity,
             child: ElevatedButton(
-              onPressed: () {},
-              child: const Text('Add Card'),
+              onPressed: isSaving ? null : onSave,
+              child: Text(isSaving ? 'Saving...' : 'Add Card'),
             ),
           ),
           const SizedBox(height: AppDefaults.padding),

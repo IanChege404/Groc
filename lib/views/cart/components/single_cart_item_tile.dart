@@ -1,17 +1,35 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/svg.dart';
 
 import '../../../core/components/network_image.dart';
 import '../../../core/constants/constants.dart';
+import '../../../core/models/cart_item_model.dart';
+import '../../../core/providers/product_cache_provider.dart';
 
-class SingleCartItemTile extends StatefulWidget {
-  const SingleCartItemTile({super.key});
+class SingleCartItemTile extends ConsumerStatefulWidget {
+  const SingleCartItemTile({
+    super.key,
+    required this.item,
+    required this.onIncrease,
+    required this.onDecrease,
+    required this.onRemove,
+    this.productName,
+    this.productImage,
+  });
+
+  final CartItemModel item;
+  final VoidCallback onIncrease;
+  final VoidCallback onDecrease;
+  final VoidCallback onRemove;
+  final String? productName;
+  final String? productImage;
 
   @override
-  State<SingleCartItemTile> createState() => _SingleCartItemTileState();
+  ConsumerState<SingleCartItemTile> createState() => _SingleCartItemTileState();
 }
 
-class _SingleCartItemTileState extends State<SingleCartItemTile>
+class _SingleCartItemTileState extends ConsumerState<SingleCartItemTile>
     with TickerProviderStateMixin {
   late AnimationController _deleteController;
   late Animation<Offset> _slideAnimation;
@@ -46,7 +64,7 @@ class _SingleCartItemTileState extends State<SingleCartItemTile>
     setState(() => _isDeleting = true);
     await _deleteController.forward();
     if (mounted) {
-      // Trigger delete callback here
+      widget.onRemove();
       ScaffoldMessenger.of(
         context,
       ).showSnackBar(const SnackBar(content: Text('Item removed from cart')));
@@ -55,6 +73,48 @@ class _SingleCartItemTileState extends State<SingleCartItemTile>
 
   @override
   Widget build(BuildContext context) {
+    // If product details are provided, render directly
+    if (widget.productName != null && widget.productImage != null) {
+      return _buildCartItemTile(
+        context,
+        widget.productName!,
+        widget.productImage!,
+      );
+    }
+
+    // Otherwise, load product details asynchronously using cached provider
+    final productAsync = ref.watch(productByIdProvider(widget.item.productId));
+
+    return productAsync.when(
+      loading: () => _buildCartItemTile(
+        context,
+        'Loading...',
+        'https://i.imgur.com/4YEHvGc.png',
+      ),
+      error: (_, __) => _buildCartItemTile(
+        context,
+        widget.item.productId,
+        'https://i.imgur.com/4YEHvGc.png',
+      ),
+      data: (product) {
+        if (product == null) {
+          return _buildCartItemTile(
+            context,
+            widget.item.productId,
+            'https://i.imgur.com/4YEHvGc.png',
+          );
+        }
+
+        return _buildCartItemTile(context, product.name, product.image);
+      },
+    );
+  }
+
+  Widget _buildCartItemTile(
+    BuildContext context,
+    String productName,
+    String productImage,
+  ) {
     return SlideTransition(
       position: _slideAnimation,
       child: FadeTransition(
@@ -69,12 +129,12 @@ class _SingleCartItemTileState extends State<SingleCartItemTile>
               Row(
                 children: [
                   /// Thumbnail
-                  const SizedBox(
+                  SizedBox(
                     width: 70,
                     child: AspectRatio(
                       aspectRatio: 1 / 1,
                       child: NetworkImageWithLoader(
-                        'https://i.imgur.com/4YEHvGc.png',
+                        productImage,
                         fit: BoxFit.contain,
                       ),
                     ),
@@ -91,12 +151,12 @@ class _SingleCartItemTileState extends State<SingleCartItemTile>
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
-                              'Sulphurfree Bura',
+                              productName,
                               style: Theme.of(context).textTheme.bodyLarge
                                   ?.copyWith(color: Colors.black),
                             ),
                             Text(
-                              '570 Ml',
+                              'Qty: ${widget.item.quantity}',
                               style: Theme.of(context).textTheme.bodySmall,
                             ),
                           ],
@@ -105,14 +165,14 @@ class _SingleCartItemTileState extends State<SingleCartItemTile>
                       Row(
                         children: [
                           IconButton(
-                            onPressed: () {},
+                            onPressed: widget.onIncrease,
                             icon: SvgPicture.asset(AppIcons.addQuantity),
                             constraints: const BoxConstraints(),
                           ),
                           Padding(
                             padding: const EdgeInsets.all(8.0),
                             child: Text(
-                              '1',
+                              '${widget.item.quantity}',
                               style: Theme.of(context).textTheme.bodyLarge
                                   ?.copyWith(
                                     fontWeight: FontWeight.bold,
@@ -121,7 +181,9 @@ class _SingleCartItemTileState extends State<SingleCartItemTile>
                             ),
                           ),
                           IconButton(
-                            onPressed: () {},
+                            onPressed: widget.item.quantity > 1
+                                ? widget.onDecrease
+                                : null,
                             icon: SvgPicture.asset(AppIcons.removeQuantity),
                             constraints: const BoxConstraints(),
                           ),
@@ -140,7 +202,9 @@ class _SingleCartItemTileState extends State<SingleCartItemTile>
                         icon: SvgPicture.asset(AppIcons.delete),
                       ),
                       const SizedBox(height: 16),
-                      const Text('\$20'),
+                      Text(
+                        '\$${(widget.item.priceAtTimeOfAdd * widget.item.quantity).toStringAsFixed(2)}',
+                      ),
                     ],
                   ),
                 ],

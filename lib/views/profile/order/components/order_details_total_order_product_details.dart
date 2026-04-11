@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
 
 import '../../../../core/constants/constants.dart';
+import '../../../../core/models/order_model.dart';
 import 'order_details_product_tile.dart';
 
 class TotalOrderProductDetails extends StatelessWidget {
-  const TotalOrderProductDetails({
-    super.key,
-  });
+  const TotalOrderProductDetails({super.key, required this.items});
+
+  final List<OrderItemModel> items;
 
   @override
   Widget build(BuildContext context) {
@@ -20,20 +21,18 @@ class TotalOrderProductDetails extends StatelessWidget {
             child: Text(
               'Product Details',
               style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                    fontWeight: FontWeight.bold,
-                    color: Colors.black,
-                  ),
+                fontWeight: FontWeight.bold,
+                color: Colors.black,
+              ),
             ),
           ),
           const SizedBox(height: 8),
           ListView.separated(
             itemBuilder: (context, index) {
-              return OrderDetailsProductTile(data: Dummy.products[index]);
+              return OrderDetailsProductTile(data: items[index]);
             },
-            separatorBuilder: (context, index) => const Divider(
-              thickness: 0.2,
-            ),
-            itemCount: 3,
+            separatorBuilder: (context, index) => const Divider(thickness: 0.2),
+            itemCount: items.length,
             shrinkWrap: true,
             physics: const NeverScrollableScrollPhysics(),
           ),

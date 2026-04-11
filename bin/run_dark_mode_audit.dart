@@ -1,3 +1,5 @@
+// ignore_for_file: avoid_print
+
 import 'dart:io';
 
 /// Dark Mode Audit Report Generator
@@ -196,12 +198,10 @@ Map<String, dynamic> _auditThemeBrightness(String libPath) {
 
       // Files that should handle brightness
       if ((content.contains('Box') || content.contains('Shadow')) &&
-              !content.contains('theme') &&
-              !content.contains('AppColors') &&
-              file.path.contains('/components/') ||
-          file.path.contains('/views/')) {
-        final fileName = file.path.split('/').last;
-
+          !content.contains('theme') &&
+          !content.contains('AppColors') &&
+          (file.path.contains('/components/') ||
+              file.path.contains('/views/'))) {
         if (content.contains('Theme.of(context).brightness') ||
             content.contains('AppColors') ||
             content.contains('isDarkMode')) {
@@ -216,11 +216,12 @@ Map<String, dynamic> _auditThemeBrightness(String libPath) {
 
   final report = {
     'compliant': compliant.length,
+    'total': issues.length,
     'issues': issues.take(5).toList(),
     'status': issues.isEmpty ? '✅ PASS' : '⚠️  REVIEW RECOMMENDED',
   };
 
-  print('  ${report['status']} - ${{compliant.length}} compliant files\n');
+  print('  ${report['status']} - ${compliant.length} compliant files\n');
   return report;
 }
 
@@ -234,7 +235,8 @@ void _generateReport(Map<String, dynamic> results) {
       (results['shadows']['total'] ?? 0) +
       (results['images']['total'] ?? 0) +
       (results['overlays']['total'] ?? 0) +
-      (results['hardcodedColors']['total'] ?? 0);
+      (results['hardcodedColors']['total'] ?? 0) +
+      (results['themeBrightness']['total'] ?? 0);
 
   print(
     'Overall Status: ${totalIssues == 0 ? "✅ COMPLIANT" : "⚠️  $totalIssues ISSUES FOUND"}\n',

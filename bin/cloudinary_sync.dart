@@ -70,10 +70,11 @@ void main(List<String> args) async {
     final shouldUpload =
         previous == null || config.overwrite || sizeChanged || mtimeChanged;
 
-    if (!shouldUpload && previous != null) {
+    if (!shouldUpload) {
       reusedCount++;
-      uploadedEntries.add(previous);
-      stdout.writeln('Reuse: ${image.localPath} -> ${previous.secureUrl}');
+      final previousEntry = previous;
+      uploadedEntries.add(previousEntry);
+      stdout.writeln('Reuse: ${image.localPath} -> ${previousEntry.secureUrl}');
       continue;
     }
 
@@ -169,7 +170,6 @@ class _Config {
       mapFilePath: '.cloudinary-map.json',
       targets: const [
         'lib/core/constants/app_images.dart',
-        'lib/core/constants/dummy_data.dart',
         'dataconnect/seed_data.gql',
       ],
       showHelp: false,
@@ -527,7 +527,6 @@ List<String> _resolveRewriteTargets(_Config config) {
   final extraTargets = [
     'lib/core/routes/unknown_page.dart',
     'lib/core/constants/app_images.dart',
-    'lib/core/constants/dummy_data.dart',
     'dataconnect/seed_data.gql',
   ];
 

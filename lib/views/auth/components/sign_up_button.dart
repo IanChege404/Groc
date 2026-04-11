@@ -2,12 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 
 import '../../../core/constants/constants.dart';
-import '../../../core/routes/app_routes.dart';
 
 class SignUpButton extends StatelessWidget {
-  const SignUpButton({
-    super.key,
-  });
+  const SignUpButton({super.key, required this.onPressed});
+
+  final VoidCallback? onPressed;
 
   @override
   Widget build(BuildContext context) {
@@ -17,15 +16,13 @@ class SignUpButton extends StatelessWidget {
         children: [
           Text(
             'Sign Up',
-            style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                  fontWeight: FontWeight.bold,
-                ),
+            style: Theme.of(
+              context,
+            ).textTheme.titleLarge?.copyWith(fontWeight: FontWeight.bold),
           ),
           const Spacer(),
           ElevatedButton(
-            onPressed: () {
-              Navigator.pushNamed(context, AppRoutes.numberVerification);
-            },
+            onPressed: onPressed,
             style: ElevatedButton.styleFrom(elevation: 1),
             child: SvgPicture.asset(
               AppIcons.arrowForward,

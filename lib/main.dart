@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
-import 'package:provider/provider.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:provider/provider.dart' as p;
 
 import 'core/config/env_config.dart';
 import 'core/l10n/locale_provider.dart';
@@ -28,9 +29,11 @@ void main() async {
   }
 
   runApp(
-    ChangeNotifierProvider(
-      create: (_) => LocaleProvider(),
-      child: const MyApp(),
+    ProviderScope(
+      child: p.ChangeNotifierProvider(
+        create: (_) => LocaleProvider(),
+        child: const MyApp(),
+      ),
     ),
   );
 }
@@ -40,7 +43,7 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Consumer<LocaleProvider>(
+    return p.Consumer<LocaleProvider>(
       builder: (context, localeProvider, _) {
         return MaterialApp(
           title: 'Afri-Commerce',

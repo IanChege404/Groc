@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import '../models/cart_item_model.dart';
 import '../models/order_model.dart';
+import '../models/wishlist_model.dart';
 import '../utils/logger.dart';
 
 /// Firestore database service singleton
@@ -16,6 +17,14 @@ class FirestoreService {
     _firestore = FirebaseFirestore.instance;
   }
 
+  Query<Map<String, dynamic>> _productsBaseQuery({String? category}) {
+    Query<Map<String, dynamic>> query = _firestore.collection('products');
+    if (category != null && category.isNotEmpty) {
+      query = query.where('categoryId', isEqualTo: category);
+    }
+    return query.orderBy('createdAt', descending: true);
+  }
+
   // PRODUCTS
   Future<List<Map<String, dynamic>>> getProducts({
     int page = 1,
@@ -24,42 +33,83 @@ class FirestoreService {
     String? search,
   }) async {
     try {
-      Query query = _firestore.collection('products');
-      if (category != null && category.isNotEmpty) {
-        query = query.where('categoryId', isEqualTo: category);
-      }
-      QuerySnapshot snapshot = await query
-          .orderBy('createdAt', descending: true)
-          .limit(pageSize * page)
-          .get();
+      final normalizedPage = page < 1 ? 1 : page;
+      final hasSearch = search != null && search.trim().isNotEmpty;
 
-      List<Map<String, dynamic>> products = snapshot.docs
-          .map(
-            (doc) => <String, dynamic>{
-              ...(doc.data() as Map<String, dynamic>? ?? {}),
-              'id': doc.id,
-            },
-          )
-          .toList();
+      if (!hasSearch) {
+        DocumentSnapshot<Map<String, dynamic>>? cursor;
+        if (normalizedPage > 1) {
+          for (int i = 1; i < normalizedPage; i++) {
+            Query<Map<String, dynamic>> traversalQuery = _productsBaseQuery(
+              category: category,
+            ).limit(pageSize);
+            if (cursor != null) {
+              traversalQuery = traversalQuery.startAfterDocument(cursor);
+            }
 
-      if (search != null && search.isNotEmpty) {
-        final searchLower = search.toLowerCase();
-        products = products
-            .where(
-              (p) =>
-                  ((p['name'] as String?)?.toLowerCase().contains(
-                        searchLower,
-                      ) ??
-                      false) ||
-                  ((p['description'] as String?)?.toLowerCase().contains(
-                        searchLower,
-                      ) ??
-                      false),
-            )
+            final chunk = await traversalQuery.get();
+
+            if (chunk.docs.isEmpty) {
+              return [];
+            }
+            cursor = chunk.docs.last;
+          }
+        }
+
+        Query<Map<String, dynamic>> query = _productsBaseQuery(
+          category: category,
+        ).limit(pageSize);
+        if (cursor != null) {
+          query = query.startAfterDocument(cursor);
+        }
+
+        final snapshot = await query.get();
+        return snapshot.docs
+            .map((doc) => <String, dynamic>{...(doc.data()), 'id': doc.id})
             .toList();
       }
 
-      final startIndex = (page - 1) * pageSize;
+      final searchLower = search.toLowerCase();
+      final required = normalizedPage * pageSize;
+      final products = <Map<String, dynamic>>[];
+      DocumentSnapshot<Map<String, dynamic>>? cursor;
+
+      while (products.length < required) {
+        Query<Map<String, dynamic>> query = _productsBaseQuery(
+          category: category,
+        ).limit(pageSize);
+        if (cursor != null) {
+          query = query.startAfterDocument(cursor);
+        }
+
+        final snapshot = await query.get();
+        if (snapshot.docs.isEmpty) {
+          break;
+        }
+
+        cursor = snapshot.docs.last;
+
+        products.addAll(
+          snapshot.docs
+              .map((doc) => <String, dynamic>{...(doc.data()), 'id': doc.id})
+              .where(
+                (p) =>
+                    ((p['name'] as String?)?.toLowerCase().contains(
+                          searchLower,
+                        ) ??
+                        false) ||
+                    ((p['description'] as String?)?.toLowerCase().contains(
+                          searchLower,
+                        ) ??
+                        false),
+              ),
+        );
+      }
+
+      final startIndex = (normalizedPage - 1) * pageSize;
+      if (startIndex >= products.length) {
+        return [];
+      }
       final endIndex = startIndex + pageSize;
       return products.sublist(startIndex, endIndex.clamp(0, products.length));
     } catch (e) {
@@ -75,10 +125,7 @@ class FirestoreService {
     try {
       final doc = await _firestore.collection('products').doc(id).get();
       if (doc.exists) {
-        return <String, dynamic>{
-          ...(doc.data() as Map<String, dynamic>? ?? {}),
-          'id': doc.id,
-        };
+        return <String, dynamic>{...(doc.data() ?? {}), 'id': doc.id};
       }
       return null;
     } catch (e) {
@@ -94,14 +141,13 @@ class FirestoreService {
           .orderBy('name')
           .get();
       return snapshot.docs
-          .map(
-            (doc) => <String, dynamic>{
-              ...(doc.data() as Map<String, dynamic>? ?? {}),
-              'id': doc.id,
-            },
-          )
+          .map((doc) => <String, dynamic>{...(doc.data()), 'id': doc.id})
           .toList();
     } catch (e) {
+      Logger.error(
+        'Error fetching categories: $e',
+        'FirestoreService.getCategories',
+      );
       return [];
     }
   }
@@ -113,14 +159,13 @@ class FirestoreService {
           .where('userId', isEqualTo: userId)
           .get();
       return snapshot.docs
-          .map(
-            (doc) => <String, dynamic>{
-              ...(doc.data() as Map<String, dynamic>? ?? {}),
-              'id': doc.id,
-            },
-          )
+          .map((doc) => <String, dynamic>{...(doc.data()), 'id': doc.id})
           .toList();
     } catch (e) {
+      Logger.error(
+        'Error fetching wishlist: $e',
+        'FirestoreService.getUserWishlist',
+      );
       return [];
     }
   }
@@ -160,14 +205,24 @@ class FirestoreService {
     }
   }
 
-  Future<void> removeFromCart(String cartItemId) async {
+  Future<void> removeFromCart(String cartItemId, {String? userId}) async {
     try {
-      // Note: You'll need to pass userId or extract from cartItemId structure
-      // For now, this is a placeholder - in practice, you'd need more context
-      Logger.error(
-        'removeFromCart requires userId context',
-        'FirestoreService.removeFromCart',
-      );
+      if (userId != null && userId.isNotEmpty) {
+        await removeCartItem(userId, cartItemId);
+        return;
+      }
+
+      final snapshot = await _firestore
+          .collectionGroup('items')
+          .where(FieldPath.documentId, isEqualTo: cartItemId)
+          .limit(1)
+          .get();
+
+      if (snapshot.docs.isEmpty) {
+        return;
+      }
+
+      await snapshot.docs.first.reference.delete();
     } catch (e) {
       Logger.error(
         'Error removing from cart: $e',
@@ -308,6 +363,312 @@ class FirestoreService {
         'Error updating tracking: $e',
         'FirestoreService.updateOrderTracking',
       );
+      rethrow;
+    }
+  }
+
+  // USER PROFILE METHODS
+  Future<Map<String, dynamic>?> getUserProfile(String userId) async {
+    try {
+      final doc = await _firestore.collection('users').doc(userId).get();
+      if (!doc.exists) {
+        return null;
+      }
+
+      return <String, dynamic>{...(doc.data() ?? {}), 'id': doc.id};
+    } catch (e) {
+      Logger.error('Error fetching profile: $e', 'FirestoreService.getUserProfile');
+      return null;
+    }
+  }
+
+  Future<void> updateUserProfile(
+    String userId,
+    Map<String, dynamic> data,
+  ) async {
+    try {
+      await _firestore.collection('users').doc(userId).set(
+            {
+              ...data,
+              'updatedAt': FieldValue.serverTimestamp(),
+            },
+            SetOptions(merge: true),
+          );
+    } catch (e) {
+      Logger.error(
+        'Error updating profile: $e',
+        'FirestoreService.updateUserProfile',
+      );
+      rethrow;
+    }
+  }
+
+  // ADDRESS METHODS
+  Future<List<Map<String, dynamic>>> getUserAddresses(String userId) async {
+    try {
+      final snapshot = await _firestore
+          .collection('users')
+          .doc(userId)
+          .collection('addresses')
+          .orderBy('isDefault', descending: true)
+          .orderBy('updatedAt', descending: true)
+          .get();
+
+      return snapshot.docs
+          .map((doc) => <String, dynamic>{...(doc.data()), 'id': doc.id})
+          .toList();
+    } catch (e) {
+      Logger.error(
+        'Error fetching addresses: $e',
+        'FirestoreService.getUserAddresses',
+      );
+      return [];
+    }
+  }
+
+  Future<void> addUserAddress(
+    String userId,
+    Map<String, dynamic> data,
+  ) async {
+    try {
+      final docRef = _firestore
+          .collection('users')
+          .doc(userId)
+          .collection('addresses')
+          .doc();
+
+      await docRef.set({
+        ...data,
+        'userId': userId,
+        'isDefault': data['isDefault'] ?? false,
+        'createdAt': FieldValue.serverTimestamp(),
+        'updatedAt': FieldValue.serverTimestamp(),
+      });
+
+      if (data['isDefault'] == true) {
+        final otherAddresses = await _firestore
+            .collection('users')
+            .doc(userId)
+            .collection('addresses')
+            .get();
+
+        for (final address in otherAddresses.docs) {
+          if (address.id != docRef.id) {
+            await address.reference.update({'isDefault': false});
+          }
+        }
+      }
+    } catch (e) {
+      Logger.error(
+        'Error adding address: $e',
+        'FirestoreService.addUserAddress',
+      );
+      rethrow;
+    }
+  }
+
+  Future<void> updateUserAddress(
+    String userId,
+    String addressId,
+    Map<String, dynamic> data,
+  ) async {
+    try {
+      await _firestore
+          .collection('users')
+          .doc(userId)
+          .collection('addresses')
+          .doc(addressId)
+          .set(
+            {
+              ...data,
+              'updatedAt': FieldValue.serverTimestamp(),
+            },
+            SetOptions(merge: true),
+          );
+    } catch (e) {
+      Logger.error(
+        'Error updating address: $e',
+        'FirestoreService.updateUserAddress',
+      );
+      rethrow;
+    }
+  }
+
+  Future<void> deleteUserAddress(String userId, String addressId) async {
+    try {
+      await _firestore
+          .collection('users')
+          .doc(userId)
+          .collection('addresses')
+          .doc(addressId)
+          .delete();
+    } catch (e) {
+      Logger.error(
+        'Error deleting address: $e',
+        'FirestoreService.deleteUserAddress',
+      );
+      rethrow;
+    }
+  }
+
+  Future<void> setDefaultAddress(String userId, String addressId) async {
+    try {
+      final collection = _firestore
+          .collection('users')
+          .doc(userId)
+          .collection('addresses');
+
+      final snapshot = await collection.get();
+      for (final doc in snapshot.docs) {
+        await doc.reference.update({'isDefault': doc.id == addressId});
+      }
+    } catch (e) {
+      Logger.error(
+        'Error setting default address: $e',
+        'FirestoreService.setDefaultAddress',
+      );
+      rethrow;
+    }
+  }
+
+  // PAYMENT METHOD METHODS
+  Future<List<Map<String, dynamic>>> getPaymentMethods(String userId) async {
+    try {
+      final snapshot = await _firestore
+          .collection('users')
+          .doc(userId)
+          .collection('payment_methods')
+          .orderBy('isDefault', descending: true)
+          .orderBy('updatedAt', descending: true)
+          .get();
+
+      return snapshot.docs
+          .map((doc) => <String, dynamic>{...(doc.data()), 'id': doc.id})
+          .toList();
+    } catch (e) {
+      Logger.error(
+        'Error fetching payment methods: $e',
+        'FirestoreService.getPaymentMethods',
+      );
+      return [];
+    }
+  }
+
+  Future<void> addPaymentMethod(
+    String userId,
+    Map<String, dynamic> data,
+  ) async {
+    try {
+      final docRef = _firestore
+          .collection('users')
+          .doc(userId)
+          .collection('payment_methods')
+          .doc();
+
+      await docRef.set({
+        ...data,
+        'userId': userId,
+        'createdAt': FieldValue.serverTimestamp(),
+        'updatedAt': FieldValue.serverTimestamp(),
+      });
+
+      if (data['isDefault'] == true) {
+        final otherMethods = await _firestore
+            .collection('users')
+            .doc(userId)
+            .collection('payment_methods')
+            .get();
+        for (final method in otherMethods.docs) {
+          if (method.id != docRef.id) {
+            await method.reference.update({'isDefault': false});
+          }
+        }
+      }
+    } catch (e) {
+      Logger.error(
+        'Error adding payment method: $e',
+        'FirestoreService.addPaymentMethod',
+      );
+      rethrow;
+    }
+  }
+
+  Future<void> deletePaymentMethod(String userId, String methodId) async {
+    try {
+      await _firestore
+          .collection('users')
+          .doc(userId)
+          .collection('payment_methods')
+          .doc(methodId)
+          .delete();
+    } catch (e) {
+      Logger.error(
+        'Error deleting payment method: $e',
+        'FirestoreService.deletePaymentMethod',
+      );
+      rethrow;
+    }
+  }
+
+  // WISHLIST METHODS
+  Future<List<WishlistModel>> getWishlistItems(String userId) async {
+    try {
+      final snapshot = await _firestore
+          .collection('wishlist')
+          .where('userId', isEqualTo: userId)
+          .get();
+
+      return snapshot.docs
+          .map((doc) => WishlistModel.fromFirestore(doc))
+          .toList();
+    } catch (e) {
+      Logger.error(
+        'Error fetching wishlist items: $e',
+        'FirestoreService.getWishlistItems',
+      );
+      return [];
+    }
+  }
+
+  Future<void> addToWishlist(WishlistModel item) async {
+    try {
+      await _firestore
+          .collection('wishlist')
+          .doc(item.id)
+          .set(item.toFirestore());
+    } catch (e) {
+      Logger.error('Error adding to wishlist: $e', 'FirestoreService.addToWishlist');
+      rethrow;
+    }
+  }
+
+  Future<void> removeFromWishlist(String userId, String wishlistItemId) async {
+    try {
+      await _firestore
+          .collection('wishlist')
+          .doc(wishlistItemId)
+          .delete();
+    } catch (e) {
+      Logger.error(
+        'Error removing from wishlist: $e',
+        'FirestoreService.removeFromWishlist',
+      );
+      rethrow;
+    }
+  }
+
+  Future<void> clearWishlist(String userId) async {
+    try {
+      final snapshot = await _firestore
+          .collection('wishlist')
+          .where('userId', isEqualTo: userId)
+          .get();
+
+      for (final doc in snapshot.docs) {
+        await doc.reference.delete();
+      }
+    } catch (e) {
+      Logger.error('Error clearing wishlist: $e', 'FirestoreService.clearWishlist');
       rethrow;
     }
   }

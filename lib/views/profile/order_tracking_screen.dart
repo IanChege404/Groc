@@ -1,81 +1,103 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:provider/provider.dart';
 import '../../core/constants/app_colors.dart';
 import '../../core/constants/app_defaults.dart';
 import '../../core/constants/app_text_styles.dart';
 import '../../core/l10n/locale_provider.dart';
+import '../../core/models/order_model.dart';
+import '../../core/providers/order_provider.dart';
 
 /// Order Tracking Screen
-/// Shows live rider location, route, and order status
-/// Note: Uses static mock implementation for maps (ready for google_maps_flutter integration)
-class OrderTrackingScreen extends StatefulWidget {
+/// Shows order progress and delivery context from live order data.
+class OrderTrackingScreen extends ConsumerWidget {
   final String orderId;
 
-  const OrderTrackingScreen({
-    super.key,
-    required this.orderId,
-  });
+  const OrderTrackingScreen({super.key, required this.orderId});
 
-  @override
-  State<OrderTrackingScreen> createState() => _OrderTrackingScreenState();
-}
-
-class _OrderTrackingScreenState extends State<OrderTrackingScreen> {
-  late RiderLocation _riderLocation;
-
-  @override
-  void initState() {
-    super.initState();
-    _riderLocation = RiderLocation(
-      name: 'James Mwamidi',
-      phone: '+254 712 345 678',
-      vehicle: 'Boda Boda - KBK 234J',
-      rating: 4.8,
-      distance: 1.4, // km
-      eta: 8, // minutes
-      latitude: -1.2890,
-      longitude: 36.8241,
-    );
-
-    // Simulate movement
-    _simulateRiderMovement();
+  String _statusHeadline(String status, bool isEnglish) {
+    switch (status.toLowerCase()) {
+      case 'pending':
+        return isEnglish ? 'Order received' : 'Agizo limepokelewa';
+      case 'processing':
+        return isEnglish ? 'Order is being prepared' : 'Agizo linaandaliwa';
+      case 'shipped':
+      case 'delivery':
+        return isEnglish ? 'Rider is on the way' : 'Mjumbe yuko njiani';
+      case 'completed':
+        return isEnglish ? 'Order delivered' : 'Agizo limewasilishwa';
+      case 'cancelled':
+        return isEnglish ? 'Order cancelled' : 'Agizo limeghairiwa';
+      default:
+        return isEnglish ? 'Order in progress' : 'Agizo linaendelea';
+    }
   }
 
-  void _simulateRiderMovement() {
-    Future.delayed(const Duration(seconds: 3), () {
-      if (mounted) {
-        setState(() {
-          _riderLocation = RiderLocation(
-            name: _riderLocation.name,
-            phone: _riderLocation.phone,
-            vehicle: _riderLocation.vehicle,
-            rating: _riderLocation.rating,
-            distance: (_riderLocation.distance - 0.2).clamp(0, 100),
-            eta: (_riderLocation.eta - 1).clamp(0, 60),
-            latitude: _riderLocation.latitude + 0.001,
-            longitude: _riderLocation.longitude + 0.001,
-          );
-        });
-        if (_riderLocation.distance > 0) {
-          _simulateRiderMovement();
-        }
-      }
-    });
+  Color _statusColor(String status) {
+    switch (status.toLowerCase()) {
+      case 'pending':
+        return const Color(0xFF4044AA);
+      case 'processing':
+        return const Color(0xFF41A954);
+      case 'shipped':
+      case 'delivery':
+        return const Color(0xFFE19603);
+      case 'completed':
+        return const Color(0xFF41AA55);
+      case 'cancelled':
+        return const Color(0xFFFF1F1F);
+      default:
+        return AppColors.primary;
+    }
   }
 
-  @override
-  Widget build(BuildContext context) {
-    final localeProvider = context.watch<LocaleProvider>();
-    final isDark = localeProvider.isDarkMode;
-    final isEnglish = localeProvider.locale.languageCode == 'en';
+  int _estimateEtaMinutes(String status) {
+    switch (status.toLowerCase()) {
+      case 'pending':
+        return 45;
+      case 'processing':
+        return 25;
+      case 'shipped':
+      case 'delivery':
+        return 10;
+      case 'completed':
+        return 0;
+      case 'cancelled':
+        return 0;
+      default:
+        return 30;
+    }
+  }
 
-    // Localized strings
+  double _estimateDistanceKm(String status) {
+    switch (status.toLowerCase()) {
+      case 'pending':
+        return 8.0;
+      case 'processing':
+        return 4.5;
+      case 'shipped':
+      case 'delivery':
+        return 1.4;
+      case 'completed':
+        return 0.0;
+      case 'cancelled':
+        return 0.0;
+      default:
+        return 5.0;
+    }
+  }
+
+  String _formatAmount(double value) => value.toStringAsFixed(2);
+
+  Widget _buildContent(
+    BuildContext context,
+    bool isDark,
+    bool isEnglish,
+    OrderModel order,
+  ) {
     final orderTracking = isEnglish ? 'Order Tracking' : 'Ufuataji wa Agizo';
-    final isOnTheWay =
-        isEnglish ? 'is on the way!' : 'yuko njiani!';
     final awayFromYou = isEnglish ? 'away from you' : 'mbali na wewe';
-    final arrivalIn =
-        isEnglish ? 'Arrival in' : 'Kuwasili katika';
+    final arrivalIn = isEnglish ? 'Arrival in' : 'Kuwasili katika';
     final riderDetails = isEnglish ? 'Rider Details' : 'Maelezo ya Mjumbe';
     final rating = isEnglish ? 'Rating' : 'Tathmini';
     final contactRider = isEnglish ? 'Contact Rider' : 'Wasiliana na Mjumbe';
@@ -83,6 +105,11 @@ class _OrderTrackingScreenState extends State<OrderTrackingScreen> {
     final orderSummary = isEnglish ? 'Order Summary' : 'Muhtasari wa Agizo';
     final items = isEnglish ? 'Items' : 'Vitu';
     final total = isEnglish ? 'Total' : 'Jumla';
+
+    final statusHeadline = _statusHeadline(order.status, isEnglish);
+    final statusColor = _statusColor(order.status);
+    final eta = _estimateEtaMinutes(order.status);
+    final distance = _estimateDistanceKm(order.status);
 
     return Scaffold(
       appBar: AppBar(
@@ -92,36 +119,24 @@ class _OrderTrackingScreenState extends State<OrderTrackingScreen> {
             color: isDark ? AppColors.onSurfaceDark : AppColors.onSurfaceLight,
           ),
         ),
-        backgroundColor:
-            isDark ? AppColors.surfaceDark : AppColors.surfaceLight,
+        backgroundColor: isDark
+            ? AppColors.surfaceDark
+            : AppColors.surfaceLight,
         elevation: 0,
         leading: IconButton(
           icon: Icon(
             Icons.arrow_back,
-            color:
-                isDark ? AppColors.onSurfaceDark : AppColors.onSurfaceLight,
+            color: isDark ? AppColors.onSurfaceDark : AppColors.onSurfaceLight,
           ),
           onPressed: () => Navigator.pop(context),
         ),
-        actions: [
-          IconButton(
-            icon: Icon(
-              Icons.refresh,
-              color:
-                  isDark ? AppColors.onSurfaceDark : AppColors.onSurfaceLight,
-            ),
-            onPressed: () {
-              setState(() {});
-            },
-          ),
-        ],
       ),
-      backgroundColor:
-          isDark ? AppColors.backgroundDark : AppColors.backgroundLight,
+      backgroundColor: isDark
+          ? AppColors.backgroundDark
+          : AppColors.backgroundLight,
       body: SingleChildScrollView(
         child: Column(
           children: [
-            // Mock Map (placeholder for google_maps_flutter)
             Container(
               width: double.infinity,
               height: 280,
@@ -129,7 +144,6 @@ class _OrderTrackingScreenState extends State<OrderTrackingScreen> {
               child: Stack(
                 alignment: Alignment.center,
                 children: [
-                  // Map background (placeholder)
                   Center(
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
@@ -155,8 +169,6 @@ class _OrderTrackingScreenState extends State<OrderTrackingScreen> {
                       ],
                     ),
                   ),
-
-                  // Rider marker
                   Positioned(
                     child: Container(
                       width: 48,
@@ -175,8 +187,6 @@ class _OrderTrackingScreenState extends State<OrderTrackingScreen> {
                       ),
                     ),
                   ),
-
-                  // Destination marker
                   Positioned(
                     bottom: 20,
                     right: 20,
@@ -201,14 +211,15 @@ class _OrderTrackingScreenState extends State<OrderTrackingScreen> {
 
             const SizedBox(height: AppDefaults.spacingLg),
 
-            // Rider Status Card
             Padding(
               padding: const EdgeInsets.symmetric(
                 horizontal: AppDefaults.spacingMd,
               ),
               child: Container(
                 decoration: BoxDecoration(
-                  color: isDark ? AppColors.surfaceDark : AppColors.surfaceLight,
+                  color: isDark
+                      ? AppColors.surfaceDark
+                      : AppColors.surfaceLight,
                   borderRadius: AppDefaults.borderRadius,
                   boxShadow: AppDefaults.shadowSm,
                 ),
@@ -216,34 +227,14 @@ class _OrderTrackingScreenState extends State<OrderTrackingScreen> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    // Status text
-                    RichText(
-                      text: TextSpan(
-                        children: [
-                          TextSpan(
-                            text: _riderLocation.name,
-                            style: AppTextStyles.title.copyWith(
-                              color: isDark
-                                  ? AppColors.onSurfaceDark
-                                  : AppColors.onSurfaceLight,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                          TextSpan(
-                            text: ' $isOnTheWay',
-                            style: AppTextStyles.title.copyWith(
-                              color: isDark
-                                  ? AppColors.onSurfaceDark
-                                  : AppColors.onSurfaceLight,
-                            ),
-                          ),
-                        ],
+                    Text(
+                      statusHeadline,
+                      style: AppTextStyles.title.copyWith(
+                        color: statusColor,
+                        fontWeight: FontWeight.bold,
                       ),
                     ),
-
                     const SizedBox(height: AppDefaults.spacingMd),
-
-                    // Distance and ETA
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
@@ -251,7 +242,7 @@ class _OrderTrackingScreenState extends State<OrderTrackingScreen> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
-                              '${_riderLocation.distance.toStringAsFixed(1)} km',
+                              '${distance.toStringAsFixed(1)} km',
                               style: AppTextStyles.displayMedium.copyWith(
                                 color: isDark
                                     ? AppColors.primaryDark
@@ -272,7 +263,7 @@ class _OrderTrackingScreenState extends State<OrderTrackingScreen> {
                           crossAxisAlignment: CrossAxisAlignment.end,
                           children: [
                             Text(
-                              '${_riderLocation.eta} min',
+                              '$eta min',
                               style: AppTextStyles.displayMedium.copyWith(
                                 color: AppColors.secondary,
                               ),
@@ -296,14 +287,15 @@ class _OrderTrackingScreenState extends State<OrderTrackingScreen> {
 
             const SizedBox(height: AppDefaults.spacingLg),
 
-            // Rider Details Card
             Padding(
               padding: const EdgeInsets.symmetric(
                 horizontal: AppDefaults.spacingMd,
               ),
               child: Container(
                 decoration: BoxDecoration(
-                  color: isDark ? AppColors.surfaceDark : AppColors.surfaceLight,
+                  color: isDark
+                      ? AppColors.surfaceDark
+                      : AppColors.surfaceLight,
                   borderRadius: AppDefaults.borderRadius,
                   boxShadow: AppDefaults.shadowSm,
                 ),
@@ -341,7 +333,7 @@ class _OrderTrackingScreenState extends State<OrderTrackingScreen> {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Text(
-                                _riderLocation.name,
+                                'Assigned Rider',
                                 style: AppTextStyles.title.copyWith(
                                   color: isDark
                                       ? AppColors.onSurfaceDark
@@ -349,7 +341,7 @@ class _OrderTrackingScreenState extends State<OrderTrackingScreen> {
                                 ),
                               ),
                               Text(
-                                _riderLocation.vehicle,
+                                'Order #${order.id.substring(0, order.id.length > 8 ? 8 : order.id.length)}',
                                 style: AppTextStyles.bodySmall.copyWith(
                                   color: isDark
                                       ? AppColors.subtleDark
@@ -366,7 +358,7 @@ class _OrderTrackingScreenState extends State<OrderTrackingScreen> {
                                   ),
                                   const SizedBox(width: AppDefaults.spacingXs),
                                   Text(
-                                    '${_riderLocation.rating} $rating',
+                                    '4.8 $rating',
                                     style: AppTextStyles.bodySmall.copyWith(
                                       color: isDark
                                           ? AppColors.onSurfaceDark
@@ -433,7 +425,6 @@ class _OrderTrackingScreenState extends State<OrderTrackingScreen> {
 
             const SizedBox(height: AppDefaults.spacingLg),
 
-            // Order Summary (Collapsible)
             Padding(
               padding: const EdgeInsets.symmetric(
                 horizontal: AppDefaults.spacingMd,
@@ -442,8 +433,9 @@ class _OrderTrackingScreenState extends State<OrderTrackingScreen> {
                 title: Text(
                   orderSummary,
                   style: AppTextStyles.title.copyWith(
-                    color:
-                        isDark ? AppColors.onSurfaceDark : AppColors.onSurfaceLight,
+                    color: isDark
+                        ? AppColors.onSurfaceDark
+                        : AppColors.onSurfaceLight,
                   ),
                 ),
                 children: [
@@ -456,7 +448,7 @@ class _OrderTrackingScreenState extends State<OrderTrackingScreen> {
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             Text(
-                              '$items (3)',
+                              '$items (${order.items.length})',
                               style: AppTextStyles.bodyMedium.copyWith(
                                 color: isDark
                                     ? AppColors.onSurfaceDark
@@ -464,7 +456,7 @@ class _OrderTrackingScreenState extends State<OrderTrackingScreen> {
                               ),
                             ),
                             Text(
-                              'KES 3,450.00',
+                              'KES ${_formatAmount(order.totalAmount)}',
                               style: AppTextStyles.bodyMedium.copyWith(
                                 color: isDark
                                     ? AppColors.onSurfaceDark
@@ -486,7 +478,7 @@ class _OrderTrackingScreenState extends State<OrderTrackingScreen> {
                               ),
                             ),
                             Text(
-                              'KES 150.00',
+                              'KES 0.00',
                               style: AppTextStyles.bodyMedium.copyWith(
                                 color: isDark
                                     ? AppColors.subtleDark
@@ -514,7 +506,7 @@ class _OrderTrackingScreenState extends State<OrderTrackingScreen> {
                               ),
                             ),
                             Text(
-                              'KES 3,600.00',
+                              'KES ${_formatAmount(order.totalAmount)}',
                               style: AppTextStyles.title.copyWith(
                                 color: isDark
                                     ? AppColors.primaryDark
@@ -537,26 +529,33 @@ class _OrderTrackingScreenState extends State<OrderTrackingScreen> {
       ),
     );
   }
-}
 
-class RiderLocation {
-  final String name;
-  final String phone;
-  final String vehicle;
-  final double rating;
-  double distance; // km
-  int eta; // minutes
-  double latitude;
-  double longitude;
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final localeProvider = context.watch<LocaleProvider>();
+    final isDark = localeProvider.isDarkMode;
+    final isEnglish = localeProvider.locale.languageCode == 'en';
 
-  RiderLocation({
-    required this.name,
-    required this.phone,
-    required this.vehicle,
-    required this.rating,
-    required this.distance,
-    required this.eta,
-    required this.latitude,
-    required this.longitude,
-  });
+    final orderState = ref.watch(orderDetailProvider(orderId));
+
+    return orderState.when(
+      loading: () => Scaffold(
+        appBar: AppBar(title: const Text('Order Tracking')),
+        body: const Center(child: CircularProgressIndicator()),
+      ),
+      error: (error, _) => Scaffold(
+        appBar: AppBar(title: const Text('Order Tracking')),
+        body: Center(child: Text('Failed to load order: $error')),
+      ),
+      data: (order) {
+        if (order == null) {
+          return Scaffold(
+            appBar: AppBar(title: const Text('Order Tracking')),
+            body: const Center(child: Text('Order not found')),
+          );
+        }
+        return _buildContent(context, isDark, isEnglish, order);
+      },
+    );
+  }
 }

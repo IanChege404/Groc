@@ -1,25 +1,27 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/svg.dart';
 
 import '../constants/constants.dart';
-import '../models/dummy_bundle_model.dart';
+import '../models/bundle_model.dart';
+import '../models/wishlist_model.dart';
+import '../providers/wishlist_provider.dart';
 import '../routes/app_routes.dart';
 import 'network_image.dart';
 
-class BundleTileSquare extends StatefulWidget {
+class BundleTileSquare extends ConsumerStatefulWidget {
   const BundleTileSquare({super.key, required this.data});
 
   final BundleModel data;
 
   @override
-  State<BundleTileSquare> createState() => _BundleTileSquareState();
+  ConsumerState<BundleTileSquare> createState() => _BundleTileSquareState();
 }
 
-class _BundleTileSquareState extends State<BundleTileSquare>
+class _BundleTileSquareState extends ConsumerState<BundleTileSquare>
     with TickerProviderStateMixin {
   late AnimationController _popController;
   late Animation<double> _popAnimation;
-  bool _isFavorite = false;
 
   @override
   void initState() {
@@ -41,23 +43,91 @@ class _BundleTileSquareState extends State<BundleTileSquare>
   }
 
   Future<void> _toggleFavorite() async {
-    setState(() => _isFavorite = !_isFavorite);
-    await _popController.forward();
+    final wishlistState = ref.read(wishlistItemsProvider);
+    final isCurrentlyInWishlist = wishlistState.maybeWhen(
+      data: (items) => items.any((item) => item.productId == widget.data.id),
+      orElse: () => false,
+    );
+
+    try {
+      await _popController.forward();
+
+      if (isCurrentlyInWishlist) {
+        // Remove from wishlist
+        final wishlistItem = wishlistState.maybeWhen(
+          data: (items) =>
+              items.firstWhere((item) => item.productId == widget.data.id),
+          orElse: () => null,
+        );
+        if (wishlistItem != null) {
+          await ref
+              .read(wishlistItemsProvider.notifier)
+              .removeFromWishlist(wishlistItem.id);
+        }
+      } else {
+        // Add to wishlist
+        final newWishlistItem = WishlistModel(
+          id: '${widget.data.id}_${DateTime.now().millisecondsSinceEpoch}',
+          userId: '', // Will be set by the provider
+          productId: widget.data.id,
+          addedAt: DateTime.now(),
+        );
+        await ref
+            .read(wishlistItemsProvider.notifier)
+            .addToWishlist(newWishlistItem);
+      }
+
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(
+              isCurrentlyInWishlist
+                  ? 'Removed from wishlist'
+                  : 'Added to wishlist',
+            ),
+            duration: const Duration(seconds: 1),
+          ),
+        );
+      }
+    } catch (e) {
+      await _popController.reverse();
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('Failed to update wishlist: $e'),
+            backgroundColor: Colors.red,
+            duration: const Duration(seconds: 2),
+          ),
+        );
+      }
+    }
+
     await _popController.reverse();
   }
 
   @override
   Widget build(BuildContext context) {
+    final wishlistState = ref.watch(wishlistItemsProvider);
+    final isFavorite = wishlistState.maybeWhen(
+      data: (items) => items.any((item) => item.productId == widget.data.id),
+      orElse: () => false,
+    );
+
     return Material(
       color: AppColors.scaffoldBackground,
       borderRadius: AppDefaults.borderRadius,
       child: InkWell(
         onTap: () {
-          Navigator.pushNamed(context, AppRoutes.bundleProduct);
+          Navigator.pushNamed(
+            context,
+            AppRoutes.bundleProduct,
+            arguments: {'bundle': widget.data},
+          );
         },
         borderRadius: AppDefaults.borderRadius,
         child: Container(
           width: 176,
+          height: 320,
           padding: const EdgeInsets.symmetric(horizontal: AppDefaults.padding),
           decoration: BoxDecoration(
             border: Border.all(width: 0.1, color: AppColors.placeholder),
@@ -76,7 +146,9 @@ class _BundleTileSquareState extends State<BundleTileSquare>
                     child: AspectRatio(
                       aspectRatio: 1 / 1,
                       child: NetworkImageWithLoader(
-                        widget.data.cover,
+                        widget.data.images.isNotEmpty
+                            ? widget.data.images.first
+                            : widget.data.image,
                         fit: BoxFit.contain,
                       ),
                     ),
@@ -106,7 +178,7 @@ class _BundleTileSquareState extends State<BundleTileSquare>
                             child: Padding(
                               padding: const EdgeInsets.all(8.0),
                               child: SvgPicture.asset(
-                                _isFavorite
+                                isFavorite
                                     ? AppIcons.heartActive
                                     : AppIcons.heartOutlined,
                                 width: 20,
@@ -133,7 +205,7 @@ class _BundleTileSquareState extends State<BundleTileSquare>
                     overflow: TextOverflow.ellipsis,
                   ),
                   Text(
-                    widget.data.itemNames.join(','),
+                    widget.data.itemNames.join(', '),
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
                   ),
@@ -143,14 +215,14 @@ class _BundleTileSquareState extends State<BundleTileSquare>
               Row(
                 children: [
                   Text(
-                    '\$${widget.data.price.toInt()}',
+                    '\$${widget.data.price.toStringAsFixed(2)}',
                     style: Theme.of(context).textTheme.titleLarge?.copyWith(
                       color: Theme.of(context).textTheme.titleLarge?.color,
                     ),
                   ),
                   const SizedBox(width: 4),
                   Text(
-                    '\$${widget.data.mainPrice}',
+                    '\$${widget.data.mainPrice.toStringAsFixed(2)}',
                     style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                       decoration: TextDecoration.lineThrough,
                     ),

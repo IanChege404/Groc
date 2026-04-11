@@ -1,50 +1,43 @@
 import 'package:flutter/material.dart';
 
-import '../../../../core/enums/dummy_order_status.dart';
+import '../../../../core/models/order_model.dart';
 import '../../../../core/routes/app_routes.dart';
 import 'order_preview_tile.dart';
 
 class CompletedTab extends StatelessWidget {
-  const CompletedTab({
-    super.key,
-  });
+  const CompletedTab({super.key, required this.orders});
+
+  final List<OrderModel> orders;
 
   @override
   Widget build(BuildContext context) {
+    if (orders.isEmpty) {
+      return const Center(child: Text('No previous orders'));
+    }
+
     return ListView(
       padding: const EdgeInsets.only(top: 8),
-      children: [
-        OrderPreviewTile(
-          orderID: '232425627',
-          date: '25 Nov',
-          status: OrderStatus.confirmed,
-          onTap: () => Navigator.pushNamed(context, AppRoutes.orderDetails),
-        ),
-        OrderPreviewTile(
-          orderID: '232425627',
-          date: '25 Nov',
-          status: OrderStatus.processing,
-          onTap: () => Navigator.pushNamed(context, AppRoutes.orderDetails),
-        ),
-        OrderPreviewTile(
-          orderID: '232425627',
-          date: '25 Nov',
-          status: OrderStatus.shipped,
-          onTap: () => Navigator.pushNamed(context, AppRoutes.orderDetails),
-        ),
-        OrderPreviewTile(
-          orderID: '232425627',
-          date: '25 Nov',
-          status: OrderStatus.delivery,
-          onTap: () => Navigator.pushNamed(context, AppRoutes.orderDetails),
-        ),
-        OrderPreviewTile(
-          orderID: '232425627',
-          date: '25 Nov',
-          status: OrderStatus.cancelled,
-          onTap: () => Navigator.pushNamed(context, AppRoutes.orderDetails),
-        ),
-      ],
+      children: orders
+          .map(
+            (order) => OrderPreviewTile(
+              orderID: order.id,
+              date: _formatDate(order.createdAt),
+              status: order.status,
+              onTap: () => Navigator.pushNamed(
+                context,
+                AppRoutes.orderDetails,
+                arguments: {'orderId': order.id},
+              ),
+            ),
+          )
+          .toList(),
     );
+  }
+
+  String _formatDate(DateTime dateTime) {
+    final day = dateTime.day.toString().padLeft(2, '0');
+    final month = dateTime.month.toString().padLeft(2, '0');
+    final year = dateTime.year.toString();
+    return '$day/$month/$year';
   }
 }

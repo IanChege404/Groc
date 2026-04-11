@@ -141,7 +141,6 @@ By default, the script scans `assets/images` and writes a mapping file to `.clou
 
 Default rewrite targets:
 - `lib/core/constants/app_images.dart`
-- `lib/core/constants/dummy_data.dart`
 - `dataconnect/seed_data.gql`
 
 Optional flag for broader URL replacement by filename match:

@@ -2,19 +2,20 @@ rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
     // Public read access to products, categories, and bundles
+    // Writes allowed only from authenticated/admin context
     match /products/{document=**} {
       allow read: if true;
-      allow create, update, delete: if false;
+      allow create, update, delete: if request.auth != null;
     }
 
     match /categories/{document=**} {
       allow read: if true;
-      allow create, update, delete: if false;
+      allow create, update, delete: if request.auth != null;
     }
 
     match /bundles/{document=**} {
       allow read: if true;
-      allow create, update, delete: if false;
+      allow create, update, delete: if request.auth != null;
     }
 
     // Users can read/write their own user document
@@ -23,6 +24,15 @@ service cloud.firestore {
       allow create: if request.auth.uid == userId;
       allow update: if request.auth.uid == userId;
       allow delete: if false;
+
+      // Nested profile subcollections
+      match /addresses/{addressId} {
+        allow read, create, update, delete: if request.auth.uid == userId;
+      }
+
+      match /payment_methods/{paymentMethodId} {
+        allow read, create, update, delete: if request.auth.uid == userId;
+      }
     }
 
     // Cart: users can manage their own cart
@@ -30,16 +40,28 @@ service cloud.firestore {
       allow read, write: if request.auth.uid == userId;
     }
 
-    // Wishlist: users can manage their own wishlist
-    match /wishlist/{userId}/{document=**} {
-      allow read, write: if request.auth.uid == userId;
+    // Wishlist: users can manage only their own wishlist entries
+    match /wishlist/{wishlistId} {
+      allow read: if request.auth.uid != null && request.auth.uid == resource.data.userId;
+      allow create: if request.auth.uid != null && request.auth.uid == request.resource.data.userId;
+      allow update: if request.auth.uid != null
+                    && request.auth.uid == resource.data.userId
+                    && request.resource.data.userId == resource.data.userId;
+      allow delete: if request.auth.uid != null && request.auth.uid == resource.data.userId;
     }
 
-    // Orders: users can read their own orders, admin creates them on checkout
+    // Orders: users can access only their own orders and cannot impersonate others
     match /orders/{orderId} {
       allow read: if request.auth.uid == resource.data.userId;
-      allow create: if request.auth.uid != null;
-      allow update, delete: if false;
+      allow create: if request.auth.uid != null
+                    && request.resource.data.userId == request.auth.uid;
+      allow update: if request.auth.uid == resource.data.userId
+                    && request.resource.data.userId == resource.data.userId
+                    && request.resource.data.items == resource.data.items
+                    && request.resource.data.totalAmount == resource.data.totalAmount
+                    && request.resource.data.paymentMethod == resource.data.paymentMethod
+                    && request.resource.data.createdAt == resource.data.createdAt;
+      allow delete: if false;
     }
 
     // Reviews: public read, authenticated users can create

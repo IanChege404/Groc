@@ -53,6 +53,8 @@ app.*.map.json
 .env
 .env.*
 !.env.example
+serviceAccountKey.json
+GoogleService-Info.plist
 
 # Local editor settings
 .vscode/
@@ -64,3 +66,7 @@ app.*.map.json
 .github/Analyse_Codebase_skill.md
 screens.md
 roadmap.md
+android/app/google-services.json
+servicceAccountKey.json
+android/app/google-services.json
+android/app/google-services.json

@@ -1,4 +1,7 @@
 import 'package:flutter/cupertino.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import '../models/bundle_model.dart';
+import '../models/product_model.dart';
 
 import '../../views/auth/forget_password_page.dart';
 import '../../views/auth/intro_login_page.dart';
@@ -20,6 +23,7 @@ import '../../views/drawer/faq_page.dart';
 import '../../views/drawer/help_page.dart';
 import '../../views/drawer/terms_and_conditions_page.dart';
 import '../../views/entrypoint/entrypoint_ui.dart';
+import '../../views/home/home_page.dart';
 import '../../views/home/bundle_create_page.dart';
 import '../../views/home/bundle_details_page.dart';
 import '../../views/home/bundle_product_details_page.dart';
@@ -56,8 +60,42 @@ import 'app_routes.dart';
 import 'unknown_page.dart';
 
 class RouteGenerator {
+  static final Set<String> _protectedRoutes = {
+    AppRoutes.cartPage,
+    AppRoutes.checkoutPage,
+    AppRoutes.deliveryMethod,
+    AppRoutes.mpesaProcessing,
+    AppRoutes.myOrder,
+    AppRoutes.orderDetails,
+    AppRoutes.orderTracking,
+    AppRoutes.deliveryAddress,
+    AppRoutes.newAddress,
+    AppRoutes.paymentMethod,
+    AppRoutes.paymentCardAdd,
+    AppRoutes.wallet,
+    AppRoutes.profileEdit,
+    AppRoutes.notifications,
+    AppRoutes.settings,
+    AppRoutes.settingsLanguage,
+    AppRoutes.settingsNotifications,
+    AppRoutes.changePassword,
+    AppRoutes.changePhoneNumber,
+    AppRoutes.coupon,
+    AppRoutes.couponDetails,
+    AppRoutes.review,
+    AppRoutes.submitReview,
+  };
+
+  static bool _isAuthenticated() => FirebaseAuth.instance.currentUser != null;
+
   static Route? onGenerate(RouteSettings settings) {
     final route = settings.name;
+
+    if (route != null &&
+        _protectedRoutes.contains(route) &&
+        !_isAuthenticated()) {
+      return CupertinoPageRoute(builder: (_) => const LoginOrSignUpPage());
+    }
 
     switch (route) {
       case AppRoutes.splash:
@@ -74,6 +112,9 @@ class RouteGenerator {
 
       case AppRoutes.entryPoint:
         return CupertinoPageRoute(builder: (_) => const EntryPointUI());
+
+      case AppRoutes.home:
+        return CupertinoPageRoute(builder: (_) => const HomePage());
 
       case AppRoutes.search:
         return CupertinoPageRoute(builder: (_) => const SearchPage());
@@ -104,7 +145,13 @@ class RouteGenerator {
         );
 
       case AppRoutes.categoryDetails:
-        return CupertinoPageRoute(builder: (_) => const CategoryProductPage());
+        final categoryArgs = settings.arguments as Map<String, dynamic>?;
+        return CupertinoPageRoute(
+          builder: (_) => CategoryProductPage(
+            categoryId: categoryArgs?['categoryId'] as String?,
+            categoryName: categoryArgs?['categoryName'] as String?,
+          ),
+        );
 
       case AppRoutes.login:
         return CupertinoPageRoute(builder: (_) => const LoginPage());
@@ -133,15 +180,23 @@ class RouteGenerator {
         return CupertinoPageRoute(builder: (_) => const PopularPackPage());
 
       case AppRoutes.bundleProduct:
+        final bundleArgs = settings.arguments as Map<String, dynamic>?;
         return CupertinoPageRoute(
-          builder: (_) => const BundleProductDetailsPage(),
+          builder: (_) => BundleProductDetailsPage(
+            bundle: bundleArgs?['bundle'] as BundleModel?,
+          ),
         );
 
       case AppRoutes.bundleDetailsPage:
         return CupertinoPageRoute(builder: (_) => const BundleDetailsPage());
 
       case AppRoutes.productDetails:
-        return CupertinoPageRoute(builder: (_) => const ProductDetailsPage());
+        final productArgs = settings.arguments as Map<String, dynamic>?;
+        return CupertinoPageRoute(
+          builder: (_) => ProductDetailsPage(
+            product: productArgs?['product'] as ProductModel?,
+          ),
+        );
 
       case AppRoutes.createMyPack:
         return CupertinoPageRoute(builder: (_) => const BundleCreatePage());
@@ -156,7 +211,10 @@ class RouteGenerator {
         return CupertinoPageRoute(builder: (_) => const AllOrderPage());
 
       case AppRoutes.orderDetails:
-        return CupertinoPageRoute(builder: (_) => const OrderDetailsPage());
+        final args = settings.arguments as Map<String, dynamic>?;
+        return CupertinoPageRoute(
+          builder: (_) => OrderDetailsPage(orderId: args?['orderId'] ?? ''),
+        );
 
       case AppRoutes.coupon:
         return CupertinoPageRoute(builder: (_) => const CouponAndOffersPage());

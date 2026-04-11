@@ -76,11 +76,6 @@ class FirestoreAuthService {
 
       // Update user profile
       await user.updateDisplayName('$firstName $lastName');
-      if (phone != null) {
-        await user.updatePhoneNumber(
-          PhoneAuthProvider.credential(verificationId: phone, smsCode: ''),
-        );
-      }
 
       final userData = {
         'id': user.uid,

@@ -7,34 +7,36 @@ import 'item_row.dart';
 class ItemTotalsAndPrice extends StatelessWidget {
   const ItemTotalsAndPrice({
     super.key,
+    required this.totalItems,
+    required this.subtotal,
+    this.shipping = 0,
   });
+
+  final int totalItems;
+  final double subtotal;
+  final double shipping;
+
+  double get totalPrice => subtotal + shipping;
 
   @override
   Widget build(BuildContext context) {
-    return const Padding(
-      padding: EdgeInsets.all(AppDefaults.padding),
+    return Padding(
+      padding: const EdgeInsets.all(AppDefaults.padding),
       child: Column(
         children: [
+          ItemRow(title: 'Total Item', value: '$totalItems'),
           ItemRow(
-            title: 'Total Item',
-            value: '6',
+            title: 'Subtotal',
+            value: '\$ ${subtotal.toStringAsFixed(2)}',
           ),
           ItemRow(
-            title: 'Weight',
-            value: '33 Kg',
+            title: 'Shipping',
+            value: '\$ ${shipping.toStringAsFixed(2)}',
           ),
-          ItemRow(
-            title: 'Price',
-            value: '\$ 82.25',
-          ),
-          ItemRow(
-            title: 'Price',
-            value: '\$ 12.25',
-          ),
-          DottedDivider(),
+          const DottedDivider(),
           ItemRow(
             title: 'Total Price',
-            value: '\$ 70.25',
+            value: '\$ ${totalPrice.toStringAsFixed(2)}',
           ),
         ],
       ),
