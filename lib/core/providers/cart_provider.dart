@@ -47,6 +47,12 @@ class CartNotifier extends StateNotifier<AsyncValue<List<CartItemModel>>> {
     _initializeCart();
   }
 
+  @override
+  void dispose() {
+    _cartSubscription?.cancel();
+    super.dispose();
+  }
+
   Future<void> _initializeCart() async {
     try {
       final userId = authState.maybeWhen(
@@ -103,9 +109,28 @@ class CartNotifier extends StateNotifier<AsyncValue<List<CartItemModel>>> {
         throw Exception('User not authenticated');
       }
 
-      // Create a new item with the userId set
-      final itemWithUserId = item.copyWith(userId: userId);
-      await firestore.addToCart(itemWithUserId);
+      // Use a deterministic document ID: userId_productId
+      // This prevents duplicates and makes updates/removals reliable.
+      final docId = '${userId}_${item.productId}';
+
+      // Check whether this product is already in the cart.
+      final currentItems = state.value ?? [];
+      final existingItem = currentItems
+          .where((i) => i.productId == item.productId)
+          .firstOrNull;
+
+      if (existingItem != null) {
+        // Increment the quantity of the existing cart entry.
+        await firestore.updateCartItemQuantity(
+          userId,
+          existingItem.id,
+          existingItem.quantity + item.quantity,
+        );
+      } else {
+        // Add a new cart item with the deterministic document ID.
+        final newItem = item.copyWith(id: docId, userId: userId);
+        await firestore.addToCart(newItem);
+      }
       // Real-time listener will automatically update state
     } catch (e) {
       state = AsyncValue.error(e, StackTrace.current);

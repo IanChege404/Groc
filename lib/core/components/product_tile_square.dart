@@ -67,7 +67,7 @@ class _ProductTileSquareState extends ConsumerState<ProductTileSquare>
       } else {
         // Add to wishlist
         final newWishlistItem = WishlistModel(
-          id: '${widget.data.id}_${DateTime.now().millisecondsSinceEpoch}',
+          id: '', // Deterministic ID (userId_productId) is set by the provider
           userId: '', // Will be set by the provider
           productId: widget.data.id,
           addedAt: DateTime.now(),
