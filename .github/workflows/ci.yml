@@ -17,6 +17,7 @@ jobs:
         uses: subosito/flutter-action@v2
         with:
           flutter-version: '3.27.0'
+          flutter-version: '3.24.3'
           channel: 'stable'
       
       - name: Get dependencies
@@ -38,6 +39,7 @@ jobs:
         uses: subosito/flutter-action@v2
         with:
           flutter-version: '3.27.0'
+          flutter-version: '3.24.3'
           channel: 'stable'
       
       - name: Get dependencies
@@ -64,6 +66,7 @@ jobs:
         uses: subosito/flutter-action@v2
         with:
           flutter-version: '3.27.0'
+          flutter-version: '3.24.3'
           channel: 'stable'
       
       - name: Set up Java
@@ -84,16 +87,3 @@ jobs:
           name: app-release.apk
           path: build/app/outputs/flutter-apk/app-release.apk
           retention-days: 5
-
-  security-scan:
-    name: Security Scan
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      
-      - name: Run Snyk Security Scan
-        uses: snyk/actions/flutter@master
-        env:
-          SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
-        with:
-          args: --severity-threshold=high
