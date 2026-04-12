@@ -157,10 +157,15 @@ class LoyaltyNotifier extends StateNotifier<AsyncValue<LoyaltyModel?>> {
   }
 
   int _calculateTier(int totalPoints) {
-    if (totalPoints >= 10000) return 4; // Platinum
-    if (totalPoints >= 5000) return 3; // Gold
-    if (totalPoints >= 2000) return 2; // Silver
-    return 1; // Bronze
+    final thresholds = PaymentConstants.loyaltyTierThresholds;
+    int tier = 1;
+    for (int i = thresholds.length - 1; i >= 0; i--) {
+      if (totalPoints >= thresholds[i]) {
+        tier = i + 1;
+        break;
+      }
+    }
+    return tier;
   }
 }
 

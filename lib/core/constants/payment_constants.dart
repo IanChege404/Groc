@@ -43,6 +43,16 @@ class PaymentConstants {
   // Redeem: 100 points = KES 1
   static const double kesPerPoint = 0.01;
 
+  // Loyalty tiers — minimum total points required per tier (index = tier - 1)
+  // tier 1 = Bronze (0), tier 2 = Silver (500), tier 3 = Gold (2000), tier 4 = Platinum (5000)
+  static const List<int> loyaltyTierThresholds = [0, 500, 2000, 5000];
+  static const List<String> loyaltyTierNames = [
+    'Bronze',
+    'Silver',
+    'Gold',
+    'Platinum',
+  ];
+
   // Minimum amounts
   static const double minMpesaAmount = 1.0;
   static const double maxMpesaAmount = 150000.0;

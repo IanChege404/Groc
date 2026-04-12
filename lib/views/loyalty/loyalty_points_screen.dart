@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../core/components/app_back_button.dart';
 import '../../core/constants/app_colors.dart';
 import '../../core/constants/app_defaults.dart';
+import '../../core/constants/payment_constants.dart';
 import '../../core/models/loyalty_model.dart';
 import '../../core/providers/loyalty_provider.dart';
 
@@ -126,9 +127,9 @@ class _TierProgress extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final tiers = ['Bronze', 'Silver', 'Gold', 'Platinum'];
-    final thresholds = [0, 500, 2000, 5000];
-    final currentTierIdx = loyalty.tier - 1;
+    final tiers = PaymentConstants.loyaltyTierNames;
+    final thresholds = PaymentConstants.loyaltyTierThresholds;
+    final currentTierIdx = (loyalty.tier - 1).clamp(0, tiers.length - 1);
 
     return Card(
       child: Padding(
@@ -176,7 +177,7 @@ class _TierProgress extends StatelessWidget {
                 );
               }).toList(),
             ),
-            if (loyalty.tier < 4) ...[
+            if (loyalty.tier < tiers.length) ...[
               const SizedBox(height: 12),
               Text(
                 '${loyalty.pointsToNextTier} more points to ${tiers[loyalty.tier]}',

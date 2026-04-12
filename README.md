@@ -379,6 +379,51 @@ flutter test
 
 See [LICENSE.md](LICENSE.md) for full terms.
 
+## 🆕 New Services Setup
+
+### Payment Integration
+
+Create a `.env.development` file (gitignored) with:
+
+```env
+APP_ENV=development
+API_BASE_URL=http://localhost:8000/api
+
+# M-Pesa (Daraja API)
+MPESA_CONSUMER_KEY=your_sandbox_consumer_key
+MPESA_CONSUMER_SECRET=your_sandbox_consumer_secret
+MPESA_PASSKEY=your_lnm_passkey
+MPESA_BUSINESS_SHORTCODE=174379
+MPESA_CALLBACK_URL=https://your-domain.com/api/mpesa/callback
+
+# Flutterwave
+FLUTTERWAVE_SECRET_KEY=FLWSECK_TEST-xxxx
+FLUTTERWAVE_PUBLIC_KEY=FLWPUBK_TEST-xxxx
+
+# FCM
+FCM_SERVER_KEY=your_fcm_server_key
+```
+
+### Firebase Cloud Messaging (FCM)
+
+1. Enable FCM in your Firebase console
+2. Add `google-services.json` (Android) and `GoogleService-Info.plist` (iOS)
+3. FCM is auto-initialized in `FcmService` — call `fcmService.requestPermission()` after login
+
+### Hive (Offline Cache)
+
+Hive is auto-initialized in `main()`. No additional setup needed. Cached data expires after 30 minutes by default (configurable via `HiveService.isStale`).
+
+### Admin Dashboard
+
+```bash
+cd admin
+npm install
+npm run dev  # http://localhost:3000
+```
+
+Deploy to Vercel: `vercel --prod`
+
 ## 🤝 Support
 
 - 📧 **Email**: support@africangrocery.dev
@@ -391,9 +436,9 @@ See [LICENSE.md](LICENSE.md) for full terms.
 Built with ❤️ for African entrepreneurs and developers.
 
 **Tech Stack:**
-- Flutter 3.9+ | Dart 3.9+
-- Provider 6.1.0 | GoRouter 13.0
-- Very Good Analysis 6.0
+- Flutter 3.27+ | Dart 3.5+
+- Riverpod | Firebase | Hive | Flutterwave | M-Pesa Daraja
+- Next.js 14 | TypeScript | Tailwind CSS (Admin)
 
 ---
 

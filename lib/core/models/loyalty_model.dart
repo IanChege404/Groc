@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import '../constants/payment_constants.dart';
 
 class LoyaltyModel {
   final String id;
@@ -22,23 +23,14 @@ class LoyaltyModel {
   });
 
   String get tierName {
-    switch (tier) {
-      case 4:
-        return 'Platinum';
-      case 3:
-        return 'Gold';
-      case 2:
-        return 'Silver';
-      default:
-        return 'Bronze';
-    }
+    final idx = (tier - 1).clamp(0, PaymentConstants.loyaltyTierNames.length - 1);
+    return PaymentConstants.loyaltyTierNames[idx];
   }
 
   /// Points needed for next tier
   int get pointsToNextTier {
-    if (tier >= 4) return 0;
-    final thresholds = [500, 2000, 5000, 10000];
-    return thresholds[tier] - totalPoints;
+    if (tier >= PaymentConstants.loyaltyTierThresholds.length) return 0;
+    return PaymentConstants.loyaltyTierThresholds[tier] - totalPoints;
   }
 
   /// Monetary value of available points (100 points = KES 1)
