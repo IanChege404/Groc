@@ -1,6 +1,11 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import '../models/cart_item_model.dart';
+import '../models/coupon_model.dart';
+import '../models/notification_model.dart';
 import '../models/order_model.dart';
+import '../models/transaction_model.dart';
+import '../models/user_settings_model.dart';
+import '../models/wallet_model.dart';
 import '../models/wishlist_model.dart';
 import '../utils/logger.dart';
 
@@ -15,6 +20,29 @@ class FirestoreService {
 
   FirestoreService._internal() {
     _firestore = FirebaseFirestore.instance;
+  }
+
+  Future<T> _withRetry<T>(
+    Future<T> Function() action, {
+    int maxAttempts = 3,
+  }) async {
+    Object? lastError;
+
+    for (var attempt = 0; attempt < maxAttempts; attempt++) {
+      try {
+        return await action();
+      } catch (error) {
+        lastError = error;
+        if (attempt == maxAttempts - 1) {
+          rethrow;
+        }
+        await Future<void>.delayed(
+          Duration(milliseconds: 250 * (1 << attempt)),
+        );
+      }
+    }
+
+    throw lastError ?? Exception('Unknown Firestore error');
   }
 
   Query<Map<String, dynamic>> _productsBaseQuery({String? category}) {
@@ -665,6 +693,506 @@ class FirestoreService {
       Logger.error(
         'Error clearing wishlist: $e',
         'FirestoreService.clearWishlist',
+      );
+      rethrow;
+    }
+  }
+
+  // REAL-TIME ORDER TRACKING
+  Stream<OrderModel?> getOrderTrackingStream(String orderId) {
+    return _firestore.collection('orders').doc(orderId).snapshots().map((doc) {
+      if (doc.exists) {
+        return OrderModel.fromFirestore(doc);
+      }
+      return null;
+    });
+  }
+
+  // NOTIFICATION METHODS
+  Stream<List<NotificationModel>> getNotificationsStream(String userId) {
+    return _firestore
+        .collection('users')
+        .doc(userId)
+        .collection('notifications')
+        .orderBy('timestamp', descending: true)
+        .snapshots()
+        .map(
+          (snapshot) => snapshot.docs
+              .map((doc) => NotificationModel.fromFirestore(doc))
+              .toList(),
+        );
+  }
+
+  Future<List<NotificationModel>> getNotifications(String userId) async {
+    try {
+      return await _withRetry(() async {
+        final snapshot = await _firestore
+            .collection('users')
+            .doc(userId)
+            .collection('notifications')
+            .orderBy('timestamp', descending: true)
+            .get();
+        return snapshot.docs
+            .map((doc) => NotificationModel.fromFirestore(doc))
+            .toList();
+      });
+    } catch (e) {
+      Logger.error(
+        'Error fetching notifications: $e',
+        'FirestoreService.getNotifications',
+      );
+      return [];
+    }
+  }
+
+  Future<void> markNotificationAsRead(
+    String userId,
+    String notificationId,
+  ) async {
+    try {
+      await _withRetry(() async {
+        await _firestore
+            .collection('users')
+            .doc(userId)
+            .collection('notifications')
+            .doc(notificationId)
+            .update({'isRead': true});
+      });
+    } catch (e) {
+      Logger.error(
+        'Error marking notification as read: $e',
+        'FirestoreService.markNotificationAsRead',
+      );
+      rethrow;
+    }
+  }
+
+  Future<void> deleteNotification(String userId, String notificationId) async {
+    try {
+      await _withRetry(() async {
+        await _firestore
+            .collection('users')
+            .doc(userId)
+            .collection('notifications')
+            .doc(notificationId)
+            .delete();
+      });
+    } catch (e) {
+      Logger.error(
+        'Error deleting notification: $e',
+        'FirestoreService.deleteNotification',
+      );
+      rethrow;
+    }
+  }
+
+  Future<void> addNotification(
+    String userId,
+    NotificationModel notification,
+  ) async {
+    try {
+      await _withRetry(() async {
+        await _firestore
+            .collection('users')
+            .doc(userId)
+            .collection('notifications')
+            .doc(notification.id)
+            .set(notification.toFirestore());
+      });
+    } catch (e) {
+      Logger.error(
+        'Error adding notification: $e',
+        'FirestoreService.addNotification',
+      );
+      rethrow;
+    }
+  }
+
+  // WALLET METHODS
+  Future<WalletModel?> getWallet(String userId) async {
+    try {
+      return await _withRetry(() async {
+        final doc = await _firestore
+            .collection('users')
+            .doc(userId)
+            .collection('wallet')
+            .doc('balance')
+            .get();
+        if (doc.exists) {
+          return WalletModel.fromFirestore(doc);
+        }
+        return null;
+      });
+    } catch (e) {
+      Logger.error('Error fetching wallet: $e', 'FirestoreService.getWallet');
+      return null;
+    }
+  }
+
+  Stream<WalletModel?> getWalletStream(String userId) {
+    return _firestore
+        .collection('users')
+        .doc(userId)
+        .collection('wallet')
+        .doc('balance')
+        .snapshots()
+        .map((doc) {
+          if (doc.exists) {
+            return WalletModel.fromFirestore(doc);
+          }
+          return null;
+        });
+  }
+
+  Future<void> initializeWallet(String userId) async {
+    try {
+      await _withRetry(() async {
+        final wallet = WalletModel(
+          userId: userId,
+          balance: 0.0,
+          currency: 'KES',
+          lastUpdated: DateTime.now(),
+        );
+        await _firestore
+            .collection('users')
+            .doc(userId)
+            .collection('wallet')
+            .doc('balance')
+            .set(wallet.toFirestore());
+      });
+    } catch (e) {
+      Logger.error(
+        'Error initializing wallet: $e',
+        'FirestoreService.initializeWallet',
+      );
+      rethrow;
+    }
+  }
+
+  Future<void> updateWalletBalance(String userId, double newBalance) async {
+    try {
+      await _withRetry(() async {
+        await _firestore
+            .collection('users')
+            .doc(userId)
+            .collection('wallet')
+            .doc('balance')
+            .set({
+              'userId': userId,
+              'balance': newBalance,
+              'currency': 'KES',
+              'lastUpdated': FieldValue.serverTimestamp(),
+            }, SetOptions(merge: true));
+      });
+    } catch (e) {
+      Logger.error(
+        'Error updating wallet balance: $e',
+        'FirestoreService.updateWalletBalance',
+      );
+      rethrow;
+    }
+  }
+
+  // TRANSACTION METHODS
+  Stream<List<TransactionModel>> getTransactionsStream(String userId) {
+    return _firestore
+        .collection('users')
+        .doc(userId)
+        .collection('transactions')
+        .orderBy('timestamp', descending: true)
+        .snapshots()
+        .map(
+          (snapshot) => snapshot.docs
+              .map((doc) => TransactionModel.fromFirestore(doc))
+              .toList(),
+        );
+  }
+
+  Future<List<TransactionModel>> getTransactionHistory(
+    String userId, {
+    int limit = 50,
+  }) async {
+    try {
+      return await _withRetry(() async {
+        final snapshot = await _firestore
+            .collection('users')
+            .doc(userId)
+            .collection('transactions')
+            .orderBy('timestamp', descending: true)
+            .limit(limit)
+            .get();
+
+        return snapshot.docs
+            .map((doc) => TransactionModel.fromFirestore(doc))
+            .toList();
+      });
+    } catch (e) {
+      Logger.error(
+        'Error fetching transactions: $e',
+        'FirestoreService.getTransactionHistory',
+      );
+      return [];
+    }
+  }
+
+  Future<void> addTransaction(
+    String userId,
+    TransactionModel transaction,
+  ) async {
+    try {
+      await _withRetry(() async {
+        await _firestore
+            .collection('users')
+            .doc(userId)
+            .collection('transactions')
+            .doc(transaction.id)
+            .set(transaction.toFirestore());
+      });
+    } catch (e) {
+      Logger.error(
+        'Error adding transaction: $e',
+        'FirestoreService.addTransaction',
+      );
+      rethrow;
+    }
+  }
+
+  // COUPON METHODS
+  Future<List<CouponModel>> getUserCoupons(String userId) async {
+    try {
+      return await _withRetry(() async {
+        final snapshot = await _firestore
+            .collection('users')
+            .doc(userId)
+            .collection('coupons')
+            .get();
+        return snapshot.docs
+            .map((doc) => CouponModel.fromFirestore(doc))
+            .toList();
+      });
+    } catch (e) {
+      Logger.error(
+        'Error fetching user coupons: $e',
+        'FirestoreService.getUserCoupons',
+      );
+      return [];
+    }
+  }
+
+  Stream<List<CouponModel>> getUserCouponsStream(String userId) {
+    return _firestore
+        .collection('users')
+        .doc(userId)
+        .collection('coupons')
+        .snapshots()
+        .map(
+          (snapshot) => snapshot.docs
+              .map((doc) => CouponModel.fromFirestore(doc))
+              .toList(),
+        );
+  }
+
+  Future<CouponModel?> getCouponByCode(String code) async {
+    try {
+      return await _withRetry(() async {
+        final snapshot = await _firestore
+            .collection('coupons')
+            .where('code', isEqualTo: code.toUpperCase())
+            .limit(1)
+            .get();
+
+        if (snapshot.docs.isNotEmpty) {
+          return CouponModel.fromFirestore(snapshot.docs.first);
+        }
+        return null;
+      });
+    } catch (e) {
+      Logger.error(
+        'Error fetching coupon: $e',
+        'FirestoreService.getCouponByCode',
+      );
+      return null;
+    }
+  }
+
+  Future<void> addCouponToUser(String userId, CouponModel coupon) async {
+    try {
+      await _withRetry(() async {
+        await _firestore
+            .collection('users')
+            .doc(userId)
+            .collection('coupons')
+            .doc(coupon.id)
+            .set(coupon.toFirestore());
+      });
+    } catch (e) {
+      Logger.error(
+        'Error adding coupon to user: $e',
+        'FirestoreService.addCouponToUser',
+      );
+      rethrow;
+    }
+  }
+
+  Future<void> markCouponAsUsed(String userId, String couponId) async {
+    try {
+      await _withRetry(() async {
+        await _firestore
+            .collection('users')
+            .doc(userId)
+            .collection('coupons')
+            .doc(couponId)
+            .update({'isUsed': true});
+      });
+    } catch (e) {
+      Logger.error(
+        'Error marking coupon as used: $e',
+        'FirestoreService.markCouponAsUsed',
+      );
+      rethrow;
+    }
+  }
+
+  Future<void> removeCoupon(String userId, String couponId) async {
+    try {
+      await _withRetry(() async {
+        await _firestore
+            .collection('users')
+            .doc(userId)
+            .collection('coupons')
+            .doc(couponId)
+            .delete();
+      });
+    } catch (e) {
+      Logger.error(
+        'Error removing coupon: $e',
+        'FirestoreService.removeCoupon',
+      );
+      rethrow;
+    }
+  }
+
+  // USER SETTINGS METHODS
+  Future<UserSettingsModel?> getUserSettings(String userId) async {
+    try {
+      return await _withRetry(() async {
+        final doc = await _firestore
+            .collection('users')
+            .doc(userId)
+            .collection('settings')
+            .doc('preferences')
+            .get();
+        if (doc.exists) {
+          return UserSettingsModel.fromFirestore(doc);
+        }
+        return null;
+      });
+    } catch (e) {
+      Logger.error(
+        'Error fetching user settings: $e',
+        'FirestoreService.getUserSettings',
+      );
+      return null;
+    }
+  }
+
+  Stream<UserSettingsModel?> getUserSettingsStream(String userId) {
+    return _firestore
+        .collection('users')
+        .doc(userId)
+        .collection('settings')
+        .doc('preferences')
+        .snapshots()
+        .map((doc) {
+          if (doc.exists) {
+            return UserSettingsModel.fromFirestore(doc);
+          }
+          return null;
+        });
+  }
+
+  Future<void> initializeUserSettings(String userId) async {
+    try {
+      await _withRetry(() async {
+        final settings = UserSettingsModel(
+          userId: userId,
+          lastUpdated: DateTime.now(),
+        );
+        await _firestore
+            .collection('users')
+            .doc(userId)
+            .collection('settings')
+            .doc('preferences')
+            .set(settings.toFirestore());
+      });
+    } catch (e) {
+      Logger.error(
+        'Error initializing user settings: $e',
+        'FirestoreService.initializeUserSettings',
+      );
+      rethrow;
+    }
+  }
+
+  Future<void> updateUserSettings(
+    String userId,
+    Map<String, dynamic> data,
+  ) async {
+    try {
+      await _withRetry(() async {
+        await _firestore
+            .collection('users')
+            .doc(userId)
+            .collection('settings')
+            .doc('preferences')
+            .set({
+              ...data,
+              'lastUpdated': FieldValue.serverTimestamp(),
+            }, SetOptions(merge: true));
+      });
+    } catch (e) {
+      Logger.error(
+        'Error updating user settings: $e',
+        'FirestoreService.updateUserSettings',
+      );
+      rethrow;
+    }
+  }
+
+  Future<void> updateLanguage(String userId, String languageCode) async {
+    try {
+      await updateUserSettings(userId, {'languageCode': languageCode});
+    } catch (e) {
+      Logger.error(
+        'Error updating language: $e',
+        'FirestoreService.updateLanguage',
+      );
+      rethrow;
+    }
+  }
+
+  Future<void> updateNotificationSettings(
+    String userId, {
+    bool? notificationsEnabled,
+    bool? emailNotificationsEnabled,
+    bool? pushNotificationsEnabled,
+  }) async {
+    try {
+      final data = <String, dynamic>{};
+      if (notificationsEnabled != null) {
+        data['notificationsEnabled'] = notificationsEnabled;
+      }
+      if (emailNotificationsEnabled != null) {
+        data['emailNotificationsEnabled'] = emailNotificationsEnabled;
+      }
+      if (pushNotificationsEnabled != null) {
+        data['pushNotificationsEnabled'] = pushNotificationsEnabled;
+      }
+      await updateUserSettings(userId, data);
+    } catch (e) {
+      Logger.error(
+        'Error updating notification settings: $e',
+        'FirestoreService.updateNotificationSettings',
       );
       rethrow;
     }

@@ -1,11 +1,7 @@
 import 'package:flutter/material.dart';
 
 class ItemRow extends StatelessWidget {
-  const ItemRow({
-    super.key,
-    required this.title,
-    required this.value,
-  });
+  const ItemRow({super.key, required this.title, required this.value});
 
   final String title;
   final String value;
@@ -19,16 +15,16 @@ class ItemRow extends StatelessWidget {
           Text(
             title,
             style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                  color: Colors.black,
-                ),
+              color: Theme.of(context).colorScheme.onSurface,
+            ),
           ),
           const Spacer(),
           Text(
             value,
             style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                  color: Colors.black,
-                  fontWeight: FontWeight.bold,
-                ),
+              color: Theme.of(context).colorScheme.onSurface,
+              fontWeight: FontWeight.bold,
+            ),
           ),
         ],
       ),

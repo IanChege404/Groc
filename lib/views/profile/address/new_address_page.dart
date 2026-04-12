@@ -1,20 +1,21 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../core/components/app_radio.dart';
 import '../../../core/constants/app_colors.dart';
 import '../../../core/constants/app_defaults.dart';
 
 import '../../../core/components/app_back_button.dart';
 import '../../../core/services/firestore_service.dart';
+import '../../../core/providers/user_provider.dart';
 
-class NewAddressPage extends StatefulWidget {
+class NewAddressPage extends ConsumerStatefulWidget {
   const NewAddressPage({super.key});
 
   @override
-  State<NewAddressPage> createState() => _NewAddressPageState();
+  ConsumerState<NewAddressPage> createState() => _NewAddressPageState();
 }
 
-class _NewAddressPageState extends State<NewAddressPage> {
+class _NewAddressPageState extends ConsumerState<NewAddressPage> {
   final _formKey = GlobalKey<FormState>();
   final _firestoreService = FirestoreService();
   final _fullNameController = TextEditingController();
@@ -44,8 +45,15 @@ class _NewAddressPageState extends State<NewAddressPage> {
       return;
     }
 
-    final user = FirebaseAuth.instance.currentUser;
-    if (user == null) {
+    /// Get user ID from the provider instead of FirebaseAuth
+    final userProfile = ref.read(userProfileProvider);
+
+    String? userId;
+    userProfile.whenData((user) {
+      userId = user.id;
+    });
+
+    if (userId == null || userId!.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text('Please sign in again to save address')),
       );
@@ -53,7 +61,7 @@ class _NewAddressPageState extends State<NewAddressPage> {
     }
 
     setState(() => _isSaving = true);
-    await _firestoreService.addUserAddress(user.uid, {
+    await _firestoreService.addUserAddress(userId!, {
       'label': _fullNameController.text.trim(),
       'phone': _phoneController.text.trim(),
       'line1': _address1Controller.text.trim(),

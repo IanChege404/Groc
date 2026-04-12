@@ -5,9 +5,7 @@ import '../../../core/components/app_settings_tile.dart';
 import '../../../core/constants/constants.dart';
 
 class TopQuestions extends StatelessWidget {
-  const TopQuestions({
-    super.key,
-  });
+  const TopQuestions({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -18,9 +16,9 @@ class TopQuestions extends StatelessWidget {
         Text(
           'Top Questions',
           style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                color: Colors.black,
-                fontWeight: FontWeight.bold,
-              ),
+            color: Theme.of(context).colorScheme.onSurface,
+            fontWeight: FontWeight.bold,
+          ),
         ),
         const SizedBox(height: AppDefaults.padding / 2),
         AppSettingsListTile(

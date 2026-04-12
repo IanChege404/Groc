@@ -19,9 +19,7 @@ class VerticalStepIndicator extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: const EdgeInsets.symmetric(
-        horizontal: AppDefaults.margin,
-      ),
+      margin: const EdgeInsets.symmetric(horizontal: AppDefaults.margin),
       child: Column(
         children: [
           if (!isStart)
@@ -29,7 +27,9 @@ class VerticalStepIndicator extends StatelessWidget {
               height: height / 2,
               width: 3,
               decoration: BoxDecoration(
-                color: isActive ? AppColors.primary : Colors.grey,
+                color: isActive
+                    ? AppColors.primary
+                    : Theme.of(context).dividerColor,
               ),
             ),
           Container(
@@ -37,7 +37,9 @@ class VerticalStepIndicator extends StatelessWidget {
             height: 14,
             decoration: BoxDecoration(
               border: Border.all(
-                color: isActive ? AppColors.primary : Colors.grey,
+                color: isActive
+                    ? AppColors.primary
+                    : Theme.of(context).dividerColor,
                 width: 3,
               ),
               shape: BoxShape.circle,
@@ -47,10 +49,12 @@ class VerticalStepIndicator extends StatelessWidget {
             height: !isStart ? height / 2 : height,
             width: 3,
             decoration: BoxDecoration(
-              color: isActive ? AppColors.primary : Colors.grey,
+              color: isActive
+                  ? AppColors.primary
+                  : Theme.of(context).dividerColor,
               borderRadius: isEnd ? AppDefaults.borderRadius : null,
             ),
-          )
+          ),
         ],
       ),
     );

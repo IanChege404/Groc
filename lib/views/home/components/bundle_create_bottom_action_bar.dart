@@ -5,9 +5,7 @@ import '../../../core/constants/constants.dart';
 import 'product_avatar_with_quantity.dart';
 
 class BottomActionBar extends StatelessWidget {
-  const BottomActionBar({
-    super.key,
-  });
+  const BottomActionBar({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -39,14 +37,14 @@ class BottomActionBar extends StatelessWidget {
           Text(
             '\$35.05',
             style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                  color: Colors.white,
-                  fontWeight: FontWeight.bold,
-                ),
+              color: Theme.of(context).colorScheme.onPrimary,
+              fontWeight: FontWeight.bold,
+            ),
           ),
           const SizedBox(width: 8),
           Container(
-            decoration: const BoxDecoration(
-              color: Colors.white,
+            decoration: BoxDecoration(
+              color: Theme.of(context).colorScheme.onPrimary,
               shape: BoxShape.circle,
             ),
             padding: const EdgeInsets.all(AppDefaults.padding),

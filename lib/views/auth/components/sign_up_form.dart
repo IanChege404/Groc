@@ -100,7 +100,7 @@ class _SignUpFormState extends State<SignUpForm> {
       margin: const EdgeInsets.all(AppDefaults.margin),
       padding: const EdgeInsets.all(AppDefaults.padding),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: Theme.of(context).colorScheme.surface,
         boxShadow: AppDefaults.boxShadow,
         borderRadius: AppDefaults.borderRadius,
       ),

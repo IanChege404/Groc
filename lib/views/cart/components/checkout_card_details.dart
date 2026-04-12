@@ -4,9 +4,7 @@ import 'package:flutter/material.dart';
 import '../../../core/constants/constants.dart';
 
 class CardDetails extends StatefulWidget {
-  const CardDetails({
-    super.key,
-  });
+  const CardDetails({super.key});
 
   @override
   State<CardDetails> createState() => _CardDetailsState();
@@ -110,15 +108,14 @@ class _CardDetailsState extends State<CardDetails> {
             children: [
               Text(
                 'Remember My Card Details',
-                style: Theme.of(context)
-                    .textTheme
-                    .bodyLarge
-                    ?.copyWith(color: Colors.black),
+                style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                  color: Theme.of(context).colorScheme.onSurface,
+                ),
               ),
               const Spacer(),
-              CupertinoSwitch(value: true, onChanged: (v) {})
+              CupertinoSwitch(value: true, onChanged: (v) {}),
             ],
-          )
+          ),
         ],
       ),
     );

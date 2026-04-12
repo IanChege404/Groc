@@ -1,123 +1,125 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/svg.dart';
 
 import '../../../core/components/app_back_button.dart';
 import '../../../core/components/app_radio.dart';
+import '../../../core/components/retryable_error_view.dart';
 import '../../../core/constants/constants.dart';
+import '../../../core/mixins/refresh_on_return_mixin.dart';
+import '../../../core/providers/auth_provider.dart';
+import '../../../core/providers/user_data_provider.dart';
 import '../../../core/services/firestore_service.dart';
 import '../../../core/routes/app_routes.dart';
 
-class AddressPage extends StatefulWidget {
+class AddressPage extends ConsumerStatefulWidget {
   const AddressPage({super.key});
 
   @override
-  State<AddressPage> createState() => _AddressPageState();
+  ConsumerState<AddressPage> createState() => _AddressPageState();
 }
 
-class _AddressPageState extends State<AddressPage> {
+class _AddressPageState extends ConsumerState<AddressPage>
+    with RefreshOnReturnMixin<AddressPage> {
   final _firestoreService = FirestoreService();
-  bool _loading = true;
-  List<Map<String, dynamic>> _addresses = const [];
 
   @override
-  void initState() {
-    super.initState();
-    _loadAddresses();
-  }
-
-  Future<void> _loadAddresses() async {
-    final user = FirebaseAuth.instance.currentUser;
-    if (user == null) {
-      if (!mounted) return;
-      setState(() {
-        _loading = false;
-        _addresses = const [];
-      });
-      return;
+  Future<void> onRefreshRequested() async {
+    final userId = ref.read(authProvider).value;
+    if (userId != null && userId.isNotEmpty) {
+      ref.invalidate(userAddressesProvider(userId));
     }
-
-    final addresses = await _firestoreService.getUserAddresses(user.uid);
-    if (!mounted) return;
-    setState(() {
-      _addresses = addresses;
-      _loading = false;
-    });
   }
 
   Future<void> _deleteAddress(String addressId) async {
-    final user = FirebaseAuth.instance.currentUser;
-    if (user == null) return;
-    await _firestoreService.deleteUserAddress(user.uid, addressId);
-    if (!mounted) return;
-    await _loadAddresses();
+    final userId = ref.read(authProvider).value;
+    if (userId == null || userId.isEmpty) return;
+
+    await _firestoreService.deleteUserAddress(userId, addressId);
+    ref.invalidate(userAddressesProvider(userId));
   }
 
   Future<void> _setDefault(String addressId) async {
-    final user = FirebaseAuth.instance.currentUser;
-    if (user == null) return;
-    await _firestoreService.setDefaultAddress(user.uid, addressId);
-    if (!mounted) return;
-    await _loadAddresses();
+    final userId = ref.read(authProvider).value;
+    if (userId == null || userId.isEmpty) return;
+
+    await _firestoreService.setDefaultAddress(userId, addressId);
+    ref.invalidate(userAddressesProvider(userId));
   }
 
   @override
   Widget build(BuildContext context) {
+    final userId = ref.watch(authProvider).value;
+    final addressesAsync = userId == null || userId.isEmpty
+        ? const AsyncValue<List<Map<String, dynamic>>>.data([])
+        : ref.watch(userAddressesProvider(userId));
+
     return Scaffold(
       backgroundColor: AppColors.cardColor,
       appBar: AppBar(
         leading: const AppBackButton(),
         title: const Text('Delivery Address'),
       ),
-      body: _loading
-          ? const Center(child: CircularProgressIndicator())
-          : Container(
-              margin: const EdgeInsets.all(AppDefaults.margin),
-              padding: const EdgeInsets.all(AppDefaults.padding),
-              decoration: BoxDecoration(
-                color: AppColors.scaffoldBackground,
-                borderRadius: AppDefaults.borderRadius,
+      body: addressesAsync.when(
+        loading: () => const Center(child: CircularProgressIndicator()),
+        error: (error, _) => RetryableErrorView(
+          title: 'Unable to load addresses',
+          message:
+              'Please check your internet connection and try again. ${error.toString()}',
+          onRetry: () => onRefreshRequested(),
+        ),
+        data: (addresses) => Container(
+          margin: const EdgeInsets.all(AppDefaults.margin),
+          padding: const EdgeInsets.all(AppDefaults.padding),
+          decoration: BoxDecoration(
+            color: AppColors.scaffoldBackground,
+            borderRadius: AppDefaults.borderRadius,
+          ),
+          child: Stack(
+            children: [
+              RefreshIndicator(
+                onRefresh: onRefreshRequested,
+                child: addresses.isEmpty
+                    ? ListView(
+                        children: const [
+                          SizedBox(height: 240),
+                          Center(child: Text('No saved addresses yet')),
+                        ],
+                      )
+                    : ListView.separated(
+                        itemBuilder: (context, index) {
+                          final address = addresses[index];
+                          return AddressTile(
+                            label: (address['label'] as String?) ?? 'Address',
+                            address: (address['line1'] as String?) ?? '',
+                            number: (address['phone'] as String?) ?? '',
+                            isActive: address['isDefault'] == true,
+                            onTap: () => _setDefault(address['id'] as String),
+                            onDelete: () =>
+                                _deleteAddress(address['id'] as String),
+                          );
+                        },
+                        itemCount: addresses.length,
+                        separatorBuilder: (context, index) =>
+                            const Divider(thickness: 0.2),
+                      ),
               ),
-              child: Stack(
-                children: [
-                  if (_addresses.isEmpty)
-                    const Center(child: Text('No saved addresses yet'))
-                  else
-                    ListView.separated(
-                      itemBuilder: (context, index) {
-                        final address = _addresses[index];
-                        return AddressTile(
-                          label: (address['label'] as String?) ?? 'Address',
-                          address: (address['line1'] as String?) ?? '',
-                          number: (address['phone'] as String?) ?? '',
-                          isActive: address['isDefault'] == true,
-                          onTap: () => _setDefault(address['id'] as String),
-                          onDelete: () =>
-                              _deleteAddress(address['id'] as String),
-                        );
-                      },
-                      itemCount: _addresses.length,
-                      separatorBuilder: (context, index) =>
-                          const Divider(thickness: 0.2),
-                    ),
-                  Positioned(
-                    bottom: 16,
-                    right: 16,
-                    child: FloatingActionButton(
-                      onPressed: () {
-                        Navigator.pushNamed(
-                          context,
-                          AppRoutes.newAddress,
-                        ).then((_) => _loadAddresses());
-                      },
-                      backgroundColor: AppColors.primary,
-                      splashColor: AppColors.primary,
-                      child: const Icon(Icons.add),
-                    ),
-                  ),
-                ],
+              Positioned(
+                bottom: 16,
+                right: 16,
+                child: FloatingActionButton(
+                  onPressed: () {
+                    Navigator.pushNamed(context, AppRoutes.newAddress);
+                  },
+                  backgroundColor: AppColors.primary,
+                  splashColor: AppColors.primary,
+                  child: const Icon(Icons.add),
+                ),
               ),
-            ),
+            ],
+          ),
+        ),
+      ),
     );
   }
 }
@@ -157,18 +159,18 @@ class AddressTile extends StatelessWidget {
             children: [
               Text(
                 label,
-                style: Theme.of(
-                  context,
-                ).textTheme.bodyLarge?.copyWith(color: Colors.black),
+                style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                  color: Theme.of(context).colorScheme.onSurface,
+                ),
               ),
               const SizedBox(height: 4),
               Text(address),
               const SizedBox(height: 4),
               Text(
                 number,
-                style: Theme.of(
-                  context,
-                ).textTheme.bodyLarge?.copyWith(color: Colors.black),
+                style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                  color: Theme.of(context).colorScheme.onSurface,
+                ),
               ),
             ],
           ),

@@ -17,39 +17,21 @@ class CategoriesChip extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // return Material(
-    //   color: isActive ? AppColors.primary : null,
-    //   borderRadius: BorderRadius.circular(4),
-    //   child: InkWell(
-    //     onTap: onPressed,
-    //     borderRadius: BorderRadius.circular(4),
-    //     child: Container(
-    //       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-    //       decoration: BoxDecoration(
-    //         borderRadius: BorderRadius.circular(4),
-    //         border: Border.all(color: AppColors.primary),
-    //       ),
-    //       child: Text(
-    //         label,
-    //         style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-    //               color: isActive ? Colors.white : null,
-    //             ),
-    //       ),
-    //     ),
-    //   ),
-    // );
     return OutlinedButton(
-      onPressed: () {},
+      onPressed: onPressed,
       style: OutlinedButton.styleFrom(
-        foregroundColor: isActive ? Colors.white : AppColors.placeholder,
-        padding:
-            const EdgeInsets.symmetric(horizontal: AppDefaults.padding * 1.5),
-        minimumSize: const Size(40, 48),
-        backgroundColor: isActive ? AppColors.primary : Colors.white,
-        side: const BorderSide(color: AppColors.primary),
-        textStyle: const TextStyle(
-          fontWeight: FontWeight.normal,
+        foregroundColor: isActive
+            ? Theme.of(context).colorScheme.onPrimary
+            : AppColors.placeholder,
+        padding: const EdgeInsets.symmetric(
+          horizontal: AppDefaults.padding * 1.5,
         ),
+        minimumSize: const Size(40, 48),
+        backgroundColor: isActive
+            ? AppColors.primary
+            : Theme.of(context).colorScheme.surface,
+        side: const BorderSide(color: AppColors.primary),
+        textStyle: const TextStyle(fontWeight: FontWeight.normal),
       ),
       child: Text(label),
     );

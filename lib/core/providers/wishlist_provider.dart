@@ -29,7 +29,7 @@ final isProductInWishlistProvider = FutureProvider.family<bool, String>((
 ) async {
   final wishlistState = ref.watch(wishlistItemsProvider);
   return wishlistState.maybeWhen(
-    data: (items) => items.any((item) => item.productId == productId),
+    data: (items) => items.any((item) => item.itemId == productId),
     orElse: () => false,
   );
 });
@@ -148,7 +148,7 @@ class WishlistNotifier extends StateNotifier<AsyncValue<List<WishlistModel>>> {
       );
 
       Logger.info(
-        'Adding to wishlist - userId: $userId, productId: ${item.productId}',
+        'Adding to wishlist - userId: $userId, itemId: ${item.itemId}',
         'WishlistNotifier.addToWishlist',
       );
 
@@ -170,10 +170,15 @@ class WishlistNotifier extends StateNotifier<AsyncValue<List<WishlistModel>>> {
         _setupRealtimeListener(userId);
       }
 
-      // Use a deterministic document ID: userId_productId.
-      // This prevents duplicates and keeps isProductInWishlist checks consistent.
-      final docId = '${userId}_${item.productId}';
-      final itemWithUserId = item.copyWith(id: docId, userId: userId);
+      // Use a deterministic document ID including item type.
+      // This allows product and bundle entries to coexist safely.
+      final itemType = item.itemType ?? WishlistItemType.product;
+      final docId = '${userId}_${itemType.name}_${item.itemId}';
+      final itemWithUserId = item.copyWith(
+        id: docId,
+        userId: userId,
+        itemType: itemType,
+      );
       Logger.info(
         'Saving to Firestore - itemId: ${itemWithUserId.id}, userId: ${itemWithUserId.userId}',
         'WishlistNotifier.addToWishlist',

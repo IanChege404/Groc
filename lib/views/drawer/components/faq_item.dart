@@ -24,16 +24,16 @@ class TitleAndParagraph extends StatelessWidget {
           Text(
             title,
             style: isTitleHeadline
-                ? Theme.of(context).textTheme.titleLarge?.copyWith(
-                      fontWeight: FontWeight.bold,
-                    )
+                ? Theme.of(
+                    context,
+                  ).textTheme.titleLarge?.copyWith(fontWeight: FontWeight.bold)
                 : Theme.of(context).textTheme.bodyLarge?.copyWith(
-                      fontWeight: FontWeight.bold,
-                      color: Colors.black,
-                    ),
+                    fontWeight: FontWeight.bold,
+                    color: Theme.of(context).colorScheme.onSurface,
+                  ),
           ),
           const SizedBox(height: AppDefaults.padding),
-          Text(paragraph)
+          Text(paragraph),
         ],
       ),
     );

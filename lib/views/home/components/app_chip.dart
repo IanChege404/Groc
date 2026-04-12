@@ -31,7 +31,9 @@ class AppChip extends StatelessWidget {
         padding: const EdgeInsets.all(4),
         child: TextButton(
           onPressed: onPressed,
-          style: TextButton.styleFrom(foregroundColor: Colors.grey),
+          style: TextButton.styleFrom(
+            foregroundColor: Theme.of(context).hintColor,
+          ),
           child: Text(label),
         ),
       );

@@ -39,7 +39,9 @@ class AddressCard extends StatelessWidget {
             decoration: BoxDecoration(
               borderRadius: AppDefaults.borderRadius,
               border: Border.all(
-                color: isActive ? AppColors.primary : Colors.grey,
+                color: isActive
+                    ? AppColors.primary
+                    : Theme.of(context).dividerColor,
                 width: isActive ? 1 : 0.3,
               ),
             ),
@@ -55,14 +57,14 @@ class AddressCard extends StatelessWidget {
                     Text(
                       label,
                       style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                            fontWeight: FontWeight.bold,
-                            color: Colors.black,
-                          ),
+                        fontWeight: FontWeight.bold,
+                        color: Theme.of(context).colorScheme.onSurface,
+                      ),
                     ),
                     const SizedBox(height: 8),
                     Text(phoneNumber),
                     const SizedBox(height: 8),
-                    Text(address)
+                    Text(address),
                   ],
                 ),
               ],

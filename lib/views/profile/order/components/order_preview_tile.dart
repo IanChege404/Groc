@@ -24,7 +24,7 @@ class OrderPreviewTile extends StatelessWidget {
         vertical: AppDefaults.padding / 2,
       ),
       child: Material(
-        color: Colors.white,
+        color: Theme.of(context).colorScheme.surface,
         borderRadius: AppDefaults.borderRadius,
         child: InkWell(
           onTap: onTap,
@@ -40,9 +40,9 @@ class OrderPreviewTile extends StatelessWidget {
                     const SizedBox(width: 5),
                     Text(
                       orderID,
-                      style: Theme.of(
-                        context,
-                      ).textTheme.bodyLarge?.copyWith(color: Colors.black),
+                      style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                        color: Theme.of(context).colorScheme.onSurface,
+                      ),
                     ),
                     const Spacer(),
                     Text(date),

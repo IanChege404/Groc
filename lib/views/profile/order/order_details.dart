@@ -26,7 +26,7 @@ class OrderDetailsPage extends ConsumerWidget {
       case 'cancelled':
         return const Color(0xFFFF1F1F);
       default:
-        return Colors.black;
+        return AppColors.primary;
     }
   }
 
@@ -52,7 +52,7 @@ class OrderDetailsPage extends ConsumerWidget {
                 Text(
                   item.productName,
                   style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                    color: Colors.black,
+                    color: Theme.of(context).colorScheme.onSurface,
                     fontWeight: FontWeight.w600,
                   ),
                 ),
@@ -67,7 +67,7 @@ class OrderDetailsPage extends ConsumerWidget {
           Text(
             '\$${lineTotal.toStringAsFixed(2)}',
             style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-              color: Colors.black,
+              color: Theme.of(context).colorScheme.onSurface,
               fontWeight: FontWeight.w600,
             ),
           ),
@@ -100,7 +100,7 @@ class OrderDetailsPage extends ConsumerWidget {
               margin: const EdgeInsets.all(AppDefaults.margin),
               padding: const EdgeInsets.all(AppDefaults.padding),
               decoration: BoxDecoration(
-                color: Colors.white,
+                color: Theme.of(context).colorScheme.surface,
                 borderRadius: AppDefaults.borderRadius,
               ),
               child: Column(
@@ -110,7 +110,7 @@ class OrderDetailsPage extends ConsumerWidget {
                     'Order id #${order.id}',
                     style: Theme.of(context).textTheme.bodyLarge?.copyWith(
                       fontWeight: FontWeight.bold,
-                      color: Colors.black,
+                      color: Theme.of(context).colorScheme.onSurface,
                     ),
                   ),
                   const SizedBox(height: 6),
@@ -141,7 +141,7 @@ class OrderDetailsPage extends ConsumerWidget {
                     'Product Details',
                     style: Theme.of(context).textTheme.bodyLarge?.copyWith(
                       fontWeight: FontWeight.bold,
-                      color: Colors.black,
+                      color: Theme.of(context).colorScheme.onSurface,
                     ),
                   ),
                   const SizedBox(height: 8),
@@ -153,7 +153,7 @@ class OrderDetailsPage extends ConsumerWidget {
                         'Total Amount',
                         style: Theme.of(context).textTheme.bodyLarge?.copyWith(
                           fontWeight: FontWeight.bold,
-                          color: Colors.black,
+                          color: Theme.of(context).colorScheme.onSurface,
                         ),
                       ),
                       const Spacer(),
@@ -161,7 +161,7 @@ class OrderDetailsPage extends ConsumerWidget {
                         '\$${order.totalAmount.toStringAsFixed(2)}',
                         style: Theme.of(context).textTheme.bodyLarge?.copyWith(
                           fontWeight: FontWeight.bold,
-                          color: Colors.black,
+                          color: Theme.of(context).colorScheme.onSurface,
                         ),
                       ),
                     ],
@@ -173,7 +173,7 @@ class OrderDetailsPage extends ConsumerWidget {
                         'Paid From',
                         style: Theme.of(context).textTheme.bodyLarge?.copyWith(
                           fontWeight: FontWeight.bold,
-                          color: Colors.black,
+                          color: Theme.of(context).colorScheme.onSurface,
                         ),
                       ),
                       const Spacer(),
@@ -181,7 +181,7 @@ class OrderDetailsPage extends ConsumerWidget {
                         order.paymentMethod.toUpperCase(),
                         style: Theme.of(context).textTheme.bodyLarge?.copyWith(
                           fontWeight: FontWeight.bold,
-                          color: Colors.black,
+                          color: Theme.of(context).colorScheme.onSurface,
                         ),
                       ),
                     ],

@@ -38,15 +38,16 @@ class UnknownPage extends StatelessWidget {
                 Text(
                   'oppss!! something wrong',
                   style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                        fontWeight: FontWeight.bold,
-                        color: Colors.black,
-                      ),
+                    fontWeight: FontWeight.bold,
+                    color: Theme.of(context).colorScheme.onSurface,
+                  ),
                   textAlign: TextAlign.center,
                 ),
                 const SizedBox(height: 16),
                 const Padding(
-                  padding:
-                      EdgeInsets.symmetric(horizontal: AppDefaults.padding),
+                  padding: EdgeInsets.symmetric(
+                    horizontal: AppDefaults.padding,
+                  ),
                   child: Text(
                     'Sorry, something went wrong\nplease try again .',
                     textAlign: TextAlign.center,

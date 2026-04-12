@@ -13,10 +13,7 @@ class HelpPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        leading: const AppBackButton(),
-        title: const Text('Help'),
-      ),
+      appBar: AppBar(leading: const AppBackButton(), title: const Text('Help')),
       body: SingleChildScrollView(
         child: Padding(
           padding: const EdgeInsets.all(AppDefaults.padding),
@@ -26,9 +23,9 @@ class HelpPage extends StatelessWidget {
               Text(
                 'Hi! How can we help?',
                 style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                      color: Colors.black,
-                      fontWeight: FontWeight.bold,
-                    ),
+                  color: Theme.of(context).colorScheme.onSurface,
+                  fontWeight: FontWeight.bold,
+                ),
               ),
               const _SearchBar(),
               const TopQuestions(),
@@ -47,9 +44,9 @@ class _SearchBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Theme(
-      data: Theme.of(context).copyWith(
-        inputDecorationTheme: AppTheme.secondaryInputDecorationTheme,
-      ),
+      data: Theme.of(
+        context,
+      ).copyWith(inputDecorationTheme: AppTheme.secondaryInputDecorationTheme),
       child: Padding(
         padding: const EdgeInsets.symmetric(vertical: AppDefaults.padding),
         child: TextField(

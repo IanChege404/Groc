@@ -58,7 +58,11 @@ class PopularPackPage extends ConsumerWidget {
               left: 0,
               child: Container(
                 padding: const EdgeInsets.all(AppDefaults.padding * 2),
-                decoration: const BoxDecoration(color: Colors.white60),
+                decoration: BoxDecoration(
+                  color: Theme.of(
+                    context,
+                  ).colorScheme.surface.withValues(alpha: 0.80),
+                ),
                 child: ElevatedButton(
                   onPressed: () {
                     Navigator.pushNamed(context, AppRoutes.createMyPack);

@@ -47,7 +47,7 @@ class _ForgetPasswordPageState extends State<ForgetPasswordPage> {
                   vertical: AppDefaults.padding * 3,
                 ),
                 decoration: BoxDecoration(
-                  color: Colors.white,
+                  color: Theme.of(context).colorScheme.surface,
                   borderRadius: AppDefaults.borderRadius,
                 ),
                 child: Column(
@@ -56,10 +56,9 @@ class _ForgetPasswordPageState extends State<ForgetPasswordPage> {
                   children: [
                     Text(
                       'Reset your password',
-                      style: Theme.of(context)
-                          .textTheme
-                          .titleLarge
-                          ?.copyWith(fontWeight: FontWeight.bold),
+                      style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                        fontWeight: FontWeight.bold,
+                      ),
                     ),
                     const SizedBox(height: AppDefaults.padding),
                     const Text(
@@ -87,7 +86,7 @@ class _ForgetPasswordPageState extends State<ForgetPasswordPage> {
                     ),
                   ],
                 ),
-              )
+              ),
             ],
           ),
         ),

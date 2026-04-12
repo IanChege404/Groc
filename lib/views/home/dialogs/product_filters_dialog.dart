@@ -18,7 +18,7 @@ class ProductFiltersDialog extends StatelessWidget {
               width: 56,
               height: 3,
               decoration: BoxDecoration(
-                color: Colors.black,
+                color: Theme.of(context).dividerColor,
                 borderRadius: AppDefaults.borderRadius,
               ),
               margin: const EdgeInsets.all(8),
@@ -72,9 +72,9 @@ class _RatingStar extends StatelessWidget {
             child: Text(
               'Rating Star',
               style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                    fontWeight: FontWeight.bold,
-                    color: Colors.black,
-                  ),
+                fontWeight: FontWeight.bold,
+                color: Theme.of(context).colorScheme.onSurface,
+              ),
             ),
           ),
           const SizedBox(height: 8),
@@ -97,14 +97,14 @@ class _RatingStar extends StatelessWidget {
                     onTap: () => onStarSelect(index + 1),
                     child: const Icon(
                       Icons.star_rounded,
-                      color: Colors.grey,
+                      color: AppColors.placeholder,
                       size: 32,
                     ),
                   );
                 }
               },
             ),
-          )
+          ),
         ],
       ),
     );
@@ -125,9 +125,9 @@ class _BrandSelector extends StatelessWidget {
             child: Text(
               'Brand',
               style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                    fontWeight: FontWeight.bold,
-                    color: Colors.black,
-                  ),
+                fontWeight: FontWeight.bold,
+                color: Theme.of(context).colorScheme.onSurface,
+              ),
             ),
           ),
           const SizedBox(height: 16),
@@ -138,11 +138,7 @@ class _BrandSelector extends StatelessWidget {
               spacing: 16,
               runSpacing: 16,
               children: [
-                CategoriesChip(
-                  isActive: true,
-                  label: 'Any',
-                  onPressed: () {},
-                ),
+                CategoriesChip(isActive: true, label: 'Any', onPressed: () {}),
                 CategoriesChip(
                   isActive: false,
                   label: 'Square',
@@ -165,7 +161,7 @@ class _BrandSelector extends StatelessWidget {
                 ),
               ],
             ),
-          )
+          ),
         ],
       ),
     );
@@ -186,9 +182,9 @@ class _CategoriesSelector extends StatelessWidget {
             child: Text(
               'Categories',
               style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                    fontWeight: FontWeight.bold,
-                    color: Colors.black,
-                  ),
+                fontWeight: FontWeight.bold,
+                color: Theme.of(context).colorScheme.onSurface,
+              ),
             ),
           ),
           const SizedBox(height: 16),
@@ -228,7 +224,7 @@ class _CategoriesSelector extends StatelessWidget {
                 ),
               ],
             ),
-          )
+          ),
         ],
       ),
     );
@@ -256,9 +252,9 @@ class _PriceRangeState extends State<_PriceRange> {
             child: Text(
               'Price Range',
               style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                    fontWeight: FontWeight.bold,
-                    color: Colors.black,
-                  ),
+                fontWeight: FontWeight.bold,
+                color: Theme.of(context).colorScheme.onSurface,
+              ),
             ),
           ),
           RangeSlider(
@@ -281,13 +277,9 @@ class _PriceRangeState extends State<_PriceRange> {
             padding: EdgeInsets.symmetric(horizontal: 20.0),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text('\$0'),
-                Text('\$50'),
-                Text('\$100'),
-              ],
+              children: [Text('\$0'), Text('\$50'), Text('\$100')],
             ),
-          )
+          ),
         ],
       ),
     );
@@ -306,30 +298,21 @@ class _SortBy extends StatelessWidget {
           Text(
             'Sort By',
             style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                  fontWeight: FontWeight.bold,
-                  color: Colors.black,
-                ),
+              fontWeight: FontWeight.bold,
+              color: Theme.of(context).colorScheme.onSurface,
+            ),
           ),
           const Spacer(),
           DropdownButton(
             value: 'Popularity',
             underline: const SizedBox(),
-            icon: const Icon(
-              Icons.arrow_drop_down,
-              color: AppColors.primary,
-            ),
+            icon: const Icon(Icons.arrow_drop_down, color: AppColors.primary),
             items: const [
-              DropdownMenuItem(
-                value: 'Popularity',
-                child: Text('Popularity'),
-              ),
-              DropdownMenuItem(
-                value: 'Price',
-                child: Text('Price'),
-              ),
+              DropdownMenuItem(value: 'Popularity', child: Text('Popularity')),
+              DropdownMenuItem(value: 'Price', child: Text('Price')),
             ],
             onChanged: (v) {},
-          )
+          ),
         ],
       ),
     );
@@ -356,19 +339,16 @@ class _FilterHeader extends StatelessWidget {
                 padding: EdgeInsets.zero,
                 backgroundColor: AppColors.scaffoldWithBoxBackground,
               ),
-              child: const Icon(
-                Icons.close,
-                color: Colors.black,
-              ),
+              child: const Icon(Icons.close, color: AppColors.primary),
             ),
           ),
         ),
         Text(
           'Filter',
           style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                fontWeight: FontWeight.bold,
-                color: Colors.black,
-              ),
+            fontWeight: FontWeight.bold,
+            color: Theme.of(context).colorScheme.onSurface,
+          ),
         ),
         SizedBox(
           width: 56,
@@ -377,11 +357,11 @@ class _FilterHeader extends StatelessWidget {
             child: Text(
               'Reset',
               style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                    color: Colors.black,
-                  ),
+                color: Theme.of(context).colorScheme.onSurface,
+              ),
             ),
           ),
-        )
+        ),
       ],
     );
   }

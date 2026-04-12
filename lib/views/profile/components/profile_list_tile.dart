@@ -30,10 +30,9 @@ class ProfileListTile extends StatelessWidget {
               const SizedBox(width: 16),
               Text(
                 title,
-                style: Theme.of(context)
-                    .textTheme
-                    .bodyLarge
-                    ?.copyWith(color: Colors.black),
+                style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                  color: Theme.of(context).colorScheme.onSurface,
+                ),
               ),
               const Spacer(),
               SvgPicture.asset(AppIcons.right),

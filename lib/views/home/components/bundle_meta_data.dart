@@ -1,65 +1,62 @@
 import 'package:flutter/material.dart';
 
+import '../../../core/models/bundle_model.dart';
+
 class BundleMetaData extends StatelessWidget {
-  const BundleMetaData({
-    super.key,
-  });
+  const BundleMetaData({super.key, required this.bundle});
+
+  final BundleModel bundle;
+
+  String _formatCurrency(double value) => 'Ksh ${value.toStringAsFixed(2)}';
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final itemCount = bundle.itemNames.length;
+    final savings = (bundle.mainPrice - bundle.price).clamp(
+      0.0,
+      double.infinity,
+    );
+
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 16.0),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          /* <---- Weight -----> */
           Column(
             children: [
               Text(
-                '25 Kg',
-                style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                      fontWeight: FontWeight.bold,
-                      color: Colors.black,
-                    ),
+                '$itemCount',
+                style: theme.textTheme.bodyLarge?.copyWith(
+                  fontWeight: FontWeight.bold,
+                  color: theme.colorScheme.onSurface,
+                ),
               ),
-              Text(
-                'Weight',
-                style: Theme.of(context).textTheme.bodyLarge,
-              ),
+              Text('Items', style: theme.textTheme.bodyLarge),
             ],
           ),
-
-          /* <----  Size -----> */
           Column(
             children: [
               Text(
-                'Medium',
-                style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                      fontWeight: FontWeight.bold,
-                      color: Colors.black,
-                    ),
+                '${bundle.reviewCount}',
+                style: theme.textTheme.bodyLarge?.copyWith(
+                  fontWeight: FontWeight.bold,
+                  color: theme.colorScheme.onSurface,
+                ),
               ),
-              Text(
-                'Size',
-                style: Theme.of(context).textTheme.bodyLarge,
-              ),
+              Text('Reviews', style: theme.textTheme.bodyLarge),
             ],
           ),
-
-          /* <---- Items -----> */
           Column(
             children: [
               Text(
-                '17',
-                style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                      fontWeight: FontWeight.bold,
-                      color: Colors.black,
-                    ),
+                _formatCurrency(savings),
+                style: theme.textTheme.bodyLarge?.copyWith(
+                  fontWeight: FontWeight.bold,
+                  color: theme.colorScheme.onSurface,
+                ),
               ),
-              Text(
-                'Items',
-                style: Theme.of(context).textTheme.bodyLarge,
-              ),
+              Text('Save', style: theme.textTheme.bodyLarge),
             ],
           ),
         ],

@@ -3,9 +3,7 @@ import 'package:flutter/material.dart';
 import '../../../../core/constants/constants.dart';
 
 class TotalAmountAndPaidData extends StatelessWidget {
-  const TotalAmountAndPaidData({
-    super.key,
-  });
+  const TotalAmountAndPaidData({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -18,13 +16,17 @@ class TotalAmountAndPaidData extends StatelessWidget {
               Text(
                 'Total Amount',
                 style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                    fontWeight: FontWeight.bold, color: Colors.black),
+                  fontWeight: FontWeight.bold,
+                  color: Theme.of(context).colorScheme.onSurface,
+                ),
               ),
               const Spacer(),
               Text(
                 '\$120',
                 style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                    fontWeight: FontWeight.bold, color: Colors.black),
+                  fontWeight: FontWeight.bold,
+                  color: Theme.of(context).colorScheme.onSurface,
+                ),
               ),
             ],
           ),
@@ -34,13 +36,17 @@ class TotalAmountAndPaidData extends StatelessWidget {
               Text(
                 'Paid From',
                 style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                    fontWeight: FontWeight.bold, color: Colors.black),
+                  fontWeight: FontWeight.bold,
+                  color: Theme.of(context).colorScheme.onSurface,
+                ),
               ),
               const Spacer(),
               Text(
                 'Credit Card',
                 style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                    fontWeight: FontWeight.bold, color: Colors.black),
+                  fontWeight: FontWeight.bold,
+                  color: Theme.of(context).colorScheme.onSurface,
+                ),
               ),
             ],
           ),

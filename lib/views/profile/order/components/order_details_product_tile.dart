@@ -21,9 +21,9 @@ class OrderDetailsProductTile extends StatelessWidget {
             children: [
               Text(
                 data.productName,
-                style: Theme.of(
-                  context,
-                ).textTheme.bodyLarge?.copyWith(color: Colors.black),
+                style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                  color: Theme.of(context).colorScheme.onSurface,
+                ),
               ),
               const SizedBox(height: 8),
               Text('Qty: ${data.quantity}'),

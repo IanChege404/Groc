@@ -10,6 +10,7 @@ import '../../core/constants/constants.dart';
 import '../../core/models/bundle_model.dart';
 import '../../core/models/cart_item_model.dart';
 import '../../core/providers/cart_provider.dart';
+import '../../core/routes/app_routes.dart';
 import 'components/bundle_meta_data.dart';
 import 'components/bundle_pack_details.dart';
 
@@ -33,43 +34,117 @@ class _BundleProductDetailsPageState
     _quantityKey = GlobalKey<PriceAndQuantityRowState>();
   }
 
-  Future<void> _addToCart() async {
-    if (widget.bundle == null) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Bundle information is missing')),
-      );
-      return;
+  BundleModel? get _bundle => widget.bundle;
+
+  int get _selectedQuantity => _quantityKey.currentState?.quantity ?? 1;
+
+  void _showSnackBar(String message, {Color? backgroundColor}) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(content: Text(message), backgroundColor: backgroundColor),
+    );
+  }
+
+  bool _isBundleInCart(List<CartItemModel> items) {
+    final bundle = _bundle;
+    if (bundle == null) {
+      return false;
     }
 
-    final quantity = _quantityKey.currentState?.quantity ?? 1;
+    return items.any((item) => item.productId == bundle.id);
+  }
 
-    final cartItem = CartItemModel(
+  CartItemModel _buildCartItem({required int quantity}) {
+    final bundle = _bundle!;
+    return CartItemModel(
       id: '', // Deterministic ID (userId_productId) is set by the provider
       userId: '', // Will be set by the provider
-      productId: widget.bundle!.id,
+      productId: bundle.id,
       quantity: quantity,
-      priceAtTimeOfAdd: widget.bundle!.price,
+      priceAtTimeOfAdd: bundle.price,
       addedAt: DateTime.now(),
       updatedAt: DateTime.now(),
     );
+  }
+
+  Future<void> _addBundleToCart({required int quantity}) async {
+    final bundle = _bundle;
+    if (bundle == null) {
+      _showSnackBar('Bundle information is missing');
+      return;
+    }
+
+    await ref
+        .read(cartItemsProvider.notifier)
+        .addToCart(_buildCartItem(quantity: quantity));
+  }
+
+  Future<void> _toggleCart() async {
+    final bundle = _bundle;
+    if (bundle == null) {
+      _showSnackBar('Bundle information is missing');
+      return;
+    }
+
+    final cartState = ref.read(cartItemsProvider);
+    final existingItem = cartState.maybeWhen(
+      data: (items) => items.where((i) => i.productId == bundle.id).firstOrNull,
+      orElse: () => null,
+    );
+
+    if (existingItem != null) {
+      await ref
+          .read(cartItemsProvider.notifier)
+          .removeFromCart(existingItem.id);
+      if (mounted) {
+        _showSnackBar('${bundle.name} removed from cart');
+      }
+      return;
+    }
 
     try {
-      await ref.read(cartItemsProvider.notifier).addToCart(cartItem);
+      await _addBundleToCart(quantity: _selectedQuantity);
       if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text('${widget.bundle!.name} added to cart'),
-            duration: const Duration(seconds: 2),
-          ),
-        );
+        _showSnackBar('${bundle.name} added to cart');
       }
     } catch (e) {
       if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text('Failed to add item to cart: $e'),
-            backgroundColor: Colors.red,
-          ),
+        _showSnackBar(
+          'Failed to add item to cart: $e',
+          backgroundColor: Colors.red,
+        );
+      }
+    }
+  }
+
+  Future<void> _buyNow() async {
+    final bundle = _bundle;
+    if (bundle == null) {
+      _showSnackBar('Bundle information is missing');
+      return;
+    }
+
+    try {
+      final cartState = ref.read(cartItemsProvider);
+      final existingItem = cartState.maybeWhen(
+        data: (items) =>
+            items.where((item) => item.productId == bundle.id).firstOrNull,
+        orElse: () => null,
+      );
+
+      if (existingItem == null) {
+        await _addBundleToCart(quantity: _selectedQuantity);
+      }
+
+      if (!mounted) {
+        return;
+      }
+
+      Navigator.pushNamed(context, AppRoutes.checkoutPage);
+    } catch (e) {
+      if (mounted) {
+        _showSnackBar(
+          'Unable to start checkout: $e',
+          backgroundColor: Colors.red,
         );
       }
     }
@@ -77,46 +152,91 @@ class _BundleProductDetailsPageState
 
   @override
   Widget build(BuildContext context) {
-    final images = widget.bundle?.images.isNotEmpty == true
-        ? widget.bundle!.images
-        : [widget.bundle?.image ?? 'https://i.imgur.com/NOuZzbe.png'];
+    final bundle = _bundle;
+    final hasBundle = bundle != null;
+    final cartState = ref.watch(cartItemsProvider);
+    final isInCart = cartState.maybeWhen(
+      data: (items) => _isBundleInCart(items),
+      orElse: () => false,
+    );
+
+    final currentBundle = bundle;
+    final images = hasBundle && currentBundle!.images.isNotEmpty
+        ? currentBundle.images
+        : [currentBundle?.image ?? 'https://i.imgur.com/NOuZzbe.png'];
+
+    if (!hasBundle) {
+      return Scaffold(
+        appBar: AppBar(
+          leading: const AppBackButton(),
+          title: const Text('Bundle Details'),
+        ),
+        body: Center(
+          child: Padding(
+            padding: const EdgeInsets.all(AppDefaults.padding),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Icon(
+                  Icons.info_outline_rounded,
+                  size: 56,
+                  color: Theme.of(context).colorScheme.primary,
+                ),
+                const SizedBox(height: 16),
+                Text(
+                  'Bundle information is missing',
+                  textAlign: TextAlign.center,
+                  style: Theme.of(context).textTheme.titleMedium,
+                ),
+              ],
+            ),
+          ),
+        ),
+      );
+    }
 
     return Scaffold(
-      appBar: AppBar(
-        leading: const AppBackButton(),
-        title: Text(widget.bundle?.name ?? 'Bundle Details'),
+      resizeToAvoidBottomInset: false,
+      appBar: AppBar(leading: const AppBackButton(), title: Text(bundle.name)),
+      bottomNavigationBar: SafeArea(
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: AppDefaults.padding),
+          child: BuyNowRow(
+            onBuyButtonTap: _buyNow,
+            onCartButtonTap: _toggleCart,
+            isInCart: isInCart,
+          ),
+        ),
       ),
       body: SingleChildScrollView(
         child: Column(
           children: [
             ProductImagesSlider(images: images),
-            /* <---- Product Data -----> */
             Padding(
               padding: const EdgeInsets.all(AppDefaults.padding),
               child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Align(
-                    alignment: Alignment.centerLeft,
-                    child: Text(
-                      widget.bundle?.name ?? 'Bundle Pack',
-                      style: Theme.of(context).textTheme.headlineSmall
-                          ?.copyWith(fontWeight: FontWeight.bold),
+                  Text(
+                    bundle.name,
+                    style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                      fontWeight: FontWeight.bold,
                     ),
                   ),
+                  const SizedBox(height: 8),
                   PriceAndQuantityRow(
                     key: _quantityKey,
-                    currentPrice: widget.bundle?.price ?? 0,
-                    orginalPrice: widget.bundle?.mainPrice ?? 0,
+                    currentPrice: bundle.price,
+                    orginalPrice: bundle.mainPrice,
                     quantity: 1,
                   ),
                   const SizedBox(height: AppDefaults.padding / 2),
-                  const BundleMetaData(),
-                  const PackDetails(),
+                  BundleMetaData(bundle: bundle),
+                  PackDetails(bundle: bundle),
                   ReviewRowButton(
-                    totalStars: widget.bundle?.rating.toInt() ?? 0,
+                    totalStars: (bundle.rating.round()).clamp(1, 5),
                   ),
                   const Divider(thickness: 0.1),
-                  BuyNowRow(onBuyButtonTap: () {}, onCartButtonTap: _addToCart),
                 ],
               ),
             ),

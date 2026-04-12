@@ -50,16 +50,12 @@ class ReviewTile extends StatelessWidget {
                   children: [
                     Text(
                       userName,
-                      style: Theme.of(context)
-                          .textTheme
-                          .bodyLarge
-                          ?.copyWith(color: Colors.black),
+                      style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                        color: Theme.of(context).colorScheme.onSurface,
+                      ),
                     ),
                     const Spacer(),
-                    Text(
-                      time,
-                      style: Theme.of(context).textTheme.bodySmall,
-                    ),
+                    Text(time, style: Theme.of(context).textTheme.bodySmall),
                   ],
                 ),
                 const SizedBox(height: 4),
@@ -75,7 +71,7 @@ class ReviewTile extends StatelessWidget {
                             ? SvgPicture.asset(AppIcons.heartActive)
                             : SvgPicture.asset(AppIcons.heartOutlined),
                         const SizedBox(width: AppDefaults.padding / 2),
-                        Text('$totalLikes Like')
+                        Text('$totalLikes Like'),
                       ],
                     ),
                     const SizedBox(width: AppDefaults.padding),
@@ -83,14 +79,14 @@ class ReviewTile extends StatelessWidget {
                       children: [
                         SvgPicture.asset(AppIcons.reply),
                         const SizedBox(width: AppDefaults.padding / 2),
-                        const Text('Reply')
+                        const Text('Reply'),
                       ],
-                    )
+                    ),
                   ],
-                )
+                ),
               ],
             ),
-          )
+          ),
         ],
       ),
     );

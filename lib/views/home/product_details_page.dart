@@ -10,6 +10,7 @@ import '../../core/constants/app_defaults.dart';
 import '../../core/models/cart_item_model.dart';
 import '../../core/models/product_model.dart';
 import '../../core/providers/cart_provider.dart';
+import '../../core/routes/app_routes.dart';
 
 class ProductDetailsPage extends ConsumerStatefulWidget {
   const ProductDetailsPage({super.key, this.product});
@@ -29,43 +30,118 @@ class _ProductDetailsPageState extends ConsumerState<ProductDetailsPage> {
     _quantityKey = GlobalKey<PriceAndQuantityRowState>();
   }
 
-  Future<void> _addToCart() async {
-    if (widget.product == null) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Product information is missing')),
-      );
-      return;
+  ProductModel? get _product => widget.product;
+
+  int get _selectedQuantity => _quantityKey.currentState?.quantity ?? 1;
+
+  void _showSnackBar(String message, {Color? backgroundColor}) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(content: Text(message), backgroundColor: backgroundColor),
+    );
+  }
+
+  bool _isProductInCart(List<CartItemModel> items) {
+    final product = _product;
+    if (product == null) {
+      return false;
     }
 
-    final quantity = _quantityKey.currentState?.quantity ?? 1;
+    return items.any((item) => item.productId == product.id);
+  }
 
-    final cartItem = CartItemModel(
+  CartItemModel _buildCartItem({required int quantity}) {
+    final product = _product!;
+    return CartItemModel(
       id: '', // Deterministic ID (userId_productId) is set by the provider
       userId: '', // Will be set by the provider
-      productId: widget.product!.id,
+      productId: product.id,
       quantity: quantity,
-      priceAtTimeOfAdd: widget.product!.price,
+      priceAtTimeOfAdd: product.price,
       addedAt: DateTime.now(),
       updatedAt: DateTime.now(),
     );
+  }
+
+  Future<void> _addProductToCart({required int quantity}) async {
+    final product = _product;
+    if (product == null) {
+      _showSnackBar('Product information is missing');
+      return;
+    }
+
+    await ref
+        .read(cartItemsProvider.notifier)
+        .addToCart(_buildCartItem(quantity: quantity));
+  }
+
+  Future<void> _toggleCart() async {
+    final product = _product;
+    if (product == null) {
+      _showSnackBar('Product information is missing');
+      return;
+    }
+
+    final cartState = ref.read(cartItemsProvider);
+    final existingItem = cartState.maybeWhen(
+      data: (items) =>
+          items.where((i) => i.productId == product.id).firstOrNull,
+      orElse: () => null,
+    );
+
+    if (existingItem != null) {
+      await ref
+          .read(cartItemsProvider.notifier)
+          .removeFromCart(existingItem.id);
+      if (mounted) {
+        _showSnackBar('${product.name} removed from cart');
+      }
+      return;
+    }
 
     try {
-      await ref.read(cartItemsProvider.notifier).addToCart(cartItem);
+      await _addProductToCart(quantity: _selectedQuantity);
       if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text('${widget.product!.name} added to cart'),
-            duration: const Duration(seconds: 2),
-          ),
-        );
+        _showSnackBar('${product.name} added to cart');
       }
     } catch (e) {
       if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text('Failed to add item to cart: $e'),
-            backgroundColor: Colors.red,
-          ),
+        _showSnackBar(
+          'Failed to add item to cart: $e',
+          backgroundColor: Colors.red,
+        );
+      }
+    }
+  }
+
+  Future<void> _buyNow() async {
+    final product = _product;
+    if (product == null) {
+      _showSnackBar('Product information is missing');
+      return;
+    }
+
+    try {
+      final cartState = ref.read(cartItemsProvider);
+      final existingItem = cartState.maybeWhen(
+        data: (items) =>
+            items.where((item) => item.productId == product.id).firstOrNull,
+        orElse: () => null,
+      );
+
+      if (existingItem == null) {
+        await _addProductToCart(quantity: _selectedQuantity);
+      }
+
+      if (!mounted) {
+        return;
+      }
+
+      Navigator.pushNamed(context, AppRoutes.checkoutPage);
+    } catch (e) {
+      if (mounted) {
+        _showSnackBar(
+          'Unable to start checkout: $e',
+          backgroundColor: Colors.red,
         );
       }
     }
@@ -73,20 +149,60 @@ class _ProductDetailsPageState extends ConsumerState<ProductDetailsPage> {
 
   @override
   Widget build(BuildContext context) {
-    final images = widget.product?.images.isNotEmpty == true
-        ? widget.product!.images
-        : [widget.product?.image ?? 'https://i.imgur.com/3o6ons9.png'];
+    final product = _product;
+    final cartState = ref.watch(cartItemsProvider);
+    final isInCart = cartState.maybeWhen(
+      data: (items) => _isProductInCart(items),
+      orElse: () => false,
+    );
+
+    final hasProduct = product != null;
+    final currentProduct = product;
+    final images = hasProduct && currentProduct!.images.isNotEmpty
+        ? currentProduct.images
+        : [currentProduct?.image ?? 'https://i.imgur.com/3o6ons9.png'];
+
+    if (!hasProduct) {
+      return Scaffold(
+        appBar: AppBar(
+          leading: const AppBackButton(),
+          title: const Text('Product Details'),
+        ),
+        body: Center(
+          child: Padding(
+            padding: const EdgeInsets.all(AppDefaults.padding),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Icon(
+                  Icons.info_outline_rounded,
+                  size: 56,
+                  color: Theme.of(context).colorScheme.primary,
+                ),
+                const SizedBox(height: 16),
+                Text(
+                  'Product information is missing',
+                  textAlign: TextAlign.center,
+                  style: Theme.of(context).textTheme.titleMedium,
+                ),
+              ],
+            ),
+          ),
+        ),
+      );
+    }
 
     return Scaffold(
       resizeToAvoidBottomInset: false,
-      appBar: AppBar(
-        leading: const AppBackButton(),
-        title: Text(widget.product?.name ?? 'Product Details'),
-      ),
+      appBar: AppBar(leading: const AppBackButton(), title: Text(product.name)),
       bottomNavigationBar: SafeArea(
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: AppDefaults.padding),
-          child: BuyNowRow(onBuyButtonTap: () {}, onCartButtonTap: _addToCart),
+          child: BuyNowRow(
+            onBuyButtonTap: _buyNow,
+            onCartButtonTap: _toggleCart,
+            isInCart: isInCart,
+          ),
         ),
       ),
       body: SingleChildScrollView(
@@ -101,13 +217,13 @@ class _ProductDetailsPageState extends ConsumerState<ProductDetailsPage> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      widget.product?.name ?? 'Product details unavailable',
+                      product.name,
                       style: Theme.of(context).textTheme.titleLarge?.copyWith(
                         fontWeight: FontWeight.bold,
                       ),
                     ),
                     const SizedBox(height: 8),
-                    Text('Weight: ${widget.product?.weight ?? '-'}'),
+                    Text('Weight: ${product.weight}'),
                   ],
                 ),
               ),
@@ -118,8 +234,8 @@ class _ProductDetailsPageState extends ConsumerState<ProductDetailsPage> {
               ),
               child: PriceAndQuantityRow(
                 key: _quantityKey,
-                currentPrice: widget.product?.price ?? 0,
-                orginalPrice: widget.product?.mainPrice ?? 0,
+                currentPrice: product.price,
+                orginalPrice: product.mainPrice,
                 quantity: 1,
               ),
             ),
@@ -135,19 +251,17 @@ class _ProductDetailsPageState extends ConsumerState<ProductDetailsPage> {
                     'Product Details',
                     style: Theme.of(context).textTheme.bodyLarge?.copyWith(
                       fontWeight: FontWeight.bold,
-                      color: Colors.black,
+                      color: Theme.of(context).colorScheme.onSurface,
                     ),
                   ),
                   const SizedBox(height: 8),
-                  Text(
-                    widget.product?.description ?? 'No description available.',
-                  ),
+                  Text(product.description),
                 ],
               ),
             ),
 
             /// Review Row
-            const Padding(
+            Padding(
               padding: EdgeInsets.symmetric(
                 horizontal: AppDefaults.padding,
                 // vertical: AppDefaults.padding,
@@ -155,7 +269,9 @@ class _ProductDetailsPageState extends ConsumerState<ProductDetailsPage> {
               child: Column(
                 children: [
                   Divider(thickness: 0.1),
-                  ReviewRowButton(totalStars: 5),
+                  ReviewRowButton(
+                    totalStars: (product.rating.round()).clamp(1, 5),
+                  ),
                   Divider(thickness: 0.1),
                 ],
               ),

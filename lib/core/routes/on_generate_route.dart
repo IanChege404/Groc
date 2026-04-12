@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import '../models/bundle_model.dart';
 import '../models/product_model.dart';
+import '../models/coupon_model.dart';
 
 import '../../views/auth/forget_password_page.dart';
 import '../../views/auth/intro_login_page.dart';
@@ -51,6 +52,7 @@ import '../../views/profile/profile_edit_page.dart';
 import '../../views/profile/settings/change_password_page.dart';
 import '../../views/profile/settings/change_phone_number_page.dart';
 import '../../views/profile/settings/language_settings_page.dart';
+import '../../views/profile/settings/location_settings_page.dart';
 import '../../views/profile/settings/notifications_settings_page.dart';
 import '../../views/profile/settings/settings_page.dart';
 import '../../views/review/review_page.dart';
@@ -78,6 +80,7 @@ class RouteGenerator {
     AppRoutes.settings,
     AppRoutes.settingsLanguage,
     AppRoutes.settingsNotifications,
+    AppRoutes.settingsLocation,
     AppRoutes.changePassword,
     AppRoutes.changePhoneNumber,
     AppRoutes.coupon,
@@ -220,7 +223,11 @@ class RouteGenerator {
         return CupertinoPageRoute(builder: (_) => const CouponAndOffersPage());
 
       case AppRoutes.couponDetails:
-        return CupertinoPageRoute(builder: (_) => const CouponDetailsPage());
+        final couponArgs = settings.arguments as Map<String, dynamic>?;
+        return CupertinoPageRoute(
+          builder: (_) =>
+              CouponDetailsPage(coupon: couponArgs?['coupon'] as CouponModel?),
+        );
 
       case AppRoutes.profileEdit:
         return CupertinoPageRoute(builder: (_) => const ProfileEditPage());
@@ -244,6 +251,9 @@ class RouteGenerator {
 
       case AppRoutes.settingsLanguage:
         return CupertinoPageRoute(builder: (_) => const LanguageSettingsPage());
+
+      case AppRoutes.settingsLocation:
+        return CupertinoPageRoute(builder: (_) => const LocationSettingsPage());
 
       case AppRoutes.changePassword:
         return CupertinoPageRoute(builder: (_) => const ChangePasswordPage());

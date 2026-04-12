@@ -47,10 +47,9 @@ class PaymentCardTile extends StatelessWidget {
                 const SizedBox(height: 8),
                 Text(
                   label,
-                  style: Theme.of(context)
-                      .textTheme
-                      .bodyLarge
-                      ?.copyWith(color: Colors.black),
+                  style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                    color: Theme.of(context).colorScheme.onSurface,
+                  ),
                 ),
               ],
             ),

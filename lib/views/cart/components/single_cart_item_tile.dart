@@ -153,7 +153,11 @@ class _SingleCartItemTileState extends ConsumerState<SingleCartItemTile>
                             Text(
                               productName,
                               style: Theme.of(context).textTheme.bodyLarge
-                                  ?.copyWith(color: Colors.black),
+                                  ?.copyWith(
+                                    color: Theme.of(
+                                      context,
+                                    ).colorScheme.onSurface,
+                                  ),
                             ),
                             Text(
                               'Qty: ${widget.item.quantity}',
@@ -176,7 +180,9 @@ class _SingleCartItemTileState extends ConsumerState<SingleCartItemTile>
                               style: Theme.of(context).textTheme.bodyLarge
                                   ?.copyWith(
                                     fontWeight: FontWeight.bold,
-                                    color: Colors.black,
+                                    color: Theme.of(
+                                      context,
+                                    ).colorScheme.onSurface,
                                   ),
                             ),
                           ),

@@ -33,7 +33,7 @@ class OrderStatusRow extends StatelessWidget {
         Container(
           padding: const EdgeInsets.all(8.0),
           decoration: BoxDecoration(
-            color: isActive ? _orderColor() : Colors.grey,
+            color: isActive ? _orderColor() : Theme.of(context).dividerColor,
             borderRadius: BorderRadius.circular(8.0),
           ),
           child: SvgPicture.asset(_orderIcon()),
@@ -49,9 +49,9 @@ class OrderStatusRow extends StatelessWidget {
             children: [
               Text(
                 _orderStatus(),
-                style: Theme.of(
-                  context,
-                ).textTheme.bodyLarge?.copyWith(color: Colors.black),
+                style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                  color: Theme.of(context).colorScheme.onSurface,
+                ),
               ),
               const SizedBox(height: 4),
               Row(

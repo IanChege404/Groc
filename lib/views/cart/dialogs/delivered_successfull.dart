@@ -11,9 +11,7 @@ class DeliverySuccessfullDialog extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Dialog(
-      shape: RoundedRectangleBorder(
-        borderRadius: AppDefaults.borderRadius,
-      ),
+      shape: RoundedRectangleBorder(borderRadius: AppDefaults.borderRadius),
       child: Padding(
         padding: const EdgeInsets.symmetric(
           vertical: AppDefaults.padding * 3,
@@ -39,12 +37,11 @@ class DeliverySuccessfullDialog extends StatelessWidget {
               children: [
                 Text(
                   '#15425050',
-                  style: Theme.of(context)
-                      .textTheme
-                      .bodyLarge
-                      ?.copyWith(color: Colors.black),
+                  style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                    color: Theme.of(context).colorScheme.onSurface,
+                  ),
                 ),
-                const Text(' order Successfully.')
+                const Text(' order Successfully.'),
               ],
             ),
             const SizedBox(height: AppDefaults.padding),

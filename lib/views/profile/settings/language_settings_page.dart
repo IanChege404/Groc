@@ -1,114 +1,81 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/svg.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:provider/provider.dart' as p;
 
 import '../../../core/components/app_back_button.dart';
 import '../../../core/components/app_settings_tile.dart';
 import '../../../core/constants/constants.dart';
-import '../../../core/themes/app_themes.dart';
+import '../../../core/l10n/locale_provider.dart';
+import '../../../core/providers/auth_provider.dart';
+import '../../../core/providers/settings_provider.dart';
 
-class LanguageSettingsPage extends StatelessWidget {
+class LanguageSettingsPage extends ConsumerWidget {
   const LanguageSettingsPage({super.key});
 
+  Future<void> _setLanguage(
+    BuildContext context,
+    WidgetRef ref,
+    String code,
+  ) async {
+    final localeProvider = p.Provider.of<LocaleProvider>(
+      context,
+      listen: false,
+    );
+    await localeProvider.setLocale(code);
+
+    final userId = ref.read(authProvider).value;
+    if (userId != null && userId.isNotEmpty) {
+      await ref
+          .read(userSettingsProvider.notifier)
+          .updateLanguage(userId, code);
+    }
+
+    if (context.mounted) {
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(const SnackBar(content: Text('Language updated')));
+    }
+  }
+
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final selectedCode = p.Provider.of<LocaleProvider>(
+      context,
+    ).locale.languageCode;
+
     return Scaffold(
       appBar: AppBar(
         leading: const AppBackButton(),
-        title: const Text(
-          'Language Settings',
-        ),
+        title: const Text('Language Settings'),
       ),
       backgroundColor: AppColors.cardColor,
-      body: SingleChildScrollView(
-        child: Container(
-          margin: const EdgeInsets.all(AppDefaults.padding),
-          padding: const EdgeInsets.symmetric(
-            horizontal: AppDefaults.padding,
-            vertical: AppDefaults.padding * 2,
-          ),
-          decoration: BoxDecoration(
-            color: AppColors.scaffoldBackground,
-            borderRadius: AppDefaults.borderRadius,
-          ),
-          child: const Column(
-            children: [
-              _SearchField(),
-              _SuggestedLanguage(),
-              _AllCountries(),
-            ],
-          ),
+      body: Container(
+        margin: const EdgeInsets.all(AppDefaults.padding),
+        padding: const EdgeInsets.symmetric(
+          horizontal: AppDefaults.padding,
+          vertical: AppDefaults.padding * 2,
         ),
-      ),
-    );
-  }
-}
-
-class _AllCountries extends StatelessWidget {
-  const _AllCountries();
-
-  @override
-  Widget build(BuildContext context) {
-    return const Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        SizedBox(height: AppDefaults.padding),
-        Text('All Countries/Regions'),
-        SizedBox(height: AppDefaults.padding),
-        AppSettingsListTile(label: 'Bangladesh'),
-        AppSettingsListTile(label: 'Canada'),
-        AppSettingsListTile(label: 'Cuba'),
-        AppSettingsListTile(label: 'Spain'),
-        AppSettingsListTile(label: 'Australia'),
-        AppSettingsListTile(label: 'Greece'),
-      ],
-    );
-  }
-}
-
-class _SuggestedLanguage extends StatelessWidget {
-  const _SuggestedLanguage();
-
-  @override
-  Widget build(BuildContext context) {
-    return const Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        SizedBox(height: AppDefaults.padding),
-        Text('Suggested'),
-        SizedBox(height: AppDefaults.padding),
-        AppSettingsListTile(label: 'Bangladesh'),
-        AppSettingsListTile(label: 'Canada'),
-        AppSettingsListTile(label: 'Australia'),
-        AppSettingsListTile(
-          label: 'United States',
-          trailing: Icon(
-            Icons.check,
-            color: Colors.green,
-          ),
+        decoration: BoxDecoration(
+          color: AppColors.scaffoldBackground,
+          borderRadius: AppDefaults.borderRadius,
         ),
-      ],
-    );
-  }
-}
-
-class _SearchField extends StatelessWidget {
-  const _SearchField();
-
-  @override
-  Widget build(BuildContext context) {
-    return Theme(
-      data: Theme.of(context).copyWith(
-        inputDecorationTheme: AppTheme.secondaryInputDecorationTheme,
-      ),
-      child: TextField(
-        decoration: InputDecoration(
-          labelText: 'Search',
-          hintText: 'Type a word',
-          suffixIcon: Padding(
-            padding: const EdgeInsets.all(AppDefaults.padding),
-            child: SvgPicture.asset(AppIcons.search),
-          ),
-          suffixIconConstraints: const BoxConstraints(),
+        child: Column(
+          children: [
+            AppSettingsListTile(
+              label: 'English',
+              trailing: selectedCode == 'en'
+                  ? const Icon(Icons.check, color: Colors.green)
+                  : null,
+              onTap: () => _setLanguage(context, ref, 'en'),
+            ),
+            AppSettingsListTile(
+              label: 'Swahili',
+              trailing: selectedCode == 'sw'
+                  ? const Icon(Icons.check, color: Colors.green)
+                  : null,
+              onTap: () => _setLanguage(context, ref, 'sw'),
+            ),
+          ],
         ),
       ),
     );

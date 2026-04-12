@@ -32,15 +32,16 @@ class OrderFailedPage extends StatelessWidget {
                 Text(
                   'Sorry, Order has Failed',
                   style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                        fontWeight: FontWeight.bold,
-                        color: Colors.black,
-                      ),
+                    fontWeight: FontWeight.bold,
+                    color: Theme.of(context).colorScheme.onSurface,
+                  ),
                   textAlign: TextAlign.center,
                 ),
                 const SizedBox(height: 16),
                 const Padding(
-                  padding:
-                      EdgeInsets.symmetric(horizontal: AppDefaults.padding),
+                  padding: EdgeInsets.symmetric(
+                    horizontal: AppDefaults.padding,
+                  ),
                   child: Text(
                     'Sorry, somethings went wrong.\nPlease try again continue your order',
                     textAlign: TextAlign.center,

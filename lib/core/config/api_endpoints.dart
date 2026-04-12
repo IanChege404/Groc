@@ -56,7 +56,7 @@ class ApiEndpoints {
   // Wishlist/Favorites Endpoints
   static const String getWishlist = '/wishlist';
   static const String addToWishlist = '/wishlist';
-  static String removeFromWishlist(String productId) => '/wishlist/$productId';
+  static String removeFromWishlist(String itemId) => '/wishlist/$itemId';
 
   // Review Endpoints
   static const String getProductReviews = '/reviews';

@@ -223,7 +223,7 @@ class _MpesaProcessingScreenState extends State<MpesaProcessingScreen>
                     child: Text(
                       'M',
                       style: AppTextStyles.displayLarge.copyWith(
-                        color: Colors.white,
+                        color: Theme.of(context).colorScheme.onPrimary,
                         fontSize: 48,
                       ),
                     ),

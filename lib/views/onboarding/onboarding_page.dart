@@ -28,10 +28,7 @@ class _OnboardingPageState extends State<OnboardingPage> {
 
   _gotoNextPage() {
     if (currentPage < items.length - 1) {
-      controller.nextPage(
-        duration: AppDefaults.duration,
-        curve: Curves.ease,
-      );
+      controller.nextPage(duration: AppDefaults.duration, curve: Curves.ease);
     } else {
       _gotoLoginSignUp();
     }
@@ -74,9 +71,7 @@ class _OnboardingPageState extends State<OnboardingPage> {
                 itemCount: items.length,
                 controller: controller,
                 itemBuilder: (context, index) {
-                  return OnboardingView(
-                    data: items[index],
-                  );
+                  return OnboardingView(data: items[index]);
                 },
               ),
             ),
@@ -87,7 +82,9 @@ class _OnboardingPageState extends State<OnboardingPage> {
                 TweenAnimationBuilder(
                   duration: AppDefaults.duration,
                   tween: Tween<double>(
-                      begin: 0, end: (1 / items.length) * (currentPage + 1)),
+                    begin: 0,
+                    end: (1 / items.length) * (currentPage + 1),
+                  ),
                   curve: Curves.easeInOutBack,
                   builder: (context, double value, _) => SizedBox(
                     height: 70,
@@ -105,8 +102,8 @@ class _OnboardingPageState extends State<OnboardingPage> {
                   style: ElevatedButton.styleFrom(shape: const CircleBorder()),
                   child: SvgPicture.asset(
                     AppIcons.arrowForward,
-                    colorFilter: const ColorFilter.mode(
-                      Colors.white,
+                    colorFilter: ColorFilter.mode(
+                      Theme.of(context).colorScheme.onPrimary,
                       BlendMode.srcIn,
                     ),
                   ),

@@ -1,18 +1,25 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../core/components/app_back_button.dart';
+import '../../core/components/retryable_error_view.dart';
+import '../../core/mixins/refresh_on_return_mixin.dart';
+import '../../core/providers/auth_provider.dart';
+import '../../core/providers/user_data_provider.dart';
 import '../../core/services/firestore_service.dart';
 import '../../core/constants/constants.dart';
+import '../../core/providers/user_provider.dart';
 
-class ProfileEditPage extends StatefulWidget {
+class ProfileEditPage extends ConsumerStatefulWidget {
   const ProfileEditPage({super.key});
 
   @override
-  State<ProfileEditPage> createState() => _ProfileEditPageState();
+  ConsumerState<ProfileEditPage> createState() => _ProfileEditPageState();
 }
 
-class _ProfileEditPageState extends State<ProfileEditPage> {
+class _ProfileEditPageState extends ConsumerState<ProfileEditPage>
+    with RefreshOnReturnMixin<ProfileEditPage> {
   final _formKey = GlobalKey<FormState>();
   final _firestoreService = FirestoreService();
   final _firstNameController = TextEditingController();
@@ -22,6 +29,7 @@ class _ProfileEditPageState extends State<ProfileEditPage> {
   final _birthdayController = TextEditingController();
   bool _isLoading = true;
   bool _isSaving = false;
+  String? _loadingError;
 
   @override
   void initState() {
@@ -43,28 +51,55 @@ class _ProfileEditPageState extends State<ProfileEditPage> {
     final user = FirebaseAuth.instance.currentUser;
     if (user == null) {
       if (!mounted) return;
-      setState(() => _isLoading = false);
+      setState(() {
+        _isLoading = false;
+        _loadingError = 'Please sign in again to edit your profile.';
+      });
       return;
     }
 
-    final profile = await _firestoreService.getUserProfile(user.uid);
-    final displayName = user.displayName?.trim() ?? '';
-    final nameParts = displayName.isNotEmpty
-        ? displayName.split(RegExp(r'\s+')).where((e) => e.isNotEmpty).toList()
-        : <String>[];
+    try {
+      final profile = await ref.read(userDataProvider(user.uid).future);
+      final displayName = user.displayName?.trim() ?? '';
+      final nameParts = displayName.isNotEmpty
+          ? displayName
+                .split(RegExp(r'\s+'))
+                .where((e) => e.isNotEmpty)
+                .toList()
+          : <String>[];
 
-    if (!mounted) return;
-    _firstNameController.text =
-        (profile?['firstName'] as String?) ??
-        (nameParts.isNotEmpty ? nameParts.first : '');
-    _lastNameController.text =
-        (profile?['lastName'] as String?) ??
-        (nameParts.length > 1 ? nameParts.sublist(1).join(' ') : '');
-    _phoneController.text =
-        (profile?['phone'] as String?) ?? user.phoneNumber ?? '';
-    _genderController.text = (profile?['gender'] as String?) ?? '';
-    _birthdayController.text = (profile?['birthday'] as String?) ?? '';
-    setState(() => _isLoading = false);
+      if (!mounted) return;
+      _firstNameController.text =
+          (profile?['firstName'] as String?) ??
+          (nameParts.isNotEmpty ? nameParts.first : '');
+      _lastNameController.text =
+          (profile?['lastName'] as String?) ??
+          (nameParts.length > 1 ? nameParts.sublist(1).join(' ') : '');
+      _phoneController.text =
+          (profile?['phone'] as String?) ?? user.phoneNumber ?? '';
+      _genderController.text = (profile?['gender'] as String?) ?? '';
+      _birthdayController.text = (profile?['birthday'] as String?) ?? '';
+      setState(() {
+        _isLoading = false;
+        _loadingError = null;
+      });
+    } catch (e) {
+      if (!mounted) return;
+      setState(() {
+        _isLoading = false;
+        _loadingError =
+            'Could not load your profile details. Pull to refresh or retry.';
+      });
+    }
+  }
+
+  @override
+  Future<void> onRefreshRequested() async {
+    final uid = ref.read(authProvider).value;
+    if (uid != null && uid.isNotEmpty) {
+      ref.invalidate(userDataProvider(uid));
+    }
+    await _loadProfile();
   }
 
   Future<void> _saveProfile() async {
@@ -83,23 +118,41 @@ class _ProfileEditPageState extends State<ProfileEditPage> {
     setState(() => _isSaving = true);
     final firstName = _firstNameController.text.trim();
     final lastName = _lastNameController.text.trim();
-    await _firestoreService.updateUserProfile(user.uid, {
-      'firstName': firstName,
-      'lastName': lastName,
-      'phone': _phoneController.text.trim(),
-      'gender': _genderController.text.trim(),
-      'birthday': _birthdayController.text.trim(),
-      'email': user.email,
-      'displayName': '$firstName $lastName'.trim(),
-    });
 
-    await user.updateDisplayName('$firstName $lastName'.trim());
+    try {
+      await _firestoreService.updateUserProfile(user.uid, {
+        'firstName': firstName,
+        'lastName': lastName,
+        'phone': _phoneController.text.trim(),
+        'gender': _genderController.text.trim(),
+        'birthday': _birthdayController.text.trim(),
+        'email': user.email,
+        'displayName': '$firstName $lastName'.trim(),
+      });
 
-    if (!mounted) return;
-    setState(() => _isSaving = false);
-    ScaffoldMessenger.of(
-      context,
-    ).showSnackBar(const SnackBar(content: Text('Profile saved')));
+      await user.updateDisplayName('$firstName $lastName'.trim());
+
+      if (!mounted) return;
+      setState(() => _isSaving = false);
+
+      /// Refresh the user profile provider to sync header and other UI elements
+      ref.invalidate(userProfileProvider);
+
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Profile saved successfully')),
+      );
+
+      /// Pop back to profile view
+      if (mounted) {
+        Navigator.of(context).pop();
+      }
+    } catch (e) {
+      if (!mounted) return;
+      setState(() => _isSaving = false);
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Error saving profile: ${e.toString()}')),
+      );
+    }
   }
 
   @override
@@ -112,83 +165,93 @@ class _ProfileEditPageState extends State<ProfileEditPage> {
       ),
       body: _isLoading
           ? const Center(child: CircularProgressIndicator())
-          : SingleChildScrollView(
-              child: Container(
-                margin: const EdgeInsets.all(AppDefaults.padding),
-                padding: const EdgeInsets.symmetric(
-                  horizontal: AppDefaults.padding,
-                  vertical: AppDefaults.padding * 2,
-                ),
-                decoration: BoxDecoration(
-                  color: AppColors.scaffoldBackground,
-                  borderRadius: AppDefaults.borderRadius,
-                ),
-                child: Form(
-                  key: _formKey,
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      const Text('First Name'),
-                      const SizedBox(height: 8),
-                      TextFormField(
-                        controller: _firstNameController,
-                        keyboardType: TextInputType.text,
-                        textInputAction: TextInputAction.next,
-                        validator: (value) =>
-                            (value == null || value.trim().isEmpty)
-                            ? 'First name is required'
-                            : null,
-                      ),
-                      const SizedBox(height: AppDefaults.padding),
-                      const Text('Last Name'),
-                      const SizedBox(height: 8),
-                      TextFormField(
-                        controller: _lastNameController,
-                        keyboardType: TextInputType.text,
-                        textInputAction: TextInputAction.next,
-                        validator: (value) =>
-                            (value == null || value.trim().isEmpty)
-                            ? 'Last name is required'
-                            : null,
-                      ),
-                      const SizedBox(height: AppDefaults.padding),
-                      const Text('Phone Number'),
-                      const SizedBox(height: 8),
-                      TextFormField(
-                        controller: _phoneController,
-                        keyboardType: TextInputType.phone,
-                        textInputAction: TextInputAction.next,
-                        validator: (value) =>
-                            (value == null || value.trim().isEmpty)
-                            ? 'Phone number is required'
-                            : null,
-                      ),
-                      const SizedBox(height: AppDefaults.padding),
-                      const Text('Gender'),
-                      const SizedBox(height: 8),
-                      TextFormField(
-                        controller: _genderController,
-                        keyboardType: TextInputType.text,
-                        textInputAction: TextInputAction.next,
-                      ),
-                      const SizedBox(height: AppDefaults.padding),
-                      const Text('Birthday'),
-                      const SizedBox(height: 8),
-                      TextFormField(
-                        controller: _birthdayController,
-                        keyboardType: TextInputType.datetime,
-                        textInputAction: TextInputAction.done,
-                      ),
-                      const SizedBox(height: AppDefaults.padding),
-                      SizedBox(
-                        width: double.infinity,
-                        child: ElevatedButton(
-                          onPressed: _isSaving ? null : _saveProfile,
-                          child: Text(_isSaving ? 'Saving...' : 'Save'),
+          : _loadingError != null
+          ? RetryableErrorView(
+              title: 'Unable to load profile',
+              message: _loadingError!,
+              onRetry: _loadProfile,
+            )
+          : RefreshIndicator(
+              onRefresh: onRefreshRequested,
+              child: SingleChildScrollView(
+                physics: const AlwaysScrollableScrollPhysics(),
+                child: Container(
+                  margin: const EdgeInsets.all(AppDefaults.padding),
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: AppDefaults.padding,
+                    vertical: AppDefaults.padding * 2,
+                  ),
+                  decoration: BoxDecoration(
+                    color: AppColors.scaffoldBackground,
+                    borderRadius: AppDefaults.borderRadius,
+                  ),
+                  child: Form(
+                    key: _formKey,
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        const Text('First Name'),
+                        const SizedBox(height: 8),
+                        TextFormField(
+                          controller: _firstNameController,
+                          keyboardType: TextInputType.text,
+                          textInputAction: TextInputAction.next,
+                          validator: (value) =>
+                              (value == null || value.trim().isEmpty)
+                              ? 'First name is required'
+                              : null,
                         ),
-                      ),
-                    ],
+                        const SizedBox(height: AppDefaults.padding),
+                        const Text('Last Name'),
+                        const SizedBox(height: 8),
+                        TextFormField(
+                          controller: _lastNameController,
+                          keyboardType: TextInputType.text,
+                          textInputAction: TextInputAction.next,
+                          validator: (value) =>
+                              (value == null || value.trim().isEmpty)
+                              ? 'Last name is required'
+                              : null,
+                        ),
+                        const SizedBox(height: AppDefaults.padding),
+                        const Text('Phone Number'),
+                        const SizedBox(height: 8),
+                        TextFormField(
+                          controller: _phoneController,
+                          keyboardType: TextInputType.phone,
+                          textInputAction: TextInputAction.next,
+                          validator: (value) =>
+                              (value == null || value.trim().isEmpty)
+                              ? 'Phone number is required'
+                              : null,
+                        ),
+                        const SizedBox(height: AppDefaults.padding),
+                        const Text('Gender'),
+                        const SizedBox(height: 8),
+                        TextFormField(
+                          controller: _genderController,
+                          keyboardType: TextInputType.text,
+                          textInputAction: TextInputAction.next,
+                        ),
+                        const SizedBox(height: AppDefaults.padding),
+                        const Text('Birthday'),
+                        const SizedBox(height: 8),
+                        TextFormField(
+                          controller: _birthdayController,
+                          keyboardType: TextInputType.datetime,
+                          textInputAction: TextInputAction.done,
+                        ),
+                        const SizedBox(height: AppDefaults.padding),
+                        SizedBox(
+                          width: double.infinity,
+                          child: ElevatedButton(
+                            onPressed: _isSaving ? null : _saveProfile,
+                            child: Text(_isSaving ? 'Saving...' : 'Save'),
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
                 ),
               ),

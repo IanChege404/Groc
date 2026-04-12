@@ -34,15 +34,16 @@ class OrderSuccessfullPage extends StatelessWidget {
                 Text(
                   'Order Placed Successfully',
                   style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                        fontWeight: FontWeight.bold,
-                        color: Colors.black,
-                      ),
+                    fontWeight: FontWeight.bold,
+                    color: Theme.of(context).colorScheme.onSurface,
+                  ),
                   textAlign: TextAlign.center,
                 ),
                 const SizedBox(height: 16),
                 const Padding(
-                  padding:
-                      EdgeInsets.symmetric(horizontal: AppDefaults.padding),
+                  padding: EdgeInsets.symmetric(
+                    horizontal: AppDefaults.padding,
+                  ),
                   child: Text(
                     'Thanks for your order. Your order has placed successfully. Please continue your order.',
                     textAlign: TextAlign.center,

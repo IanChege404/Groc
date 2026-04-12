@@ -11,12 +11,12 @@ final ordersProvider =
       return OrderNotifier(firestore: firestore, authState: authState);
     });
 
-final orderDetailProvider = FutureProvider.family<OrderModel?, String>((
+final orderDetailProvider = StreamProvider.family<OrderModel?, String>((
   ref,
   orderId,
-) async {
+) {
   final firestore = FirestoreService();
-  return firestore.getOrder(orderId);
+  return firestore.getOrderTrackingStream(orderId);
 });
 
 class OrderNotifier extends StateNotifier<AsyncValue<List<OrderModel>>> {

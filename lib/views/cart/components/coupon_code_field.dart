@@ -48,7 +48,7 @@ class _CouponCodeFieldState extends State<CouponCodeField> {
               'Add Coupon',
               style: Theme.of(context).textTheme.bodyLarge?.copyWith(
                 fontWeight: FontWeight.bold,
-                color: Colors.black,
+                color: Theme.of(context).colorScheme.onSurface,
               ),
             ),
           ),
@@ -76,7 +76,7 @@ class _CouponCodeFieldState extends State<CouponCodeField> {
                     foregroundColor: isFilled ? null : AppColors.placeholder,
                     backgroundColor: isFilled
                         ? null
-                        : Colors.grey.withValues(alpha: 0.3),
+                        : Theme.of(context).dividerColor.withValues(alpha: 0.3),
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(8),
                     ),

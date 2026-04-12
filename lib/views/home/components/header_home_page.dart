@@ -5,9 +5,7 @@ import '../../../core/constants/constants.dart';
 import '../../../core/routes/app_routes.dart';
 
 class HeaderHomePage extends StatelessWidget {
-  const HeaderHomePage({
-    super.key,
-  });
+  const HeaderHomePage({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -82,9 +80,9 @@ class _CurrentLocationDropDown extends StatelessWidget {
                   Text(
                     'Current Location',
                     style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                          fontWeight: FontWeight.bold,
-                          color: Colors.black,
-                        ),
+                      fontWeight: FontWeight.bold,
+                      color: Theme.of(context).colorScheme.onSurface,
+                    ),
                   ),
                   const Text('Chahatak, Sylhet'),
                 ],

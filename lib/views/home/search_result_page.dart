@@ -63,9 +63,9 @@ class _SearchResultPageState extends ConsumerState<SearchResultPage> {
                 trimmedQuery.isEmpty
                     ? 'Start typing to search products'
                     : 'Search results for "$trimmedQuery"',
-                style: Theme.of(
-                  context,
-                ).textTheme.bodyLarge?.copyWith(color: Colors.black),
+                style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                  color: Theme.of(context).colorScheme.onSurface,
+                ),
               ),
             ),
           ),

@@ -4,9 +4,7 @@ import '../../../core/constants/constants.dart';
 import 'checkout_payment_card_tile.dart';
 
 class PaymentSystem extends StatelessWidget {
-  const PaymentSystem({
-    super.key,
-  });
+  const PaymentSystem({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -21,10 +19,9 @@ class PaymentSystem extends StatelessWidget {
             alignment: Alignment.centerLeft,
             child: Text(
               'Select Payment System',
-              style: Theme.of(context)
-                  .textTheme
-                  .bodyLarge
-                  ?.copyWith(color: Colors.black),
+              style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                color: Theme.of(context).colorScheme.onSurface,
+              ),
             ),
           ),
         ),
@@ -53,7 +50,7 @@ class PaymentSystem extends StatelessWidget {
               ),
             ],
           ),
-        )
+        ),
       ],
     );
   }

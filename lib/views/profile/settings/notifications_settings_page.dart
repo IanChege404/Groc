@@ -1,21 +1,41 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../core/components/app_back_button.dart';
 import '../../../core/components/app_settings_tile.dart';
 import '../../../core/constants/constants.dart';
+import '../../../core/providers/auth_provider.dart';
+import '../../../core/providers/settings_provider.dart';
 
-class NotificationSettingsPage extends StatelessWidget {
+class NotificationSettingsPage extends ConsumerWidget {
   const NotificationSettingsPage({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final userId = ref.watch(authProvider).value;
+    final settings = ref.watch(userSettingsProvider).value;
+
+    final notificationsEnabled = settings?.notificationsEnabled ?? true;
+    final pushEnabled = settings?.pushNotificationsEnabled ?? true;
+    final emailEnabled = settings?.emailNotificationsEnabled ?? false;
+
+    Future<void> save({bool? notifications, bool? push, bool? email}) async {
+      if (userId == null || userId.isEmpty) return;
+      await ref
+          .read(userSettingsProvider.notifier)
+          .updateNotificationSettings(
+            userId,
+            notificationsEnabled: notifications,
+            pushNotificationsEnabled: push,
+            emailNotificationsEnabled: email,
+          );
+    }
+
     return Scaffold(
       appBar: AppBar(
         leading: const AppBackButton(),
-        title: const Text(
-          'Change Notificaiton Settings',
-        ),
+        title: const Text('Change Notification Settings'),
       ),
       backgroundColor: AppColors.cardColor,
       body: Container(
@@ -38,8 +58,8 @@ class NotificationSettingsPage extends StatelessWidget {
                 trailing: Transform.scale(
                   scale: 0.7,
                   child: CupertinoSwitch(
-                    value: true,
-                    onChanged: (v) {},
+                    value: notificationsEnabled,
+                    onChanged: (value) => save(notifications: value),
                   ),
                 ),
               ),
@@ -48,8 +68,8 @@ class NotificationSettingsPage extends StatelessWidget {
                 trailing: Transform.scale(
                   scale: 0.7,
                   child: CupertinoSwitch(
-                    value: true,
-                    onChanged: (v) {},
+                    value: pushEnabled,
+                    onChanged: (value) => save(push: value),
                   ),
                 ),
               ),
@@ -58,8 +78,8 @@ class NotificationSettingsPage extends StatelessWidget {
                 trailing: Transform.scale(
                   scale: 0.7,
                   child: CupertinoSwitch(
-                    value: false,
-                    onChanged: (v) {},
+                    value: emailEnabled,
+                    onChanged: (value) => save(email: value),
                   ),
                 ),
               ),

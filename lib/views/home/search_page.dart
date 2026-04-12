@@ -37,15 +37,16 @@ class _RecentSearchList extends StatelessWidget {
       child: Column(
         children: [
           Padding(
-            padding:
-                const EdgeInsets.symmetric(horizontal: AppDefaults.padding),
+            padding: const EdgeInsets.symmetric(
+              horizontal: AppDefaults.padding,
+            ),
             child: Align(
               alignment: Alignment.centerLeft,
               child: Text(
                 'Recent Search',
                 style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                      color: Colors.black,
-                    ),
+                  color: Theme.of(context).colorScheme.onSurface,
+                ),
               ),
             ),
           ),
@@ -55,12 +56,11 @@ class _RecentSearchList extends StatelessWidget {
               itemBuilder: (context, index) {
                 return const SearchHistoryTile();
               },
-              separatorBuilder: (context, index) => const Divider(
-                thickness: 0.1,
-              ),
+              separatorBuilder: (context, index) =>
+                  const Divider(thickness: 0.1),
               itemCount: 16,
             ),
-          )
+          ),
         ],
       ),
     );
@@ -128,7 +128,7 @@ class _SearchPageHeader extends StatelessWidget {
                       child: SvgPicture.asset(AppIcons.filter),
                     ),
                   ),
-                )
+                ),
               ],
             ),
           ),
@@ -139,25 +139,17 @@ class _SearchPageHeader extends StatelessWidget {
 }
 
 class SearchHistoryTile extends StatelessWidget {
-  const SearchHistoryTile({
-    super.key,
-  });
+  const SearchHistoryTile({super.key});
 
   @override
   Widget build(BuildContext context) {
     return InkWell(
       onTap: () {},
       child: Padding(
-        padding: const EdgeInsets.symmetric(
-          vertical: 8,
-          horizontal: 16,
-        ),
+        padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
         child: Row(
           children: [
-            Text(
-              'Vegetables',
-              style: Theme.of(context).textTheme.bodyMedium,
-            ),
+            Text('Vegetables', style: Theme.of(context).textTheme.bodyMedium),
             const Spacer(),
             SvgPicture.asset(AppIcons.searchTileArrow),
           ],

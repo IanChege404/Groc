@@ -26,7 +26,7 @@ class ProfileMenuOptions extends StatelessWidget {
       margin: const EdgeInsets.all(AppDefaults.padding),
       padding: const EdgeInsets.all(AppDefaults.padding),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: Theme.of(context).colorScheme.surface,
         boxShadow: AppDefaults.boxShadow,
         borderRadius: AppDefaults.borderRadius,
       ),

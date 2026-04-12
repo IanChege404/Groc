@@ -5,9 +5,7 @@ import '../../../../core/constants/constants.dart';
 import '../../../../core/routes/app_routes.dart';
 
 class AddNewCardRow extends StatelessWidget {
-  const AddNewCardRow({
-    super.key,
-  });
+  const AddNewCardRow({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -18,9 +16,9 @@ class AddNewCardRow extends StatelessWidget {
           Text(
             'My Card',
             style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                  fontWeight: FontWeight.bold,
-                  color: Colors.black,
-                ),
+              fontWeight: FontWeight.bold,
+              color: Theme.of(context).colorScheme.onSurface,
+            ),
           ),
           const Spacer(),
           IconButton(
@@ -28,7 +26,7 @@ class AddNewCardRow extends StatelessWidget {
               Navigator.pushNamed(context, AppRoutes.paymentCardAdd);
             },
             icon: SvgPicture.asset(AppIcons.cardAdd),
-          )
+          ),
         ],
       ),
     );

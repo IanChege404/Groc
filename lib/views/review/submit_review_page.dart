@@ -35,8 +35,9 @@ class SubmitReviewPage extends StatelessWidget {
                 height: 100,
                 child: AspectRatio(
                   aspectRatio: 1 / 1,
-                  child:
-                      NetworkImageWithLoader('https://i.imgur.com/aMo2GQb.png'),
+                  child: NetworkImageWithLoader(
+                    'https://i.imgur.com/aMo2GQb.png',
+                  ),
                 ),
               ),
               Padding(
@@ -44,9 +45,9 @@ class SubmitReviewPage extends StatelessWidget {
                 child: Text(
                   'How would you rate the\nquality of this Products',
                   style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                        color: Colors.black,
-                        fontWeight: FontWeight.bold,
-                      ),
+                    color: Theme.of(context).colorScheme.onSurface,
+                    fontWeight: FontWeight.bold,
+                  ),
                 ),
               ),
               Row(
@@ -66,15 +67,13 @@ class SubmitReviewPage extends StatelessWidget {
                 child: Text(
                   'Leave a your valuable\ncomments',
                   style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                        color: Colors.black,
-                        fontWeight: FontWeight.bold,
-                      ),
+                    color: Theme.of(context).colorScheme.onSurface,
+                    fontWeight: FontWeight.bold,
+                  ),
                 ),
               ),
               const SizedBox(height: AppDefaults.padding * 2),
-              const TextField(
-                maxLines: 10,
-              ),
+              const TextField(maxLines: 10),
               const SizedBox(height: AppDefaults.padding * 2),
               SizedBox(
                 width: double.infinity,

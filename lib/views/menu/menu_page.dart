@@ -16,12 +16,12 @@ class MenuPage extends StatelessWidget {
           Text(
             'Choose a category',
             style: Theme.of(context).textTheme.headlineSmall?.copyWith(
-                  color: Colors.black,
-                  fontWeight: FontWeight.bold,
-                ),
+              color: Theme.of(context).colorScheme.onSurface,
+              fontWeight: FontWeight.bold,
+            ),
           ),
           const SizedBox(height: 16),
-          const CateogoriesGrid()
+          const CateogoriesGrid(),
         ],
       ),
     );
@@ -29,9 +29,7 @@ class MenuPage extends StatelessWidget {
 }
 
 class CateogoriesGrid extends StatelessWidget {
-  const CateogoriesGrid({
-    super.key,
-  });
+  const CateogoriesGrid({super.key});
 
   @override
   Widget build(BuildContext context) {

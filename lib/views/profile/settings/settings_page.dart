@@ -14,9 +14,7 @@ class SettingsPage extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         leading: const AppBackButton(),
-        title: const Text(
-          'Settings',
-        ),
+        title: const Text('Settings'),
       ),
       backgroundColor: AppColors.cardColor,
       body: Container(
@@ -64,7 +62,8 @@ class SettingsPage extends StatelessWidget {
             AppSettingsListTile(
               label: 'Location',
               trailing: SvgPicture.asset(AppIcons.right),
-              onTap: () {},
+              onTap: () =>
+                  Navigator.pushNamed(context, AppRoutes.settingsLocation),
             ),
             AppSettingsListTile(
               label: 'Profile Setting',

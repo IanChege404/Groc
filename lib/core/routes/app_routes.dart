@@ -60,6 +60,7 @@ class AppRoutes {
   static const settings = '/settings';
   static const settingsLanguage = '/settingsLanguage';
   static const settingsNotifications = '/settingsNotifications';
+  static const settingsLocation = '/settingsLocation';
   static const changePassword = '/changePassword';
   static const changePhoneNumber = '/changePhoneNumber';
 

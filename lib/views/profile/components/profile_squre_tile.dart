@@ -31,8 +31,8 @@ class ProfileSqureTile extends StatelessWidget {
               Text(
                 label,
                 style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                      color: Colors.black,
-                    ),
+                  color: Theme.of(context).colorScheme.onSurface,
+                ),
               ),
             ],
           ),

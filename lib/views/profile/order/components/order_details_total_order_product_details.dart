@@ -22,7 +22,7 @@ class TotalOrderProductDetails extends StatelessWidget {
               'Product Details',
               style: Theme.of(context).textTheme.bodyLarge?.copyWith(
                 fontWeight: FontWeight.bold,
-                color: Colors.black,
+                color: Theme.of(context).colorScheme.onSurface,
               ),
             ),
           ),

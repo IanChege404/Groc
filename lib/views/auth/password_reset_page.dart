@@ -49,7 +49,7 @@ class _PasswordResetPageState extends State<PasswordResetPage> {
                   vertical: AppDefaults.padding * 3,
                 ),
                 decoration: BoxDecoration(
-                  color: Colors.white,
+                  color: Theme.of(context).colorScheme.surface,
                   borderRadius: AppDefaults.borderRadius,
                 ),
                 child: Column(
@@ -58,10 +58,9 @@ class _PasswordResetPageState extends State<PasswordResetPage> {
                   children: [
                     Text(
                       'Add New password',
-                      style: Theme.of(context)
-                          .textTheme
-                          .titleLarge
-                          ?.copyWith(fontWeight: FontWeight.bold),
+                      style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                        fontWeight: FontWeight.bold,
+                      ),
                     ),
                     const SizedBox(height: AppDefaults.padding * 3),
                     const Text("New Password"),
@@ -90,7 +89,7 @@ class _PasswordResetPageState extends State<PasswordResetPage> {
                     ),
                   ],
                 ),
-              )
+              ),
             ],
           ),
         ),

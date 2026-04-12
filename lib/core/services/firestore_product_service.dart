@@ -68,6 +68,22 @@ class FirestoreProductService {
     }
   }
 
+  /// Get bundle by ID
+  Future<ApiResponse<BundleModel>> getBundleById(String id) async {
+    try {
+      final doc = await _firestore.collection('bundles').doc(id).get();
+
+      if (!doc.exists) {
+        return ApiResponse.error('Bundle not found');
+      }
+
+      final bundle = BundleModel.fromFirestore(doc);
+      return ApiResponse.success(data: bundle);
+    } catch (e) {
+      return ApiResponse.error('Failed to fetch bundle: $e');
+    }
+  }
+
   /// Get new products (for Home screen)
   Future<ApiResponse<List<ProductModel>>> getNewProducts({
     int limit = 10,
@@ -243,7 +259,10 @@ class FirestoreProductService {
           .get();
 
       final wishlistProductIds = snapshot.docs
-          .map((doc) => doc['productId'] as String)
+          .map(
+            (doc) =>
+                (doc.data()['itemId'] ?? doc.data()['productId']) as String,
+          )
           .toList();
 
       return ApiResponse.success(data: wishlistProductIds);

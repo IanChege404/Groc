@@ -26,8 +26,8 @@ class SignUpButton extends StatelessWidget {
             style: ElevatedButton.styleFrom(elevation: 1),
             child: SvgPicture.asset(
               AppIcons.arrowForward,
-              colorFilter: const ColorFilter.mode(
-                Colors.white,
+              colorFilter: ColorFilter.mode(
+                Theme.of(context).colorScheme.onPrimary,
                 BlendMode.srcIn,
               ),
             ),

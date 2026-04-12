@@ -125,4 +125,61 @@ class FirestoreAuthService {
       return null;
     }
   }
+
+  /// Change current user's password
+  Future<ApiResponse<void>> changePassword(String newPassword) async {
+    try {
+      final user = _auth.currentUser;
+      if (user == null) {
+        return ApiResponse.error('No authenticated user found');
+      }
+      await user.updatePassword(newPassword);
+      return ApiResponse.success(data: null);
+    } on FirebaseAuthException catch (e) {
+      return ApiResponse.error(e.message ?? 'Password update failed');
+    } catch (e) {
+      return ApiResponse.error('Unexpected error: $e');
+    }
+  }
+
+  /// Start phone verification flow
+  Future<ApiResponse<void>> verifyPhoneNumber({
+    required String phoneNumber,
+    required void Function(PhoneAuthCredential credential) onAutoVerified,
+    required void Function(String verificationId, int? resendToken) onCodeSent,
+    required void Function(FirebaseAuthException error) onFailed,
+  }) async {
+    try {
+      await _auth.verifyPhoneNumber(
+        phoneNumber: phoneNumber,
+        verificationCompleted: onAutoVerified,
+        verificationFailed: onFailed,
+        codeSent: onCodeSent,
+        codeAutoRetrievalTimeout: (_) {},
+      );
+      return ApiResponse.success(data: null);
+    } on FirebaseAuthException catch (e) {
+      return ApiResponse.error(e.message ?? 'Phone verification failed');
+    } catch (e) {
+      return ApiResponse.error('Unexpected error: $e');
+    }
+  }
+
+  /// Change current user's phone number with verified credential
+  Future<ApiResponse<void>> updatePhoneNumber(
+    PhoneAuthCredential credential,
+  ) async {
+    try {
+      final user = _auth.currentUser;
+      if (user == null) {
+        return ApiResponse.error('No authenticated user found');
+      }
+      await user.updatePhoneNumber(credential);
+      return ApiResponse.success(data: null);
+    } on FirebaseAuthException catch (e) {
+      return ApiResponse.error(e.message ?? 'Phone update failed');
+    } catch (e) {
+      return ApiResponse.error('Unexpected error: $e');
+    }
+  }
 }

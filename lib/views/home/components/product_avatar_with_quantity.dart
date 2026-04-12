@@ -20,8 +20,8 @@ class ProductAvatarWithQuanitty extends StatelessWidget {
         Container(
           margin: const EdgeInsets.symmetric(horizontal: 4, vertical: 16),
           padding: const EdgeInsets.all(AppDefaults.padding / 2),
-          decoration: const BoxDecoration(
-            color: Colors.white,
+          decoration: BoxDecoration(
+            color: Theme.of(context).colorScheme.surface,
             shape: BoxShape.circle,
           ),
           width: 50,
@@ -37,19 +37,18 @@ class ProductAvatarWithQuanitty extends StatelessWidget {
             child: Container(
               padding: const EdgeInsets.all(4),
               decoration: BoxDecoration(
-                color: Colors.white,
+                color: Theme.of(context).colorScheme.surface,
                 shape: BoxShape.circle,
                 border: Border.all(color: AppColors.primary, width: 2),
               ),
               child: Text(
                 'x$quantity',
-                style: Theme.of(context)
-                    .textTheme
-                    .bodySmall
-                    ?.copyWith(color: Colors.black),
+                style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                  color: Theme.of(context).colorScheme.onSurface,
+                ),
               ),
             ),
-          )
+          ),
       ],
     );
   }

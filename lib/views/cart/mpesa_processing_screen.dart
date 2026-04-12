@@ -145,11 +145,11 @@ class _MpesaProcessingScreenState extends State<MpesaProcessingScreen>
                     shape: BoxShape.circle,
                     color: Color(0xFF00A651), // M-Pesa Green
                   ),
-                  child: const Center(
+                  child: Center(
                     child: Text(
                       'M',
                       style: TextStyle(
-                        color: Colors.white,
+                        color: Theme.of(context).colorScheme.onPrimary,
                         fontSize: 48,
                         fontWeight: FontWeight.bold,
                         fontFamily: 'Sora',
@@ -268,18 +268,18 @@ class _MpesaProcessingScreenState extends State<MpesaProcessingScreen>
                   style: ElevatedButton.styleFrom(
                     backgroundColor: _canResend
                         ? Theme.of(context).colorScheme.primary
-                        : Colors.grey.shade400,
-                    foregroundColor: Colors.white,
+                        : Theme.of(context).disabledColor,
+                    foregroundColor: Theme.of(context).colorScheme.onPrimary,
                     shape: RoundedRectangleBorder(
                       borderRadius: AppDefaults.borderRadius,
                     ),
-                    disabledBackgroundColor: Colors.grey.shade400,
+                    disabledBackgroundColor: Theme.of(context).disabledColor,
                   ),
                   child: Text(
                     _canResend ? 'Resend Request' : 'Waiting...',
-                    style: Theme.of(
-                      context,
-                    ).textTheme.labelLarge?.copyWith(color: Colors.white),
+                    style: Theme.of(context).textTheme.labelLarge?.copyWith(
+                      color: Theme.of(context).colorScheme.onPrimary,
+                    ),
                   ),
                 ),
               ),

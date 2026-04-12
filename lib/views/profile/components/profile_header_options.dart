@@ -5,9 +5,7 @@ import '../../../core/routes/app_routes.dart';
 import 'profile_squre_tile.dart';
 
 class ProfileHeaderOptions extends StatelessWidget {
-  const ProfileHeaderOptions({
-    super.key,
-  });
+  const ProfileHeaderOptions({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -15,7 +13,7 @@ class ProfileHeaderOptions extends StatelessWidget {
       margin: const EdgeInsets.all(AppDefaults.padding),
       padding: const EdgeInsets.all(AppDefaults.padding),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: Theme.of(context).colorScheme.surface,
         borderRadius: AppDefaults.borderRadius,
         boxShadow: AppDefaults.boxShadow,
       ),

@@ -20,17 +20,18 @@ class EmptyCartPageSecond extends StatelessWidget {
               padding: EdgeInsets.all(AppDefaults.padding * 2),
               child: AspectRatio(
                 aspectRatio: 1 / 1,
-                child:
-                    NetworkImageWithLoader('https://i.imgur.com/znE8Gir.png'),
+                child: NetworkImageWithLoader(
+                  'https://i.imgur.com/znE8Gir.png',
+                ),
               ),
             ),
           ),
           Text(
             'Oppss!',
-            style: Theme.of(context)
-                .textTheme
-                .titleLarge
-                ?.copyWith(fontWeight: FontWeight.bold, color: Colors.black),
+            style: Theme.of(context).textTheme.titleLarge?.copyWith(
+              fontWeight: FontWeight.bold,
+              color: Theme.of(context).colorScheme.onSurface,
+            ),
           ),
           const SizedBox(height: 8),
           const Text('Sorry, you have no products in your cart'),

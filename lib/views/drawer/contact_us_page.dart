@@ -34,9 +34,9 @@ class ContactUsPage extends StatelessWidget {
               child: Text(
                 'Contact Us',
                 style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                      color: Colors.black,
-                      fontWeight: FontWeight.bold,
-                    ),
+                  color: Theme.of(context).colorScheme.onSurface,
+                  fontWeight: FontWeight.bold,
+                ),
               ),
             ),
 
@@ -53,15 +53,15 @@ class ContactUsPage extends StatelessWidget {
                     Text(
                       '+8801710000000',
                       style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                            color: Colors.black,
-                          ),
+                        color: Theme.of(context).colorScheme.onSurface,
+                      ),
                     ),
                     const SizedBox(height: AppDefaults.padding / 2),
                     Text(
                       '+8801710000000',
                       style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                            color: Colors.black,
-                          ),
+                        color: Theme.of(context).colorScheme.onSurface,
+                      ),
                     ),
                   ],
                 ),
@@ -75,8 +75,8 @@ class ContactUsPage extends StatelessWidget {
                 Text(
                   'jonarban45@gmail.com',
                   style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                        color: Colors.black,
-                      ),
+                    color: Theme.of(context).colorScheme.onSurface,
+                  ),
                 ),
               ],
             ),
@@ -89,8 +89,8 @@ class ContactUsPage extends StatelessWidget {
                 Text(
                   '26/C Mohammadpur\nDhaka, Bangladesh',
                   style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                        color: Colors.black,
-                      ),
+                    color: Theme.of(context).colorScheme.onSurface,
+                  ),
                 ),
               ],
             ),

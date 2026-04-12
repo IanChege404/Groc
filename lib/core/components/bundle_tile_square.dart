@@ -45,7 +45,7 @@ class _BundleTileSquareState extends ConsumerState<BundleTileSquare>
   Future<void> _toggleFavorite() async {
     final wishlistState = ref.read(wishlistItemsProvider);
     final isCurrentlyInWishlist = wishlistState.maybeWhen(
-      data: (items) => items.any((item) => item.productId == widget.data.id),
+      data: (items) => items.any((item) => item.itemId == widget.data.id),
       orElse: () => false,
     );
 
@@ -56,7 +56,7 @@ class _BundleTileSquareState extends ConsumerState<BundleTileSquare>
         // Remove from wishlist
         final wishlistItem = wishlistState.maybeWhen(
           data: (items) =>
-              items.firstWhere((item) => item.productId == widget.data.id),
+              items.firstWhere((item) => item.itemId == widget.data.id),
           orElse: () => null,
         );
         if (wishlistItem != null) {
@@ -67,10 +67,11 @@ class _BundleTileSquareState extends ConsumerState<BundleTileSquare>
       } else {
         // Add to wishlist
         final newWishlistItem = WishlistModel(
-          id: '', // Deterministic ID (userId_productId) is set by the provider
+          id: '', // Deterministic ID is set by the provider
           userId: '', // Will be set by the provider
-          productId: widget.data.id,
+          itemId: widget.data.id,
           addedAt: DateTime.now(),
+          itemType: WishlistItemType.bundle,
         );
         await ref
             .read(wishlistItemsProvider.notifier)
@@ -109,7 +110,7 @@ class _BundleTileSquareState extends ConsumerState<BundleTileSquare>
   Widget build(BuildContext context) {
     final wishlistState = ref.watch(wishlistItemsProvider);
     final isFavorite = wishlistState.maybeWhen(
-      data: (items) => items.any((item) => item.productId == widget.data.id),
+      data: (items) => items.any((item) => item.itemId == widget.data.id),
       orElse: () => false,
     );
 

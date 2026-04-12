@@ -6,6 +6,7 @@ import 'package:provider/provider.dart' as p;
 import 'core/config/env_config.dart';
 import 'core/l10n/locale_provider.dart';
 import 'core/routes/app_routes.dart';
+import 'core/routes/app_route_observer.dart';
 import 'core/routes/on_generate_route.dart';
 import 'core/themes/app_theme_dark.dart';
 import 'core/themes/app_themes.dart';
@@ -63,6 +64,7 @@ class MyApp extends StatelessWidget {
           ],
 
           onGenerateRoute: RouteGenerator.onGenerate,
+          navigatorObservers: [appRouteObserver],
           initialRoute: AppRoutes.splash,
         );
       },

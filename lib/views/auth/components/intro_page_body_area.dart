@@ -5,9 +5,7 @@ import '../../../core/constants/app_defaults.dart';
 import '../../../core/routes/app_routes.dart';
 
 class IntroPageBodyArea extends StatelessWidget {
-  const IntroPageBodyArea({
-    super.key,
-  });
+  const IntroPageBodyArea({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -25,12 +23,16 @@ class IntroPageBodyArea extends StatelessWidget {
                   Text(
                     'Welcome to our',
                     style: Theme.of(context).textTheme.headlineMedium?.copyWith(
-                        fontWeight: FontWeight.bold, color: Colors.black),
+                      fontWeight: FontWeight.bold,
+                      color: Theme.of(context).colorScheme.onSurface,
+                    ),
                   ),
                   Text(
                     'E-Grocery',
                     style: Theme.of(context).textTheme.headlineMedium?.copyWith(
-                        fontWeight: FontWeight.w700, color: AppColors.primary),
+                      fontWeight: FontWeight.w700,
+                      color: AppColors.primary,
+                    ),
                   ),
                 ],
               ),
@@ -56,15 +58,15 @@ class IntroPageBodyArea extends StatelessWidget {
                     onPressed: () =>
                         Navigator.pushNamed(context, AppRoutes.signup),
                     style: ElevatedButton.styleFrom(
-                      foregroundColor: Colors.black,
-                      backgroundColor: Colors.white,
+                      foregroundColor: Theme.of(context).colorScheme.onSurface,
+                      backgroundColor: Theme.of(context).colorScheme.surface,
                     ),
                     child: const Text('Create an account'),
                   ),
-                )
+                ),
               ],
             ),
-          )
+          ),
         ],
       ),
     );
