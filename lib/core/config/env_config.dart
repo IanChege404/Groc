@@ -49,6 +49,19 @@ class EnvConfig {
 
   static String mpesaCallbackUrl() => dotenv.env['MPESA_CALLBACK_URL'] ?? '';
 
+  /// Flutterwave Configuration
+  static String flutterwaveSecretKey() =>
+      dotenv.env['FLUTTERWAVE_SECRET_KEY'] ?? '';
+
+  static String flutterwavePublicKey() =>
+      dotenv.env['FLUTTERWAVE_PUBLIC_KEY'] ?? '';
+
+  static String flutterwaveEncryptionKey() =>
+      dotenv.env['FLUTTERWAVE_ENCRYPTION_KEY'] ?? '';
+
+  /// FCM Configuration
+  static String fcmServerKey() => dotenv.env['FCM_SERVER_KEY'] ?? '';
+
   /// Feature Flags
   static bool isPaymentGatewayEnabled() =>
       dotenv.env['ENABLE_PAYMENT_GATEWAY']?.toLowerCase() == 'true';

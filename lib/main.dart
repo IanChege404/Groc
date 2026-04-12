@@ -11,6 +11,7 @@ import 'core/routes/on_generate_route.dart';
 import 'core/themes/app_theme_dark.dart';
 import 'core/themes/app_themes.dart';
 import 'core/services/firebase_service.dart';
+import 'core/services/hive_service.dart';
 import 'core/utils/logger.dart';
 
 void main() async {
@@ -27,6 +28,13 @@ void main() async {
   } catch (e) {
     Logger.warning('Firebase init warning: $e', 'main');
     // Continue app even if Firebase fails
+  }
+
+  // Initialize Hive local cache
+  try {
+    await HiveService().initialize();
+  } catch (e) {
+    Logger.warning('Hive init warning: $e', 'main');
   }
 
   runApp(

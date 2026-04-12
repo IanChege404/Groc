@@ -46,6 +46,13 @@ import '../../views/profile/order/my_order_page.dart';
 import '../../views/profile/order/order_details.dart';
 import '../../views/profile/order_tracking_screen.dart';
 import '../../views/profile/payment_method/add_new_card_page.dart';
+import '../../views/checkout/payment_selection_screen.dart';
+import '../../views/checkout/card_payment_screen.dart';
+import '../../views/recipes/recipes_screen.dart';
+import '../../views/recipes/recipe_detail_screen.dart';
+import '../../views/deals/flash_deals_screen.dart';
+import '../../views/loyalty/loyalty_points_screen.dart';
+import '../../core/models/recipe_model.dart';
 import '../../views/profile/wallet_screen.dart';
 import '../../views/profile/payment_method/payment_method_page.dart';
 import '../../views/profile/profile_edit_page.dart';
@@ -87,6 +94,9 @@ class RouteGenerator {
     AppRoutes.couponDetails,
     AppRoutes.review,
     AppRoutes.submitReview,
+    AppRoutes.paymentSelection,
+    AppRoutes.cardPayment,
+    AppRoutes.loyaltyPoints,
   };
 
   static bool _isAuthenticated() => FirebaseAuth.instance.currentUser != null;
@@ -294,6 +304,46 @@ class RouteGenerator {
 
       case AppRoutes.paymentCardAdd:
         return CupertinoPageRoute(builder: (_) => const AddNewCardPage());
+
+      case AppRoutes.paymentSelection:
+        final paymentSelectionArgs =
+            settings.arguments as Map<String, dynamic>?;
+        return CupertinoPageRoute(
+          builder: (_) => PaymentSelectionScreen(
+            amount: (paymentSelectionArgs?['amount'] as num?)?.toDouble() ??
+                0.0,
+            orderId: paymentSelectionArgs?['orderId'] as String? ?? '',
+          ),
+        );
+
+      case AppRoutes.cardPayment:
+        final cardPaymentArgs = settings.arguments as Map<String, dynamic>?;
+        return CupertinoPageRoute(
+          builder: (_) => CardPaymentScreen(
+            amount:
+                (cardPaymentArgs?['amount'] as num?)?.toDouble() ?? 0.0,
+            orderId: cardPaymentArgs?['orderId'] as String? ?? '',
+          ),
+        );
+
+      case AppRoutes.recipes:
+        return CupertinoPageRoute(builder: (_) => const RecipesScreen());
+
+      case AppRoutes.recipeDetail:
+        final recipeDetailArgs = settings.arguments as Map<String, dynamic>?;
+        final recipe = recipeDetailArgs?['recipe'] as RecipeModel?;
+        if (recipe == null) return errorRoute();
+        return CupertinoPageRoute(
+          builder: (_) => RecipeDetailScreen(recipe: recipe),
+        );
+
+      case AppRoutes.flashDeals:
+        return CupertinoPageRoute(builder: (_) => const FlashDealsScreen());
+
+      case AppRoutes.loyaltyPoints:
+        return CupertinoPageRoute(
+          builder: (_) => const LoyaltyPointsScreen(),
+        );
 
       case AppRoutes.wallet:
         return CupertinoPageRoute(builder: (_) => const WalletScreen());

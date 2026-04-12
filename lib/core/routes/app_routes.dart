@@ -81,4 +81,16 @@ class AppRoutes {
   /* <---- Payment Method -----> */
   static const paymentMethod = '/paymentMethod';
   static const paymentCardAdd = '/paymentCardAdd';
+  static const paymentSelection = '/paymentSelection';
+  static const cardPayment = '/cardPayment';
+
+  /* <---- Recipes -----> */
+  static const recipes = '/recipes';
+  static const recipeDetail = '/recipeDetail';
+
+  /* <---- Flash Deals -----> */
+  static const flashDeals = '/flashDeals';
+
+  /* <---- Loyalty -----> */
+  static const loyaltyPoints = '/loyaltyPoints';
 }
