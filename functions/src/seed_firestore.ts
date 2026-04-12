@@ -474,6 +474,123 @@ async function run(): Promise<void> {
     await db.collection("bundles").doc(item.id).set(item.data, {merge: true});
   }
 
+  // Seed recipes collection
+  console.log("Writing recipes ...");
+  const recipeSeeds = [
+    {
+      id: "recipe_001",
+      data: {
+        name: "Kenyan Beef Stew",
+        description: "A hearty traditional Kenyan beef stew with potatoes and carrots.",
+        imageUrl: "",
+        servings: 4,
+        prepTimeMinutes: 15,
+        cookTimeMinutes: 60,
+        difficulty: "medium",
+        ingredients: [
+          {productId: "beef_001", productName: "Beef (500g)", quantity: 1, unit: "pack"},
+          {productId: "potato_001", productName: "Potatoes", quantity: 4, unit: "pieces"},
+          {productId: "carrot_001", productName: "Carrots", quantity: 3, unit: "pieces"},
+          {productId: "tomato_001", productName: "Tomatoes", quantity: 3, unit: "pieces"},
+          {productId: "onion_001", productName: "Onions", quantity: 2, unit: "pieces"},
+        ],
+        instructions: [
+          "Cut beef into cubes and season with salt and pepper.",
+          "Heat oil in a large pot and brown the beef in batches.",
+          "Add onions and cook until softened.",
+          "Add tomatoes and cook for 5 minutes.",
+          "Add potatoes and carrots, cover with water.",
+          "Simmer for 45 minutes until meat and vegetables are tender.",
+        ],
+        tags: ["kenyan", "beef", "stew", "dinner"],
+        rating: 4.5,
+        reviewCount: 24,
+        createdAt: now,
+      },
+    },
+    {
+      id: "recipe_002",
+      data: {
+        name: "Githeri Special",
+        description: "Classic Kenyan mixed beans and maize dish.",
+        imageUrl: "",
+        servings: 6,
+        prepTimeMinutes: 10,
+        cookTimeMinutes: 90,
+        difficulty: "easy",
+        ingredients: [
+          {productId: "maize_001", productName: "Maize (dried)", quantity: 2, unit: "cups"},
+          {productId: "beans_001", productName: "Beans (mixed)", quantity: 2, unit: "cups"},
+          {productId: "tomato_001", productName: "Tomatoes", quantity: 2, unit: "pieces"},
+          {productId: "onion_001", productName: "Onions", quantity: 1, unit: "piece"},
+        ],
+        instructions: [
+          "Soak maize and beans overnight.",
+          "Boil together for 60–90 minutes until tender.",
+          "Fry onions and tomatoes in oil.",
+          "Add the boiled githeri and mix well.",
+          "Season with salt and serve hot.",
+        ],
+        tags: ["kenyan", "vegetarian", "beans", "maize", "lunch"],
+        rating: 4.3,
+        reviewCount: 18,
+        createdAt: now,
+      },
+    },
+  ];
+
+  for (const recipe of recipeSeeds) {
+    await db.collection("recipes").doc(recipe.id).set(recipe.data, {merge: true});
+  }
+
+  // Seed flash deals (offers collection)
+  console.log("Writing flash deals ...");
+  const startTime = admin.firestore.Timestamp.fromDate(new Date());
+  const endTime = admin.firestore.Timestamp.fromDate(
+    new Date(Date.now() + 48 * 60 * 60 * 1000), // 48 hours from now
+  );
+
+  const flashDeals = [
+    {
+      id: "deal_001",
+      data: {
+        productId: "prod_tomato",
+        productName: "Fresh Tomatoes 1kg",
+        imageUrl: "",
+        originalPrice: 150,
+        dealPrice: 90,
+        discountPercentage: 40,
+        stockLeft: 50,
+        totalStock: 100,
+        startTime,
+        endTime,
+        isActive: true,
+        categoryId: "cat_vegetables",
+      },
+    },
+    {
+      id: "deal_002",
+      data: {
+        productId: "prod_milk",
+        productName: "Fresh Whole Milk 1L",
+        imageUrl: "",
+        originalPrice: 80,
+        dealPrice: 60,
+        discountPercentage: 25,
+        stockLeft: 30,
+        totalStock: 80,
+        startTime,
+        endTime,
+        isActive: true,
+        categoryId: "cat_dairy",
+      },
+    },
+  ];
+
+  for (const deal of flashDeals) {
+    await db.collection("offers").doc(deal.id).set(deal.data, {merge: true});
+  }
+
   console.log("Seeding completed successfully.");
   await app.delete();
 }
