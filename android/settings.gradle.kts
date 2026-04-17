@@ -13,6 +13,9 @@ pluginManagement {
     repositories {
         google()
         mavenCentral()
+        // Add Aliyun mirror as fallback for better reliability
+        maven("https://maven.aliyun.com/repository/gradle-plugin")
+        maven("https://maven.aliyun.com/repository/public")
         gradlePluginPortal()
     }
 }

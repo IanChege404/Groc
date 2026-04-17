@@ -1,5 +1,4 @@
 import '../config/api_endpoints.dart';
-import '../config/env_config.dart';
 import '../network/api_client.dart';
 
 class PaymentService {
@@ -39,8 +38,6 @@ class PaymentService {
         'phone_number': formattedPhone,
         'amount': amount,
         'order_id': orderId,
-        'merchant_key': EnvConfig.mpesaConsumerKey(),
-        'shortcode': EnvConfig.mpesaBusinessShortcode(),
       },
       fromJson: (json) => MpesaPaymentResponse.fromJson(json),
     );
@@ -49,11 +46,19 @@ class PaymentService {
   /// Confirm payment after transaction
   Future<ApiResponse<PaymentConfirmation>> confirmPayment({
     required String paymentId,
-    required String transactionId,
+    required String status,
+    String? transactionId,
   }) {
+    final body = <String, dynamic>{
+      'status': status,
+    };
+    if (transactionId != null && transactionId.isNotEmpty) {
+      body['transaction_id'] = transactionId;
+    }
+
     return _apiClient.post<PaymentConfirmation>(
       ApiEndpoints.confirmPayment(paymentId),
-      body: {'transaction_id': transactionId},
+      body: body,
       fromJson: (json) => PaymentConfirmation.fromJson(json),
     );
   }
@@ -180,11 +185,12 @@ class PaymentConfirmation {
   });
 
   factory PaymentConfirmation.fromJson(Map<String, dynamic> json) {
+    final paymentId = json['payment_id'] as String? ?? '';
     return PaymentConfirmation(
-      paymentId: json['payment_id'] as String,
-      orderId: json['order_id'] as String,
-      status: json['status'] as String,
-      transactionId: json['transaction_id'] as String,
+      paymentId: paymentId,
+      orderId: json['order_id'] as String? ?? '',
+      status: json['status'] as String? ?? 'pending',
+      transactionId: json['transaction_id'] as String? ?? paymentId,
       confirmedAt: json['confirmed_at'] != null
           ? DateTime.parse(json['confirmed_at'] as String)
           : DateTime.now(),

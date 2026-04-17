@@ -128,7 +128,7 @@ class _ProductTileSquareState extends ConsumerState<ProductTileSquare>
           ),
           child: Container(
             width: 176,
-            height: 296,
+            height: 280,
             padding: const EdgeInsets.all(AppDefaults.padding),
             decoration: BoxDecoration(
               border: Border.all(width: 0.1, color: AppColors.placeholder),
@@ -136,6 +136,7 @@ class _ProductTileSquareState extends ConsumerState<ProductTileSquare>
             ),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisSize: MainAxisSize.max,
               children: [
                 Stack(
                   children: [
@@ -190,35 +191,56 @@ class _ProductTileSquareState extends ConsumerState<ProductTileSquare>
                     ),
                   ],
                 ),
-                const SizedBox(height: 8),
-                Text(
-                  widget.data.name,
-                  style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                    color: Theme.of(context).textTheme.titleMedium?.color,
+                const SizedBox(height: 6),
+                Flexible(
+                  child: Text(
+                    widget.data.name,
+                    style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                          color: Theme.of(context).textTheme.titleMedium?.color,
+                        ),
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
                   ),
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
                 ),
-                const SizedBox(height: 16),
-                Text(widget.data.weight),
-                Row(
-                  mainAxisSize: MainAxisSize.min,
-                  crossAxisAlignment: CrossAxisAlignment.end,
-                  children: [
-                    Text(
-                      '\$${widget.data.price.toStringAsFixed(2)}',
-                      style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                        color: Theme.of(context).textTheme.titleLarge?.color,
+                const SizedBox(height: 4),
+                Flexible(
+                  child: Text(
+                    widget.data.weight,
+                    style: Theme.of(context).textTheme.bodySmall,
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                ),
+                const SizedBox(height: 6),
+                Flexible(
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    crossAxisAlignment: CrossAxisAlignment.end,
+                    children: [
+                      Flexible(
+                        child: Text(
+                          '\$${widget.data.price.toStringAsFixed(2)}',
+                          style:
+                              Theme.of(context).textTheme.titleSmall?.copyWith(
+                                    color: Theme.of(context)
+                                        .textTheme
+                                        .titleSmall
+                                        ?.color,
+                                  ),
+                        ),
                       ),
-                    ),
-                    const SizedBox(width: 4),
-                    Text(
-                      '\$${widget.data.mainPrice.toStringAsFixed(2)}',
-                      style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                        decoration: TextDecoration.lineThrough,
+                      const SizedBox(width: 4),
+                      Flexible(
+                        child: Text(
+                          '\$${widget.data.mainPrice.toStringAsFixed(2)}',
+                          style:
+                              Theme.of(context).textTheme.bodySmall?.copyWith(
+                                    decoration: TextDecoration.lineThrough,
+                                  ),
+                        ),
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
               ],
             ),

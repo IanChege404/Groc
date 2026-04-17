@@ -1,0 +1,138 @@
+{
+  "metadata": {
+    "generated_at": "2026-04-17T04:40:07.164896+00:00",
+    "source_files": [
+      "lib/core/constants/dummy_data.dart",
+      "lib/core/constants/app_images.dart",
+      "lib/core/constants/app_icons.dart",
+      "lib/views/onboarding/data/onboarding_data.dart"
+    ],
+    "download_images": false,
+    "counts": {
+      "products": 3,
+      "bundles": 4,
+      "onboarding": 3,
+      "assets": 113,
+      "images_downloaded": 0,
+      "images_failed": 0
+    }
+  },
+  "products": [
+    {
+      "id": "prod_perrysicecreambanana_410e2fde",
+      "name": "Perry's Ice Cream Banana",
+      "weight": "800 gm",
+      "cover": "https://i.imgur.com/6unJlSL.png",
+      "images": [
+        "https://i.imgur.com/6unJlSL.png"
+      ],
+      "price": 13.0,
+      "main_price": 15.0,
+      "category": "Frozen Desserts",
+      "source_file": "lib/core/constants/dummy_data.dart"
+    },
+    {
+      "id": "prod_vanillaicecreambanana_fbf8fe69",
+      "name": "Vanilla Ice Cream Banana",
+      "weight": "500 gm",
+      "cover": "https://i.imgur.com/oaCY49b.png",
+      "images": [
+        "https://i.imgur.com/oaCY49b.png"
+      ],
+      "price": 12.0,
+      "main_price": 15.0,
+      "category": "Frozen Desserts",
+      "source_file": "lib/core/constants/dummy_data.dart"
+    },
+    {
+      "id": "prod_meat_e4b662d3",
+      "name": "Meat",
+      "weight": "1 Kg",
+      "cover": "https://i.imgur.com/5wghZji.png",
+      "images": [
+        "https://i.imgur.com/5wghZji.png"
+      ],
+      "price": 15.0,
+      "main_price": 18.0,
+      "category": "Meat & Fish",
+      "source_file": "lib/core/constants/dummy_data.dart"
+    }
+  ],
+  "bundles": [
+    {
+      "id": "bundle_bundlepack_28d4600e",
+      "name": "Bundle Pack",
+      "cover": "https://i.imgur.com/Y0IFT2g.png",
+      "items": [
+        "Onion",
+        "Oil",
+        "Salt"
+      ],
+      "price": 35.0,
+      "main_price": 50.32,
+      "source_file": "lib/core/constants/dummy_data.dart"
+    },
+    {
+      "id": "bundle_mediumspicespack_11d2205b",
+      "name": "Medium Spices Pack",
+      "cover": "https://i.postimg.cc/qtM4zj1K/packs-2.png",
+      "items": [
+        "Onion",
+        "Oil",
+        "Salt"
+      ],
+      "price": 35.0,
+      "main_price": 50.32,
+      "source_file": "lib/core/constants/dummy_data.dart"
+    },
+    {
+      "id": "bundle_bundlepack_28d4600e",
+      "name": "Bundle Pack",
+      "cover": "https://i.postimg.cc/MnwW8WRd/pack-1.png",
+      "items": [
+        "Onion",
+        "Oil",
+        "Salt"
+      ],
+      "price": 35.0,
+      "main_price": 50.32,
+      "source_file": "lib/core/constants/dummy_data.dart"
+    },
+    {
+      "id": "bundle_bundlepack_28d4600e",
+      "name": "Bundle Pack",
+      "cover": "https://i.postimg.cc/k2y7Jkv9/pack-4.png",
+      "items": [
+        "Onion",
+        "Oil",
+        "Salt"
+      ],
+      "price": 35.0,
+      "main_price": 50.32,
+      "source_file": "lib/core/constants/dummy_data.dart"
+    }
+  ],
+  "onboarding": [
+    {
+      "id": "onboard_browseallthecategory_0e639ab9",
+      "image_url": "",
+      "headline": "Browse all the category",
+      "description": "In aliquip aute exercitation ut et nisi ut mollit. Deserunt dolor elit pariatur aute .",
+      "source_file": "lib/views/onboarding/data/onboarding_data.dart"
+    },
+    {
+      "id": "onboard_amazingdiscountsoffers_fce4b713",
+      "image_url": "",
+      "headline": "Amazing Discounts & Offers",
+      "description": "In aliquip aute exercitation ut et nisi ut mollit. Deserunt dolor elit pariatur aute .",
+      "source_file": "lib/views/onboarding/data/onboarding_data.dart"
+    },
+    {
+      "id": "onboard_deliveryin30min_da0b7743",
+      "image_url": "",
+      "headline": "Delivery in 30 Min",
+      "description": "In aliquip aute exercitation ut et nisi ut mollit. Deserunt dolor elit pariatur aute .",
+      "source_file": "lib/views/onboarding/data/onboarding_data.dart"
+    }
+  ]
+}

@@ -1,0 +1,492 @@
+vm.swappiness = 90
+Running scope as unit: run-r07a939e8daa44bd6ba89cf7a7926cc2f.scope
+[  +73 ms] executing: uname -m
+[   +6 ms] Exit code 0 from: uname -m
+[        ] x86_64
+[  +12 ms] Artifact Instance of 'MaterialFonts' is not required, skipping update.
+[        ] Artifact Instance of 'GradleWrapper' is not required, skipping update.
+[        ] Artifact Instance of 'AndroidGenSnapshotArtifacts' is not required, skipping update.
+[        ] Artifact Instance of 'AndroidInternalBuildArtifacts' is not required, skipping update.
+[        ] Artifact Instance of 'IOSEngineArtifacts' is not required, skipping update.
+[        ] Artifact Instance of 'FlutterWebSdk' is not required, skipping update.
+[        ] Artifact Instance of 'LegacyCanvasKitRemover' is not required, skipping update.
+[        ] Artifact Instance of 'FlutterSdk' is not required, skipping update.
+[        ] Artifact Instance of 'WindowsEngineArtifacts' is not required, skipping update.
+[        ] Artifact Instance of 'MacOSEngineArtifacts' is not required, skipping update.
+[        ] Artifact Instance of 'LinuxEngineArtifacts' is not required, skipping update.
+[        ] Artifact Instance of 'LinuxFuchsiaSDKArtifacts' is not required, skipping update.
+[        ] Artifact Instance of 'MacOSFuchsiaSDKArtifacts' is not required, skipping update.
+[        ] Artifact Instance of 'FlutterRunnerSDKArtifacts' is not required, skipping update.
+[        ] Artifact Instance of 'FlutterRunnerDebugSymbols' is not required, skipping update.
+[        ] Artifact Instance of 'IosUsbArtifacts' is not required, skipping update.
+[        ] Artifact Instance of 'IosUsbArtifacts' is not required, skipping update.
+[        ] Artifact Instance of 'IosUsbArtifacts' is not required, skipping update.
+[        ] Artifact Instance of 'IosUsbArtifacts' is not required, skipping update.
+[        ] Artifact Instance of 'IosUsbArtifacts' is not required, skipping update.
+[        ] Artifact Instance of 'IosUsbArtifacts' is not required, skipping update.
+[        ] Artifact Instance of 'FontSubsetArtifacts' is not required, skipping update.
+[        ] Artifact Instance of 'PubDependencies' is not required, skipping update.
+[   +1 ms] executing: [/home/devmahnx/flutter/] git -c log.showSignature=false log HEAD -n 1 --pretty=format:%ad --date=iso
+[   +8 ms] Exit code 0 from: git -c log.showSignature=false log HEAD -n 1 --pretty=format:%ad --date=iso
+[   +1 ms] 2026-03-25 16:21:00 -0700
+[  +66 ms] Artifact Instance of 'AndroidGenSnapshotArtifacts' is not required, skipping update.
+[   +3 ms] Artifact Instance of 'AndroidInternalBuildArtifacts' is not required, skipping update.
+[        ] Artifact Instance of 'IOSEngineArtifacts' is not required, skipping update.
+[        ] Artifact Instance of 'FlutterWebSdk' is not required, skipping update.
+[        ] Artifact Instance of 'FlutterEngineStamp' is not required, skipping update.
+[        ] Artifact Instance of 'LegacyCanvasKitRemover' is not required, skipping update.
+[   +4 ms] Artifact Instance of 'WindowsEngineArtifacts' is not required, skipping update.
+[        ] Artifact Instance of 'MacOSEngineArtifacts' is not required, skipping update.
+[        ] Artifact Instance of 'LinuxEngineArtifacts' is not required, skipping update.
+[        ] Artifact Instance of 'LinuxFuchsiaSDKArtifacts' is not required, skipping update.
+[        ] Artifact Instance of 'MacOSFuchsiaSDKArtifacts' is not required, skipping update.
+[        ] Artifact Instance of 'FlutterRunnerSDKArtifacts' is not required, skipping update.
+[        ] Artifact Instance of 'FlutterRunnerDebugSymbols' is not required, skipping update.
+[  +70 ms] executing: /home/devmahnx/Android/Sdk/platform-tools/adb devices -l
+[  +79 ms] List of devices attached
+           adb-R58R912VEVT-QXa1WC._adb-tls-connect._tcp device product:a12snnxx model:SM_A127F device:a12s transport_id:1
+[   +8 ms] /home/devmahnx/Android/Sdk/platform-tools/adb -s adb-R58R912VEVT-QXa1WC._adb-tls-connect._tcp shell getprop
+[ +122 ms] Artifact Instance of 'AndroidInternalBuildArtifacts' is not required, skipping update.
+[        ] Artifact Instance of 'IOSEngineArtifacts' is not required, skipping update.
+[        ] Artifact Instance of 'FlutterEngineStamp' is not required, skipping update.
+[   +4 ms] Artifact Instance of 'WindowsEngineArtifacts' is not required, skipping update.
+[        ] Artifact Instance of 'MacOSEngineArtifacts' is not required, skipping update.
+[   +1 ms] Artifact Instance of 'LinuxFuchsiaSDKArtifacts' is not required, skipping update.
+[        ] Artifact Instance of 'MacOSFuchsiaSDKArtifacts' is not required, skipping update.
+[        ] Artifact Instance of 'FlutterRunnerSDKArtifacts' is not required, skipping update.
+[        ] Artifact Instance of 'FlutterRunnerDebugSymbols' is not required, skipping update.
+[ +162 ms] Skipping pub get: version match.
+[ +111 ms] Found plugin flutter_native_splash at /home/devmahnx/.pub-cache/hosted/pub.dev/flutter_native_splash-2.4.1/
+[  +42 ms] Found plugin url_launcher at /home/devmahnx/.pub-cache/hosted/pub.dev/url_launcher-6.3.2/
+[   +2 ms] Found plugin url_launcher_windows at /home/devmahnx/.pub-cache/hosted/pub.dev/url_launcher_windows-3.1.5/
+[   +6 ms] Found plugin url_launcher_web at /home/devmahnx/.pub-cache/hosted/pub.dev/url_launcher_web-2.4.2/
+[   +2 ms] Found plugin url_launcher_macos at /home/devmahnx/.pub-cache/hosted/pub.dev/url_launcher_macos-3.2.5/
+[   +4 ms] Found plugin url_launcher_linux at /home/devmahnx/.pub-cache/hosted/pub.dev/url_launcher_linux-3.2.2/
+[   +5 ms] Found plugin url_launcher_ios at /home/devmahnx/.pub-cache/hosted/pub.dev/url_launcher_ios-6.4.1/
+[   +3 ms] Found plugin url_launcher_android at /home/devmahnx/.pub-cache/hosted/pub.dev/url_launcher_android-6.3.29/
+[   +3 ms] Found plugin shared_preferences at /home/devmahnx/.pub-cache/hosted/pub.dev/shared_preferences-2.5.5/
+[   +3 ms] Found plugin shared_preferences_windows at /home/devmahnx/.pub-cache/hosted/pub.dev/shared_preferences_windows-2.4.1/
+[  +10 ms] Found plugin path_provider_windows at /home/devmahnx/.pub-cache/hosted/pub.dev/path_provider_windows-2.3.0/
+[  +28 ms] Found plugin shared_preferences_web at /home/devmahnx/.pub-cache/hosted/pub.dev/shared_preferences_web-2.4.3/
+[   +3 ms] Found plugin shared_preferences_linux at /home/devmahnx/.pub-cache/hosted/pub.dev/shared_preferences_linux-2.4.1/
+[   +7 ms] Found plugin path_provider_linux at /home/devmahnx/.pub-cache/hosted/pub.dev/path_provider_linux-2.2.1/
+[   +9 ms] Found plugin shared_preferences_foundation at /home/devmahnx/.pub-cache/hosted/pub.dev/shared_preferences_foundation-2.5.6/
+[   +3 ms] Found plugin shared_preferences_android at /home/devmahnx/.pub-cache/hosted/pub.dev/shared_preferences_android-2.4.23/
+[  +14 ms] Found plugin path_provider at /home/devmahnx/.pub-cache/hosted/pub.dev/path_provider-2.1.5/
+[  +12 ms] Found plugin path_provider_foundation at /home/devmahnx/.pub-cache/hosted/pub.dev/path_provider_foundation-2.4.0/
+[   +3 ms] Found plugin path_provider_android at /home/devmahnx/.pub-cache/hosted/pub.dev/path_provider_android-2.2.9/
+[  +11 ms] Found plugin image_picker at /home/devmahnx/.pub-cache/hosted/pub.dev/image_picker-1.2.1/
+[   +3 ms] Found plugin image_picker_windows at /home/devmahnx/.pub-cache/hosted/pub.dev/image_picker_windows-0.2.2/
+[  +22 ms] Found plugin file_selector_windows at /home/devmahnx/.pub-cache/hosted/pub.dev/file_selector_windows-0.9.3+5/
+[   +4 ms] Found plugin image_picker_macos at /home/devmahnx/.pub-cache/hosted/pub.dev/image_picker_macos-0.2.2+1/
+[   +2 ms] Found plugin file_selector_macos at /home/devmahnx/.pub-cache/hosted/pub.dev/file_selector_macos-0.9.5/
+[   +4 ms] Found plugin image_picker_linux at /home/devmahnx/.pub-cache/hosted/pub.dev/image_picker_linux-0.2.2/
+[   +2 ms] Found plugin file_selector_linux at /home/devmahnx/.pub-cache/hosted/pub.dev/file_selector_linux-0.9.4/
+[   +2 ms] Found plugin image_picker_ios at /home/devmahnx/.pub-cache/hosted/pub.dev/image_picker_ios-0.8.13+6/
+[   +5 ms] Found plugin image_picker_for_web at /home/devmahnx/.pub-cache/hosted/pub.dev/image_picker_for_web-3.1.1/
+[   +2 ms] Found plugin image_picker_android at /home/devmahnx/.pub-cache/hosted/pub.dev/image_picker_android-0.8.13+16/
+[   +1 ms] Found plugin flutter_plugin_android_lifecycle at /home/devmahnx/.pub-cache/hosted/pub.dev/flutter_plugin_android_lifecycle-2.0.34/
+[  +13 ms] Found plugin flutter_image_compress at /home/devmahnx/.pub-cache/hosted/pub.dev/flutter_image_compress-2.4.0/
+[   +1 ms] Found plugin flutter_image_compress_web at /home/devmahnx/.pub-cache/hosted/pub.dev/flutter_image_compress_web-0.1.5/
+[   +2 ms] Found plugin flutter_image_compress_ohos at /home/devmahnx/.pub-cache/hosted/pub.dev/flutter_image_compress_ohos-0.0.3/
+[        ] Found plugin flutter_image_compress_macos at /home/devmahnx/.pub-cache/hosted/pub.dev/flutter_image_compress_macos-1.0.3/
+[   +1 ms] Found plugin flutter_image_compress_common at /home/devmahnx/.pub-cache/hosted/pub.dev/flutter_image_compress_common-1.0.6/
+[   +2 ms] Found plugin flutter_credit_card at /home/devmahnx/.pub-cache/hosted/pub.dev/flutter_credit_card-4.1.0/
+[   +1 ms] Found plugin firebase_messaging at /home/devmahnx/.pub-cache/hosted/pub.dev/firebase_messaging-15.2.10/
+[   +2 ms] Found plugin firebase_messaging_web at /home/devmahnx/.pub-cache/hosted/pub.dev/firebase_messaging_web-3.10.10/
+[   +2 ms] Found plugin firebase_core at /home/devmahnx/.pub-cache/hosted/pub.dev/firebase_core-3.15.2/
+[   +1 ms] Found plugin firebase_core_web at /home/devmahnx/.pub-cache/hosted/pub.dev/firebase_core_web-2.24.1/
+[   +3 ms] Found plugin firebase_auth at /home/devmahnx/.pub-cache/hosted/pub.dev/firebase_auth-5.7.0/
+[   +1 ms] Found plugin firebase_auth_web at /home/devmahnx/.pub-cache/hosted/pub.dev/firebase_auth_web-5.15.3/
+[   +3 ms] Found plugin cloud_firestore at /home/devmahnx/.pub-cache/hosted/pub.dev/cloud_firestore-5.6.12/
+[   +2 ms] Found plugin cloud_firestore_web at /home/devmahnx/.pub-cache/hosted/pub.dev/cloud_firestore_web-4.4.12/
+[  +17 ms] Found plugin sqflite at /home/devmahnx/.pub-cache/hosted/pub.dev/sqflite-2.3.3+1/
+[  +86 ms] Found plugin flutter_native_splash at /home/devmahnx/.pub-cache/hosted/pub.dev/flutter_native_splash-2.4.1/
+[  +19 ms] Found plugin url_launcher at /home/devmahnx/.pub-cache/hosted/pub.dev/url_launcher-6.3.2/
+[        ] Found plugin url_launcher_windows at /home/devmahnx/.pub-cache/hosted/pub.dev/url_launcher_windows-3.1.5/
+[   +2 ms] Found plugin url_launcher_web at /home/devmahnx/.pub-cache/hosted/pub.dev/url_launcher_web-2.4.2/
+[   +1 ms] Found plugin url_launcher_macos at /home/devmahnx/.pub-cache/hosted/pub.dev/url_launcher_macos-3.2.5/
+[   +1 ms] Found plugin url_launcher_linux at /home/devmahnx/.pub-cache/hosted/pub.dev/url_launcher_linux-3.2.2/
+[   +1 ms] Found plugin url_launcher_ios at /home/devmahnx/.pub-cache/hosted/pub.dev/url_launcher_ios-6.4.1/
+[   +1 ms] Found plugin url_launcher_android at /home/devmahnx/.pub-cache/hosted/pub.dev/url_launcher_android-6.3.29/
+[   +1 ms] Found plugin shared_preferences at /home/devmahnx/.pub-cache/hosted/pub.dev/shared_preferences-2.5.5/
+[   +2 ms] Found plugin shared_preferences_windows at /home/devmahnx/.pub-cache/hosted/pub.dev/shared_preferences_windows-2.4.1/
+[   +2 ms] Found plugin path_provider_windows at /home/devmahnx/.pub-cache/hosted/pub.dev/path_provider_windows-2.3.0/
+[   +4 ms] Found plugin shared_preferences_web at /home/devmahnx/.pub-cache/hosted/pub.dev/shared_preferences_web-2.4.3/
+[   +1 ms] Found plugin shared_preferences_linux at /home/devmahnx/.pub-cache/hosted/pub.dev/shared_preferences_linux-2.4.1/
+[   +1 ms] Found plugin path_provider_linux at /home/devmahnx/.pub-cache/hosted/pub.dev/path_provider_linux-2.2.1/
+[   +3 ms] Found plugin shared_preferences_foundation at /home/devmahnx/.pub-cache/hosted/pub.dev/shared_preferences_foundation-2.5.6/
+[   +2 ms] Found plugin shared_preferences_android at /home/devmahnx/.pub-cache/hosted/pub.dev/shared_preferences_android-2.4.23/
+[   +3 ms] Found plugin path_provider at /home/devmahnx/.pub-cache/hosted/pub.dev/path_provider-2.1.5/
+[   +2 ms] Found plugin path_provider_foundation at /home/devmahnx/.pub-cache/hosted/pub.dev/path_provider_foundation-2.4.0/
+[   +1 ms] Found plugin path_provider_android at /home/devmahnx/.pub-cache/hosted/pub.dev/path_provider_android-2.2.9/
+[   +2 ms] Found plugin image_picker at /home/devmahnx/.pub-cache/hosted/pub.dev/image_picker-1.2.1/
+[   +1 ms] Found plugin image_picker_windows at /home/devmahnx/.pub-cache/hosted/pub.dev/image_picker_windows-0.2.2/
+[   +5 ms] Found plugin file_selector_windows at /home/devmahnx/.pub-cache/hosted/pub.dev/file_selector_windows-0.9.3+5/
+[   +2 ms] Found plugin image_picker_macos at /home/devmahnx/.pub-cache/hosted/pub.dev/image_picker_macos-0.2.2+1/
+[   +1 ms] Found plugin file_selector_macos at /home/devmahnx/.pub-cache/hosted/pub.dev/file_selector_macos-0.9.5/
+[        ] Found plugin image_picker_linux at /home/devmahnx/.pub-cache/hosted/pub.dev/image_picker_linux-0.2.2/
+[        ] Found plugin file_selector_linux at /home/devmahnx/.pub-cache/hosted/pub.dev/file_selector_linux-0.9.4/
+[        ] Found plugin image_picker_ios at /home/devmahnx/.pub-cache/hosted/pub.dev/image_picker_ios-0.8.13+6/
+[        ] Found plugin image_picker_for_web at /home/devmahnx/.pub-cache/hosted/pub.dev/image_picker_for_web-3.1.1/
+[   +1 ms] Found plugin image_picker_android at /home/devmahnx/.pub-cache/hosted/pub.dev/image_picker_android-0.8.13+16/
+[        ] Found plugin flutter_plugin_android_lifecycle at /home/devmahnx/.pub-cache/hosted/pub.dev/flutter_plugin_android_lifecycle-2.0.34/
+[   +8 ms] Found plugin flutter_image_compress at /home/devmahnx/.pub-cache/hosted/pub.dev/flutter_image_compress-2.4.0/
+[   +1 ms] Found plugin flutter_image_compress_web at /home/devmahnx/.pub-cache/hosted/pub.dev/flutter_image_compress_web-0.1.5/
+[   +1 ms] Found plugin flutter_image_compress_ohos at /home/devmahnx/.pub-cache/hosted/pub.dev/flutter_image_compress_ohos-0.0.3/
+[        ] Found plugin flutter_image_compress_macos at /home/devmahnx/.pub-cache/hosted/pub.dev/flutter_image_compress_macos-1.0.3/
+[        ] Found plugin flutter_image_compress_common at /home/devmahnx/.pub-cache/hosted/pub.dev/flutter_image_compress_common-1.0.6/
+[   +1 ms] Found plugin flutter_credit_card at /home/devmahnx/.pub-cache/hosted/pub.dev/flutter_credit_card-4.1.0/
+[   +2 ms] Found plugin firebase_messaging at /home/devmahnx/.pub-cache/hosted/pub.dev/firebase_messaging-15.2.10/
+[   +2 ms] Found plugin firebase_messaging_web at /home/devmahnx/.pub-cache/hosted/pub.dev/firebase_messaging_web-3.10.10/
+[   +1 ms] Found plugin firebase_core at /home/devmahnx/.pub-cache/hosted/pub.dev/firebase_core-3.15.2/
+[        ] Found plugin firebase_core_web at /home/devmahnx/.pub-cache/hosted/pub.dev/firebase_core_web-2.24.1/
+[   +2 ms] Found plugin firebase_auth at /home/devmahnx/.pub-cache/hosted/pub.dev/firebase_auth-5.7.0/
+[   +1 ms] Found plugin firebase_auth_web at /home/devmahnx/.pub-cache/hosted/pub.dev/firebase_auth_web-5.15.3/
+[   +2 ms] Found plugin cloud_firestore at /home/devmahnx/.pub-cache/hosted/pub.dev/cloud_firestore-5.6.12/
+[        ] Found plugin cloud_firestore_web at /home/devmahnx/.pub-cache/hosted/pub.dev/cloud_firestore_web-4.4.12/
+[   +8 ms] Found plugin sqflite at /home/devmahnx/.pub-cache/hosted/pub.dev/sqflite-2.3.3+1/
+[  +25 ms] Skipping generating web_plugin_registrant.dart because it is up-to-date.
+[  +33 ms] Found plugin flutter_native_splash at /home/devmahnx/.pub-cache/hosted/pub.dev/flutter_native_splash-2.4.1/
+[  +15 ms] Found plugin url_launcher at /home/devmahnx/.pub-cache/hosted/pub.dev/url_launcher-6.3.2/
+[   +1 ms] Found plugin url_launcher_windows at /home/devmahnx/.pub-cache/hosted/pub.dev/url_launcher_windows-3.1.5/
+[   +2 ms] Found plugin url_launcher_web at /home/devmahnx/.pub-cache/hosted/pub.dev/url_launcher_web-2.4.2/
+[   +2 ms] Found plugin url_launcher_macos at /home/devmahnx/.pub-cache/hosted/pub.dev/url_launcher_macos-3.2.5/
+[        ] Found plugin url_launcher_linux at /home/devmahnx/.pub-cache/hosted/pub.dev/url_launcher_linux-3.2.2/
+[   +1 ms] Found plugin url_launcher_ios at /home/devmahnx/.pub-cache/hosted/pub.dev/url_launcher_ios-6.4.1/
+[   +1 ms] Found plugin url_launcher_android at /home/devmahnx/.pub-cache/hosted/pub.dev/url_launcher_android-6.3.29/
+[   +1 ms] Found plugin shared_preferences at /home/devmahnx/.pub-cache/hosted/pub.dev/shared_preferences-2.5.5/
+[   +2 ms] Found plugin shared_preferences_windows at /home/devmahnx/.pub-cache/hosted/pub.dev/shared_preferences_windows-2.4.1/
+[   +2 ms] Found plugin path_provider_windows at /home/devmahnx/.pub-cache/hosted/pub.dev/path_provider_windows-2.3.0/
+[   +3 ms] Found plugin shared_preferences_web at /home/devmahnx/.pub-cache/hosted/pub.dev/shared_preferences_web-2.4.3/
+[   +1 ms] Found plugin shared_preferences_linux at /home/devmahnx/.pub-cache/hosted/pub.dev/shared_preferences_linux-2.4.1/
+[   +1 ms] Found plugin path_provider_linux at /home/devmahnx/.pub-cache/hosted/pub.dev/path_provider_linux-2.2.1/
+[   +2 ms] Found plugin shared_preferences_foundation at /home/devmahnx/.pub-cache/hosted/pub.dev/shared_preferences_foundation-2.5.6/
+[   +1 ms] Found plugin shared_preferences_android at /home/devmahnx/.pub-cache/hosted/pub.dev/shared_preferences_android-2.4.23/
+[   +2 ms] Found plugin path_provider at /home/devmahnx/.pub-cache/hosted/pub.dev/path_provider-2.1.5/
+[   +1 ms] Found plugin path_provider_foundation at /home/devmahnx/.pub-cache/hosted/pub.dev/path_provider_foundation-2.4.0/
+[   +2 ms] Found plugin path_provider_android at /home/devmahnx/.pub-cache/hosted/pub.dev/path_provider_android-2.2.9/
+[   +2 ms] Found plugin image_picker at /home/devmahnx/.pub-cache/hosted/pub.dev/image_picker-1.2.1/
+[   +1 ms] Found plugin image_picker_windows at /home/devmahnx/.pub-cache/hosted/pub.dev/image_picker_windows-0.2.2/
+[   +3 ms] Found plugin file_selector_windows at /home/devmahnx/.pub-cache/hosted/pub.dev/file_selector_windows-0.9.3+5/
+[   +1 ms] Found plugin image_picker_macos at /home/devmahnx/.pub-cache/hosted/pub.dev/image_picker_macos-0.2.2+1/
+[        ] Found plugin file_selector_macos at /home/devmahnx/.pub-cache/hosted/pub.dev/file_selector_macos-0.9.5/
+[        ] Found plugin image_picker_linux at /home/devmahnx/.pub-cache/hosted/pub.dev/image_picker_linux-0.2.2/
+[   +1 ms] Found plugin file_selector_linux at /home/devmahnx/.pub-cache/hosted/pub.dev/file_selector_linux-0.9.4/
+[   +1 ms] Found plugin image_picker_ios at /home/devmahnx/.pub-cache/hosted/pub.dev/image_picker_ios-0.8.13+6/
+[        ] Found plugin image_picker_for_web at /home/devmahnx/.pub-cache/hosted/pub.dev/image_picker_for_web-3.1.1/
+[   +1 ms] Found plugin image_picker_android at /home/devmahnx/.pub-cache/hosted/pub.dev/image_picker_android-0.8.13+16/
+[   +1 ms] Found plugin flutter_plugin_android_lifecycle at /home/devmahnx/.pub-cache/hosted/pub.dev/flutter_plugin_android_lifecycle-2.0.34/
+[   +8 ms] Found plugin flutter_image_compress at /home/devmahnx/.pub-cache/hosted/pub.dev/flutter_image_compress-2.4.0/
+[   +1 ms] Found plugin flutter_image_compress_web at /home/devmahnx/.pub-cache/hosted/pub.dev/flutter_image_compress_web-0.1.5/
+[   +3 ms] Found plugin flutter_image_compress_ohos at /home/devmahnx/.pub-cache/hosted/pub.dev/flutter_image_compress_ohos-0.0.3/
+[   +2 ms] Found plugin flutter_image_compress_macos at /home/devmahnx/.pub-cache/hosted/pub.dev/flutter_image_compress_macos-1.0.3/
+[   +2 ms] Found plugin flutter_image_compress_common at /home/devmahnx/.pub-cache/hosted/pub.dev/flutter_image_compress_common-1.0.6/
+[   +3 ms] Found plugin flutter_credit_card at /home/devmahnx/.pub-cache/hosted/pub.dev/flutter_credit_card-4.1.0/
+[   +3 ms] Found plugin firebase_messaging at /home/devmahnx/.pub-cache/hosted/pub.dev/firebase_messaging-15.2.10/
+[   +2 ms] Found plugin firebase_messaging_web at /home/devmahnx/.pub-cache/hosted/pub.dev/firebase_messaging_web-3.10.10/
+[   +4 ms] Found plugin firebase_core at /home/devmahnx/.pub-cache/hosted/pub.dev/firebase_core-3.15.2/
+[   +1 ms] Found plugin firebase_core_web at /home/devmahnx/.pub-cache/hosted/pub.dev/firebase_core_web-2.24.1/
+[   +3 ms] Found plugin firebase_auth at /home/devmahnx/.pub-cache/hosted/pub.dev/firebase_auth-5.7.0/
+[   +1 ms] Found plugin firebase_auth_web at /home/devmahnx/.pub-cache/hosted/pub.dev/firebase_auth_web-5.15.3/
+[   +3 ms] Found plugin cloud_firestore at /home/devmahnx/.pub-cache/hosted/pub.dev/cloud_firestore-5.6.12/
+[   +1 ms] Found plugin cloud_firestore_web at /home/devmahnx/.pub-cache/hosted/pub.dev/cloud_firestore_web-4.4.12/
+[   +9 ms] Found plugin sqflite at /home/devmahnx/.pub-cache/hosted/pub.dev/sqflite-2.3.3+1/
+[  +12 ms] Generating /home/devmahnx/Dev/Pro_Grocery/android/app/src/main/java/io/flutter/plugins/GeneratedPluginRegistrant.java
+[   +1 ms] Skipping generating GeneratedPluginRegistrant.java because it is up-to-date.
+[   +7 ms] Skipping generating generated_plugin_registrant.h because it is up-to-date.
+[   +2 ms] Skipping generating generated_plugin_registrant.cc because it is up-to-date.
+[   +2 ms] Skipping generating generated_plugins.cmake because it is up-to-date.
+[   +3 ms] Skipping generating generated_plugin_registrant.h because it is up-to-date.
+[   +1 ms] Skipping generating generated_plugin_registrant.cc because it is up-to-date.
+[   +1 ms] Skipping generating generated_plugins.cmake because it is up-to-date.
+[   +4 ms] Skipping generating GeneratedPluginRegistrant.h because it is up-to-date.
+[   +2 ms] Skipping generating GeneratedPluginRegistrant.m because it is up-to-date.
+[   +1 ms] Skipping generating GeneratedPluginRegistrant.swift because it is up-to-date.
+[ +100 ms] ro.hardware = exynos850
+[        ] ro.build.characteristics = phone
+[ +133 ms] Initializing file store
+[   +2 ms] Done initializing file store
+[  +19 ms] Skipping target: gen_localizations
+[   +3 ms] gen_dart_plugin_registrant: Starting due to {InvalidatedReasonKind.inputChanged: The following inputs have updated contents: /home/devmahnx/Dev/Pro_Grocery/.dart_tool/package_config.json,/home/devmahnx/Dev/Pro_Grocery/.dart_tool/flutter_build/dart_plugin_registrant.dart}
+[  +68 ms] Found plugin flutter_native_splash at /home/devmahnx/.pub-cache/hosted/pub.dev/flutter_native_splash-2.4.1/
+[  +36 ms] Found plugin url_launcher at /home/devmahnx/.pub-cache/hosted/pub.dev/url_launcher-6.3.2/
+[   +3 ms] Found plugin url_launcher_windows at /home/devmahnx/.pub-cache/hosted/pub.dev/url_launcher_windows-3.1.5/
+[   +8 ms] Found plugin url_launcher_web at /home/devmahnx/.pub-cache/hosted/pub.dev/url_launcher_web-2.4.2/
+[   +3 ms] Found plugin url_launcher_macos at /home/devmahnx/.pub-cache/hosted/pub.dev/url_launcher_macos-3.2.5/
+[   +1 ms] Found plugin url_launcher_linux at /home/devmahnx/.pub-cache/hosted/pub.dev/url_launcher_linux-3.2.2/
+[   +2 ms] Found plugin url_launcher_ios at /home/devmahnx/.pub-cache/hosted/pub.dev/url_launcher_ios-6.4.1/
+[   +3 ms] Found plugin url_launcher_android at /home/devmahnx/.pub-cache/hosted/pub.dev/url_launcher_android-6.3.29/
+[   +2 ms] Found plugin shared_preferences at /home/devmahnx/.pub-cache/hosted/pub.dev/shared_preferences-2.5.5/
+[   +1 ms] Found plugin shared_preferences_windows at /home/devmahnx/.pub-cache/hosted/pub.dev/shared_preferences_windows-2.4.1/
+[   +4 ms] Found plugin path_provider_windows at /home/devmahnx/.pub-cache/hosted/pub.dev/path_provider_windows-2.3.0/
+[   +4 ms] Found plugin shared_preferences_web at /home/devmahnx/.pub-cache/hosted/pub.dev/shared_preferences_web-2.4.3/
+[   +1 ms] Found plugin shared_preferences_linux at /home/devmahnx/.pub-cache/hosted/pub.dev/shared_preferences_linux-2.4.1/
+[   +1 ms] Found plugin path_provider_linux at /home/devmahnx/.pub-cache/hosted/pub.dev/path_provider_linux-2.2.1/
+[   +3 ms] Found plugin shared_preferences_foundation at /home/devmahnx/.pub-cache/hosted/pub.dev/shared_preferences_foundation-2.5.6/
+[   +1 ms] Found plugin shared_preferences_android at /home/devmahnx/.pub-cache/hosted/pub.dev/shared_preferences_android-2.4.23/
+[   +2 ms] Found plugin path_provider at /home/devmahnx/.pub-cache/hosted/pub.dev/path_provider-2.1.5/
+[        ] Found plugin path_provider_foundation at /home/devmahnx/.pub-cache/hosted/pub.dev/path_provider_foundation-2.4.0/
+[        ] Found plugin path_provider_android at /home/devmahnx/.pub-cache/hosted/pub.dev/path_provider_android-2.2.9/
+[   +1 ms] Found plugin image_picker at /home/devmahnx/.pub-cache/hosted/pub.dev/image_picker-1.2.1/
+[   +1 ms] Found plugin image_picker_windows at /home/devmahnx/.pub-cache/hosted/pub.dev/image_picker_windows-0.2.2/
+[   +3 ms] Found plugin file_selector_windows at /home/devmahnx/.pub-cache/hosted/pub.dev/file_selector_windows-0.9.3+5/
+[   +2 ms] Found plugin image_picker_macos at /home/devmahnx/.pub-cache/hosted/pub.dev/image_picker_macos-0.2.2+1/
+[   +1 ms] Found plugin file_selector_macos at /home/devmahnx/.pub-cache/hosted/pub.dev/file_selector_macos-0.9.5/
+[        ] Found plugin image_picker_linux at /home/devmahnx/.pub-cache/hosted/pub.dev/image_picker_linux-0.2.2/
+[        ] Found plugin file_selector_linux at /home/devmahnx/.pub-cache/hosted/pub.dev/file_selector_linux-0.9.4/
+[        ] Found plugin image_picker_ios at /home/devmahnx/.pub-cache/hosted/pub.dev/image_picker_ios-0.8.13+6/
+[        ] Found plugin image_picker_for_web at /home/devmahnx/.pub-cache/hosted/pub.dev/image_picker_for_web-3.1.1/
+[   +1 ms] Found plugin image_picker_android at /home/devmahnx/.pub-cache/hosted/pub.dev/image_picker_android-0.8.13+16/
+[   +1 ms] Found plugin flutter_plugin_android_lifecycle at /home/devmahnx/.pub-cache/hosted/pub.dev/flutter_plugin_android_lifecycle-2.0.34/
+[  +11 ms] Found plugin flutter_image_compress at /home/devmahnx/.pub-cache/hosted/pub.dev/flutter_image_compress-2.4.0/
+[   +1 ms] Found plugin flutter_image_compress_web at /home/devmahnx/.pub-cache/hosted/pub.dev/flutter_image_compress_web-0.1.5/
+[  +25 ms] Found plugin flutter_image_compress_ohos at /home/devmahnx/.pub-cache/hosted/pub.dev/flutter_image_compress_ohos-0.0.3/
+[   +2 ms] Found plugin flutter_image_compress_macos at /home/devmahnx/.pub-cache/hosted/pub.dev/flutter_image_compress_macos-1.0.3/
+[   +1 ms] Found plugin flutter_image_compress_common at /home/devmahnx/.pub-cache/hosted/pub.dev/flutter_image_compress_common-1.0.6/
+[   +5 ms] Found plugin flutter_credit_card at /home/devmahnx/.pub-cache/hosted/pub.dev/flutter_credit_card-4.1.0/
+[   +1 ms] Found plugin firebase_messaging at /home/devmahnx/.pub-cache/hosted/pub.dev/firebase_messaging-15.2.10/
+[   +1 ms] Found plugin firebase_messaging_web at /home/devmahnx/.pub-cache/hosted/pub.dev/firebase_messaging_web-3.10.10/
+[   +2 ms] Found plugin firebase_core at /home/devmahnx/.pub-cache/hosted/pub.dev/firebase_core-3.15.2/
+[   +1 ms] Found plugin firebase_core_web at /home/devmahnx/.pub-cache/hosted/pub.dev/firebase_core_web-2.24.1/
+[   +4 ms] Found plugin firebase_auth at /home/devmahnx/.pub-cache/hosted/pub.dev/firebase_auth-5.7.0/
+[        ] Found plugin firebase_auth_web at /home/devmahnx/.pub-cache/hosted/pub.dev/firebase_auth_web-5.15.3/
+[   +1 ms] Found plugin cloud_firestore at /home/devmahnx/.pub-cache/hosted/pub.dev/cloud_firestore-5.6.12/
+[        ] Found plugin cloud_firestore_web at /home/devmahnx/.pub-cache/hosted/pub.dev/cloud_firestore_web-4.4.12/
+[   +4 ms] Found plugin sqflite at /home/devmahnx/.pub-cache/hosted/pub.dev/sqflite-2.3.3+1/
+[  +13 ms] Skipping generating dart_plugin_registrant.dart because it is up-to-date.
+[        ] gen_dart_plugin_registrant: Complete
+[   +3 ms] Skipping target: _composite
+[   +3 ms] complete
+[   +6 ms] Launching lib/main.dart on SM A127F (wireless) in debug mode...
+[   +6 ms] /home/devmahnx/flutter/bin/cache/dart-sdk/bin/dartaotruntime /home/devmahnx/flutter/bin/cache/dart-sdk/bin/snapshots/frontend_server_aot.dart.snapshot --sdk-root /home/devmahnx/flutter/bin/cache/artifacts/engine/common/flutter_patched_sdk/ --incremental --target=flutter --experimental-emit-debug-metadata -DFLUTTER_VERSION=3.41.6 -DFLUTTER_CHANNEL=stable -DFLUTTER_GIT_URL=https://github.com/flutter/flutter.git -DFLUTTER_FRAMEWORK_REVISION=db50e20168 -DFLUTTER_ENGINE_REVISION=425cfb54d0 -DFLUTTER_DART_VERSION=3.11.4 --output-dill /tmp/flutter_tools.WGBZBA/flutter_tool.AZPAKU/app.dill --packages /home/devmahnx/Dev/Pro_Grocery/.dart_tool/package_config.json -Ddart.vm.profile=false -Ddart.vm.product=false --enable-asserts --track-widget-creation --filesystem-scheme org-dartlang-root --initialize-from-dill build/b70f9274ac3b5ec9754be8774a3c9a1c.cache.dill.track.dill --source file:///home/devmahnx/Dev/Pro_Grocery/.dart_tool/flutter_build/dart_plugin_registrant.dart --source package:flutter/src/dart_plugin_registrant.dart -Dflutter.dart_plugin_registrant=file:///home/devmahnx/Dev/Pro_Grocery/.dart_tool/flutter_build/dart_plugin_registrant.dart --verbosity=error --enable-experiment=alternative-invalidation-strategy
+[   +7 ms] executing: /home/devmahnx/Android/Sdk/build-tools/36.0.0/aapt dump xmltree /home/devmahnx/Dev/Pro_Grocery/build/app/outputs/flutter-apk/app-debug.apk AndroidManifest.xml
+[   +8 ms] Exit code 0 from: /home/devmahnx/Android/Sdk/build-tools/36.0.0/aapt dump xmltree /home/devmahnx/Dev/Pro_Grocery/build/app/outputs/flutter-apk/app-debug.apk AndroidManifest.xml
+[        ] N: android=http://schemas.android.com/apk/res/android
+             E: manifest (line=2)
+               A: android:versionCode(0x0101021b)=(type 0x10)0x1
+               A: android:versionName(0x0101021c)="1.0.0" (Raw: "1.0.0")
+               A: android:compileSdkVersion(0x01010572)=(type 0x10)0x24
+               A: android:compileSdkVersionCodename(0x01010573)="16" (Raw: "16")
+               A: package="com.example.new_proj" (Raw: "com.example.new_proj")
+               A: platformBuildVersionCode=(type 0x10)0x24
+               A: platformBuildVersionName=(type 0x10)0x10
+               E: uses-sdk (line=7)
+                 A: android:minSdkVersion(0x0101020c)=(type 0x10)0x18
+                 A: android:targetSdkVersion(0x01010270)=(type 0x10)0x24
+               E: uses-permission (line=15)
+                 A: android:name(0x01010003)="android.permission.INTERNET" (Raw: "android.permission.INTERNET")
+               E: queries (line=23)
+                 E: intent (line=24)
+                   E: action (line=25)
+                     A: android:name(0x01010003)="android.intent.action.PROCESS_TEXT" (Raw: "android.intent.action.PROCESS_TEXT")
+                   E: data (line=27)
+                     A: android:mimeType(0x01010026)="text/plain" (Raw: "text/plain")
+               E: uses-permission (line=31)
+                 A: android:name(0x01010003)="android.permission.ACCESS_NETWORK_STATE" (Raw: "android.permission.ACCESS_NETWORK_STATE")
+               E: uses-permission (line=32)
+                 A: android:name(0x01010003)="com.google.android.providers.gsf.permission.READ_GSERVICES" (Raw: "com.google.android.providers.gsf.permission.READ_GSERVICES")
+               E: permission (line=34)
+                 A: android:name(0x01010003)="com.example.new_proj.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION" (Raw: "com.example.new_proj.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION")
+                 A: android:protectionLevel(0x01010009)=(type 0x11)0x2
+               E: uses-permission (line=38)
+                 A: android:name(0x01010003)="com.example.new_proj.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION" (Raw: "com.example.new_proj.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION")
+               E: application (line=40)
+                 A: android:label(0x01010001)="new_proj" (Raw: "new_proj")
+                 A: android:icon(0x01010002)=@0x7f0c0000
+                 A: android:name(0x01010003)="android.app.Application" (Raw: "android.app.Application")
+                 A: android:debuggable(0x0101000f)=(type 0x12)0xffffffff
+                 A: android:extractNativeLibs(0x010104ea)=(type 0x12)0x0
+                 A: android:appComponentFactory(0x0101057a)="androidx.core.app.CoreComponentFactory" (Raw: "androidx.core.app.CoreComponentFactory")
+                 E: activity (line=47)
+                   A: android:theme(0x01010000)=@0x7f0f00a2
+                   A: android:name(0x01010003)="com.example.new_proj.MainActivity" (Raw: "com.example.new_proj.MainActivity")
+                   A: android:exported(0x01010010)=(type 0x12)0xffffffff
+                   A: android:taskAffinity(0x01010012)="" (Raw: "")
+                   A: android:launchMode(0x0101001d)=(type 0x10)0x1
+                   A: android:configChanges(0x0101001f)=(type 0x11)0x40003fb4
+                   A: android:windowSoftInputMode(0x0101022b)=(type 0x11)0x10
+                   A: android:hardwareAccelerated(0x010102d3)=(type 0x12)0xffffffff
+                   E: meta-data (line=63)
+                     A: android:name(0x01010003)="io.flutter.embedding.android.NormalTheme" (Raw: "io.flutter.embedding.android.NormalTheme")
+                     A: android:resource(0x01010025)=@0x7f0f00a3
+                   E: intent-filter (line=67)
+                     E: action (line=68)
+                       A: android:name(0x01010003)="android.intent.action.MAIN" (Raw: "android.intent.action.MAIN")
+                     E: category (line=70)
+                       A: android:name(0x01010003)="android.intent.category.LAUNCHER" (Raw: "android.intent.category.LAUNCHER")
+                 E: meta-data (line=77)
+                   A: android:name(0x01010003)="flutterEmbedding" (Raw: "flutterEmbedding")
+                   A: android:value(0x01010024)=(type 0x10)0x2
+                 E: service (line=81)
+                   A: android:name(0x01010003)="com.google.firebase.components.ComponentDiscoveryService" (Raw: "com.google.firebase.components.ComponentDiscoveryService")
+                   A: android:exported(0x01010010)=(type 0x12)0x0
+                   A: android:directBootAware(0x01010505)=(type 0x12)0xffffffff
+                   E: meta-data (line=85)
+                     A: android:name(0x01010003)="com.google.firebase.components:io.flutter.plugins.firebase.auth.FlutterFirebaseAuthRegistrar" (Raw: "com.google.firebase.components:io.flutter.plugins.firebase.auth.FlutterFirebaseAuthRegistrar")
+                     A: android:value(0x01010024)="com.google.firebase.components.ComponentRegistrar" (Raw: "com.google.firebase.components.ComponentRegistrar")
+                   E: meta-data (line=88)
+                     A: android:name(0x01010003)="com.google.firebase.components:io.flutter.plugins.firebase.firestore.FlutterFirebaseFirestoreRegistrar" (Raw: "com.google.firebase.components:io.flutter.plugins.firebase.firestore.FlutterFirebaseFirestoreRegistrar")
+                     A: android:value(0x01010024)="com.google.firebase.components.ComponentRegistrar" (Raw: "com.google.firebase.components.ComponentRegistrar")
+                   E: meta-data (line=91)
+                     A: android:name(0x01010003)="com.google.firebase.components:io.flutter.plugins.firebase.core.FlutterFirebaseCoreRegistrar" (Raw: "com.google.firebase.components:io.flutter.plugins.firebase.core.FlutterFirebaseCoreRegistrar")
+                     A: android:value(0x01010024)="com.google.firebase.components.ComponentRegistrar" (Raw: "com.google.firebase.components.ComponentRegistrar")
+                   E: meta-data (line=94)
+                     A: android:name(0x01010003)="com.google.firebase.components:com.google.firebase.auth.FirebaseAuthRegistrar" (Raw: "com.google.firebase.components:com.google.firebase.auth.FirebaseAuthRegistrar")
+                     A: android:value(0x01010024)="com.google.firebase.components.ComponentRegistrar" (Raw: "com.google.firebase.components.ComponentRegistrar")
+                   E: meta-data (line=97)
+                     A: android:name(0x01010003)="com.google.firebase.components:com.google.firebase.firestore.FirebaseFirestoreKtxRegistrar" (Raw: "com.google.firebase.components:com.google.firebase.firestore.FirebaseFirestoreKtxRegistrar")
+                     A: android:value(0x01010024)="com.google.firebase.components.ComponentRegistrar" (Raw: "com.google.firebase.components.ComponentRegistrar")
+                   E: meta-data (line=100)
+                     A: android:name(0x01010003)="com.google.firebase.components:com.google.firebase.firestore.FirestoreRegistrar" (Raw: "com.google.firebase.components:com.google.firebase.firestore.FirestoreRegistrar")
+                     A: android:value(0x01010024)="com.google.firebase.components.ComponentRegistrar" (Raw: "com.google.firebase.components.ComponentRegistrar")
+                   E: meta-data (line=103)
+                     A: android:name(0x01010003)="com.google.firebase.components:com.google.firebase.ktx.FirebaseCommonLegacyRegistrar" (Raw: "com.google.firebase.components:com.google.firebase.ktx.FirebaseCommonLegacyRegistrar")
+                     A: android:value(0x01010024)="com.google.firebase.components.ComponentRegistrar" (Raw: "com.google.firebase.components.ComponentRegistrar")
+                   E: meta-data (line=106)
+                     A: android:name(0x01010003)="com.google.firebase.components:com.google.firebase.FirebaseCommonKtxRegistrar" (Raw: "com.google.firebase.components:com.google.firebase.FirebaseCommonKtxRegistrar")
+                     A: android:value(0x01010024)="com.google.firebase.components.ComponentRegistrar" (Raw: "com.google.firebase.components.ComponentRegistrar")
+                 E: activity (line=111)
+                   A: android:theme(0x01010000)=@0x01030010
+                   A: android:name(0x01010003)="com.google.firebase.auth.internal.GenericIdpActivity" (Raw: "com.google.firebase.auth.internal.GenericIdpActivity")
+                   A: android:exported(0x01010010)=(type 0x12)0xffffffff
+                   A: android:excludeFromRecents(0x01010017)=(type 0x12)0xffffffff
+                   A: android:launchMode(0x0101001d)=(type 0x10)0x2
+                   E: intent-filter (line=117)
+                     E: action (line=118)
+                       A: android:name(0x01010003)="android.intent.action.VIEW" (Raw: "android.intent.action.VIEW")
+                     E: category (line=120)
+                       A: android:name(0x01010003)="android.intent.category.DEFAULT" (Raw: "android.intent.category.DEFAULT")
+                     E: category (line=121)
+                       A: android:name(0x01010003)="android.intent.category.BROWSABLE" (Raw: "android.intent.category.BROWSABLE")
+                     E: data (line=123)
+                       A: android:scheme(0x01010027)="genericidp" (Raw: "genericidp")
+                       A: android:host(0x01010028)="firebase.auth" (Raw: "firebase.auth")
+                       A: android:path(0x0101002a)="/" (Raw: "/")
+                 E: activity (line=129)
+                   A: android:theme(0x01010000)=@0x01030010
+                   A: android:name(0x01010003)="com.google.firebase.auth.internal.RecaptchaActivity" (Raw: "com.google.firebase.auth.internal.RecaptchaActivity")
+                   A: android:exported(0x01010010)=(type 0x12)0xffffffff
+                   A: android:excludeFromRecents(0x01010017)=(type 0x12)0xffffffff
+                   A: android:launchMode(0x0101001d)=(type 0x10)0x2
+                   E: intent-filter (line=135)
+                     E: action (line=136)
+                       A: android:name(0x01010003)="android.intent.action.VIEW" (Raw: "android.intent.action.VIEW")
+                     E: category (line=138)
+                       A: android:name(0x01010003)="android.intent.category.DEFAULT" (Raw: "android.intent.category.DEFAULT")
+                     E: category (line=139)
+                       A: android:name(0x01010003)="android.intent.category.BROWSABLE" (Raw: "android.intent.category.BROWSABLE")
+                     E: data (line=141)
+                       A: android:scheme(0x01010027)="recaptcha" (Raw: "recaptcha")
+                       A: android:host(0x01010028)="firebase.auth" (Raw: "firebase.auth")
+                       A: android:path(0x0101002a)="/" (Raw: "/")
+                 E: provider (line=148)
+                   A: android:name(0x01010003)="com.google.firebase.provider.FirebaseInitProvider" (Raw: "com.google.firebase.provider.FirebaseInitProvider")
+                   A: android:exported(0x01010010)=(type 0x12)0x0
+                   A: android:authorities(0x01010018)="com.example.new_proj.firebaseinitprovider" (Raw: "com.example.new_proj.firebaseinitprovider")
+                   A: android:initOrder(0x0101001a)=(type 0x10)0x64
+                   A: android:directBootAware(0x01010505)=(type 0x12)0xffffffff
+                 E: service (line=155)
+                   A: android:name(0x01010003)="androidx.credentials.playservices.CredentialProviderMetadataHolder" (Raw: "androidx.credentials.playservices.CredentialProviderMetadataHolder")
+                   A: android:enabled(0x0101000e)=(type 0x12)0xffffffff
+                   A: android:exported(0x01010010)=(type 0x12)0x0
+                   E: meta-data (line=159)
+                     A: android:name(0x01010003)="androidx.credentials.CREDENTIAL_PROVIDER_KEY" (Raw: "androidx.credentials.CREDENTIAL_PROVIDER_KEY")
+                     A: android:value(0x01010024)="androidx.credentials.playservices.CredentialProviderPlayServicesImpl" (Raw: "androidx.credentials.playservices.CredentialProviderPlayServicesImpl")
+                 E: activity (line=164)
+                   A: android:theme(0x01010000)=@0x7f0f012b
+                   A: android:name(0x01010003)="androidx.credentials.playservices.HiddenActivity" (Raw: "androidx.credentials.playservices.HiddenActivity")
+                   A: android:enabled(0x0101000e)=(type 0x12)0xffffffff
+                   A: android:exported(0x01010010)=(type 0x12)0x0
+                   A: android:configChanges(0x0101001f)=(type 0x11)0x5a0
+                   A: android:fitsSystemWindows(0x010100dd)=(type 0x12)0xffffffff
+                 E: activity (line=172)
+                   A: android:theme(0x01010000)=@0x01030010
+                   A: android:name(0x01010003)="com.google.android.gms.auth.api.signin.internal.SignInHubActivity" (Raw: "com.google.android.gms.auth.api.signin.internal.SignInHubActivity")
+                   A: android:exported(0x01010010)=(type 0x12)0x0
+                   A: android:excludeFromRecents(0x01010017)=(type 0x12)0xffffffff
+                 E: service (line=181)
+                   A: android:name(0x01010003)="com.google.android.gms.auth.api.signin.RevocationBoundService" (Raw: "com.google.android.gms.auth.api.signin.RevocationBoundService")
+                   A: android:permission(0x01010006)="com.google.android.gms.auth.api.signin.permission.REVOCATION_NOTIFICATION" (Raw: "com.google.android.gms.auth.api.signin.permission.REVOCATION_NOTIFICATION")
+                   A: android:exported(0x01010010)=(type 0x12)0xffffffff
+                   A: android:visibleToInstantApps(0x01010531)=(type 0x12)0xffffffff
+                 E: activity (line=187)
+                   A: android:theme(0x01010000)=@0x01030010
+                   A: android:name(0x01010003)="com.google.android.gms.common.api.GoogleApiActivity" (Raw: "com.google.android.gms.common.api.GoogleApiActivity")
+                   A: android:exported(0x01010010)=(type 0x12)0x0
+                 E: uses-library (line=192)
+                   A: android:name(0x01010003)="androidx.window.extensions" (Raw: "androidx.window.extensions")
+                   A: android:required(0x0101028e)=(type 0x12)0x0
+                 E: uses-library (line=195)
+                   A: android:name(0x01010003)="androidx.window.sidecar" (Raw: "androidx.window.sidecar")
+                   A: android:required(0x0101028e)=(type 0x12)0x0
+                 E: meta-data (line=199)
+                   A: android:name(0x01010003)="com.google.android.gms.version" (Raw: "com.google.android.gms.version")
+                   A: android:value(0x01010024)=@0x7f090004
+                 E: provider (line=203)
+                   A: android:name(0x01010003)="androidx.startup.InitializationProvider" (Raw: "androidx.startup.InitializationProvider")
+                   A: android:exported(0x01010010)=(type 0x12)0x0
+                   A: android:authorities(0x01010018)="com.example.new_proj.androidx-startup" (Raw: "com.example.new_proj.androidx-startup")
+                   E: meta-data (line=207)
+                     A: android:name(0x01010003)="androidx.lifecycle.ProcessLifecycleInitializer" (Raw: "androidx.lifecycle.ProcessLifecycleInitializer")
+                     A: android:value(0x01010024)="androidx.startup" (Raw: "androidx.startup")
+                   E: meta-data (line=210)
+                     A: android:name(0x01010003)="androidx.profileinstaller.ProfileInstallerInitializer" (Raw: "androidx.profileinstaller.ProfileInstallerInitializer")
+                     A: android:value(0x01010024)="androidx.startup" (Raw: "androidx.startup")
+                 E: receiver (line=215)
+                   A: android:name(0x01010003)="androidx.profileinstaller.ProfileInstallReceiver" (Raw: "androidx.profileinstaller.ProfileInstallReceiver")
+                   A: android:permission(0x01010006)="android.permission.DUMP" (Raw: "android.permission.DUMP")
+                   A: android:enabled(0x0101000e)=(type 0x12)0xffffffff
+                   A: android:exported(0x01010010)=(type 0x12)0xffffffff
+                   A: android:directBootAware(0x01010505)=(type 0x12)0x0
+                   E: intent-filter (line=221)
+                     E: action (line=222)
+                       A: android:name(0x01010003)="androidx.profileinstaller.action.INSTALL_PROFILE" (Raw: "androidx.profileinstaller.action.INSTALL_PROFILE")
+                   E: intent-filter (line=224)
+                     E: action (line=225)
+                       A: android:name(0x01010003)="androidx.profileinstaller.action.SKIP_FILE" (Raw: "androidx.profileinstaller.action.SKIP_FILE")
+                   E: intent-filter (line=227)
+                     E: action (line=228)
+                       A: android:name(0x01010003)="androidx.profileinstaller.action.SAVE_PROFILE" (Raw: "androidx.profileinstaller.action.SAVE_PROFILE")
+                   E: intent-filter (line=230)
+                     E: action (line=231)
+                       A: android:name(0x01010003)="androidx.profileinstaller.action.BENCHMARK_OPERATION" (Raw: "androidx.profileinstaller.action.BENCHMARK_OPERATION")
+                 E: activity (line=234)
+                   A: android:theme(0x01010000)=@0x7f0f012c
+                   A: android:name(0x01010003)="com.google.android.play.core.common.PlayCoreDialogWrapperActivity" (Raw: "com.google.android.play.core.common.PlayCoreDialogWrapperActivity")
+                   A: android:exported(0x01010010)=(type 0x12)0x0
+                   A: android:stateNotNeeded(0x01010016)=(type 0x12)0xffffffff
+[  +12 ms] executing: /home/devmahnx/Android/Sdk/platform-tools/adb -s adb-R58R912VEVT-QXa1WC._adb-tls-connect._tcp shell -x logcat -v time -t 1
+[  +14 ms] <- compile package:grocery/main.dart
+[ +417 ms] --------- beginning of main
+           04-12 12:02:54.764 D/NetworkController( 1340): SignalStrength from intent slotId=1
+[  +18 ms] executing: /home/devmahnx/Android/Sdk/platform-tools/adb version
+[  +15 ms] Android Debug Bridge version 1.0.41
+           Version 36.0.0-13206524
+           Installed as /home/devmahnx/Android/Sdk/platform-tools/adb
+           Running on Linux 6.12.32-amd64 (x86_64)
+[   +3 ms] executing: /home/devmahnx/Android/Sdk/platform-tools/adb start-server
+[  +11 ms] Building APK
+[  +20 ms] executing: /home/devmahnx/AndroidStudio/android-studio/jbr/bin/java -version
+[ +164 ms] Exit code 0 from: /home/devmahnx/AndroidStudio/android-studio/jbr/bin/java -version
+[        ] openjdk version "17.0.11" 2024-04-16
+           OpenJDK Runtime Environment (build 17.0.11+0-17.0.11b1207.24-11852314)
+           OpenJDK 64-Bit Server VM (build 17.0.11+0-17.0.11b1207.24-11852314, mixed mode)
+[   +1 ms] executing: /opt/android-studio/jbr/bin/java -version
+[ +114 ms] Exit code 0 from: /opt/android-studio/jbr/bin/java -version
+[        ] openjdk version "17.0.11" 2024-04-16
+           OpenJDK Runtime Environment (build 17.0.11+0-17.0.11b1207.24-11852314)
+           OpenJDK 64-Bit Server VM (build 17.0.11+0-17.0.11b1207.24-11852314, mixed mode)
+[  +12 ms] Top-level Gradle build file not found, skipping migration of task "clean".
+[   +5 ms] executing: /home/devmahnx/AndroidStudio/android-studio/jbr/bin/java --version
+[ +108 ms] Exit code 0 from: /home/devmahnx/AndroidStudio/android-studio/jbr/bin/java --version
+[        ] openjdk 17.0.11 2024-04-16
+           OpenJDK Runtime Environment (build 17.0.11+0-17.0.11b1207.24-11852314)
+           OpenJDK 64-Bit Server VM (build 17.0.11+0-17.0.11b1207.24-11852314, mixed mode)
+[  +26 ms] CMake project not found, skipping support Android 15 16k page size migration.
+[   +4 ms] Using gradle from /home/devmahnx/Dev/Pro_Grocery/android/gradlew.
+[  +34 ms] LocalFile: '/home/devmahnx/Dev/Pro_Grocery/android/build.gradle.kts' doesn't provide an AGP version. Checking settings.
+[   +1 ms] LocalFile: '/home/devmahnx/Dev/Pro_Grocery/android/settings.gradle.kts' provides AGP version: 8.9.1
+[  +44 ms] Running Gradle task 'assembleDebug'...
+[   +2 ms] executing: [/home/devmahnx/Dev/Pro_Grocery/android/] /home/devmahnx/Dev/Pro_Grocery/android/gradlew --full-stacktrace --info -Pverbose=true -Ptarget-platform=android-arm64 -Ptarget=/home/devmahnx/Dev/Pro_Grocery/lib/main.dart -Pbase-application-name=android.app.Application -Pdart-defines=RkxVVFRFUl9WRVJTSU9OPTMuNDEuNg==,RkxVVFRFUl9DSEFOTkVMPXN0YWJsZQ==,RkxVVFRFUl9HSVRfVVJMPWh0dHBzOi8vZ2l0aHViLmNvbS9mbHV0dGVyL2ZsdXR0ZXIuZ2l0,RkxVVFRFUl9GUkFNRVdPUktfUkVWSVNJT049ZGI1MGUyMDE2OA==,RkxVVFRFUl9FTkdJTkVfUkVWSVNJT049NDI1Y2ZiNTRkMA==,RkxVVFRFUl9EQVJUX1ZFUlNJT049My4xMS40 -Pdart-obfuscation=false -Ptrack-widget-creation=true -Ptree-shake-icons=false -Pfilesystem-scheme=org-dartlang-root assembleDebug
+[ +299 ms] Downloading https://services.gradle.org/distributions/gradle-8.12-all.zip

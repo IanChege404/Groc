@@ -36,8 +36,8 @@ class ApiEndpoints {
   static String trackOrder(String orderId) => '/orders/$orderId/track';
 
   // Payment Endpoints
-  static const String initiatePayment = '/payments/initiate';
   static const String mpesaPayment = '/payments/mpesa';
+  static const String initiatePayment = mpesaPayment;
   static String confirmPayment(String paymentId) =>
       '/payments/$paymentId/confirm';
   static String getPaymentStatus(String paymentId) =>

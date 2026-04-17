@@ -1,0 +1,62 @@
+{
+  "summary": {
+    "total_errors": 0,
+    "total_warnings": 0,
+    "total_skipped": 0
+  },
+  "errors": [],
+  "warnings": [],
+  "skipped_items": [],
+  "image_validation": [
+    {
+      "url": "https://i.imgur.com/6unJlSL.png",
+      "status": "SKIPPED",
+      "details": "download disabled"
+    },
+    {
+      "url": "https://i.imgur.com/6unJlSL.png",
+      "status": "SKIPPED",
+      "details": "download disabled"
+    },
+    {
+      "url": "https://i.imgur.com/oaCY49b.png",
+      "status": "SKIPPED",
+      "details": "download disabled"
+    },
+    {
+      "url": "https://i.imgur.com/oaCY49b.png",
+      "status": "SKIPPED",
+      "details": "download disabled"
+    },
+    {
+      "url": "https://i.imgur.com/5wghZji.png",
+      "status": "SKIPPED",
+      "details": "download disabled"
+    },
+    {
+      "url": "https://i.imgur.com/5wghZji.png",
+      "status": "SKIPPED",
+      "details": "download disabled"
+    },
+    {
+      "url": "https://i.imgur.com/Y0IFT2g.png",
+      "status": "SKIPPED",
+      "details": "download disabled"
+    },
+    {
+      "url": "https://i.postimg.cc/qtM4zj1K/packs-2.png",
+      "status": "SKIPPED",
+      "details": "download disabled"
+    },
+    {
+      "url": "https://i.postimg.cc/MnwW8WRd/pack-1.png",
+      "status": "SKIPPED",
+      "details": "download disabled"
+    },
+    {
+      "url": "https://i.postimg.cc/k2y7Jkv9/pack-4.png",
+      "status": "SKIPPED",
+      "details": "download disabled"
+    }
+  ]
+}

@@ -47,6 +47,75 @@ interface SeedBundle {
   reviewCount: number;
 }
 
+interface SeedRecipeIngredient {
+  productId: string;
+  productName: string;
+  quantity: number;
+  unit: string;
+  imageFileName?: string;
+  price?: number;
+}
+
+interface SeedRecipe {
+  id: string;
+  name: string;
+  description: string;
+  imageFileName: string;
+  servings: number;
+  prepTimeMinutes: number;
+  cookTimeMinutes: number;
+  difficulty: "easy" | "medium" | "hard";
+  ingredients: SeedRecipeIngredient[];
+  instructions: string[];
+  tags: string[];
+  rating: number;
+  reviewCount: number;
+}
+
+interface SeedOffer {
+  id: string;
+  productId: string;
+  productName: string;
+  imageFileName: string;
+  originalPrice: number;
+  dealPrice: number;
+  discountPercentage: number;
+  stockLeft: number;
+  totalStock: number;
+  categoryId: string;
+  startsInHours?: number;
+  endsInHours: number;
+  isActive: boolean;
+}
+
+interface SeedCoupon {
+  id: string;
+  code: string;
+  title: string;
+  discount: number;
+  discountType: "percentage" | "fixed";
+  expiresInDays: number;
+  isUsed?: boolean;
+  applicableCategories: string[];
+  description?: string;
+  minPurchaseAmount?: number;
+  maxDiscount?: number;
+  imageFileName: string;
+}
+
+interface SeedOnboarding {
+  id: string;
+  headline: string;
+  description: string;
+  imageUrl: string;
+}
+
+interface SeedDrawerMenuItem {
+  id: string;
+  label: string;
+  route?: string;
+}
+
 interface Config {
   mapFilePath: string;
   dryRun: boolean;
@@ -54,8 +123,22 @@ interface Config {
   projectId?: string;
 }
 
+const RESET_COLLECTIONS = [
+  "categories",
+  "products",
+  "bundles",
+  "recipes",
+  "offers",
+  "coupons",
+  "onboarding",
+  "drawer_menu",
+  "top_questions",
+  "help_topics",
+  "app_content",
+] as const;
+
 function parseArgs(argv: string[]): Config {
-  let mapFilePath = path.resolve("../.cloudinary-map.json");
+  let mapFilePath = path.resolve(process.cwd(), ".cloudinary-map.json");
   let dryRun = false;
   let reset = false;
   let projectId: string | undefined;
@@ -89,12 +172,12 @@ function parseArgs(argv: string[]): Config {
 }
 
 function printUsage(): void {
-  console.log("Firestore admin seeder (categories/products/bundles)");
+  console.log("Firestore admin seeder (catalog + content)");
   console.log("Usage: npm --prefix functions run seed:firestore -- [options]");
   console.log("Options:");
   console.log("  --dry-run              Validate and print summary only");
-  console.log("  --reset                Delete existing categories/products/bundles first");
-  console.log("  --map-file=<path>      Path to .cloudinary-map.json");
+  console.log("  --reset                Delete all seeded collections first");
+  console.log("  --map-file=<path>      Absolute/relative path to .cloudinary-map.json");
   console.log("  --project-id=<id>      Override Firebase project ID");
   console.log("  --help, -h             Show help");
 }
@@ -116,7 +199,9 @@ function loadCloudinaryMap(filePath: string): Map<string, string> {
 
     const key = entry.fileName.toLowerCase();
     if (byFileName.has(key) && byFileName.get(key) !== entry.secureUrl) {
-      console.warn(`Warning: duplicate Cloudinary fileName \"${key}\" with different URLs. Keeping first.`);
+      console.warn(
+        `Warning: duplicate Cloudinary fileName "${key}" with different URLs. Keeping first.`,
+      );
       continue;
     }
 
@@ -132,6 +217,12 @@ function imageUrl(map: Map<string, string>, fileName: string): string {
     throw new Error(`Missing Cloudinary URL for required image: ${fileName}`);
   }
   return url;
+}
+
+function assertReference(condition: boolean, message: string): void {
+  if (!condition) {
+    throw new Error(message);
+  }
 }
 
 const categorySeeds: SeedCategory[] = [
@@ -227,6 +318,20 @@ const productSeeds: SeedProduct[] = [
     imageFileName: "coupon_background_1.png",
     rating: 4.2,
     reviewCount: 42,
+    weight: "1 Kg",
+  },
+  {
+    id: "product_fresh_tomatoes_1kg",
+    name: "Fresh Tomatoes",
+    description: "Ripe fresh tomatoes perfect for stews, sauces, and salads",
+    categoryId: "category_pantry_staples",
+    category: "Pantry Staples",
+    price: 5,
+    mainPrice: 6.5,
+    stock: 110,
+    imageFileName: "coupon_background_2.png",
+    rating: 4.4,
+    reviewCount: 74,
     weight: "1 Kg",
   },
   {
@@ -351,13 +456,224 @@ const bundleSeeds: SeedBundle[] = [
   },
 ];
 
+const recipeSeeds: SeedRecipe[] = [
+  {
+    id: "recipe_001",
+    name: "Kenyan Beef Stew",
+    description: "A hearty traditional Kenyan beef stew with tomatoes and onions.",
+    imageFileName: "coupon_background_3.png",
+    servings: 4,
+    prepTimeMinutes: 15,
+    cookTimeMinutes: 60,
+    difficulty: "medium",
+    ingredients: [
+      {
+        productId: "product_premium_meat_selection_1kg",
+        productName: "Premium Meat Selection (500g)",
+        quantity: 1,
+        unit: "pack",
+        imageFileName: "app_logo.png",
+        price: 15,
+      },
+      {
+        productId: "product_fresh_tomatoes_1kg",
+        productName: "Fresh Tomatoes",
+        quantity: 3,
+        unit: "pieces",
+        imageFileName: "coupon_background_2.png",
+        price: 5,
+      },
+      {
+        productId: "product_organic_onions_1kg",
+        productName: "Organic Onions",
+        quantity: 2,
+        unit: "pieces",
+        imageFileName: "coupon_background_1.png",
+        price: 3.5,
+      },
+      {
+        productId: "product_sea_salt_premium_grade_500gm",
+        productName: "Sea Salt",
+        quantity: 1,
+        unit: "tbsp",
+        imageFileName: "coupon_background_3.png",
+        price: 2.5,
+      },
+    ],
+    instructions: [
+      "Cut beef into cubes and season with salt and pepper.",
+      "Heat oil in a large pot and brown the beef in batches.",
+      "Add onions and cook until softened.",
+      "Add tomatoes and cook for 5 minutes.",
+      "Add water and simmer for 45 minutes until tender.",
+    ],
+    tags: ["kenyan", "beef", "stew", "dinner"],
+    rating: 4.5,
+    reviewCount: 24,
+  },
+  {
+    id: "recipe_002",
+    name: "Spiced Tomato Onion Mix",
+    description: "Quick tomato-onion base for stews, rice, and vegetable dishes.",
+    imageFileName: "coupon_background_4.png",
+    servings: 3,
+    prepTimeMinutes: 10,
+    cookTimeMinutes: 20,
+    difficulty: "easy",
+    ingredients: [
+      {
+        productId: "product_fresh_tomatoes_1kg",
+        productName: "Fresh Tomatoes",
+        quantity: 4,
+        unit: "pieces",
+        imageFileName: "coupon_background_2.png",
+        price: 5,
+      },
+      {
+        productId: "product_organic_onions_1kg",
+        productName: "Organic Onions",
+        quantity: 2,
+        unit: "pieces",
+        imageFileName: "coupon_background_1.png",
+        price: 3.5,
+      },
+      {
+        productId: "product_mixed_spice_collection_250gm",
+        productName: "Mixed Spice Collection",
+        quantity: 1,
+        unit: "tbsp",
+        imageFileName: "coupon_background_4.png",
+        price: 12,
+      },
+    ],
+    instructions: [
+      "Slice onions and tomatoes.",
+      "Saute onions in a little oil until translucent.",
+      "Add tomatoes and cook until soft.",
+      "Stir in mixed spices and simmer for 5 minutes.",
+    ],
+    tags: ["kenyan", "vegetarian", "sauce", "lunch"],
+    rating: 4.3,
+    reviewCount: 18,
+  },
+];
+
+const offerSeeds: SeedOffer[] = [
+  {
+    id: "deal_001",
+    productId: "product_fresh_tomatoes_1kg",
+    productName: "Fresh Tomatoes 1kg",
+    imageFileName: "coupon_background_2.png",
+    originalPrice: 6.5,
+    dealPrice: 5,
+    discountPercentage: 23,
+    stockLeft: 50,
+    totalStock: 100,
+    categoryId: "category_pantry_staples",
+    startsInHours: 0,
+    endsInHours: 48,
+    isActive: true,
+  },
+  {
+    id: "deal_002",
+    productId: "product_fresh_whole_milk_1litre",
+    productName: "Fresh Whole Milk 1L",
+    imageFileName: "profile_page_background.png",
+    originalPrice: 4,
+    dealPrice: 3.2,
+    discountPercentage: 20,
+    stockLeft: 30,
+    totalStock: 80,
+    categoryId: "category_dairy_eggs",
+    startsInHours: 0,
+    endsInHours: 48,
+    isActive: true,
+  },
+];
+
+const couponSeeds: SeedCoupon[] = [
+  {
+    id: "coupon_welcome_10",
+    code: "WELCOME10",
+    title: "10% Off Welcome Coupon",
+    discount: 10,
+    discountType: "percentage",
+    expiresInDays: 90,
+    applicableCategories: ["category_pantry_staples", "category_dairy_eggs"],
+    description: "Get 10% off your first order.",
+    minPurchaseAmount: 20,
+    maxDiscount: 5,
+    imageFileName: "coupon_background_1.png",
+  },
+  {
+    id: "coupon_dairy_5",
+    code: "DAIRY5",
+    title: "Save 5 on Dairy",
+    discount: 5,
+    discountType: "fixed",
+    expiresInDays: 60,
+    applicableCategories: ["category_dairy_eggs"],
+    description: "Flat 5 off on dairy purchases above 15.",
+    minPurchaseAmount: 15,
+    imageFileName: "coupon_background_2.png",
+  },
+];
+
+const onboardingSeeds: SeedOnboarding[] = [
+  {
+    id: "onboarding_001",
+    headline: "Browse all the category",
+    description: "In aliquip aute exercitation ut et nisi ut mollit. Deserunt dolor elit pariatur aute .",
+    imageUrl: "https://i.imgur.com/X2G11k0.png",
+  },
+  {
+    id: "onboarding_002",
+    headline: "Amazing Discounts & Offers",
+    description: "In aliquip aute exercitation ut et nisi ut mollit. Deserunt dolor elit pariatur aute .",
+    imageUrl: "https://i.imgur.com/sMLlh1i.png",
+  },
+  {
+    id: "onboarding_003",
+    headline: "Delivery in 30 Min",
+    description: "In aliquip aute exercitation ut et nisi ut mollit. Deserunt dolor elit pariatur aute .",
+    imageUrl: "https://i.imgur.com/lHlOUT5.png",
+  },
+];
+
+const drawerMenuSeeds: SeedDrawerMenuItem[] = [
+  {id: "drawer_001", label: "Invite Friend"},
+  {id: "drawer_002", label: "About Us", route: "aboutUs"},
+  {id: "drawer_003", label: "FAQs", route: "faq"},
+  {id: "drawer_004", label: "Terms & Conditions", route: "termsAndConditions"},
+  {id: "drawer_005", label: "Help Center", route: "help"},
+  {id: "drawer_006", label: "Rate This App"},
+  {id: "drawer_007", label: "Privacy Policy"},
+  {id: "drawer_008", label: "Contact Us", route: "contactUs"},
+  {id: "drawer_009", label: "Logout", route: "introLogin"},
+];
+
+const topQuestions = [
+  "How do I return my Items",
+  "How to use collection point?",
+  "What is Grocery?",
+  "How can i add new delivery address?",
+  "How can i avail Sticker Price?",
+];
+
+const helpTopics = [
+  "My Account",
+  "Payment and Wallet",
+  "Shipping & Delivery",
+  "Vouchers & Promotions",
+  "Ordering",
+];
+
 async function maybeReset(db: admin.firestore.Firestore, reset: boolean): Promise<void> {
   if (!reset) return;
 
-  console.log("Reset enabled: deleting existing categories/products/bundles ...");
-  const targets = ["categories", "products", "bundles"];
+  console.log("Reset enabled: deleting all seeded collections ...");
 
-  for (const col of targets) {
+  for (const col of RESET_COLLECTIONS) {
     const snapshot = await db.collection(col).get();
     if (snapshot.empty) continue;
 
@@ -373,6 +689,17 @@ async function maybeReset(db: admin.firestore.Firestore, reset: boolean): Promis
     }
 
     console.log(`  - deleted ${docs.length} docs from ${col}`);
+  }
+}
+
+async function writeCollection(
+  db: admin.firestore.Firestore,
+  collection: string,
+  docs: Array<{id: string; data: Record<string, unknown>}>,
+): Promise<void> {
+  console.log(`Writing ${collection} ...`);
+  for (const item of docs) {
+    await db.collection(collection).doc(item.id).set(item.data, {merge: true});
   }
 }
 
@@ -398,59 +725,294 @@ async function run(): Promise<void> {
     },
   }));
 
-  const products = productSeeds.map((item) => ({
-    id: item.id,
-    data: {
-      name: item.name,
-      description: item.description,
-      category: item.category,
-      categoryId: item.categoryId,
-      price: item.price,
-      mainPrice: item.mainPrice,
-      stock: item.stock,
-      image: imageUrl(cloudinary, item.imageFileName),
-      images: [imageUrl(cloudinary, item.imageFileName)],
-      rating: item.rating,
-      reviewCount: item.reviewCount,
-      weight: item.weight,
-      createdAt: now,
-      updatedAt: now,
-    },
-  }));
+  const categoryIdSet = new Set(categories.map((item) => item.id));
+
+  const products = productSeeds.map((item) => {
+    assertReference(
+      categoryIdSet.has(item.categoryId),
+      `Product ${item.id} references unknown categoryId: ${item.categoryId}`,
+    );
+
+    const productImage = imageUrl(cloudinary, item.imageFileName);
+    return {
+      id: item.id,
+      data: {
+        name: item.name,
+        description: item.description,
+        category: item.category,
+        categoryId: item.categoryId,
+        price: item.price,
+        mainPrice: item.mainPrice,
+        stock: item.stock,
+        image: productImage,
+        images: [productImage],
+        rating: item.rating,
+        reviewCount: item.reviewCount,
+        weight: item.weight,
+        createdAt: now,
+        updatedAt: now,
+      },
+    };
+  });
 
   const productIdSet = new Set(products.map((item) => item.id));
+
   for (const bundle of bundleSeeds) {
     for (const productId of bundle.productIds) {
-      if (!productIdSet.has(productId)) {
-        throw new Error(`Bundle ${bundle.id} references unknown productId: ${productId}`);
-      }
+      assertReference(
+        productIdSet.has(productId),
+        `Bundle ${bundle.id} references unknown productId: ${productId}`,
+      );
     }
   }
 
-  const bundles = bundleSeeds.map((item) => ({
+  const bundles = bundleSeeds.map((item) => {
+    const bundleImage = imageUrl(cloudinary, item.imageFileName);
+    return {
+      id: item.id,
+      data: {
+        name: item.name,
+        description: item.description,
+        image: bundleImage,
+        images: [bundleImage],
+        itemNames: item.itemNames,
+        productIds: item.productIds,
+        price: item.price,
+        mainPrice: item.mainPrice,
+        rating: item.rating,
+        reviewCount: item.reviewCount,
+        createdAt: now,
+        updatedAt: now,
+      },
+    };
+  });
+
+  const recipes = recipeSeeds.map((item) => {
+    for (const ingredient of item.ingredients) {
+      assertReference(
+        productIdSet.has(ingredient.productId),
+        `Recipe ${item.id} references unknown ingredient productId: ${ingredient.productId}`,
+      );
+    }
+
+    return {
+      id: item.id,
+      data: {
+        name: item.name,
+        description: item.description,
+        imageUrl: imageUrl(cloudinary, item.imageFileName),
+        servings: item.servings,
+        prepTimeMinutes: item.prepTimeMinutes,
+        cookTimeMinutes: item.cookTimeMinutes,
+        difficulty: item.difficulty,
+        ingredients: item.ingredients.map((ingredient) => ({
+          productId: ingredient.productId,
+          productName: ingredient.productName,
+          quantity: ingredient.quantity,
+          unit: ingredient.unit,
+          imageUrl: ingredient.imageFileName ? imageUrl(cloudinary, ingredient.imageFileName) : null,
+          price: ingredient.price ?? null,
+        })),
+        instructions: item.instructions,
+        tags: item.tags,
+        rating: item.rating,
+        reviewCount: item.reviewCount,
+        createdAt: now,
+      },
+    };
+  });
+
+  const offers = offerSeeds.map((deal) => {
+    assertReference(
+      productIdSet.has(deal.productId),
+      `Offer ${deal.id} references unknown productId: ${deal.productId}`,
+    );
+    assertReference(
+      categoryIdSet.has(deal.categoryId),
+      `Offer ${deal.id} references unknown categoryId: ${deal.categoryId}`,
+    );
+
+    const startTime = admin.firestore.Timestamp.fromDate(
+      new Date(Date.now() + (deal.startsInHours ?? 0) * 60 * 60 * 1000),
+    );
+    const endTime = admin.firestore.Timestamp.fromDate(
+      new Date(Date.now() + deal.endsInHours * 60 * 60 * 1000),
+    );
+
+    return {
+      id: deal.id,
+      data: {
+        productId: deal.productId,
+        productName: deal.productName,
+        imageUrl: imageUrl(cloudinary, deal.imageFileName),
+        originalPrice: deal.originalPrice,
+        dealPrice: deal.dealPrice,
+        discountPercentage: deal.discountPercentage,
+        stockLeft: deal.stockLeft,
+        totalStock: deal.totalStock,
+        startTime,
+        endTime,
+        isActive: deal.isActive,
+        categoryId: deal.categoryId,
+      },
+    };
+  });
+
+  const coupons = couponSeeds.map((coupon) => {
+    for (const categoryId of coupon.applicableCategories) {
+      assertReference(
+        categoryIdSet.has(categoryId),
+        `Coupon ${coupon.id} references unknown applicable categoryId: ${categoryId}`,
+      );
+    }
+
+    return {
+      id: coupon.id,
+      data: {
+        code: coupon.code.toUpperCase(),
+        title: coupon.title,
+        discount: coupon.discount,
+        discountType: coupon.discountType,
+        expireDate: admin.firestore.Timestamp.fromDate(
+          new Date(Date.now() + coupon.expiresInDays * 24 * 60 * 60 * 1000),
+        ),
+        isUsed: coupon.isUsed ?? false,
+        applicableCategories: coupon.applicableCategories,
+        description: coupon.description ?? null,
+        minPurchaseAmount: coupon.minPurchaseAmount ?? null,
+        maxDiscount: coupon.maxDiscount ?? null,
+        imageUrl: imageUrl(cloudinary, coupon.imageFileName),
+        createdAt: now,
+      },
+    };
+  });
+
+  const onboarding = onboardingSeeds.map((item, index) => ({
     id: item.id,
     data: {
-      name: item.name,
+      headline: item.headline,
       description: item.description,
-      image: imageUrl(cloudinary, item.imageFileName),
-      images: [imageUrl(cloudinary, item.imageFileName)],
-      itemNames: item.itemNames,
-      productIds: item.productIds,
-      price: item.price,
-      mainPrice: item.mainPrice,
-      rating: item.rating,
-      reviewCount: item.reviewCount,
-      createdAt: now,
+      imageUrl: item.imageUrl,
+      order: index,
+      isActive: true,
       updatedAt: now,
     },
   }));
 
+  const drawerMenu = drawerMenuSeeds.map((item, index) => ({
+    id: item.id,
+    data: {
+      label: item.label,
+      route: item.route ?? null,
+      order: index,
+      isActive: true,
+      updatedAt: now,
+    },
+  }));
+
+  const topQuestionsDocs = topQuestions.map((question, index) => ({
+    id: `question_${String(index + 1).padStart(3, "0")}`,
+    data: {
+      question,
+      order: index,
+      isActive: true,
+      updatedAt: now,
+    },
+  }));
+
+  const helpTopicsDocs = helpTopics.map((topic, index) => ({
+    id: `topic_${String(index + 1).padStart(3, "0")}`,
+    data: {
+      label: topic,
+      order: index,
+      isActive: true,
+      updatedAt: now,
+    },
+  }));
+
+  const appContent = [
+    {
+      id: "app_images",
+      data: {
+        logo: "https://i.imgur.com/9EsY2t6.png",
+        homeBanner: "https://i.imgur.com/8hBIsS5.png",
+        illustration404: "https://i.imgur.com/SGTzEiC.png",
+        introBackground1: "https://i.imgur.com/YQ9twZx.png",
+        introBackground2: "https://i.imgur.com/3hgB1or.png",
+        numberVerification: "https://i.imgur.com/tCCmY3I.png",
+        verified: "https://i.imgur.com/vF1jB6b.png",
+        couponBackgrounds: [
+          imageUrl(cloudinary, "coupon_background_1.png"),
+          imageUrl(cloudinary, "coupon_background_2.png"),
+          imageUrl(cloudinary, "coupon_background_3.png"),
+          imageUrl(cloudinary, "coupon_background_4.png"),
+        ],
+        updatedAt: now,
+      },
+    },
+    {
+      id: "app_assets",
+      data: {
+        images: [
+          imageUrl(cloudinary, "app_logo.png"),
+          imageUrl(cloudinary, "coupon_background_1.png"),
+          imageUrl(cloudinary, "coupon_background_2.png"),
+          imageUrl(cloudinary, "coupon_background_3.png"),
+          imageUrl(cloudinary, "coupon_background_4.png"),
+          imageUrl(cloudinary, "profile_page_background.png"),
+        ],
+        directories: {
+          fonts: "assets/fonts/",
+          icons: "assets/icons/",
+          images: "assets/images/",
+        },
+        updatedAt: now,
+      },
+    },
+    {
+      id: "faq",
+      data: {
+        items: [
+          {
+            title: "How it will take to delivery?",
+            paragraph:
+              "In enim justo, rhoncus ut, imperdiet a, venenatis vitae, justo. Nullam dictum felis eu pede mollis pretium.",
+          },
+          {
+            title: "What is refund system?",
+            paragraph:
+              "In enim justo, rhoncus ut, imperdiet a, venenatis vitae, justo. Nullam dictum felis eu pede mollis pretium.",
+          },
+        ],
+        updatedAt: now,
+      },
+    },
+    {
+      id: "contact_us",
+      data: {
+        phones: ["+8801710000000", "+8801710000000"],
+        email: "jonarban45@gmail.com",
+        address: "26/C Mohammadpur, Dhaka, Bangladesh",
+        mapImageUrl: "https://i.imgur.com/nys3Bxw.png",
+        updatedAt: now,
+      },
+    },
+  ];
+
   console.log("Seed preview:");
-  console.log(`  - categories: ${categories.length}`);
-  console.log(`  - products:   ${products.length}`);
-  console.log(`  - bundles:    ${bundles.length}`);
-  console.log(`  - map file:   ${config.mapFilePath}`);
-  console.log(`  - mode:       ${config.dryRun ? "dry-run" : "write"}`);
+  console.log(`  - categories:     ${categories.length}`);
+  console.log(`  - products:       ${products.length}`);
+  console.log(`  - bundles:        ${bundles.length}`);
+  console.log(`  - recipes:        ${recipes.length}`);
+  console.log(`  - offers:         ${offers.length}`);
+  console.log(`  - coupons:        ${coupons.length}`);
+  console.log(`  - onboarding:     ${onboarding.length}`);
+  console.log(`  - drawer_menu:    ${drawerMenu.length}`);
+  console.log(`  - top_questions:  ${topQuestionsDocs.length}`);
+  console.log(`  - help_topics:    ${helpTopicsDocs.length}`);
+  console.log(`  - app_content:    ${appContent.length}`);
+  console.log(`  - map file:       ${config.mapFilePath}`);
+  console.log(`  - mode:           ${config.dryRun ? "dry-run" : "write"}`);
 
   if (config.dryRun) {
     await app.delete();
@@ -459,137 +1021,17 @@ async function run(): Promise<void> {
 
   await maybeReset(db, config.reset);
 
-  console.log("Writing categories ...");
-  for (const item of categories) {
-    await db.collection("categories").doc(item.id).set(item.data, {merge: true});
-  }
-
-  console.log("Writing products ...");
-  for (const item of products) {
-    await db.collection("products").doc(item.id).set(item.data, {merge: true});
-  }
-
-  console.log("Writing bundles ...");
-  for (const item of bundles) {
-    await db.collection("bundles").doc(item.id).set(item.data, {merge: true});
-  }
-
-  // Seed recipes collection
-  console.log("Writing recipes ...");
-  const recipeSeeds = [
-    {
-      id: "recipe_001",
-      data: {
-        name: "Kenyan Beef Stew",
-        description: "A hearty traditional Kenyan beef stew with potatoes and carrots.",
-        imageUrl: "",
-        servings: 4,
-        prepTimeMinutes: 15,
-        cookTimeMinutes: 60,
-        difficulty: "medium",
-        ingredients: [
-          {productId: "beef_001", productName: "Beef (500g)", quantity: 1, unit: "pack"},
-          {productId: "potato_001", productName: "Potatoes", quantity: 4, unit: "pieces"},
-          {productId: "carrot_001", productName: "Carrots", quantity: 3, unit: "pieces"},
-          {productId: "tomato_001", productName: "Tomatoes", quantity: 3, unit: "pieces"},
-          {productId: "onion_001", productName: "Onions", quantity: 2, unit: "pieces"},
-        ],
-        instructions: [
-          "Cut beef into cubes and season with salt and pepper.",
-          "Heat oil in a large pot and brown the beef in batches.",
-          "Add onions and cook until softened.",
-          "Add tomatoes and cook for 5 minutes.",
-          "Add potatoes and carrots, cover with water.",
-          "Simmer for 45 minutes until meat and vegetables are tender.",
-        ],
-        tags: ["kenyan", "beef", "stew", "dinner"],
-        rating: 4.5,
-        reviewCount: 24,
-        createdAt: now,
-      },
-    },
-    {
-      id: "recipe_002",
-      data: {
-        name: "Githeri Special",
-        description: "Classic Kenyan mixed beans and maize dish.",
-        imageUrl: "",
-        servings: 6,
-        prepTimeMinutes: 10,
-        cookTimeMinutes: 90,
-        difficulty: "easy",
-        ingredients: [
-          {productId: "maize_001", productName: "Maize (dried)", quantity: 2, unit: "cups"},
-          {productId: "beans_001", productName: "Beans (mixed)", quantity: 2, unit: "cups"},
-          {productId: "tomato_001", productName: "Tomatoes", quantity: 2, unit: "pieces"},
-          {productId: "onion_001", productName: "Onions", quantity: 1, unit: "piece"},
-        ],
-        instructions: [
-          "Soak maize and beans overnight.",
-          "Boil together for 60–90 minutes until tender.",
-          "Fry onions and tomatoes in oil.",
-          "Add the boiled githeri and mix well.",
-          "Season with salt and serve hot.",
-        ],
-        tags: ["kenyan", "vegetarian", "beans", "maize", "lunch"],
-        rating: 4.3,
-        reviewCount: 18,
-        createdAt: now,
-      },
-    },
-  ];
-
-  for (const recipe of recipeSeeds) {
-    await db.collection("recipes").doc(recipe.id).set(recipe.data, {merge: true});
-  }
-
-  // Seed flash deals (offers collection)
-  console.log("Writing flash deals ...");
-  const startTime = admin.firestore.Timestamp.fromDate(new Date());
-  const endTime = admin.firestore.Timestamp.fromDate(
-    new Date(Date.now() + 48 * 60 * 60 * 1000), // 48 hours from now
-  );
-
-  const flashDeals = [
-    {
-      id: "deal_001",
-      data: {
-        productId: "prod_tomato",
-        productName: "Fresh Tomatoes 1kg",
-        imageUrl: "",
-        originalPrice: 150,
-        dealPrice: 90,
-        discountPercentage: 40,
-        stockLeft: 50,
-        totalStock: 100,
-        startTime,
-        endTime,
-        isActive: true,
-        categoryId: "cat_vegetables",
-      },
-    },
-    {
-      id: "deal_002",
-      data: {
-        productId: "prod_milk",
-        productName: "Fresh Whole Milk 1L",
-        imageUrl: "",
-        originalPrice: 80,
-        dealPrice: 60,
-        discountPercentage: 25,
-        stockLeft: 30,
-        totalStock: 80,
-        startTime,
-        endTime,
-        isActive: true,
-        categoryId: "cat_dairy",
-      },
-    },
-  ];
-
-  for (const deal of flashDeals) {
-    await db.collection("offers").doc(deal.id).set(deal.data, {merge: true});
-  }
+  await writeCollection(db, "categories", categories);
+  await writeCollection(db, "products", products);
+  await writeCollection(db, "bundles", bundles);
+  await writeCollection(db, "recipes", recipes);
+  await writeCollection(db, "offers", offers);
+  await writeCollection(db, "coupons", coupons);
+  await writeCollection(db, "onboarding", onboarding);
+  await writeCollection(db, "drawer_menu", drawerMenu);
+  await writeCollection(db, "top_questions", topQuestionsDocs);
+  await writeCollection(db, "help_topics", helpTopicsDocs);
+  await writeCollection(db, "app_content", appContent);
 
   console.log("Seeding completed successfully.");
   await app.delete();

@@ -1,0 +1,983 @@
+{
+  "app_images": {
+    "roundedLogo": "https://i.imgur.com/9EsY2t6.png",
+    "homePageBanner": "https://i.imgur.com/8hBIsS5.png",
+    "illustrations404": "https://i.imgur.com/SGTzEiC.png",
+    "introBackground1": "https://i.imgur.com/YQ9twZx.png",
+    "introBackground2": "https://i.imgur.com/3hgB1or.png",
+    "onboarding1": "https://i.imgur.com/X2G11k0.png",
+    "onboarding2": "https://i.imgur.com/sMLlh1i.png",
+    "onboarding3": "https://i.imgur.com/lHlOUT5.png",
+    "numberVerfication": "https://i.imgur.com/tCCmY3I.png",
+    "verified": "https://i.imgur.com/vF1jB6b.png"
+  },
+  "app_icons": {
+    "add": "assets/icons/add.svg",
+    "addRounded": "assets/icons/add_rounded.svg",
+    "appleIconRounded": "assets/icons/apple_icon_rounded.svg",
+    "appleIcon": "assets/icons/apple_icon.svg",
+    "eye": "assets/icons/eye.svg",
+    "arrowBackward": "assets/icons/arrow_backward.svg",
+    "arrowForward": "assets/icons/arrow_forward.svg",
+    "cart": "assets/icons/cart.svg",
+    "dashboardIcon": "assets/icons/dashboard_icon.svg",
+    "facebookIcon": "assets/icons/facebook_icon.svg",
+    "googleIconRounded": "assets/icons/google_icon_rounded.svg",
+    "googleIcon": "assets/icons/google_icon.svg",
+    "home": "assets/icons/home.svg",
+    "location": "assets/icons/location.svg",
+    "menu": "assets/icons/menu.svg",
+    "profile": "assets/icons/profile.svg",
+    "save": "assets/icons/save.svg",
+    "search": "assets/icons/search.svg",
+    "shoppingBag": "assets/icons/shopping_bag.svg",
+    "edit": "assets/icons/edit.svg",
+    "deleteOutline": "assets/icons/delete_outline.svg",
+    "twitterIcon": "assets/icons/twitter_icon.svg",
+    "sidebarIcon": "assets/icons/side_bar_icon.svg",
+    "heart": "assets/icons/heart.svg",
+    "heartActive": "assets/icons/heart_active.svg",
+    "heartOutlined": "assets/icons/heart_outlined.svg",
+    "addQuantity": "assets/icons/add_quantity.svg",
+    "removeQuantity": "assets/icons/remove_quantity.svg",
+    "shoppingCart": "assets/icons/shopping_cart.svg",
+    "delete": "assets/icons/delete.svg",
+    "paypal": "assets/icons/paypal.svg",
+    "cashOnDelivery": "assets/icons/cash_on_delivery.svg",
+    "masterCard": "assets/icons/master_card.svg",
+    "filter": "assets/icons/filter.svg",
+    "searchTileArrow": "assets/icons/search_tile_arrow.svg",
+    "homeProfile": "assets/icons/home_profile.svg",
+    "truckIcon": "assets/icons/truck_icon.svg",
+    "voucher": "assets/icons/voucher.svg",
+    "reply": "assets/icons/reply.svg",
+    "right": "assets/icons/right.svg",
+    "profilePerson": "assets/icons/profile_person.svg",
+    "profileNotification": "assets/icons/profile_notification.svg",
+    "profilePayment": "assets/icons/profile_payment.svg",
+    "profileSetting": "assets/icons/profile_setting.svg",
+    "profileLogout": "assets/icons/profile_logout.svg",
+    "orderConfirmed": "assets/icons/order_confirm.svg",
+    "orderDelivered": "assets/icons/order_delivered.svg",
+    "orderProcessing": "assets/icons/order_processing.svg",
+    "orderShipped": "assets/icons/order_shipped.svg",
+    "contactPhone": "assets/icons/contact_phone.svg",
+    "contactEmail": "assets/icons/contact_email.svg",
+    "contactMap": "assets/icons/contact_map.svg",
+    "cardAdd": "assets/icons/card_add.svg"
+  },
+  "extracted_assets": {
+    "total": 113,
+    "remote_images": [
+      {
+        "kind": "remote_image",
+        "ref": "https://i.imgur.com/mVeoFh5.png",
+        "source_file": "lib/core/routes/unknown_page.dart",
+        "resolved_path": "https://i.imgur.com/mVeoFh5.png",
+        "copied_path": "",
+        "remote_url": "https://i.imgur.com/mVeoFh5.png"
+      },
+      {
+        "kind": "remote_image",
+        "ref": "https://i.imgur.com/9EsY2t6.png",
+        "source_file": "lib/core/constants/app_images.dart",
+        "resolved_path": "https://i.imgur.com/9EsY2t6.png",
+        "copied_path": "",
+        "remote_url": "https://i.imgur.com/9EsY2t6.png"
+      },
+      {
+        "kind": "remote_image",
+        "ref": "https://i.imgur.com/8hBIsS5.png",
+        "source_file": "lib/core/constants/app_images.dart",
+        "resolved_path": "https://i.imgur.com/8hBIsS5.png",
+        "copied_path": "",
+        "remote_url": "https://i.imgur.com/8hBIsS5.png"
+      },
+      {
+        "kind": "remote_image",
+        "ref": "https://i.imgur.com/SGTzEiC.png",
+        "source_file": "lib/core/constants/app_images.dart",
+        "resolved_path": "https://i.imgur.com/SGTzEiC.png",
+        "copied_path": "",
+        "remote_url": "https://i.imgur.com/SGTzEiC.png"
+      },
+      {
+        "kind": "remote_image",
+        "ref": "https://i.imgur.com/YQ9twZx.png",
+        "source_file": "lib/core/constants/app_images.dart",
+        "resolved_path": "https://i.imgur.com/YQ9twZx.png",
+        "copied_path": "",
+        "remote_url": "https://i.imgur.com/YQ9twZx.png"
+      },
+      {
+        "kind": "remote_image",
+        "ref": "https://i.imgur.com/3hgB1or.png",
+        "source_file": "lib/core/constants/app_images.dart",
+        "resolved_path": "https://i.imgur.com/3hgB1or.png",
+        "copied_path": "",
+        "remote_url": "https://i.imgur.com/3hgB1or.png"
+      },
+      {
+        "kind": "remote_image",
+        "ref": "https://i.imgur.com/X2G11k0.png",
+        "source_file": "lib/core/constants/app_images.dart",
+        "resolved_path": "https://i.imgur.com/X2G11k0.png",
+        "copied_path": "",
+        "remote_url": "https://i.imgur.com/X2G11k0.png"
+      },
+      {
+        "kind": "remote_image",
+        "ref": "https://i.imgur.com/sMLlh1i.png",
+        "source_file": "lib/core/constants/app_images.dart",
+        "resolved_path": "https://i.imgur.com/sMLlh1i.png",
+        "copied_path": "",
+        "remote_url": "https://i.imgur.com/sMLlh1i.png"
+      },
+      {
+        "kind": "remote_image",
+        "ref": "https://i.imgur.com/lHlOUT5.png",
+        "source_file": "lib/core/constants/app_images.dart",
+        "resolved_path": "https://i.imgur.com/lHlOUT5.png",
+        "copied_path": "",
+        "remote_url": "https://i.imgur.com/lHlOUT5.png"
+      },
+      {
+        "kind": "remote_image",
+        "ref": "https://i.imgur.com/tCCmY3I.png",
+        "source_file": "lib/core/constants/app_images.dart",
+        "resolved_path": "https://i.imgur.com/tCCmY3I.png",
+        "copied_path": "",
+        "remote_url": "https://i.imgur.com/tCCmY3I.png"
+      },
+      {
+        "kind": "remote_image",
+        "ref": "https://i.imgur.com/vF1jB6b.png",
+        "source_file": "lib/core/constants/app_images.dart",
+        "resolved_path": "https://i.imgur.com/vF1jB6b.png",
+        "copied_path": "",
+        "remote_url": "https://i.imgur.com/vF1jB6b.png"
+      },
+      {
+        "kind": "remote_image",
+        "ref": "https://i.imgur.com/e3z9DmE.png",
+        "source_file": "lib/views/profile/notification_page.dart",
+        "resolved_path": "https://i.imgur.com/e3z9DmE.png",
+        "copied_path": "",
+        "remote_url": "https://i.imgur.com/e3z9DmE.png"
+      },
+      {
+        "kind": "remote_image",
+        "ref": "https://i.imgur.com/gKa8Vfe.png",
+        "source_file": "lib/views/profile/notification_page.dart",
+        "resolved_path": "https://i.imgur.com/gKa8Vfe.png",
+        "copied_path": "",
+        "remote_url": "https://i.imgur.com/gKa8Vfe.png"
+      },
+      {
+        "kind": "remote_image",
+        "ref": "https://i.imgur.com/8jgs2mH.png",
+        "source_file": "lib/views/profile/notification_page.dart",
+        "resolved_path": "https://i.imgur.com/8jgs2mH.png",
+        "copied_path": "",
+        "remote_url": "https://i.imgur.com/8jgs2mH.png"
+      },
+      {
+        "kind": "remote_image",
+        "ref": "https://i.imgur.com/vHZFf4w.png",
+        "source_file": "lib/views/profile/notification_page.dart",
+        "resolved_path": "https://i.imgur.com/vHZFf4w.png",
+        "copied_path": "",
+        "remote_url": "https://i.imgur.com/vHZFf4w.png"
+      },
+      {
+        "kind": "remote_image",
+        "ref": "https://i.imgur.com/dbZiWGW.png",
+        "source_file": "lib/views/profile/notification_page.dart",
+        "resolved_path": "https://i.imgur.com/dbZiWGW.png",
+        "copied_path": "",
+        "remote_url": "https://i.imgur.com/dbZiWGW.png"
+      },
+      {
+        "kind": "remote_image",
+        "ref": "https://i.imgur.com/le6UYuV.png",
+        "source_file": "lib/views/profile/notification_page.dart",
+        "resolved_path": "https://i.imgur.com/le6UYuV.png",
+        "copied_path": "",
+        "remote_url": "https://i.imgur.com/le6UYuV.png"
+      },
+      {
+        "kind": "remote_image",
+        "ref": "https://images.unsplash.com/photo-1628157588553-5eeea00af15c?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=880&q=80",
+        "source_file": "lib/views/profile/components/profile_header.dart",
+        "resolved_path": "https://images.unsplash.com/photo-1628157588553-5eeea00af15c?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=880&q=80",
+        "copied_path": "",
+        "remote_url": "https://images.unsplash.com/photo-1628157588553-5eeea00af15c?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=880&q=80"
+      },
+      {
+        "kind": "remote_image",
+        "ref": "https://i.imgur.com/AMA5llS.png",
+        "source_file": "lib/views/profile/payment_method/add_new_card_page.dart",
+        "resolved_path": "https://i.imgur.com/AMA5llS.png",
+        "copied_path": "",
+        "remote_url": "https://i.imgur.com/AMA5llS.png"
+      },
+      {
+        "kind": "remote_image",
+        "ref": "https://i.imgur.com/7pI5714.png",
+        "source_file": "lib/views/profile/payment_method/payment_method_page.dart",
+        "resolved_path": "https://i.imgur.com/7pI5714.png",
+        "copied_path": "",
+        "remote_url": "https://i.imgur.com/7pI5714.png"
+      },
+      {
+        "kind": "remote_image",
+        "ref": "https://i.imgur.com/aRJj3iU.png",
+        "source_file": "lib/views/profile/payment_method/payment_method_page.dart",
+        "resolved_path": "https://i.imgur.com/aRJj3iU.png",
+        "copied_path": "",
+        "remote_url": "https://i.imgur.com/aRJj3iU.png"
+      },
+      {
+        "kind": "remote_image",
+        "ref": "https://i.imgur.com/lLUcMC1.png",
+        "source_file": "lib/views/profile/payment_method/payment_method_page.dart",
+        "resolved_path": "https://i.imgur.com/lLUcMC1.png",
+        "copied_path": "",
+        "remote_url": "https://i.imgur.com/lLUcMC1.png"
+      },
+      {
+        "kind": "remote_image",
+        "ref": "https://i.imgur.com/uUDkwQx.png",
+        "source_file": "lib/views/profile/payment_method/components/default_card.dart",
+        "resolved_path": "https://i.imgur.com/uUDkwQx.png",
+        "copied_path": "",
+        "remote_url": "https://i.imgur.com/uUDkwQx.png"
+      },
+      {
+        "kind": "remote_image",
+        "ref": "https://i.imgur.com/znE8Gir.png",
+        "source_file": "lib/views/cart/empty_cart_page_2.dart",
+        "resolved_path": "https://i.imgur.com/znE8Gir.png",
+        "copied_path": "",
+        "remote_url": "https://i.imgur.com/znE8Gir.png"
+      },
+      {
+        "kind": "remote_image",
+        "ref": "https://i.imgur.com/3avdket.png",
+        "source_file": "lib/views/cart/empty_cart_page.dart",
+        "resolved_path": "https://i.imgur.com/3avdket.png",
+        "copied_path": "",
+        "remote_url": "https://i.imgur.com/3avdket.png"
+      },
+      {
+        "kind": "remote_image",
+        "ref": "https://i.imgur.com/4YEHvGc.png",
+        "source_file": "lib/views/cart/components/single_cart_item_tile.dart",
+        "resolved_path": "https://i.imgur.com/4YEHvGc.png",
+        "copied_path": "",
+        "remote_url": "https://i.imgur.com/4YEHvGc.png"
+      },
+      {
+        "kind": "remote_image",
+        "ref": "https://i.imgur.com/DQqtvkL.png",
+        "source_file": "lib/views/cart/dialogs/delivered_successfull.dart",
+        "resolved_path": "https://i.imgur.com/DQqtvkL.png",
+        "copied_path": "",
+        "remote_url": "https://i.imgur.com/DQqtvkL.png"
+      },
+      {
+        "kind": "remote_image",
+        "ref": "https://i.imgur.com/mbjap7k.png",
+        "source_file": "lib/views/save/empty_save_page.dart",
+        "resolved_path": "https://i.imgur.com/mbjap7k.png",
+        "copied_path": "",
+        "remote_url": "https://i.imgur.com/mbjap7k.png"
+      },
+      {
+        "kind": "remote_image",
+        "ref": "https://i.imgur.com/aMo2GQb.png",
+        "source_file": "lib/views/review/submit_review_page.dart",
+        "resolved_path": "https://i.imgur.com/aMo2GQb.png",
+        "copied_path": "",
+        "remote_url": "https://i.imgur.com/aMo2GQb.png"
+      },
+      {
+        "kind": "remote_image",
+        "ref": "https://i.imgur.com/BAOH63b.png",
+        "source_file": "lib/views/review/components/review_lists.dart",
+        "resolved_path": "https://i.imgur.com/BAOH63b.png",
+        "copied_path": "",
+        "remote_url": "https://i.imgur.com/BAOH63b.png"
+      },
+      {
+        "kind": "remote_image",
+        "ref": "https://i.imgur.com/Fj9gVGy.png",
+        "source_file": "lib/views/home/order_successfull_page.dart",
+        "resolved_path": "https://i.imgur.com/Fj9gVGy.png",
+        "copied_path": "",
+        "remote_url": "https://i.imgur.com/Fj9gVGy.png"
+      },
+      {
+        "kind": "remote_image",
+        "ref": "https://i.imgur.com/3o6ons9.png",
+        "source_file": "lib/views/home/product_details_page.dart",
+        "resolved_path": "https://i.imgur.com/3o6ons9.png",
+        "copied_path": "",
+        "remote_url": "https://i.imgur.com/3o6ons9.png"
+      },
+      {
+        "kind": "remote_image",
+        "ref": "https://i.imgur.com/EMI82tU.png",
+        "source_file": "lib/views/home/order_empty.dart",
+        "resolved_path": "https://i.imgur.com/EMI82tU.png",
+        "copied_path": "",
+        "remote_url": "https://i.imgur.com/EMI82tU.png"
+      },
+      {
+        "kind": "remote_image",
+        "ref": "https://i.imgur.com/NOuZzbe.png",
+        "source_file": "lib/views/home/bundle_product_details_page.dart",
+        "resolved_path": "https://i.imgur.com/NOuZzbe.png",
+        "copied_path": "",
+        "remote_url": "https://i.imgur.com/NOuZzbe.png"
+      },
+      {
+        "kind": "remote_image",
+        "ref": "https://i.imgur.com/vPVGf8C.png",
+        "source_file": "lib/views/home/order_failed_page.dart",
+        "resolved_path": "https://i.imgur.com/vPVGf8C.png",
+        "copied_path": "",
+        "remote_url": "https://i.imgur.com/vPVGf8C.png"
+      },
+      {
+        "kind": "remote_image",
+        "ref": "https://i.imgur.com/Y0IFT2g.png",
+        "source_file": "lib/views/home/components/bundle_pack_details.dart",
+        "resolved_path": "https://i.imgur.com/Y0IFT2g.png",
+        "copied_path": "",
+        "remote_url": "https://i.imgur.com/Y0IFT2g.png"
+      },
+      {
+        "kind": "remote_image",
+        "ref": "https://i.imgur.com/vom6opy.png",
+        "source_file": "lib/views/home/components/bundle_create_bottom_action_bar.dart",
+        "resolved_path": "https://i.imgur.com/vom6opy.png",
+        "copied_path": "",
+        "remote_url": "https://i.imgur.com/vom6opy.png"
+      },
+      {
+        "kind": "remote_image",
+        "ref": "https://i.imgur.com/GIqY9ym.png",
+        "source_file": "lib/views/home/components/bundle_create_bottom_action_bar.dart",
+        "resolved_path": "https://i.imgur.com/GIqY9ym.png",
+        "copied_path": "",
+        "remote_url": "https://i.imgur.com/GIqY9ym.png"
+      },
+      {
+        "kind": "remote_image",
+        "ref": "https://i.imgur.com/1xYlwGD.png",
+        "source_file": "lib/views/home/components/bundle_create_bottom_action_bar.dart",
+        "resolved_path": "https://i.imgur.com/1xYlwGD.png",
+        "copied_path": "",
+        "remote_url": "https://i.imgur.com/1xYlwGD.png"
+      },
+      {
+        "kind": "remote_image",
+        "ref": "https://i.imgur.com/nys3Bxw.png",
+        "source_file": "lib/views/drawer/contact_us_page.dart",
+        "resolved_path": "https://i.imgur.com/nys3Bxw.png",
+        "copied_path": "",
+        "remote_url": "https://i.imgur.com/nys3Bxw.png"
+      },
+      {
+        "kind": "remote_image",
+        "ref": "https://i.imgur.com/tGChxbZ.png",
+        "source_file": "lib/views/menu/menu_page.dart",
+        "resolved_path": "https://i.imgur.com/tGChxbZ.png",
+        "copied_path": "",
+        "remote_url": "https://i.imgur.com/tGChxbZ.png"
+      },
+      {
+        "kind": "remote_image",
+        "ref": "https://i.imgur.com/yOFxoIP.png",
+        "source_file": "lib/views/menu/menu_page.dart",
+        "resolved_path": "https://i.imgur.com/yOFxoIP.png",
+        "copied_path": "",
+        "remote_url": "https://i.imgur.com/yOFxoIP.png"
+      },
+      {
+        "kind": "remote_image",
+        "ref": "https://i.imgur.com/GPsRaFC.png",
+        "source_file": "lib/views/menu/menu_page.dart",
+        "resolved_path": "https://i.imgur.com/GPsRaFC.png",
+        "copied_path": "",
+        "remote_url": "https://i.imgur.com/GPsRaFC.png"
+      },
+      {
+        "kind": "remote_image",
+        "ref": "https://i.imgur.com/mGRqfnc.png",
+        "source_file": "lib/views/menu/menu_page.dart",
+        "resolved_path": "https://i.imgur.com/mGRqfnc.png",
+        "copied_path": "",
+        "remote_url": "https://i.imgur.com/mGRqfnc.png"
+      },
+      {
+        "kind": "remote_image",
+        "ref": "https://i.imgur.com/fwyz4oC.png",
+        "source_file": "lib/views/menu/menu_page.dart",
+        "resolved_path": "https://i.imgur.com/fwyz4oC.png",
+        "copied_path": "",
+        "remote_url": "https://i.imgur.com/fwyz4oC.png"
+      },
+      {
+        "kind": "remote_image",
+        "ref": "https://i.imgur.com/DNr8a6R.png",
+        "source_file": "lib/views/menu/menu_page.dart",
+        "resolved_path": "https://i.imgur.com/DNr8a6R.png",
+        "copied_path": "",
+        "remote_url": "https://i.imgur.com/DNr8a6R.png"
+      },
+      {
+        "kind": "remote_image",
+        "ref": "https://i.imgur.com/O2ZX5nR.png",
+        "source_file": "lib/views/menu/menu_page.dart",
+        "resolved_path": "https://i.imgur.com/O2ZX5nR.png",
+        "copied_path": "",
+        "remote_url": "https://i.imgur.com/O2ZX5nR.png"
+      },
+      {
+        "kind": "remote_image",
+        "ref": "https://i.imgur.com/wJBopjL.png",
+        "source_file": "lib/views/menu/menu_page.dart",
+        "resolved_path": "https://i.imgur.com/wJBopjL.png",
+        "copied_path": "",
+        "remote_url": "https://i.imgur.com/wJBopjL.png"
+      },
+      {
+        "kind": "remote_image",
+        "ref": "https://i.imgur.com/P4yJA9t.png",
+        "source_file": "lib/views/menu/menu_page.dart",
+        "resolved_path": "https://i.imgur.com/P4yJA9t.png",
+        "copied_path": "",
+        "remote_url": "https://i.imgur.com/P4yJA9t.png"
+      },
+      {
+        "kind": "remote_image",
+        "ref": "https://i.imgur.com/sxGf76e.png",
+        "source_file": "lib/views/menu/menu_page.dart",
+        "resolved_path": "https://i.imgur.com/sxGf76e.png",
+        "copied_path": "",
+        "remote_url": "https://i.imgur.com/sxGf76e.png"
+      },
+      {
+        "kind": "remote_image",
+        "ref": "https://i.imgur.com/BPvKeXl.png",
+        "source_file": "lib/views/menu/menu_page.dart",
+        "resolved_path": "https://i.imgur.com/BPvKeXl.png",
+        "copied_path": "",
+        "remote_url": "https://i.imgur.com/BPvKeXl.png"
+      },
+      {
+        "kind": "remote_image",
+        "ref": "https://i.imgur.com/m65fusg.png",
+        "source_file": "lib/views/menu/menu_page.dart",
+        "resolved_path": "https://i.imgur.com/m65fusg.png",
+        "copied_path": "",
+        "remote_url": "https://i.imgur.com/m65fusg.png"
+      }
+    ],
+    "local_images": [
+      {
+        "kind": "local_image",
+        "ref": "assets/images/coupon_background_1.png",
+        "source_file": "lib/core/constants/app_images.dart",
+        "resolved_path": "assets/images/coupon_background_1.png",
+        "copied_path": "data/assets/images/coupon_background_1.png",
+        "remote_url": ""
+      },
+      {
+        "kind": "local_image",
+        "ref": "assets/images/coupon_background_2.png",
+        "source_file": "lib/core/constants/app_images.dart",
+        "resolved_path": "assets/images/coupon_background_2.png",
+        "copied_path": "data/assets/images/coupon_background_2.png",
+        "remote_url": ""
+      },
+      {
+        "kind": "local_image",
+        "ref": "assets/images/coupon_background_3.png",
+        "source_file": "lib/core/constants/app_images.dart",
+        "resolved_path": "assets/images/coupon_background_3.png",
+        "copied_path": "data/assets/images/coupon_background_3.png",
+        "remote_url": ""
+      },
+      {
+        "kind": "local_image",
+        "ref": "assets/images/coupon_background_4.png",
+        "source_file": "lib/core/constants/app_images.dart",
+        "resolved_path": "assets/images/coupon_background_4.png",
+        "copied_path": "data/assets/images/coupon_background_4.png",
+        "remote_url": ""
+      },
+      {
+        "kind": "local_image",
+        "ref": "assets/images/profile_page_background.png",
+        "source_file": "lib/views/profile/components/profile_header.dart",
+        "resolved_path": "assets/images/profile_page_background.png",
+        "copied_path": "data/assets/images/profile_page_background.png",
+        "remote_url": ""
+      },
+      {
+        "kind": "local_image",
+        "ref": "assets/images/app_logo.png",
+        "source_file": "filesystem",
+        "resolved_path": "assets/images/app_logo.png",
+        "copied_path": "data/assets/images/app_logo.png",
+        "remote_url": ""
+      },
+      {
+        "kind": "local_image",
+        "ref": "assets/images/app_logo_splash.png",
+        "source_file": "filesystem",
+        "resolved_path": "assets/images/app_logo_splash.png",
+        "copied_path": "data/assets/images/app_logo_splash.png",
+        "remote_url": ""
+      }
+    ],
+    "local_icons": [
+      {
+        "kind": "local_icon",
+        "ref": "assets/icons/add.svg",
+        "source_file": "lib/core/constants/app_icons.dart",
+        "resolved_path": "assets/icons/add.svg",
+        "copied_path": "data/assets/icons/add.svg",
+        "remote_url": ""
+      },
+      {
+        "kind": "local_icon",
+        "ref": "assets/icons/add_rounded.svg",
+        "source_file": "lib/core/constants/app_icons.dart",
+        "resolved_path": "assets/icons/add_rounded.svg",
+        "copied_path": "data/assets/icons/add_rounded.svg",
+        "remote_url": ""
+      },
+      {
+        "kind": "local_icon",
+        "ref": "assets/icons/apple_icon_rounded.svg",
+        "source_file": "lib/core/constants/app_icons.dart",
+        "resolved_path": "assets/icons/apple_icon_rounded.svg",
+        "copied_path": "data/assets/icons/apple_icon_rounded.svg",
+        "remote_url": ""
+      },
+      {
+        "kind": "local_icon",
+        "ref": "assets/icons/apple_icon.svg",
+        "source_file": "lib/core/constants/app_icons.dart",
+        "resolved_path": "assets/icons/apple_icon.svg",
+        "copied_path": "data/assets/icons/apple_icon.svg",
+        "remote_url": ""
+      },
+      {
+        "kind": "local_icon",
+        "ref": "assets/icons/eye.svg",
+        "source_file": "lib/core/constants/app_icons.dart",
+        "resolved_path": "assets/icons/eye.svg",
+        "copied_path": "data/assets/icons/eye.svg",
+        "remote_url": ""
+      },
+      {
+        "kind": "local_icon",
+        "ref": "assets/icons/arrow_backward.svg",
+        "source_file": "lib/core/constants/app_icons.dart",
+        "resolved_path": "assets/icons/arrow_backward.svg",
+        "copied_path": "data/assets/icons/arrow_backward.svg",
+        "remote_url": ""
+      },
+      {
+        "kind": "local_icon",
+        "ref": "assets/icons/arrow_forward.svg",
+        "source_file": "lib/core/constants/app_icons.dart",
+        "resolved_path": "assets/icons/arrow_forward.svg",
+        "copied_path": "data/assets/icons/arrow_forward.svg",
+        "remote_url": ""
+      },
+      {
+        "kind": "local_icon",
+        "ref": "assets/icons/cart.svg",
+        "source_file": "lib/core/constants/app_icons.dart",
+        "resolved_path": "assets/icons/cart.svg",
+        "copied_path": "data/assets/icons/cart.svg",
+        "remote_url": ""
+      },
+      {
+        "kind": "local_icon",
+        "ref": "assets/icons/dashboard_icon.svg",
+        "source_file": "lib/core/constants/app_icons.dart",
+        "resolved_path": "assets/icons/dashboard_icon.svg",
+        "copied_path": "data/assets/icons/dashboard_icon.svg",
+        "remote_url": ""
+      },
+      {
+        "kind": "local_icon",
+        "ref": "assets/icons/facebook_icon.svg",
+        "source_file": "lib/core/constants/app_icons.dart",
+        "resolved_path": "assets/icons/facebook_icon.svg",
+        "copied_path": "data/assets/icons/facebook_icon.svg",
+        "remote_url": ""
+      },
+      {
+        "kind": "local_icon",
+        "ref": "assets/icons/google_icon_rounded.svg",
+        "source_file": "lib/core/constants/app_icons.dart",
+        "resolved_path": "assets/icons/google_icon_rounded.svg",
+        "copied_path": "data/assets/icons/google_icon_rounded.svg",
+        "remote_url": ""
+      },
+      {
+        "kind": "local_icon",
+        "ref": "assets/icons/google_icon.svg",
+        "source_file": "lib/core/constants/app_icons.dart",
+        "resolved_path": "assets/icons/google_icon.svg",
+        "copied_path": "data/assets/icons/google_icon.svg",
+        "remote_url": ""
+      },
+      {
+        "kind": "local_icon",
+        "ref": "assets/icons/home.svg",
+        "source_file": "lib/core/constants/app_icons.dart",
+        "resolved_path": "assets/icons/home.svg",
+        "copied_path": "data/assets/icons/home.svg",
+        "remote_url": ""
+      },
+      {
+        "kind": "local_icon",
+        "ref": "assets/icons/location.svg",
+        "source_file": "lib/core/constants/app_icons.dart",
+        "resolved_path": "assets/icons/location.svg",
+        "copied_path": "data/assets/icons/location.svg",
+        "remote_url": ""
+      },
+      {
+        "kind": "local_icon",
+        "ref": "assets/icons/menu.svg",
+        "source_file": "lib/core/constants/app_icons.dart",
+        "resolved_path": "assets/icons/menu.svg",
+        "copied_path": "data/assets/icons/menu.svg",
+        "remote_url": ""
+      },
+      {
+        "kind": "local_icon",
+        "ref": "assets/icons/profile.svg",
+        "source_file": "lib/core/constants/app_icons.dart",
+        "resolved_path": "assets/icons/profile.svg",
+        "copied_path": "data/assets/icons/profile.svg",
+        "remote_url": ""
+      },
+      {
+        "kind": "local_icon",
+        "ref": "assets/icons/save.svg",
+        "source_file": "lib/core/constants/app_icons.dart",
+        "resolved_path": "assets/icons/save.svg",
+        "copied_path": "data/assets/icons/save.svg",
+        "remote_url": ""
+      },
+      {
+        "kind": "local_icon",
+        "ref": "assets/icons/search.svg",
+        "source_file": "lib/core/constants/app_icons.dart",
+        "resolved_path": "assets/icons/search.svg",
+        "copied_path": "data/assets/icons/search.svg",
+        "remote_url": ""
+      },
+      {
+        "kind": "local_icon",
+        "ref": "assets/icons/shopping_bag.svg",
+        "source_file": "lib/core/constants/app_icons.dart",
+        "resolved_path": "assets/icons/shopping_bag.svg",
+        "copied_path": "data/assets/icons/shopping_bag.svg",
+        "remote_url": ""
+      },
+      {
+        "kind": "local_icon",
+        "ref": "assets/icons/edit.svg",
+        "source_file": "lib/core/constants/app_icons.dart",
+        "resolved_path": "assets/icons/edit.svg",
+        "copied_path": "data/assets/icons/edit.svg",
+        "remote_url": ""
+      },
+      {
+        "kind": "local_icon",
+        "ref": "assets/icons/delete_outline.svg",
+        "source_file": "lib/core/constants/app_icons.dart",
+        "resolved_path": "assets/icons/delete_outline.svg",
+        "copied_path": "data/assets/icons/delete_outline.svg",
+        "remote_url": ""
+      },
+      {
+        "kind": "local_icon",
+        "ref": "assets/icons/twitter_icon.svg",
+        "source_file": "lib/core/constants/app_icons.dart",
+        "resolved_path": "assets/icons/twitter_icon.svg",
+        "copied_path": "data/assets/icons/twitter_icon.svg",
+        "remote_url": ""
+      },
+      {
+        "kind": "local_icon",
+        "ref": "assets/icons/side_bar_icon.svg",
+        "source_file": "lib/core/constants/app_icons.dart",
+        "resolved_path": "assets/icons/side_bar_icon.svg",
+        "copied_path": "data/assets/icons/side_bar_icon.svg",
+        "remote_url": ""
+      },
+      {
+        "kind": "local_icon",
+        "ref": "assets/icons/heart.svg",
+        "source_file": "lib/core/constants/app_icons.dart",
+        "resolved_path": "assets/icons/heart.svg",
+        "copied_path": "data/assets/icons/heart.svg",
+        "remote_url": ""
+      },
+      {
+        "kind": "local_icon",
+        "ref": "assets/icons/heart_active.svg",
+        "source_file": "lib/core/constants/app_icons.dart",
+        "resolved_path": "assets/icons/heart_active.svg",
+        "copied_path": "data/assets/icons/heart_active.svg",
+        "remote_url": ""
+      },
+      {
+        "kind": "local_icon",
+        "ref": "assets/icons/heart_outlined.svg",
+        "source_file": "lib/core/constants/app_icons.dart",
+        "resolved_path": "assets/icons/heart_outlined.svg",
+        "copied_path": "data/assets/icons/heart_outlined.svg",
+        "remote_url": ""
+      },
+      {
+        "kind": "local_icon",
+        "ref": "assets/icons/add_quantity.svg",
+        "source_file": "lib/core/constants/app_icons.dart",
+        "resolved_path": "assets/icons/add_quantity.svg",
+        "copied_path": "data/assets/icons/add_quantity.svg",
+        "remote_url": ""
+      },
+      {
+        "kind": "local_icon",
+        "ref": "assets/icons/remove_quantity.svg",
+        "source_file": "lib/core/constants/app_icons.dart",
+        "resolved_path": "assets/icons/remove_quantity.svg",
+        "copied_path": "data/assets/icons/remove_quantity.svg",
+        "remote_url": ""
+      },
+      {
+        "kind": "local_icon",
+        "ref": "assets/icons/shopping_cart.svg",
+        "source_file": "lib/core/constants/app_icons.dart",
+        "resolved_path": "assets/icons/shopping_cart.svg",
+        "copied_path": "data/assets/icons/shopping_cart.svg",
+        "remote_url": ""
+      },
+      {
+        "kind": "local_icon",
+        "ref": "assets/icons/delete.svg",
+        "source_file": "lib/core/constants/app_icons.dart",
+        "resolved_path": "assets/icons/delete.svg",
+        "copied_path": "data/assets/icons/delete.svg",
+        "remote_url": ""
+      },
+      {
+        "kind": "local_icon",
+        "ref": "assets/icons/paypal.svg",
+        "source_file": "lib/core/constants/app_icons.dart",
+        "resolved_path": "assets/icons/paypal.svg",
+        "copied_path": "data/assets/icons/paypal.svg",
+        "remote_url": ""
+      },
+      {
+        "kind": "local_icon",
+        "ref": "assets/icons/cash_on_delivery.svg",
+        "source_file": "lib/core/constants/app_icons.dart",
+        "resolved_path": "assets/icons/cash_on_delivery.svg",
+        "copied_path": "data/assets/icons/cash_on_delivery.svg",
+        "remote_url": ""
+      },
+      {
+        "kind": "local_icon",
+        "ref": "assets/icons/master_card.svg",
+        "source_file": "lib/core/constants/app_icons.dart",
+        "resolved_path": "assets/icons/master_card.svg",
+        "copied_path": "data/assets/icons/master_card.svg",
+        "remote_url": ""
+      },
+      {
+        "kind": "local_icon",
+        "ref": "assets/icons/filter.svg",
+        "source_file": "lib/core/constants/app_icons.dart",
+        "resolved_path": "assets/icons/filter.svg",
+        "copied_path": "data/assets/icons/filter.svg",
+        "remote_url": ""
+      },
+      {
+        "kind": "local_icon",
+        "ref": "assets/icons/search_tile_arrow.svg",
+        "source_file": "lib/core/constants/app_icons.dart",
+        "resolved_path": "assets/icons/search_tile_arrow.svg",
+        "copied_path": "data/assets/icons/search_tile_arrow.svg",
+        "remote_url": ""
+      },
+      {
+        "kind": "local_icon",
+        "ref": "assets/icons/home_profile.svg",
+        "source_file": "lib/core/constants/app_icons.dart",
+        "resolved_path": "assets/icons/home_profile.svg",
+        "copied_path": "data/assets/icons/home_profile.svg",
+        "remote_url": ""
+      },
+      {
+        "kind": "local_icon",
+        "ref": "assets/icons/truck_icon.svg",
+        "source_file": "lib/core/constants/app_icons.dart",
+        "resolved_path": "assets/icons/truck_icon.svg",
+        "copied_path": "data/assets/icons/truck_icon.svg",
+        "remote_url": ""
+      },
+      {
+        "kind": "local_icon",
+        "ref": "assets/icons/voucher.svg",
+        "source_file": "lib/core/constants/app_icons.dart",
+        "resolved_path": "assets/icons/voucher.svg",
+        "copied_path": "data/assets/icons/voucher.svg",
+        "remote_url": ""
+      },
+      {
+        "kind": "local_icon",
+        "ref": "assets/icons/reply.svg",
+        "source_file": "lib/core/constants/app_icons.dart",
+        "resolved_path": "assets/icons/reply.svg",
+        "copied_path": "data/assets/icons/reply.svg",
+        "remote_url": ""
+      },
+      {
+        "kind": "local_icon",
+        "ref": "assets/icons/right.svg",
+        "source_file": "lib/core/constants/app_icons.dart",
+        "resolved_path": "assets/icons/right.svg",
+        "copied_path": "data/assets/icons/right.svg",
+        "remote_url": ""
+      },
+      {
+        "kind": "local_icon",
+        "ref": "assets/icons/profile_person.svg",
+        "source_file": "lib/core/constants/app_icons.dart",
+        "resolved_path": "assets/icons/profile_person.svg",
+        "copied_path": "data/assets/icons/profile_person.svg",
+        "remote_url": ""
+      },
+      {
+        "kind": "local_icon",
+        "ref": "assets/icons/profile_notification.svg",
+        "source_file": "lib/core/constants/app_icons.dart",
+        "resolved_path": "assets/icons/profile_notification.svg",
+        "copied_path": "data/assets/icons/profile_notification.svg",
+        "remote_url": ""
+      },
+      {
+        "kind": "local_icon",
+        "ref": "assets/icons/profile_payment.svg",
+        "source_file": "lib/core/constants/app_icons.dart",
+        "resolved_path": "assets/icons/profile_payment.svg",
+        "copied_path": "data/assets/icons/profile_payment.svg",
+        "remote_url": ""
+      },
+      {
+        "kind": "local_icon",
+        "ref": "assets/icons/profile_setting.svg",
+        "source_file": "lib/core/constants/app_icons.dart",
+        "resolved_path": "assets/icons/profile_setting.svg",
+        "copied_path": "data/assets/icons/profile_setting.svg",
+        "remote_url": ""
+      },
+      {
+        "kind": "local_icon",
+        "ref": "assets/icons/profile_logout.svg",
+        "source_file": "lib/core/constants/app_icons.dart",
+        "resolved_path": "assets/icons/profile_logout.svg",
+        "copied_path": "data/assets/icons/profile_logout.svg",
+        "remote_url": ""
+      },
+      {
+        "kind": "local_icon",
+        "ref": "assets/icons/order_confirm.svg",
+        "source_file": "lib/core/constants/app_icons.dart",
+        "resolved_path": "assets/icons/order_confirm.svg",
+        "copied_path": "data/assets/icons/order_confirm.svg",
+        "remote_url": ""
+      },
+      {
+        "kind": "local_icon",
+        "ref": "assets/icons/order_delivered.svg",
+        "source_file": "lib/core/constants/app_icons.dart",
+        "resolved_path": "assets/icons/order_delivered.svg",
+        "copied_path": "data/assets/icons/order_delivered.svg",
+        "remote_url": ""
+      },
+      {
+        "kind": "local_icon",
+        "ref": "assets/icons/order_processing.svg",
+        "source_file": "lib/core/constants/app_icons.dart",
+        "resolved_path": "assets/icons/order_processing.svg",
+        "copied_path": "data/assets/icons/order_processing.svg",
+        "remote_url": ""
+      },
+      {
+        "kind": "local_icon",
+        "ref": "assets/icons/order_shipped.svg",
+        "source_file": "lib/core/constants/app_icons.dart",
+        "resolved_path": "assets/icons/order_shipped.svg",
+        "copied_path": "data/assets/icons/order_shipped.svg",
+        "remote_url": ""
+      },
+      {
+        "kind": "local_icon",
+        "ref": "assets/icons/contact_phone.svg",
+        "source_file": "lib/core/constants/app_icons.dart",
+        "resolved_path": "assets/icons/contact_phone.svg",
+        "copied_path": "data/assets/icons/contact_phone.svg",
+        "remote_url": ""
+      },
+      {
+        "kind": "local_icon",
+        "ref": "assets/icons/contact_email.svg",
+        "source_file": "lib/core/constants/app_icons.dart",
+        "resolved_path": "assets/icons/contact_email.svg",
+        "copied_path": "data/assets/icons/contact_email.svg",
+        "remote_url": ""
+      },
+      {
+        "kind": "local_icon",
+        "ref": "assets/icons/contact_map.svg",
+        "source_file": "lib/core/constants/app_icons.dart",
+        "resolved_path": "assets/icons/contact_map.svg",
+        "copied_path": "data/assets/icons/contact_map.svg",
+        "remote_url": ""
+      },
+      {
+        "kind": "local_icon",
+        "ref": "assets/icons/card_add.svg",
+        "source_file": "lib/core/constants/app_icons.dart",
+        "resolved_path": "assets/icons/card_add.svg",
+        "copied_path": "data/assets/icons/card_add.svg",
+        "remote_url": ""
+      },
+      {
+        "kind": "local_icon",
+        "ref": "assets/images/app_logo.svg",
+        "source_file": "lib/views/home/home_page.dart",
+        "resolved_path": "assets/images/app_logo.svg",
+        "copied_path": "data/assets/images/app_logo.svg",
+        "remote_url": ""
+      }
+    ]
+  },
+  "copied_assets_dir": "data/assets"
+}
