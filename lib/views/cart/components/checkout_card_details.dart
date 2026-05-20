@@ -109,8 +109,8 @@ class _CardDetailsState extends State<CardDetails> {
               Text(
                 'Remember My Card Details',
                 style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                  color: Theme.of(context).colorScheme.onSurface,
-                ),
+                      color: Theme.of(context).colorScheme.onSurface,
+                    ),
               ),
               const Spacer(),
               CupertinoSwitch(value: true, onChanged: (v) {}),

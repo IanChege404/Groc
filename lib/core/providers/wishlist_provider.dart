@@ -7,13 +7,13 @@ import 'auth_provider.dart';
 
 final wishlistItemsProvider =
     StateNotifierProvider<WishlistNotifier, AsyncValue<List<WishlistModel>>>((
-      ref,
-    ) {
-      final firestore = FirestoreService();
-      final authState = ref.watch(authProvider);
+  ref,
+) {
+  final firestore = FirestoreService();
+  final authState = ref.watch(authProvider);
 
-      return WishlistNotifier(firestore: firestore, authState: authState);
-    });
+  return WishlistNotifier(firestore: firestore, authState: authState);
+});
 
 final wishlistCountProvider = Provider((ref) {
   final wishlistState = ref.watch(wishlistItemsProvider);
@@ -44,7 +44,7 @@ class WishlistNotifier extends StateNotifier<AsyncValue<List<WishlistModel>>> {
   String? _currentUserId;
 
   WishlistNotifier({required this.firestore, required this.authState})
-    : super(const AsyncValue.loading()) {
+      : super(const AsyncValue.loading()) {
     _initializeWishlist();
   }
 
@@ -108,36 +108,36 @@ class WishlistNotifier extends StateNotifier<AsyncValue<List<WishlistModel>>> {
         .where('userId', isEqualTo: userId)
         .snapshots()
         .listen(
-          (snapshot) {
-            try {
-              Logger.info(
-                'Wishlist snapshot received with ${snapshot.docs.length} items',
-                'WishlistNotifier._setupRealtimeListener',
-              );
-              final items = snapshot.docs
-                  .map((doc) => WishlistModel.fromFirestore(doc))
-                  .toList();
-              Logger.info(
-                'Loaded ${items.length} wishlist items',
-                'WishlistNotifier._setupRealtimeListener',
-              );
-              state = AsyncValue.data(items);
-            } catch (e, stack) {
-              Logger.error(
-                'Error processing wishlist snapshot: $e\nStack: $stack',
-                'WishlistNotifier._setupRealtimeListener',
-              );
-              state = AsyncValue.error(e, StackTrace.current);
-            }
-          },
-          onError: (error, stack) {
-            Logger.error(
-              'Wishlist listener error: $error\nStack: $stack',
-              'WishlistNotifier._setupRealtimeListener',
-            );
-            state = AsyncValue.error(error, StackTrace.current);
-          },
+      (snapshot) {
+        try {
+          Logger.info(
+            'Wishlist snapshot received with ${snapshot.docs.length} items',
+            'WishlistNotifier._setupRealtimeListener',
+          );
+          final items = snapshot.docs
+              .map((doc) => WishlistModel.fromFirestore(doc))
+              .toList();
+          Logger.info(
+            'Loaded ${items.length} wishlist items',
+            'WishlistNotifier._setupRealtimeListener',
+          );
+          state = AsyncValue.data(items);
+        } catch (e, stack) {
+          Logger.error(
+            'Error processing wishlist snapshot: $e\nStack: $stack',
+            'WishlistNotifier._setupRealtimeListener',
+          );
+          state = AsyncValue.error(e, StackTrace.current);
+        }
+      },
+      onError: (error, stack) {
+        Logger.error(
+          'Wishlist listener error: $error\nStack: $stack',
+          'WishlistNotifier._setupRealtimeListener',
         );
+        state = AsyncValue.error(error, StackTrace.current);
+      },
+    );
   }
 
   Future<void> addToWishlist(WishlistModel item) async {

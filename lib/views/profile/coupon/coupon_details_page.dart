@@ -98,8 +98,8 @@ class CouponDetailsPage extends ConsumerWidget {
                   ? '${effectiveCoupon.discount.toStringAsFixed(0)}% off only for you. To get this discount collect and apply the voucher.'
                   : 'Collect and apply the voucher to get your discount.',
               style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                color: Theme.of(context).colorScheme.onSurface,
-              ),
+                    color: Theme.of(context).colorScheme.onSurface,
+                  ),
               textAlign: TextAlign.center,
             ),
           ),
@@ -113,8 +113,8 @@ class CouponDetailsPage extends ConsumerWidget {
                     ? 'Exp ${DateFormat('dd/MM/yyyy').format(effectiveCoupon.expireDate)}'
                     : 'Expiration date unavailable',
                 style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                  color: Theme.of(context).colorScheme.onSurface,
-                ),
+                      color: Theme.of(context).colorScheme.onSurface,
+                    ),
               ),
             ),
           ),
@@ -155,9 +155,9 @@ class CouponDetailsPage extends ConsumerWidget {
             child: Text(
               'Terms and Condition',
               style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                fontWeight: FontWeight.normal,
-                color: Theme.of(context).colorScheme.onSurface,
-              ),
+                    fontWeight: FontWeight.normal,
+                    color: Theme.of(context).colorScheme.onSurface,
+                  ),
             ),
           ),
           const SizedBox(height: AppDefaults.padding),

@@ -63,17 +63,15 @@ class _ProfileEditPageState extends ConsumerState<ProfileEditPage>
       final displayName = user.displayName?.trim() ?? '';
       final nameParts = displayName.isNotEmpty
           ? displayName
-                .split(RegExp(r'\s+'))
-                .where((e) => e.isNotEmpty)
-                .toList()
+              .split(RegExp(r'\s+'))
+              .where((e) => e.isNotEmpty)
+              .toList()
           : <String>[];
 
       if (!mounted) return;
-      _firstNameController.text =
-          (profile?['firstName'] as String?) ??
+      _firstNameController.text = (profile?['firstName'] as String?) ??
           (nameParts.isNotEmpty ? nameParts.first : '');
-      _lastNameController.text =
-          (profile?['lastName'] as String?) ??
+      _lastNameController.text = (profile?['lastName'] as String?) ??
           (nameParts.length > 1 ? nameParts.sublist(1).join(' ') : '');
       _phoneController.text =
           (profile?['phone'] as String?) ?? user.phoneNumber ?? '';
@@ -166,96 +164,96 @@ class _ProfileEditPageState extends ConsumerState<ProfileEditPage>
       body: _isLoading
           ? const Center(child: CircularProgressIndicator())
           : _loadingError != null
-          ? RetryableErrorView(
-              title: 'Unable to load profile',
-              message: _loadingError!,
-              onRetry: _loadProfile,
-            )
-          : RefreshIndicator(
-              onRefresh: onRefreshRequested,
-              child: SingleChildScrollView(
-                physics: const AlwaysScrollableScrollPhysics(),
-                child: Container(
-                  margin: const EdgeInsets.all(AppDefaults.padding),
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: AppDefaults.padding,
-                    vertical: AppDefaults.padding * 2,
-                  ),
-                  decoration: BoxDecoration(
-                    color: AppColors.scaffoldBackground,
-                    borderRadius: AppDefaults.borderRadius,
-                  ),
-                  child: Form(
-                    key: _formKey,
-                    child: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        const Text('First Name'),
-                        const SizedBox(height: 8),
-                        TextFormField(
-                          controller: _firstNameController,
-                          keyboardType: TextInputType.text,
-                          textInputAction: TextInputAction.next,
-                          validator: (value) =>
-                              (value == null || value.trim().isEmpty)
-                              ? 'First name is required'
-                              : null,
+              ? RetryableErrorView(
+                  title: 'Unable to load profile',
+                  message: _loadingError!,
+                  onRetry: _loadProfile,
+                )
+              : RefreshIndicator(
+                  onRefresh: onRefreshRequested,
+                  child: SingleChildScrollView(
+                    physics: const AlwaysScrollableScrollPhysics(),
+                    child: Container(
+                      margin: const EdgeInsets.all(AppDefaults.padding),
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: AppDefaults.padding,
+                        vertical: AppDefaults.padding * 2,
+                      ),
+                      decoration: BoxDecoration(
+                        color: AppColors.scaffoldBackground,
+                        borderRadius: AppDefaults.borderRadius,
+                      ),
+                      child: Form(
+                        key: _formKey,
+                        child: Column(
+                          mainAxisSize: MainAxisSize.min,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            const Text('First Name'),
+                            const SizedBox(height: 8),
+                            TextFormField(
+                              controller: _firstNameController,
+                              keyboardType: TextInputType.text,
+                              textInputAction: TextInputAction.next,
+                              validator: (value) =>
+                                  (value == null || value.trim().isEmpty)
+                                      ? 'First name is required'
+                                      : null,
+                            ),
+                            const SizedBox(height: AppDefaults.padding),
+                            const Text('Last Name'),
+                            const SizedBox(height: 8),
+                            TextFormField(
+                              controller: _lastNameController,
+                              keyboardType: TextInputType.text,
+                              textInputAction: TextInputAction.next,
+                              validator: (value) =>
+                                  (value == null || value.trim().isEmpty)
+                                      ? 'Last name is required'
+                                      : null,
+                            ),
+                            const SizedBox(height: AppDefaults.padding),
+                            const Text('Phone Number'),
+                            const SizedBox(height: 8),
+                            TextFormField(
+                              controller: _phoneController,
+                              keyboardType: TextInputType.phone,
+                              textInputAction: TextInputAction.next,
+                              validator: (value) =>
+                                  (value == null || value.trim().isEmpty)
+                                      ? 'Phone number is required'
+                                      : null,
+                            ),
+                            const SizedBox(height: AppDefaults.padding),
+                            const Text('Gender'),
+                            const SizedBox(height: 8),
+                            TextFormField(
+                              controller: _genderController,
+                              keyboardType: TextInputType.text,
+                              textInputAction: TextInputAction.next,
+                            ),
+                            const SizedBox(height: AppDefaults.padding),
+                            const Text('Birthday'),
+                            const SizedBox(height: 8),
+                            TextFormField(
+                              controller: _birthdayController,
+                              keyboardType: TextInputType.datetime,
+                              textInputAction: TextInputAction.done,
+                            ),
+                            const SizedBox(height: AppDefaults.padding),
+                            SizedBox(
+                              width: double.infinity,
+                              child: ElevatedButton(
+                                onPressed: _isSaving ? null : _saveProfile,
+                                child: Text(_isSaving ? 'Saving...' : 'Save'),
+                              ),
+                            ),
+                          ],
                         ),
-                        const SizedBox(height: AppDefaults.padding),
-                        const Text('Last Name'),
-                        const SizedBox(height: 8),
-                        TextFormField(
-                          controller: _lastNameController,
-                          keyboardType: TextInputType.text,
-                          textInputAction: TextInputAction.next,
-                          validator: (value) =>
-                              (value == null || value.trim().isEmpty)
-                              ? 'Last name is required'
-                              : null,
-                        ),
-                        const SizedBox(height: AppDefaults.padding),
-                        const Text('Phone Number'),
-                        const SizedBox(height: 8),
-                        TextFormField(
-                          controller: _phoneController,
-                          keyboardType: TextInputType.phone,
-                          textInputAction: TextInputAction.next,
-                          validator: (value) =>
-                              (value == null || value.trim().isEmpty)
-                              ? 'Phone number is required'
-                              : null,
-                        ),
-                        const SizedBox(height: AppDefaults.padding),
-                        const Text('Gender'),
-                        const SizedBox(height: 8),
-                        TextFormField(
-                          controller: _genderController,
-                          keyboardType: TextInputType.text,
-                          textInputAction: TextInputAction.next,
-                        ),
-                        const SizedBox(height: AppDefaults.padding),
-                        const Text('Birthday'),
-                        const SizedBox(height: 8),
-                        TextFormField(
-                          controller: _birthdayController,
-                          keyboardType: TextInputType.datetime,
-                          textInputAction: TextInputAction.done,
-                        ),
-                        const SizedBox(height: AppDefaults.padding),
-                        SizedBox(
-                          width: double.infinity,
-                          child: ElevatedButton(
-                            onPressed: _isSaving ? null : _saveProfile,
-                            child: Text(_isSaving ? 'Saving...' : 'Save'),
-                          ),
-                        ),
-                      ],
+                      ),
                     ),
                   ),
                 ),
-              ),
-            ),
     );
   }
 }

@@ -22,9 +22,7 @@ class NotificationSettingsPage extends ConsumerWidget {
 
     Future<void> save({bool? notifications, bool? push, bool? email}) async {
       if (userId == null || userId.isEmpty) return;
-      await ref
-          .read(userSettingsProvider.notifier)
-          .updateNotificationSettings(
+      await ref.read(userSettingsProvider.notifier).updateNotificationSettings(
             userId,
             notificationsEnabled: notifications,
             pushNotificationsEnabled: push,

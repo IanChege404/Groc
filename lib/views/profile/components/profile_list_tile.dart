@@ -31,8 +31,8 @@ class ProfileListTile extends StatelessWidget {
               Text(
                 title,
                 style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                  color: Theme.of(context).colorScheme.onSurface,
-                ),
+                      color: Theme.of(context).colorScheme.onSurface,
+                    ),
               ),
               const Spacer(),
               SvgPicture.asset(AppIcons.right),

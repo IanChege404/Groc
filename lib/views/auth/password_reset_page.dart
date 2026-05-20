@@ -59,8 +59,8 @@ class _PasswordResetPageState extends State<PasswordResetPage> {
                     Text(
                       'Add New password',
                       style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                        fontWeight: FontWeight.bold,
-                      ),
+                            fontWeight: FontWeight.bold,
+                          ),
                     ),
                     const SizedBox(height: AppDefaults.padding * 3),
                     const Text("New Password"),

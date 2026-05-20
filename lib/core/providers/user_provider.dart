@@ -81,8 +81,8 @@ class UserProfileNotifier extends StateNotifier<AsyncValue<UserModel>> {
 /// Provider for user profile with auto-refresh on auth state changes
 final userProfileProvider =
     StateNotifierProvider<UserProfileNotifier, AsyncValue<UserModel>>((ref) {
-      return UserProfileNotifier(ref);
-    });
+  return UserProfileNotifier(ref);
+});
 
 /// Selectors for specific user fields
 final userFullNameProvider = FutureProvider<String>((ref) async {

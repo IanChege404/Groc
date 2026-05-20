@@ -179,10 +179,10 @@ class _MpesaProcessingScreenState extends State<MpesaProcessingScreen>
                       decoration: BoxDecoration(
                         shape: BoxShape.circle,
                         border: Border.all(
-                          color: Theme.of(context).colorScheme.primary
-                              .withValues(
-                                alpha: (1 - _waveAnimation.value) * 0.3,
-                              ),
+                          color:
+                              Theme.of(context).colorScheme.primary.withValues(
+                                    alpha: (1 - _waveAnimation.value) * 0.3,
+                                  ),
                           width: 2,
                         ),
                       ),
@@ -246,10 +246,10 @@ class _MpesaProcessingScreenState extends State<MpesaProcessingScreen>
                     const SizedBox(height: AppDefaults.spacingSm),
                     Text(
                       _formatTime(_secondsRemaining),
-                      style: Theme.of(context).textTheme.displayMedium
-                          ?.copyWith(
-                            color: Theme.of(context).colorScheme.primary,
-                          ),
+                      style:
+                          Theme.of(context).textTheme.displayMedium?.copyWith(
+                                color: Theme.of(context).colorScheme.primary,
+                              ),
                     ),
                   ],
                 ),
@@ -278,8 +278,8 @@ class _MpesaProcessingScreenState extends State<MpesaProcessingScreen>
                   child: Text(
                     _canResend ? 'Resend Request' : 'Waiting...',
                     style: Theme.of(context).textTheme.labelLarge?.copyWith(
-                      color: Theme.of(context).colorScheme.onPrimary,
-                    ),
+                          color: Theme.of(context).colorScheme.onPrimary,
+                        ),
                   ),
                 ),
               ),
@@ -293,9 +293,9 @@ class _MpesaProcessingScreenState extends State<MpesaProcessingScreen>
                   child: Text(
                     'Cancel',
                     style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                      color: Theme.of(context).colorScheme.primary,
-                      decoration: TextDecoration.underline,
-                    ),
+                          color: Theme.of(context).colorScheme.primary,
+                          decoration: TextDecoration.underline,
+                        ),
                   ),
                 ),
               ),

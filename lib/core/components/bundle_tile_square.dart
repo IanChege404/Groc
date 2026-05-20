@@ -200,8 +200,8 @@ class _BundleTileSquareState extends ConsumerState<BundleTileSquare>
                   Text(
                     widget.data.name,
                     style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                      color: Theme.of(context).textTheme.titleLarge?.color,
-                    ),
+                          color: Theme.of(context).textTheme.titleLarge?.color,
+                        ),
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
                   ),
@@ -218,15 +218,15 @@ class _BundleTileSquareState extends ConsumerState<BundleTileSquare>
                   Text(
                     '\$${widget.data.price.toStringAsFixed(2)}',
                     style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                      color: Theme.of(context).textTheme.titleLarge?.color,
-                    ),
+                          color: Theme.of(context).textTheme.titleLarge?.color,
+                        ),
                   ),
                   const SizedBox(width: 4),
                   Text(
                     '\$${widget.data.mainPrice.toStringAsFixed(2)}',
                     style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                      decoration: TextDecoration.lineThrough,
-                    ),
+                          decoration: TextDecoration.lineThrough,
+                        ),
                   ),
                   const Spacer(),
                 ],

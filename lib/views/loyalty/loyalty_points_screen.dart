@@ -20,8 +20,7 @@ class LoyaltyPointsScreen extends ConsumerWidget {
         title: const Text('Loyalty Points'),
       ),
       body: loyaltyAsync.when(
-        loading: () =>
-            const Center(child: CircularProgressIndicator()),
+        loading: () => const Center(child: CircularProgressIndicator()),
         error: (e, _) => Center(child: Text('Error: $e')),
         data: (loyalty) {
           if (loyalty == null) {
@@ -163,9 +162,8 @@ class _TierProgress extends StatelessWidget {
                       e.value,
                       style: TextStyle(
                         fontSize: 10,
-                        fontWeight: reached
-                            ? FontWeight.w700
-                            : FontWeight.normal,
+                        fontWeight:
+                            reached ? FontWeight.w700 : FontWeight.normal,
                         color: reached ? AppColors.primary : Colors.grey,
                       ),
                     ),
@@ -297,13 +295,11 @@ class _TransactionHistory extends StatelessWidget {
               (txn) => ListTile(
                 contentPadding: EdgeInsets.zero,
                 leading: CircleAvatar(
-                  backgroundColor: txn.isEarning
-                      ? Colors.green.shade50
-                      : Colors.red.shade50,
+                  backgroundColor:
+                      txn.isEarning ? Colors.green.shade50 : Colors.red.shade50,
                   child: Icon(
                     txn.isEarning ? Icons.add : Icons.remove,
-                    color:
-                        txn.isEarning ? Colors.green : Colors.red,
+                    color: txn.isEarning ? Colors.green : Colors.red,
                     size: 18,
                   ),
                 ),

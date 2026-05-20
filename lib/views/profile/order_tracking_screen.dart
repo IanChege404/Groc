@@ -105,9 +105,8 @@ class _OrderTrackingBody extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: const Text('Order Tracking')),
-      backgroundColor: isDark
-          ? AppColors.backgroundDark
-          : AppColors.backgroundLight,
+      backgroundColor:
+          isDark ? AppColors.backgroundDark : AppColors.backgroundLight,
       body: SingleChildScrollView(
         child: Column(
           children: [
@@ -154,9 +153,8 @@ class _OrderTrackingBody extends StatelessWidget {
               ),
               child: Container(
                 decoration: BoxDecoration(
-                  color: isDark
-                      ? AppColors.surfaceDark
-                      : AppColors.surfaceLight,
+                  color:
+                      isDark ? AppColors.surfaceDark : AppColors.surfaceLight,
                   borderRadius: AppDefaults.borderRadius,
                   boxShadow: AppDefaults.shadowSm,
                 ),

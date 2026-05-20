@@ -34,16 +34,14 @@ class UserCouponsNotifier extends StateNotifier<AsyncValue<List<CouponModel>>> {
     try {
       state = const AsyncValue.loading();
       _subscription?.cancel();
-      _subscription = _service
-          .getUserCouponsStream(userId)
-          .listen(
-            (coupons) {
-              state = AsyncValue.data(coupons);
-            },
-            onError: (error, stackTrace) {
-              state = AsyncValue.error(error, stackTrace);
-            },
-          );
+      _subscription = _service.getUserCouponsStream(userId).listen(
+        (coupons) {
+          state = AsyncValue.data(coupons);
+        },
+        onError: (error, stackTrace) {
+          state = AsyncValue.error(error, stackTrace);
+        },
+      );
     } catch (e) {
       state = AsyncValue.error(e, StackTrace.current);
     }
@@ -112,25 +110,25 @@ class UserCouponsNotifier extends StateNotifier<AsyncValue<List<CouponModel>>> {
 /// User coupons provider using StateNotifierProvider
 final userCouponsProvider =
     StateNotifierProvider<UserCouponsNotifier, AsyncValue<List<CouponModel>>>((
-      ref,
-    ) {
-      return UserCouponsNotifier(ref);
-    });
+  ref,
+) {
+  return UserCouponsNotifier(ref);
+});
 
 /// Real-time user coupons stream provider
-final userCouponsStreamProvider = StreamProvider.autoDispose
-    .family<List<CouponModel>, String>((ref, userId) {
-      return CouponService().getUserCouponsStream(userId);
-    });
+final userCouponsStreamProvider =
+    StreamProvider.autoDispose.family<List<CouponModel>, String>((ref, userId) {
+  return CouponService().getUserCouponsStream(userId);
+});
 
 /// Valid coupons only provider
 final validCouponsProvider = FutureProvider.autoDispose
     .family<List<CouponModel>, String>((ref, userId) async {
-      return CouponService().getValidCoupons(userId);
-    });
+  return CouponService().getValidCoupons(userId);
+});
 
 /// Validate coupon code provider
 final validateCouponProvider = FutureProvider.autoDispose
     .family<CouponModel?, String>((ref, couponCode) async {
-      return CouponService().validateCouponCode(couponCode);
-    });
+  return CouponService().validateCouponCode(couponCode);
+});

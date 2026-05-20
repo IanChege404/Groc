@@ -34,9 +34,9 @@ class OrderSuccessfullPage extends StatelessWidget {
                 Text(
                   'Order Placed Successfully',
                   style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                    fontWeight: FontWeight.bold,
-                    color: Theme.of(context).colorScheme.onSurface,
-                  ),
+                        fontWeight: FontWeight.bold,
+                        color: Theme.of(context).colorScheme.onSurface,
+                      ),
                   textAlign: TextAlign.center,
                 ),
                 const SizedBox(height: 16),

@@ -45,8 +45,8 @@ class _RecentSearchList extends StatelessWidget {
               child: Text(
                 'Recent Search',
                 style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                  color: Theme.of(context).colorScheme.onSurface,
-                ),
+                      color: Theme.of(context).colorScheme.onSurface,
+                    ),
               ),
             ),
           ),

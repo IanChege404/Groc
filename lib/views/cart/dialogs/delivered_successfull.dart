@@ -38,8 +38,8 @@ class DeliverySuccessfullDialog extends StatelessWidget {
                 Text(
                   '#15425050',
                   style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                    color: Theme.of(context).colorScheme.onSurface,
-                  ),
+                        color: Theme.of(context).colorScheme.onSurface,
+                      ),
                 ),
                 const Text(' order Successfully.'),
               ],

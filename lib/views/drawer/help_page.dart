@@ -23,9 +23,9 @@ class HelpPage extends StatelessWidget {
               Text(
                 'Hi! How can we help?',
                 style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                  color: Theme.of(context).colorScheme.onSurface,
-                  fontWeight: FontWeight.bold,
-                ),
+                      color: Theme.of(context).colorScheme.onSurface,
+                      fontWeight: FontWeight.bold,
+                    ),
               ),
               const _SearchBar(),
               const TopQuestions(),

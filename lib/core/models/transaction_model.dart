@@ -5,7 +5,7 @@ class TransactionModel {
   final String type; // debit, credit
   final double amount;
   final String
-  category; // purchase, cashback, bonus, topup, withdrawal, transfer
+      category; // purchase, cashback, bonus, topup, withdrawal, transfer
   final DateTime timestamp;
   final String description;
   final String? relatedOrderId;

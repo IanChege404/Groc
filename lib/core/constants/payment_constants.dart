@@ -15,15 +15,11 @@ class PaymentConstants {
   static const String statusRefunded = 'refunded';
 
   // M-Pesa specific
-  static const String mpesaSandboxBaseUrl =
-      'https://sandbox.safaricom.co.ke';
-  static const String mpesaProductionBaseUrl =
-      'https://api.safaricom.co.ke';
+  static const String mpesaSandboxBaseUrl = 'https://sandbox.safaricom.co.ke';
+  static const String mpesaProductionBaseUrl = 'https://api.safaricom.co.ke';
   static const String mpesaOauthEndpoint = '/oauth/v1/generate';
-  static const String mpesaStkPushEndpoint =
-      '/mpesa/stkpush/v1/processrequest';
-  static const String mpesaStkQueryEndpoint =
-      '/mpesa/stkpushquery/v1/query';
+  static const String mpesaStkPushEndpoint = '/mpesa/stkpush/v1/processrequest';
+  static const String mpesaStkQueryEndpoint = '/mpesa/stkpushquery/v1/query';
   static const int mpesaTransactionType = 4; // CustomerPayBillOnline = 4
 
   // Flutterwave specific

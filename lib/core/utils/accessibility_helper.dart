@@ -138,22 +138,26 @@ class AccessibilityHelper {
   static Future<void> announceItemAdded(
     BuildContext context, {
     required String itemName,
-  }) => announceForAccessibility(context, '$itemName added');
+  }) =>
+      announceForAccessibility(context, '$itemName added');
 
   static Future<void> announceItemRemoved(
     BuildContext context, {
     required String itemName,
-  }) => announceForAccessibility(context, '$itemName removed');
+  }) =>
+      announceForAccessibility(context, '$itemName removed');
 
   static Future<void> announceSuccess(
     BuildContext context, {
     required String message,
-  }) => announceForAccessibility(context, 'Success. $message');
+  }) =>
+      announceForAccessibility(context, 'Success. $message');
 
   static Future<void> announceError(
     BuildContext context, {
     required String message,
-  }) => announceForAccessibility(context, 'Error. $message');
+  }) =>
+      announceForAccessibility(context, 'Error. $message');
 
   // ========== TEXT SIZE SCALING ==========
   /// Get text scale factor from system settings
@@ -182,12 +186,10 @@ class AccessibilityHelper {
   static TextStyle enhanceTextWeight(TextStyle style) {
     return style.copyWith(
       fontWeight: style.fontWeight == null
-          ? FontWeight
-                .w600 // Default to semi-bold
+          ? FontWeight.w600 // Default to semi-bold
           : style.fontWeight == FontWeight.normal
-          ? FontWeight
-                .w600 // Upgrade normal to semi-bold
-          : style.fontWeight,
+              ? FontWeight.w600 // Upgrade normal to semi-bold
+              : style.fontWeight,
     );
   }
 

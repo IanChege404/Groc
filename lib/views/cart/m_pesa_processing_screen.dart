@@ -194,16 +194,14 @@ class _MpesaProcessingScreenState extends State<MpesaProcessingScreen>
     final weVeSent = isEnglish
         ? 'We sent a payment request of KES ${widget.amount.toStringAsFixed(0)} to ${widget.phoneNumber}. Enter your M-Pesa PIN to complete.'
         : 'Tumetuma ombi la malipo la KES ${widget.amount.toStringAsFixed(0)} kwa ${widget.phoneNumber}. Ingiza nambari ya siri ya M-Pesa kumalizia.';
-    final requestExpires = isEnglish
-        ? 'Request expires in'
-        : 'Ombi lilihitimisha katika';
+    final requestExpires =
+        isEnglish ? 'Request expires in' : 'Ombi lilihitimisha katika';
     const cancel = 'Cancel';
     final tuma = isEnglish ? 'Resend' : 'Tuma';
 
     return Scaffold(
-      backgroundColor: isDark
-          ? AppColors.backgroundDark
-          : AppColors.backgroundLight,
+      backgroundColor:
+          isDark ? AppColors.backgroundDark : AppColors.backgroundLight,
       body: Center(
         child: SingleChildScrollView(
           child: Padding(
@@ -273,9 +271,8 @@ class _MpesaProcessingScreenState extends State<MpesaProcessingScreen>
                   Text(
                     _statusMessage!,
                     style: AppTextStyles.bodySmall.copyWith(
-                      color: isDark
-                          ? AppColors.subtleDark
-                          : AppColors.subtleLight,
+                      color:
+                          isDark ? AppColors.subtleDark : AppColors.subtleLight,
                     ),
                     textAlign: TextAlign.center,
                   ),
@@ -298,9 +295,8 @@ class _MpesaProcessingScreenState extends State<MpesaProcessingScreen>
                     Text(
                       _formatTime(_secondsRemaining),
                       style: AppTextStyles.displayLarge.copyWith(
-                        color: isDark
-                            ? AppColors.primaryDark
-                            : AppColors.primary,
+                        color:
+                            isDark ? AppColors.primaryDark : AppColors.primary,
                       ),
                     ),
                   ],
@@ -324,9 +320,8 @@ class _MpesaProcessingScreenState extends State<MpesaProcessingScreen>
                           },
                     style: OutlinedButton.styleFrom(
                       side: BorderSide(
-                        color: isDark
-                            ? AppColors.primaryDark
-                            : AppColors.primary,
+                        color:
+                            isDark ? AppColors.primaryDark : AppColors.primary,
                       ),
                       padding: const EdgeInsets.symmetric(
                         horizontal: AppDefaults.spacingLg,
@@ -336,9 +331,8 @@ class _MpesaProcessingScreenState extends State<MpesaProcessingScreen>
                     child: Text(
                       tuma,
                       style: AppTextStyles.label.copyWith(
-                        color: isDark
-                            ? AppColors.primaryDark
-                            : AppColors.primary,
+                        color:
+                            isDark ? AppColors.primaryDark : AppColors.primary,
                       ),
                     ),
                   ),
@@ -360,9 +354,8 @@ class _MpesaProcessingScreenState extends State<MpesaProcessingScreen>
                   child: Text(
                     cancel,
                     style: AppTextStyles.label.copyWith(
-                      color: isDark
-                          ? AppColors.subtleDark
-                          : AppColors.subtleLight,
+                      color:
+                          isDark ? AppColors.subtleDark : AppColors.subtleLight,
                     ),
                   ),
                 ),

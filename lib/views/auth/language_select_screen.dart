@@ -55,8 +55,8 @@ class _LanguageSelectScreenState extends State<LanguageSelectScreen> {
                 child: Text(
                   'Afri-Commerce',
                   style: Theme.of(context).textTheme.headlineSmall?.copyWith(
-                    color: Theme.of(context).colorScheme.primary,
-                  ),
+                        color: Theme.of(context).colorScheme.primary,
+                      ),
                 ),
               ),
 
@@ -140,8 +140,8 @@ class _LanguageSelectScreenState extends State<LanguageSelectScreen> {
         decoration: BoxDecoration(
           color: isSelected
               ? (isDarkMode
-                    ? AppColors.surfaceVariantDark
-                    : AppColors.surfaceVariantLight)
+                  ? AppColors.surfaceVariantDark
+                  : AppColors.surfaceVariantLight)
               : Colors.transparent,
           borderRadius: BorderRadius.circular(12),
           border: Border(
@@ -182,7 +182,8 @@ class _LanguageSelectScreenState extends State<LanguageSelectScreen> {
             Radio<String>(
               value: languageCode,
               groupValue: _selectedLanguage, // ignore: deprecated_member_use
-              onChanged: (value) { // ignore: deprecated_member_use
+              onChanged: (value) {
+                // ignore: deprecated_member_use
                 if (value != null) {
                   setState(() {
                     _selectedLanguage = value;

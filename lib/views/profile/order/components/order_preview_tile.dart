@@ -41,8 +41,8 @@ class OrderPreviewTile extends StatelessWidget {
                     Text(
                       orderID,
                       style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                        color: Theme.of(context).colorScheme.onSurface,
-                      ),
+                            color: Theme.of(context).colorScheme.onSurface,
+                          ),
                     ),
                     const Spacer(),
                     Text(date),
@@ -75,17 +75,20 @@ class OrderPreviewTile extends StatelessWidget {
                             opacity: _normalizedStatus() == 'pending' ? 1 : 0,
                             child: Text(
                               'Pending',
-                              style: Theme.of(context).textTheme.bodyLarge
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .bodyLarge
                                   ?.copyWith(color: _orderColor()),
                             ),
                           ),
                           Opacity(
-                            opacity: _normalizedStatus() == 'processing'
-                                ? 1
-                                : 0,
+                            opacity:
+                                _normalizedStatus() == 'processing' ? 1 : 0,
                             child: Text(
                               'Processing',
-                              style: Theme.of(context).textTheme.bodyLarge
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .bodyLarge
                                   ?.copyWith(color: _orderColor()),
                             ),
                           ),
@@ -93,13 +96,14 @@ class OrderPreviewTile extends StatelessWidget {
                             opacity: _normalizedStatus() == 'shipped' ? 1 : 0,
                             child: Text(
                               'Shipped',
-                              style: Theme.of(context).textTheme.bodyLarge
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .bodyLarge
                                   ?.copyWith(color: _orderColor()),
                             ),
                           ),
                           Opacity(
-                            opacity:
-                                _normalizedStatus() == 'delivery' ||
+                            opacity: _normalizedStatus() == 'delivery' ||
                                     _normalizedStatus() == 'completed' ||
                                     _normalizedStatus() == 'cancelled'
                                 ? 1
@@ -108,9 +112,11 @@ class OrderPreviewTile extends StatelessWidget {
                               _normalizedStatus() == 'cancelled'
                                   ? 'Cancelled'
                                   : _normalizedStatus() == 'delivery'
-                                  ? 'Delivery'
-                                  : 'Completed',
-                              style: Theme.of(context).textTheme.bodyLarge
+                                      ? 'Delivery'
+                                      : 'Completed',
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .bodyLarge
                                   ?.copyWith(color: _orderColor()),
                             ),
                           ),

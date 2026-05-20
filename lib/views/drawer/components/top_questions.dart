@@ -16,9 +16,9 @@ class TopQuestions extends StatelessWidget {
         Text(
           'Top Questions',
           style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-            color: Theme.of(context).colorScheme.onSurface,
-            fontWeight: FontWeight.bold,
-          ),
+                color: Theme.of(context).colorScheme.onSurface,
+                fontWeight: FontWeight.bold,
+              ),
         ),
         const SizedBox(height: AppDefaults.padding / 2),
         AppSettingsListTile(

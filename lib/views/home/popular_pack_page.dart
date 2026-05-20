@@ -39,11 +39,11 @@ class PopularPackPage extends ConsumerWidget {
                     padding: const EdgeInsets.only(top: AppDefaults.padding),
                     gridDelegate:
                         const SliverGridDelegateWithMaxCrossAxisExtent(
-                          maxCrossAxisExtent: 200,
-                          childAspectRatio: 0.73,
-                          crossAxisSpacing: 16,
-                          mainAxisSpacing: 16,
-                        ),
+                      maxCrossAxisExtent: 200,
+                      childAspectRatio: 0.73,
+                      crossAxisSpacing: 16,
+                      mainAxisSpacing: 16,
+                    ),
                     itemCount: bundles.length,
                     itemBuilder: (context, index) {
                       return BundleTileSquare(data: bundles[index]);

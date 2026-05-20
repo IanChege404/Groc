@@ -52,17 +52,17 @@ class PriceAndQuantityRowState extends State<PriceAndQuantityRow> {
         Text(
           '\$30',
           style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-            decoration: TextDecoration.lineThrough,
-            fontWeight: FontWeight.bold,
-          ),
+                decoration: TextDecoration.lineThrough,
+                fontWeight: FontWeight.bold,
+              ),
         ),
         const SizedBox(width: AppDefaults.padding),
         Text(
           '\$20',
           style: Theme.of(context).textTheme.headlineSmall?.copyWith(
-            color: AppColors.primary,
-            fontWeight: FontWeight.bold,
-          ),
+                color: AppColors.primary,
+                fontWeight: FontWeight.bold,
+              ),
         ),
         const Spacer(),
 

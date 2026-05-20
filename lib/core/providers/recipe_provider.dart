@@ -12,8 +12,8 @@ final _firestore = FirebaseFirestore.instance;
 
 final recipesProvider =
     StateNotifierProvider<RecipeNotifier, AsyncValue<List<RecipeModel>>>((ref) {
-      return RecipeNotifier();
-    });
+  return RecipeNotifier();
+});
 
 class RecipeNotifier extends StateNotifier<AsyncValue<List<RecipeModel>>> {
   RecipeNotifier() : super(const AsyncValue.loading()) {
@@ -27,8 +27,7 @@ class RecipeNotifier extends StateNotifier<AsyncValue<List<RecipeModel>>> {
           .collection('recipes')
           .orderBy('createdAt', descending: true)
           .get();
-      final recipes =
-          snap.docs.map(RecipeModel.fromFirestore).toList();
+      final recipes = snap.docs.map(RecipeModel.fromFirestore).toList();
       state = AsyncValue.data(recipes);
     } catch (e, st) {
       Logger.error('RecipeNotifier load error: $e', 'RecipeNotifier');
@@ -43,22 +42,21 @@ class RecipeNotifier extends StateNotifier<AsyncValue<List<RecipeModel>>> {
 
 final recipeDetailProvider =
     FutureProvider.family<RecipeModel?, String>((ref, recipeId) async {
-      final doc =
-          await _firestore.collection('recipes').doc(recipeId).get();
-      if (!doc.exists) return null;
-      return RecipeModel.fromFirestore(doc);
-    });
+  final doc = await _firestore.collection('recipes').doc(recipeId).get();
+  if (!doc.exists) return null;
+  return RecipeModel.fromFirestore(doc);
+});
 
 // ── Recipes filtered by tag ───────────────────────────────────────────────────
 
 final recipesByTagProvider =
     FutureProvider.family<List<RecipeModel>, String>((ref, tag) async {
-      final snap = await _firestore
-          .collection('recipes')
-          .where('tags', arrayContains: tag)
-          .get();
-      return snap.docs.map(RecipeModel.fromFirestore).toList();
-    });
+  final snap = await _firestore
+      .collection('recipes')
+      .where('tags', arrayContains: tag)
+      .get();
+  return snap.docs.map(RecipeModel.fromFirestore).toList();
+});
 
 // ── Add all recipe ingredients to cart ───────────────────────────────────────
 
@@ -74,9 +72,7 @@ Future<int> addRecipeToCart({
   if (userId == null) return 0;
 
   final baseServings = recipe.servings;
-  final scale = targetServings > 0
-      ? targetServings / baseServings
-      : 1.0;
+  final scale = targetServings > 0 ? targetServings / baseServings : 1.0;
 
   int added = 0;
   for (final ingredient in recipe.ingredients) {

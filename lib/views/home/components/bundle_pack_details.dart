@@ -27,33 +27,33 @@ class PackDetails extends StatelessWidget {
             ),
           ),
           ...bundle.itemNames.asMap().entries.map(
-            (entry) => ListTile(
-              contentPadding: EdgeInsets.zero,
-              leading: CircleAvatar(
-                radius: 18,
-                backgroundColor: theme.colorScheme.primary.withValues(
-                  alpha: 0.12,
-                ),
-                child: Text(
-                  '${entry.key + 1}',
-                  style: theme.textTheme.labelMedium?.copyWith(
-                    fontWeight: FontWeight.bold,
-                    color: theme.colorScheme.primary,
+                (entry) => ListTile(
+                  contentPadding: EdgeInsets.zero,
+                  leading: CircleAvatar(
+                    radius: 18,
+                    backgroundColor: theme.colorScheme.primary.withValues(
+                      alpha: 0.12,
+                    ),
+                    child: Text(
+                      '${entry.key + 1}',
+                      style: theme.textTheme.labelMedium?.copyWith(
+                        fontWeight: FontWeight.bold,
+                        color: theme.colorScheme.primary,
+                      ),
+                    ),
+                  ),
+                  title: Text(entry.value),
+                  subtitle: Text('Included in this bundle'),
+                  trailing: Text(
+                    bundle.productIds.length > entry.key
+                        ? 'Item ${entry.key + 1}'
+                        : '',
+                    style: theme.textTheme.bodySmall?.copyWith(
+                      color: theme.colorScheme.onSurfaceVariant,
+                    ),
                   ),
                 ),
               ),
-              title: Text(entry.value),
-              subtitle: Text('Included in this bundle'),
-              trailing: Text(
-                bundle.productIds.length > entry.key
-                    ? 'Item ${entry.key + 1}'
-                    : '',
-                style: theme.textTheme.bodySmall?.copyWith(
-                  color: theme.colorScheme.onSurfaceVariant,
-                ),
-              ),
-            ),
-          ),
           const SizedBox(height: AppDefaults.padding),
         ],
       ),

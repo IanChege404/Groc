@@ -35,16 +35,14 @@ class NotificationNotifier
     try {
       state = const AsyncValue.loading();
       _subscription?.cancel();
-      _subscription = _service
-          .getNotificationsStream(userId)
-          .listen(
-            (notifications) {
-              state = AsyncValue.data(notifications);
-            },
-            onError: (error, stackTrace) {
-              state = AsyncValue.error(error, stackTrace);
-            },
-          );
+      _subscription = _service.getNotificationsStream(userId).listen(
+        (notifications) {
+          state = AsyncValue.data(notifications);
+        },
+        onError: (error, stackTrace) {
+          state = AsyncValue.error(error, stackTrace);
+        },
+      );
     } catch (e) {
       state = AsyncValue.error(e, StackTrace.current);
     }
@@ -110,22 +108,19 @@ class NotificationNotifier
 }
 
 /// Notifications provider using StateNotifierProvider
-final notificationsProvider =
-    StateNotifierProvider<
-      NotificationNotifier,
-      AsyncValue<List<NotificationModel>>
-    >((ref) {
-      return NotificationNotifier(ref);
-    });
+final notificationsProvider = StateNotifierProvider<NotificationNotifier,
+    AsyncValue<List<NotificationModel>>>((ref) {
+  return NotificationNotifier(ref);
+});
 
 /// Real-time notifications stream provider
 final notificationsStreamProvider = StreamProvider.autoDispose
     .family<List<NotificationModel>, String>((ref, userId) {
-      return NotificationService().getNotificationsStream(userId);
-    });
+  return NotificationService().getNotificationsStream(userId);
+});
 
 /// Unread notifications count provider
-final unreadNotificationsCountProvider = FutureProvider.autoDispose
-    .family<int, String>((ref, userId) async {
-      return NotificationService().getUnreadCount(userId);
-    });
+final unreadNotificationsCountProvider =
+    FutureProvider.autoDispose.family<int, String>((ref, userId) async {
+  return NotificationService().getUnreadCount(userId);
+});

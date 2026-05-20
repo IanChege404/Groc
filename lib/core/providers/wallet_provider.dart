@@ -148,29 +148,29 @@ class WalletNotifier extends StateNotifier<AsyncValue<WalletModel?>> {
 /// Wallet provider using StateNotifierProvider
 final walletProvider =
     StateNotifierProvider<WalletNotifier, AsyncValue<WalletModel?>>((ref) {
-      return WalletNotifier(ref);
-    });
+  return WalletNotifier(ref);
+});
 
 /// Real-time wallet balance stream provider
-final walletStreamProvider = StreamProvider.autoDispose
-    .family<WalletModel?, String>((ref, userId) {
-      return WalletService().getWalletBalanceStream(userId);
-    });
+final walletStreamProvider =
+    StreamProvider.autoDispose.family<WalletModel?, String>((ref, userId) {
+  return WalletService().getWalletBalanceStream(userId);
+});
 
 /// Transaction history provider
 final transactionsProvider = FutureProvider.autoDispose
     .family<List<TransactionModel>, String>((ref, userId) async {
-      return WalletService().getTransactionHistory(userId);
-    });
+  return WalletService().getTransactionHistory(userId);
+});
 
 /// Real-time transaction history stream provider
 final transactionsStreamProvider = StreamProvider.autoDispose
     .family<List<TransactionModel>, String>((ref, userId) {
-      return WalletService().getTransactionHistoryStream(userId);
-    });
+  return WalletService().getTransactionHistoryStream(userId);
+});
 
 /// Transactions with limit provider
 final transactionsLimitProvider = FutureProvider.autoDispose
     .family<List<TransactionModel>, (String, int)>((ref, params) async {
-      return WalletService().getTransactionHistory(params.$1, limit: params.$2);
-    });
+  return WalletService().getTransactionHistory(params.$1, limit: params.$2);
+});

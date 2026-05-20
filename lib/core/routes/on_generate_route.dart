@@ -310,8 +310,8 @@ class RouteGenerator {
             settings.arguments as Map<String, dynamic>?;
         return CupertinoPageRoute(
           builder: (_) => PaymentSelectionScreen(
-            amount: (paymentSelectionArgs?['amount'] as num?)?.toDouble() ??
-                0.0,
+            amount:
+                (paymentSelectionArgs?['amount'] as num?)?.toDouble() ?? 0.0,
             orderId: paymentSelectionArgs?['orderId'] as String? ?? '',
           ),
         );
@@ -320,8 +320,7 @@ class RouteGenerator {
         final cardPaymentArgs = settings.arguments as Map<String, dynamic>?;
         return CupertinoPageRoute(
           builder: (_) => CardPaymentScreen(
-            amount:
-                (cardPaymentArgs?['amount'] as num?)?.toDouble() ?? 0.0,
+            amount: (cardPaymentArgs?['amount'] as num?)?.toDouble() ?? 0.0,
             orderId: cardPaymentArgs?['orderId'] as String? ?? '',
           ),
         );

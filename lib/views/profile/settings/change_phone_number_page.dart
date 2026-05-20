@@ -194,8 +194,8 @@ class _ChangePhoneNumberPageState extends ConsumerState<ChangePhoneNumberPage> {
                     keyboardType: TextInputType.number,
                     validator: (value) =>
                         (value == null || value.trim().isEmpty)
-                        ? 'Enter the OTP code'
-                        : null,
+                            ? 'Enter the OTP code'
+                            : null,
                   ),
                   const SizedBox(height: AppDefaults.padding),
                   SizedBox(

@@ -42,8 +42,8 @@ class StarsRow extends StatelessWidget {
             child: Text(
               maxValue,
               style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                color: Theme.of(context).colorScheme.onSurface,
-              ),
+                    color: Theme.of(context).colorScheme.onSurface,
+                  ),
             ),
           ),
         ],

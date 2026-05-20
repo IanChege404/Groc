@@ -36,9 +36,8 @@ class FirestoreProductService {
             .where('name', isLessThan: '${search}z');
       }
 
-      final snapshot = await query
-          .limit((page - 1) * pageSize + pageSize)
-          .get();
+      final snapshot =
+          await query.limit((page - 1) * pageSize + pageSize).get();
 
       final products = snapshot.docs
           .skip((page - 1) * pageSize)
@@ -95,9 +94,8 @@ class FirestoreProductService {
           .limit(limit)
           .get();
 
-      final products = snapshot.docs
-          .map((doc) => ProductModel.fromFirestore(doc))
-          .toList();
+      final products =
+          snapshot.docs.map((doc) => ProductModel.fromFirestore(doc)).toList();
 
       return ApiResponse.success(data: products);
     } catch (e) {
@@ -116,9 +114,8 @@ class FirestoreProductService {
           .limit(limit)
           .get();
 
-      final products = snapshot.docs
-          .map((doc) => ProductModel.fromFirestore(doc))
-          .toList();
+      final products =
+          snapshot.docs.map((doc) => ProductModel.fromFirestore(doc)).toList();
 
       return ApiResponse.success(data: products);
     } catch (e) {
@@ -136,9 +133,8 @@ class FirestoreProductService {
           .limit(20)
           .get();
 
-      final products = snapshot.docs
-          .map((doc) => ProductModel.fromFirestore(doc))
-          .toList();
+      final products =
+          snapshot.docs.map((doc) => ProductModel.fromFirestore(doc)).toList();
 
       return ApiResponse.success(data: products);
     } catch (e) {
@@ -151,9 +147,8 @@ class FirestoreProductService {
     try {
       final snapshot = await _firestore.collection('categories').get();
 
-      final categories = snapshot.docs
-          .map((doc) => CategoryModel.fromFirestore(doc))
-          .toList();
+      final categories =
+          snapshot.docs.map((doc) => CategoryModel.fromFirestore(doc)).toList();
 
       return ApiResponse.success(data: categories);
     } catch (e) {
@@ -171,9 +166,8 @@ class FirestoreProductService {
           .where('categoryId', isEqualTo: categoryId)
           .get();
 
-      final products = snapshot.docs
-          .map((doc) => ProductModel.fromFirestore(doc))
-          .toList();
+      final products =
+          snapshot.docs.map((doc) => ProductModel.fromFirestore(doc)).toList();
 
       return ApiResponse.success(data: products);
     } catch (e) {
@@ -186,9 +180,8 @@ class FirestoreProductService {
     try {
       final snapshot = await _firestore.collection('bundles').get();
 
-      final bundles = snapshot.docs
-          .map((doc) => BundleModel.fromFirestore(doc))
-          .toList();
+      final bundles =
+          snapshot.docs.map((doc) => BundleModel.fromFirestore(doc)).toList();
 
       return ApiResponse.success(data: bundles);
     } catch (e) {
@@ -207,9 +200,8 @@ class FirestoreProductService {
           .limit(limit)
           .get();
 
-      final bundles = snapshot.docs
-          .map((doc) => BundleModel.fromFirestore(doc))
-          .toList();
+      final bundles =
+          snapshot.docs.map((doc) => BundleModel.fromFirestore(doc)).toList();
 
       return ApiResponse.success(data: bundles);
     } catch (e) {

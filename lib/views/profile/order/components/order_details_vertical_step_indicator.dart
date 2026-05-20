@@ -49,9 +49,8 @@ class VerticalStepIndicator extends StatelessWidget {
             height: !isStart ? height / 2 : height,
             width: 3,
             decoration: BoxDecoration(
-              color: isActive
-                  ? AppColors.primary
-                  : Theme.of(context).dividerColor,
+              color:
+                  isActive ? AppColors.primary : Theme.of(context).dividerColor,
               borderRadius: isEnd ? AppDefaults.borderRadius : null,
             ),
           ),

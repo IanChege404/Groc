@@ -11,9 +11,9 @@ final _firestore = FirebaseFirestore.instance;
 
 final loyaltyProvider =
     StateNotifierProvider<LoyaltyNotifier, AsyncValue<LoyaltyModel?>>((ref) {
-      final authState = ref.watch(authProvider);
-      return LoyaltyNotifier(authState: authState);
-    });
+  final authState = ref.watch(authProvider);
+  return LoyaltyNotifier(authState: authState);
+});
 
 class LoyaltyNotifier extends StateNotifier<AsyncValue<LoyaltyModel?>> {
   final AsyncValue<String?> authState;
@@ -32,8 +32,7 @@ class LoyaltyNotifier extends StateNotifier<AsyncValue<LoyaltyModel?>> {
   Future<void> _load(String userId) async {
     try {
       state = const AsyncValue.loading();
-      final doc =
-          await _firestore.collection('loyalty').doc(userId).get();
+      final doc = await _firestore.collection('loyalty').doc(userId).get();
 
       if (doc.exists) {
         state = AsyncValue.data(LoyaltyModel.fromFirestore(doc));
@@ -67,8 +66,7 @@ class LoyaltyNotifier extends StateNotifier<AsyncValue<LoyaltyModel?>> {
     required String orderId,
   }) async {
     try {
-      final points =
-          (orderAmount * PaymentConstants.pointsPerKes).floor();
+      final points = (orderAmount * PaymentConstants.pointsPerKes).floor();
       if (points <= 0) return;
 
       final txn = LoyaltyTransaction(
@@ -172,11 +170,7 @@ class LoyaltyNotifier extends StateNotifier<AsyncValue<LoyaltyModel?>> {
 // ── Convenience providers ────────────────────────────────────────────────────
 
 final loyaltyPointsProvider = Provider<int>((ref) {
-  return ref
-          .watch(loyaltyProvider)
-          .valueOrNull
-          ?.availablePoints ??
-      0;
+  return ref.watch(loyaltyProvider).valueOrNull?.availablePoints ?? 0;
 });
 
 final loyaltyCashValueProvider = Provider<double>((ref) {

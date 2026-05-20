@@ -7,11 +7,11 @@ import 'auth_provider.dart';
 
 final cartItemsProvider =
     StateNotifierProvider<CartNotifier, AsyncValue<List<CartItemModel>>>((ref) {
-      final firestore = FirestoreService();
-      final authState = ref.watch(authProvider);
+  final firestore = FirestoreService();
+  final authState = ref.watch(authProvider);
 
-      return CartNotifier(firestore: firestore, authState: authState);
-    });
+  return CartNotifier(firestore: firestore, authState: authState);
+});
 
 final cartTotalProvider = FutureProvider<double>((ref) async {
   final cartItems =
@@ -43,7 +43,7 @@ class CartNotifier extends StateNotifier<AsyncValue<List<CartItemModel>>> {
   dynamic _cartSubscription;
 
   CartNotifier({required this.firestore, required this.authState})
-    : super(const AsyncValue.loading()) {
+      : super(const AsyncValue.loading()) {
     _initializeCart();
   }
 
@@ -82,20 +82,20 @@ class CartNotifier extends StateNotifier<AsyncValue<List<CartItemModel>>> {
         .collection('items')
         .snapshots()
         .listen(
-          (snapshot) {
-            try {
-              final items = snapshot.docs
-                  .map((doc) => CartItemModel.fromFirestore(doc))
-                  .toList();
-              state = AsyncValue.data(items);
-            } catch (e) {
-              state = AsyncValue.error(e, StackTrace.current);
-            }
-          },
-          onError: (error) {
-            state = AsyncValue.error(error, StackTrace.current);
-          },
-        );
+      (snapshot) {
+        try {
+          final items = snapshot.docs
+              .map((doc) => CartItemModel.fromFirestore(doc))
+              .toList();
+          state = AsyncValue.data(items);
+        } catch (e) {
+          state = AsyncValue.error(e, StackTrace.current);
+        }
+      },
+      onError: (error) {
+        state = AsyncValue.error(error, StackTrace.current);
+      },
+    );
   }
 
   Future<void> addToCart(CartItemModel item) async {
@@ -115,9 +115,8 @@ class CartNotifier extends StateNotifier<AsyncValue<List<CartItemModel>>> {
 
       // Check whether this product is already in the cart.
       final currentItems = state.value ?? [];
-      final existingItem = currentItems
-          .where((i) => i.productId == item.productId)
-          .firstOrNull;
+      final existingItem =
+          currentItems.where((i) => i.productId == item.productId).firstOrNull;
 
       if (existingItem != null) {
         // Increment the quantity of the existing cart entry.

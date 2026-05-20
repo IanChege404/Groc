@@ -44,9 +44,8 @@ class _CouponAndOffersPageState extends ConsumerState<CouponAndOffersPage> {
       return;
     }
 
-    final ok = await ref
-        .read(userCouponsProvider.notifier)
-        .applyCoupon(uid, code);
+    final ok =
+        await ref.read(userCouponsProvider.notifier).applyCoupon(uid, code);
     if (!mounted) return;
 
     ScaffoldMessenger.of(context).showSnackBar(
@@ -106,9 +105,9 @@ class _CouponAndOffersPageState extends ConsumerState<CouponAndOffersPage> {
                 data: (coupons) => Text(
                   'You Have ${coupons.length} Coupons to use',
                   style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                    fontWeight: FontWeight.bold,
-                    color: Theme.of(context).colorScheme.onSurface,
-                  ),
+                        fontWeight: FontWeight.bold,
+                        color: Theme.of(context).colorScheme.onSurface,
+                      ),
                 ),
                 loading: () => const Text('Loading coupons...'),
                 error: (_, __) => const Text('Unable to load coupons'),

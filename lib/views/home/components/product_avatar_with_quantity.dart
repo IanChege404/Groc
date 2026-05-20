@@ -44,8 +44,8 @@ class ProductAvatarWithQuanitty extends StatelessWidget {
               child: Text(
                 'x$quantity',
                 style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                  color: Theme.of(context).colorScheme.onSurface,
-                ),
+                      color: Theme.of(context).colorScheme.onSurface,
+                    ),
               ),
             ),
           ),

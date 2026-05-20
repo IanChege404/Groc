@@ -87,8 +87,7 @@ class _ReviewStarsState extends State<ReviewStars>
                   child: Icon(
                     Icons.star_rounded,
                     color: isActive ? const Color(0xFFFFC107) : Colors.grey,
-                    size:
-                        (widget.iconSize ?? 24) *
+                    size: (widget.iconSize ?? 24) *
                         (widget.isInteractive && _hoveredIndex == index
                             ? 1.1
                             : 1.0),

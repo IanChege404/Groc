@@ -12,8 +12,7 @@ class RecipeDetailScreen extends ConsumerStatefulWidget {
   const RecipeDetailScreen({super.key, required this.recipe});
 
   @override
-  ConsumerState<RecipeDetailScreen> createState() =>
-      _RecipeDetailScreenState();
+  ConsumerState<RecipeDetailScreen> createState() => _RecipeDetailScreenState();
 }
 
 class _RecipeDetailScreenState extends ConsumerState<RecipeDetailScreen>
@@ -184,9 +183,8 @@ class _RecipeDetailScreenState extends ConsumerState<RecipeDetailScreen>
           contentPadding: EdgeInsets.zero,
           leading: CircleAvatar(
             radius: 16,
-            backgroundImage: ing.imageUrl != null
-                ? NetworkImage(ing.imageUrl!)
-                : null,
+            backgroundImage:
+                ing.imageUrl != null ? NetworkImage(ing.imageUrl!) : null,
             child: ing.imageUrl == null
                 ? const Icon(Icons.shopping_basket, size: 16)
                 : null,

@@ -165,13 +165,12 @@ class Product {
       rating: (json['rating'] as num?)?.toDouble() ?? 0.0,
       reviewCount: json['review_count'] as int? ?? 0,
       image: json['image'] as String?,
-      images: (json['images'] as List<dynamic>?)
-          ?.map((e) => e as String)
-          .toList(),
+      images:
+          (json['images'] as List<dynamic>?)?.map((e) => e as String).toList(),
       categoryId: json['category_id'] as String,
       stock: json['stock'] as int? ?? 0,
-      attributes: (json['attributes'] as Map<String, dynamic>?)
-          ?.cast<String, String>(),
+      attributes:
+          (json['attributes'] as Map<String, dynamic>?)?.cast<String, String>(),
       isFavorite: json['is_favorite'] as bool? ?? false,
     );
   }
@@ -218,8 +217,7 @@ class PaginatedProducts {
   });
 
   factory PaginatedProducts.fromJson(Map<String, dynamic> json) {
-    final productsList =
-        (json['data'] as List<dynamic>?)
+    final productsList = (json['data'] as List<dynamic>?)
             ?.map((item) => Product.fromJson(item as Map<String, dynamic>))
             .toList() ??
         [];

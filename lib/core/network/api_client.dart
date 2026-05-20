@@ -267,9 +267,8 @@ class ApiClient {
 
       // 2xx status codes are successful
       if (response.statusCode >= 200 && response.statusCode < 300) {
-        final data = fromJson != null
-            ? fromJson(json['data'] ?? json)
-            : null as T;
+        final data =
+            fromJson != null ? fromJson(json['data'] ?? json) : null as T;
         return ApiResponse.success(
           statusCode: response.statusCode,
           data: data,
@@ -278,8 +277,7 @@ class ApiClient {
       }
 
       // Handle error responses
-      final errorMessage =
-          json['message'] as String? ??
+      final errorMessage = json['message'] as String? ??
           json['error'] as String? ??
           'An error occurred';
 

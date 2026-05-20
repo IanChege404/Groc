@@ -55,11 +55,11 @@ class AfriErrorState extends StatelessWidget {
               title,
               textAlign: TextAlign.center,
               style: Theme.of(context).textTheme.headlineSmall?.copyWith(
-                color: isDark
-                    ? AppColors.onSurfaceDark
-                    : AppColors.onSurfaceLight,
-                fontWeight: FontWeight.w600,
-              ),
+                    color: isDark
+                        ? AppColors.onSurfaceDark
+                        : AppColors.onSurfaceLight,
+                    fontWeight: FontWeight.w600,
+                  ),
             ),
             if (subtitle != null) ...[
               const SizedBox(height: 12),
@@ -67,8 +67,9 @@ class AfriErrorState extends StatelessWidget {
                 subtitle!,
                 textAlign: TextAlign.center,
                 style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                  color: isDark ? AppColors.subtleDark : AppColors.subtleLight,
-                ),
+                      color:
+                          isDark ? AppColors.subtleDark : AppColors.subtleLight,
+                    ),
               ),
             ],
             if (showButton && buttonLabel != null) ...[

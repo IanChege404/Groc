@@ -167,8 +167,7 @@ class NotificationTile extends StatelessWidget {
           mainAxisSize: MainAxisSize.min,
           children: [
             ListTile(
-              leading:
-                  notification.imageUrl != null &&
+              leading: notification.imageUrl != null &&
                       notification.imageUrl!.isNotEmpty
                   ? Stack(
                       children: [
@@ -206,11 +205,11 @@ class NotificationTile extends StatelessWidget {
               title: Text(
                 notification.title,
                 style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                  fontWeight: notification.isRead
-                      ? FontWeight.normal
-                      : FontWeight.bold,
-                  color: Theme.of(context).colorScheme.onSurface,
-                ),
+                      fontWeight: notification.isRead
+                          ? FontWeight.normal
+                          : FontWeight.bold,
+                      color: Theme.of(context).colorScheme.onSurface,
+                    ),
               ),
               subtitle: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -222,11 +221,11 @@ class NotificationTile extends StatelessWidget {
                     maxLines: 2,
                     overflow: TextOverflow.ellipsis,
                     style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                      color: Theme.of(context)
-                          .colorScheme
-                          .onSurface
-                          .withValues(alpha: 0.7),
-                    ),
+                          color: Theme.of(context)
+                              .colorScheme
+                              .onSurface
+                              .withValues(alpha: 0.7),
+                        ),
                   ),
                   const SizedBox(height: 4),
                   Text(

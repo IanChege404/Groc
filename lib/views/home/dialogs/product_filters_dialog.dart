@@ -72,9 +72,9 @@ class _RatingStar extends StatelessWidget {
             child: Text(
               'Rating Star',
               style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                fontWeight: FontWeight.bold,
-                color: Theme.of(context).colorScheme.onSurface,
-              ),
+                    fontWeight: FontWeight.bold,
+                    color: Theme.of(context).colorScheme.onSurface,
+                  ),
             ),
           ),
           const SizedBox(height: 8),
@@ -125,9 +125,9 @@ class _BrandSelector extends StatelessWidget {
             child: Text(
               'Brand',
               style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                fontWeight: FontWeight.bold,
-                color: Theme.of(context).colorScheme.onSurface,
-              ),
+                    fontWeight: FontWeight.bold,
+                    color: Theme.of(context).colorScheme.onSurface,
+                  ),
             ),
           ),
           const SizedBox(height: 16),
@@ -182,9 +182,9 @@ class _CategoriesSelector extends StatelessWidget {
             child: Text(
               'Categories',
               style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                fontWeight: FontWeight.bold,
-                color: Theme.of(context).colorScheme.onSurface,
-              ),
+                    fontWeight: FontWeight.bold,
+                    color: Theme.of(context).colorScheme.onSurface,
+                  ),
             ),
           ),
           const SizedBox(height: 16),
@@ -252,9 +252,9 @@ class _PriceRangeState extends State<_PriceRange> {
             child: Text(
               'Price Range',
               style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                fontWeight: FontWeight.bold,
-                color: Theme.of(context).colorScheme.onSurface,
-              ),
+                    fontWeight: FontWeight.bold,
+                    color: Theme.of(context).colorScheme.onSurface,
+                  ),
             ),
           ),
           RangeSlider(
@@ -298,9 +298,9 @@ class _SortBy extends StatelessWidget {
           Text(
             'Sort By',
             style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-              fontWeight: FontWeight.bold,
-              color: Theme.of(context).colorScheme.onSurface,
-            ),
+                  fontWeight: FontWeight.bold,
+                  color: Theme.of(context).colorScheme.onSurface,
+                ),
           ),
           const Spacer(),
           DropdownButton(
@@ -346,9 +346,9 @@ class _FilterHeader extends StatelessWidget {
         Text(
           'Filter',
           style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-            fontWeight: FontWeight.bold,
-            color: Theme.of(context).colorScheme.onSurface,
-          ),
+                fontWeight: FontWeight.bold,
+                color: Theme.of(context).colorScheme.onSurface,
+              ),
         ),
         SizedBox(
           width: 56,
@@ -357,8 +357,8 @@ class _FilterHeader extends StatelessWidget {
             child: Text(
               'Reset',
               style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                color: Theme.of(context).colorScheme.onSurface,
-              ),
+                    color: Theme.of(context).colorScheme.onSurface,
+                  ),
             ),
           ),
         ),

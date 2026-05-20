@@ -219,8 +219,8 @@ class _ProductDetailsPageState extends ConsumerState<ProductDetailsPage> {
                     Text(
                       product.name,
                       style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                        fontWeight: FontWeight.bold,
-                      ),
+                            fontWeight: FontWeight.bold,
+                          ),
                     ),
                     const SizedBox(height: 8),
                     Text('Weight: ${product.weight}'),
@@ -250,9 +250,9 @@ class _ProductDetailsPageState extends ConsumerState<ProductDetailsPage> {
                   Text(
                     'Product Details',
                     style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                      fontWeight: FontWeight.bold,
-                      color: Theme.of(context).colorScheme.onSurface,
-                    ),
+                          fontWeight: FontWeight.bold,
+                          color: Theme.of(context).colorScheme.onSurface,
+                        ),
                   ),
                   const SizedBox(height: 8),
                   Text(product.description),

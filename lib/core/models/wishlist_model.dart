@@ -32,8 +32,8 @@ class WishlistModel {
       itemType: rawType == 'bundle'
           ? WishlistItemType.bundle
           : rawType == 'product'
-          ? WishlistItemType.product
-          : null,
+              ? WishlistItemType.product
+              : null,
     );
   }
 

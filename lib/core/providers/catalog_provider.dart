@@ -49,22 +49,22 @@ final categoriesProvider = FutureProvider<List<CategoryModel>>((ref) async {
 
 final productsByCategoryProvider =
     FutureProvider.family<List<ProductModel>, String>((ref, categoryId) async {
-      final service = ref.watch(firestoreProductServiceProvider);
-      final response = await service.getProductsByCategory(categoryId);
-      if (!response.success) {
-        throw Exception(
-          response.message ?? 'Failed to fetch category products',
-        );
-      }
-      return response.data ?? [];
-    });
+  final service = ref.watch(firestoreProductServiceProvider);
+  final response = await service.getProductsByCategory(categoryId);
+  if (!response.success) {
+    throw Exception(
+      response.message ?? 'Failed to fetch category products',
+    );
+  }
+  return response.data ?? [];
+});
 
 final searchProductsProvider =
     FutureProvider.family<List<ProductModel>, String>((ref, query) async {
-      final service = ref.watch(firestoreProductServiceProvider);
-      final response = await service.searchProducts(query);
-      if (!response.success) {
-        throw Exception(response.message ?? 'Failed to search products');
-      }
-      return response.data ?? [];
-    });
+  final service = ref.watch(firestoreProductServiceProvider);
+  final response = await service.searchProducts(query);
+  if (!response.success) {
+    throw Exception(response.message ?? 'Failed to search products');
+  }
+  return response.data ?? [];
+});

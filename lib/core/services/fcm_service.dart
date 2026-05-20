@@ -25,8 +25,8 @@ class FcmService {
       sound: true,
     );
 
-    final granted = settings.authorizationStatus ==
-        AuthorizationStatus.authorized;
+    final granted =
+        settings.authorizationStatus == AuthorizationStatus.authorized;
     Logger.info(
       'FCM permission: ${settings.authorizationStatus}',
       'FcmService',
@@ -94,7 +94,8 @@ class FcmService {
 
     // Background message tapped
     FirebaseMessaging.onMessageOpenedApp.listen((message) {
-      Logger.info('FCM notification tapped: ${message.messageId}', 'FcmService');
+      Logger.info(
+          'FCM notification tapped: ${message.messageId}', 'FcmService');
       onBackgroundMessageTap(message);
     });
 

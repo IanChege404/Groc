@@ -53,7 +53,8 @@ class RecipesScreen extends ConsumerWidget {
         childAspectRatio: 0.75,
       ),
       itemCount: 6,
-      itemBuilder: (_, __) => const Skeleton(height: 220, width: double.infinity),
+      itemBuilder: (_, __) =>
+          const Skeleton(height: 220, width: double.infinity),
     );
   }
 }

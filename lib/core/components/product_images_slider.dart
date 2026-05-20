@@ -114,7 +114,8 @@ class _ProductImagesSliderState extends State<ProductImagesSlider>
                 child: IconButton(
                   onPressed: _triggerPopAnimation,
                   iconSize: 56,
-                  constraints: const BoxConstraints(minHeight: 56, minWidth: 56),
+                  constraints:
+                      const BoxConstraints(minHeight: 56, minWidth: 56),
                   icon: Container(
                     padding: const EdgeInsets.all(AppDefaults.padding),
                     decoration: const BoxDecoration(

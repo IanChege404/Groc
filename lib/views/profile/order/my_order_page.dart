@@ -33,12 +33,10 @@ class AllOrderPage extends ConsumerWidget {
       orElse: () => const <OrderModel>[],
     );
 
-    final runningOrders = orders
-        .where((o) => _isRunningStatus(o.status))
-        .toList();
-    final completedOrders = orders
-        .where((o) => _isCompletedStatus(o.status))
-        .toList();
+    final runningOrders =
+        orders.where((o) => _isRunningStatus(o.status)).toList();
+    final completedOrders =
+        orders.where((o) => _isCompletedStatus(o.status)).toList();
 
     return DefaultTabController(
       length: 3,

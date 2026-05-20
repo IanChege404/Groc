@@ -58,9 +58,8 @@ class MyApp extends StatelessWidget {
           title: 'Afri-Commerce',
           theme: AppTheme.defaultTheme,
           darkTheme: AppThemeDark.darkTheme,
-          themeMode: localeProvider.isDarkMode
-              ? ThemeMode.dark
-              : ThemeMode.light,
+          themeMode:
+              localeProvider.isDarkMode ? ThemeMode.dark : ThemeMode.light,
 
           // Localization setup
           locale: localeProvider.locale,

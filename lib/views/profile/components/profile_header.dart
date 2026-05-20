@@ -25,9 +25,9 @@ class ProfileHeader extends ConsumerWidget {
               elevation: 0,
               backgroundColor: Colors.transparent,
               titleTextStyle: Theme.of(context).textTheme.titleLarge?.copyWith(
-                color: Theme.of(context).colorScheme.onPrimary,
-                fontWeight: FontWeight.bold,
-              ),
+                    color: Theme.of(context).colorScheme.onPrimary,
+                    fontWeight: FontWeight.bold,
+                  ),
             ),
             _UserData(ref: ref),
             const ProfileHeaderOptions(),
@@ -111,16 +111,16 @@ class _UserData extends ConsumerWidget {
                   Text(
                     user.fullName.isNotEmpty ? user.fullName : 'User Profile',
                     style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                      fontWeight: FontWeight.bold,
-                      color: Theme.of(context).colorScheme.onPrimary,
-                    ),
+                          fontWeight: FontWeight.bold,
+                          color: Theme.of(context).colorScheme.onPrimary,
+                        ),
                   ),
                   const SizedBox(height: 8),
                   Text(
                     'ID: ${user.id}',
                     style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                      color: Theme.of(context).colorScheme.onPrimary,
-                    ),
+                          color: Theme.of(context).colorScheme.onPrimary,
+                        ),
                   ),
                 ],
               ),

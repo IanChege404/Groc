@@ -51,8 +51,7 @@ class _PaymentSelectionScreenState
               icon: Icons.phone_android,
               iconColor: Colors.green,
               selected: _selected == PaymentConstants.mpesa,
-              onTap: () =>
-                  setState(() => _selected = PaymentConstants.mpesa),
+              onTap: () => setState(() => _selected = PaymentConstants.mpesa),
             ),
             const SizedBox(height: 10),
             _PaymentOption(
@@ -62,8 +61,7 @@ class _PaymentSelectionScreenState
               icon: Icons.credit_card,
               iconColor: Colors.blue,
               selected: _selected == PaymentConstants.card,
-              onTap: () =>
-                  setState(() => _selected = PaymentConstants.card),
+              onTap: () => setState(() => _selected = PaymentConstants.card),
             ),
             const SizedBox(height: 10),
             _PaymentOption(
@@ -73,8 +71,7 @@ class _PaymentSelectionScreenState
               icon: Icons.account_balance_wallet,
               iconColor: AppColors.primary,
               selected: _selected == PaymentConstants.wallet,
-              onTap: () =>
-                  setState(() => _selected = PaymentConstants.wallet),
+              onTap: () => setState(() => _selected = PaymentConstants.wallet),
             ),
             const SizedBox(height: 10),
             _PaymentOption(

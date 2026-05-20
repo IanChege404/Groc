@@ -102,8 +102,7 @@ class HiveService {
 
   String? getCachedCart(String userId) => _get(_cartBox, userId);
 
-  Future<void> clearCartCache(String userId) =>
-      _delete(_cartBox, userId);
+  Future<void> clearCartCache(String userId) => _delete(_cartBox, userId);
 
   // ── Categories ───────────────────────────────────────────────────────────────
 
@@ -121,8 +120,7 @@ class HiveService {
 
   // ── Deals ────────────────────────────────────────────────────────────────────
 
-  Future<void> cacheDeals(String jsonData) =>
-      _put(_dealsBox, 'all', jsonData);
+  Future<void> cacheDeals(String jsonData) => _put(_dealsBox, 'all', jsonData);
 
   String? getCachedDeals() => _get(_dealsBox, 'all');
 

@@ -22,14 +22,12 @@ class MpesaService {
     final secret = EnvConfig.mpesaConsumerSecret();
     final credentials = base64Encode(utf8.encode('$key:$secret'));
 
-    final response = await http
-        .get(
-          Uri.parse(
-            '$_baseUrl${PaymentConstants.mpesaOauthEndpoint}?grant_type=client_credentials',
-          ),
-          headers: {'Authorization': 'Basic $credentials'},
-        )
-        .timeout(const Duration(seconds: 30));
+    final response = await http.get(
+      Uri.parse(
+        '$_baseUrl${PaymentConstants.mpesaOauthEndpoint}?grant_type=client_credentials',
+      ),
+      headers: {'Authorization': 'Basic $credentials'},
+    ).timeout(const Duration(seconds: 30));
 
     if (response.statusCode == 200) {
       final body = json.decode(response.body) as Map<String, dynamic>;

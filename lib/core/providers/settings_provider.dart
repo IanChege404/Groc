@@ -81,8 +81,7 @@ class UserSettingsNotifier
             settings.copyWith(
               notificationsEnabled:
                   notificationsEnabled ?? settings.notificationsEnabled,
-              emailNotificationsEnabled:
-                  emailNotificationsEnabled ??
+              emailNotificationsEnabled: emailNotificationsEnabled ??
                   settings.emailNotificationsEnabled,
               pushNotificationsEnabled:
                   pushNotificationsEnabled ?? settings.pushNotificationsEnabled,
@@ -141,13 +140,13 @@ class UserSettingsNotifier
 /// User settings provider using StateNotifierProvider
 final userSettingsProvider =
     StateNotifierProvider<UserSettingsNotifier, AsyncValue<UserSettingsModel?>>(
-      (ref) {
-        return UserSettingsNotifier(ref);
-      },
-    );
+  (ref) {
+    return UserSettingsNotifier(ref);
+  },
+);
 
 /// Real-time user settings stream provider
 final userSettingsStreamProvider = StreamProvider.autoDispose
     .family<UserSettingsModel?, String>((ref, userId) {
-      return FirestoreService().getUserSettingsStream(userId);
-    });
+  return FirestoreService().getUserSettingsStream(userId);
+});

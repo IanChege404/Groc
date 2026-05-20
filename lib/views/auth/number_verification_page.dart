@@ -149,8 +149,8 @@ class _OTPTextFieldsState extends State<OTPTextFields>
     );
     _shakeAnimation =
         Tween<Offset>(begin: Offset.zero, end: const Offset(0.1, 0)).animate(
-          CurvedAnimation(parent: _shakeController, curve: Curves.elasticIn),
-        );
+      CurvedAnimation(parent: _shakeController, curve: Curves.elasticIn),
+    );
   }
 
   @override
@@ -233,8 +233,8 @@ class _OTPTextFieldsState extends State<OTPTextFields>
                     },
                     textAlign: TextAlign.center,
                     style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                      fontWeight: FontWeight.bold,
-                    ),
+                          fontWeight: FontWeight.bold,
+                        ),
                     inputFormatters: [
                       LengthLimitingTextInputFormatter(1),
                       FilteringTextInputFormatter.digitsOnly,

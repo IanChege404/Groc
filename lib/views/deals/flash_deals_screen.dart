@@ -37,8 +37,7 @@ class FlashDealsScreen extends ConsumerWidget {
             padding: const EdgeInsets.all(AppDefaults.padding),
             itemCount: deals.length,
             separatorBuilder: (_, __) => const SizedBox(height: 12),
-            itemBuilder: (context, index) =>
-                _DealCard(deal: deals[index]),
+            itemBuilder: (context, index) => _DealCard(deal: deals[index]),
           );
         },
       ),

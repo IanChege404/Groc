@@ -47,8 +47,8 @@ class SingleWishlistItemTile extends ConsumerWidget {
                   Text(
                     product.name,
                     style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                      fontWeight: FontWeight.bold,
-                    ),
+                          fontWeight: FontWeight.bold,
+                        ),
                     maxLines: 2,
                     overflow: TextOverflow.ellipsis,
                   ),
@@ -56,8 +56,8 @@ class SingleWishlistItemTile extends ConsumerWidget {
                   Text(
                     'Ksh ${product.price}',
                     style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                      color: Theme.of(context).colorScheme.primary,
-                    ),
+                          color: Theme.of(context).colorScheme.primary,
+                        ),
                   ),
                 ],
               ),
@@ -77,9 +77,8 @@ class SingleWishlistItemTile extends ConsumerWidget {
   }
 
   Widget _buildBundleTile(BuildContext context, BundleModel bundle) {
-    final bundleImage = bundle.images.isNotEmpty
-        ? bundle.images.first
-        : bundle.image;
+    final bundleImage =
+        bundle.images.isNotEmpty ? bundle.images.first : bundle.image;
 
     return Container(
       margin: const EdgeInsets.all(AppDefaults.padding / 2),
@@ -109,8 +108,8 @@ class SingleWishlistItemTile extends ConsumerWidget {
                   Text(
                     bundle.name,
                     style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                      fontWeight: FontWeight.bold,
-                    ),
+                          fontWeight: FontWeight.bold,
+                        ),
                     maxLines: 2,
                     overflow: TextOverflow.ellipsis,
                   ),
@@ -118,8 +117,8 @@ class SingleWishlistItemTile extends ConsumerWidget {
                   Text(
                     'Ksh ${bundle.price}',
                     style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                      color: Theme.of(context).colorScheme.primary,
-                    ),
+                          color: Theme.of(context).colorScheme.primary,
+                        ),
                   ),
                 ],
               ),

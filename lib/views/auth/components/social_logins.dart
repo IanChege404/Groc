@@ -31,9 +31,9 @@ class SocialLogins extends StatelessWidget {
                   Text(
                     'Google',
                     style: Theme.of(context).textTheme.labelLarge?.copyWith(
-                      color: Colors.red,
-                      fontWeight: FontWeight.bold,
-                    ),
+                          color: Colors.red,
+                          fontWeight: FontWeight.bold,
+                        ),
                   ),
                 ],
               ),
@@ -58,9 +58,9 @@ class SocialLogins extends StatelessWidget {
                   Text(
                     'Apple',
                     style: Theme.of(context).textTheme.labelLarge?.copyWith(
-                      color: Theme.of(context).colorScheme.onSurface,
-                      fontWeight: FontWeight.bold,
-                    ),
+                          color: Theme.of(context).colorScheme.onSurface,
+                          fontWeight: FontWeight.bold,
+                        ),
                   ),
                 ],
               ),

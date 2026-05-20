@@ -45,9 +45,9 @@ class SubmitReviewPage extends StatelessWidget {
                 child: Text(
                   'How would you rate the\nquality of this Products',
                   style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                    color: Theme.of(context).colorScheme.onSurface,
-                    fontWeight: FontWeight.bold,
-                  ),
+                        color: Theme.of(context).colorScheme.onSurface,
+                        fontWeight: FontWeight.bold,
+                      ),
                 ),
               ),
               Row(
@@ -67,9 +67,9 @@ class SubmitReviewPage extends StatelessWidget {
                 child: Text(
                   'Leave a your valuable\ncomments',
                   style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                    color: Theme.of(context).colorScheme.onSurface,
-                    fontWeight: FontWeight.bold,
-                  ),
+                        color: Theme.of(context).colorScheme.onSurface,
+                        fontWeight: FontWeight.bold,
+                      ),
                 ),
               ),
               const SizedBox(height: AppDefaults.padding * 2),

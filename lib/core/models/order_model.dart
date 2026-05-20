@@ -27,8 +27,7 @@ class OrderModel {
 
   factory OrderModel.fromFirestore(DocumentSnapshot doc) {
     final data = doc.data() as Map<String, dynamic>;
-    final itemsList =
-        (data['items'] as List?)
+    final itemsList = (data['items'] as List?)
             ?.map((item) => OrderItemModel.fromMap(item))
             .toList() ??
         [];

@@ -47,9 +47,9 @@ class _CouponCodeFieldState extends State<CouponCodeField> {
             child: Text(
               'Add Coupon',
               style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                fontWeight: FontWeight.bold,
-                color: Theme.of(context).colorScheme.onSurface,
-              ),
+                    fontWeight: FontWeight.bold,
+                    color: Theme.of(context).colorScheme.onSurface,
+                  ),
             ),
           ),
           const SizedBox(height: 16),

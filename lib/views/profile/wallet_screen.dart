@@ -39,9 +39,8 @@ class _WalletScreenState extends ConsumerState<WalletScreen> {
             color: isDark ? AppColors.onSurfaceDark : AppColors.onSurfaceLight,
           ),
         ),
-        backgroundColor: isDark
-            ? AppColors.surfaceDark
-            : AppColors.surfaceLight,
+        backgroundColor:
+            isDark ? AppColors.surfaceDark : AppColors.surfaceLight,
         leading: IconButton(
           icon: Icon(
             Icons.arrow_back,
@@ -50,9 +49,8 @@ class _WalletScreenState extends ConsumerState<WalletScreen> {
           onPressed: () => Navigator.pop(context),
         ),
       ),
-      backgroundColor: isDark
-          ? AppColors.backgroundDark
-          : AppColors.backgroundLight,
+      backgroundColor:
+          isDark ? AppColors.backgroundDark : AppColors.backgroundLight,
       body: userUid.when(
         data: (uid) {
           if (uid == null || uid.isEmpty) {
@@ -295,13 +293,12 @@ class _WalletScreenState extends ConsumerState<WalletScreen> {
                     );
                     if (amount == null || amount <= 0) return;
 
-                    final success = await ref
-                        .read(walletProvider.notifier)
-                        .withdraw(
-                          userId,
-                          amount,
-                          description: 'User withdrawal',
-                        );
+                    final success =
+                        await ref.read(walletProvider.notifier).withdraw(
+                              userId,
+                              amount,
+                              description: 'User withdrawal',
+                            );
 
                     if (!mounted) return;
                     Navigator.pop(context);
@@ -548,8 +545,8 @@ class _FilterChip extends StatelessWidget {
           color: isSelected
               ? (isDark ? AppColors.primaryDark : AppColors.primary)
               : (isDark
-                    ? AppColors.surfaceVariantDark
-                    : AppColors.surfaceVariantLight),
+                  ? AppColors.surfaceVariantDark
+                  : AppColors.surfaceVariantLight),
           borderRadius: BorderRadius.circular(20),
         ),
         child: Text(
@@ -638,9 +635,8 @@ class _TransactionTile extends StatelessWidget {
                 Text(
                   DateFormat('MMM dd, yyyy').format(transaction.timestamp),
                   style: AppTextStyles.bodySmall.copyWith(
-                    color: isDark
-                        ? AppColors.subtleDark
-                        : AppColors.subtleLight,
+                    color:
+                        isDark ? AppColors.subtleDark : AppColors.subtleLight,
                   ),
                 ),
               ],

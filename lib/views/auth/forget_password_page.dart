@@ -57,8 +57,8 @@ class _ForgetPasswordPageState extends State<ForgetPasswordPage> {
                     Text(
                       'Reset your password',
                       style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                        fontWeight: FontWeight.bold,
-                      ),
+                            fontWeight: FontWeight.bold,
+                          ),
                     ),
                     const SizedBox(height: AppDefaults.padding),
                     const Text(

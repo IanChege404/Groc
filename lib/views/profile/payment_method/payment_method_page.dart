@@ -72,9 +72,9 @@ class _PaymentMethodPageState extends ConsumerState<PaymentMethodPage>
                 child: Text(
                   'Saved Payment Methods',
                   style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                    fontWeight: FontWeight.bold,
-                    color: Theme.of(context).colorScheme.onSurface,
-                  ),
+                        fontWeight: FontWeight.bold,
+                        color: Theme.of(context).colorScheme.onSurface,
+                      ),
                 ),
               ),
               if (methods.isEmpty)

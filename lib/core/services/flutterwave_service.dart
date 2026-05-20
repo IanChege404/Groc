@@ -5,8 +5,7 @@ import '../utils/logger.dart';
 
 /// Flutterwave card payment service
 class FlutterwaveService {
-  static final FlutterwaveService _instance =
-      FlutterwaveService._internal();
+  static final FlutterwaveService _instance = FlutterwaveService._internal();
 
   factory FlutterwaveService() => _instance;
 
@@ -69,7 +68,8 @@ class FlutterwaveService {
       final data = json.decode(response.body) as Map<String, dynamic>;
       return FlutterwavePaymentResponse.fromJson(data);
     } catch (e) {
-      Logger.error('Flutterwave initiatePayment error: $e', 'FlutterwaveService');
+      Logger.error(
+          'Flutterwave initiatePayment error: $e', 'FlutterwaveService');
       rethrow;
     }
   }

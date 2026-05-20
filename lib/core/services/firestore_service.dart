@@ -123,12 +123,12 @@ class FirestoreService {
               .where(
                 (p) =>
                     ((p['name'] as String?)?.toLowerCase().contains(
-                          searchLower,
-                        ) ??
+                              searchLower,
+                            ) ??
                         false) ||
                     ((p['description'] as String?)?.toLowerCase().contains(
-                          searchLower,
-                        ) ??
+                              searchLower,
+                            ) ??
                         false),
               ),
         );
@@ -164,10 +164,8 @@ class FirestoreService {
 
   Future<List<Map<String, dynamic>>> getCategories() async {
     try {
-      final snapshot = await _firestore
-          .collection('categories')
-          .orderBy('name')
-          .get();
+      final snapshot =
+          await _firestore.collection('categories').orderBy('name').get();
       return snapshot.docs
           .map((doc) => <String, dynamic>{...(doc.data()), 'id': doc.id})
           .toList();
@@ -289,9 +287,9 @@ class FirestoreService {
           .collection('items')
           .doc(itemId)
           .update({
-            'quantity': quantity,
-            'updatedAt': FieldValue.serverTimestamp(),
-          });
+        'quantity': quantity,
+        'updatedAt': FieldValue.serverTimestamp(),
+      });
     } catch (e) {
       Logger.error(
         'Error updating cart item quantity: $e',
@@ -504,9 +502,9 @@ class FirestoreService {
           .collection('addresses')
           .doc(addressId)
           .set({
-            ...data,
-            'updatedAt': FieldValue.serverTimestamp(),
-          }, SetOptions(merge: true));
+        ...data,
+        'updatedAt': FieldValue.serverTimestamp(),
+      }, SetOptions(merge: true));
     } catch (e) {
       Logger.error(
         'Error updating address: $e',
@@ -535,10 +533,8 @@ class FirestoreService {
 
   Future<void> setDefaultAddress(String userId, String addressId) async {
     try {
-      final collection = _firestore
-          .collection('users')
-          .doc(userId)
-          .collection('addresses');
+      final collection =
+          _firestore.collection('users').doc(userId).collection('addresses');
 
       final snapshot = await collection.get();
       for (final doc in snapshot.docs) {
@@ -837,11 +833,11 @@ class FirestoreService {
         .doc('balance')
         .snapshots()
         .map((doc) {
-          if (doc.exists) {
-            return WalletModel.fromFirestore(doc);
-          }
-          return null;
-        });
+      if (doc.exists) {
+        return WalletModel.fromFirestore(doc);
+      }
+      return null;
+    });
   }
 
   Future<void> initializeWallet(String userId) async {
@@ -878,11 +874,11 @@ class FirestoreService {
             .collection('wallet')
             .doc('balance')
             .set({
-              'userId': userId,
-              'balance': newBalance,
-              'currency': 'KES',
-              'lastUpdated': FieldValue.serverTimestamp(),
-            }, SetOptions(merge: true));
+          'userId': userId,
+          'balance': newBalance,
+          'currency': 'KES',
+          'lastUpdated': FieldValue.serverTimestamp(),
+        }, SetOptions(merge: true));
       });
     } catch (e) {
       Logger.error(
@@ -1104,11 +1100,11 @@ class FirestoreService {
         .doc('preferences')
         .snapshots()
         .map((doc) {
-          if (doc.exists) {
-            return UserSettingsModel.fromFirestore(doc);
-          }
-          return null;
-        });
+      if (doc.exists) {
+        return UserSettingsModel.fromFirestore(doc);
+      }
+      return null;
+    });
   }
 
   Future<void> initializeUserSettings(String userId) async {
@@ -1146,9 +1142,9 @@ class FirestoreService {
             .collection('settings')
             .doc('preferences')
             .set({
-              ...data,
-              'lastUpdated': FieldValue.serverTimestamp(),
-            }, SetOptions(merge: true));
+          ...data,
+          'lastUpdated': FieldValue.serverTimestamp(),
+        }, SetOptions(merge: true));
       });
     } catch (e) {
       Logger.error(

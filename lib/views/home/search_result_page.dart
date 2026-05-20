@@ -64,8 +64,8 @@ class _SearchResultPageState extends ConsumerState<SearchResultPage> {
                     ? 'Start typing to search products'
                     : 'Search results for "$trimmedQuery"',
                 style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                  color: Theme.of(context).colorScheme.onSurface,
-                ),
+                      color: Theme.of(context).colorScheme.onSurface,
+                    ),
               ),
             ),
           ),
@@ -88,10 +88,10 @@ class _SearchResultPageState extends ConsumerState<SearchResultPage> {
                         ),
                         gridDelegate:
                             const SliverGridDelegateWithFixedCrossAxisCount(
-                              crossAxisCount: 2,
-                              mainAxisSpacing: 16,
-                              childAspectRatio: 0.72,
-                            ),
+                          crossAxisCount: 2,
+                          mainAxisSpacing: 16,
+                          childAspectRatio: 0.72,
+                        ),
                         itemCount: products.length,
                         itemBuilder: (context, index) {
                           return ProductTileSquare(data: products[index]);

@@ -51,10 +51,8 @@ class _SignUpFormState extends State<SignUpForm> {
     }
 
     final fullName = nameController.text.trim();
-    final nameParts = fullName
-        .split(RegExp(r'\s+'))
-        .where((e) => e.isNotEmpty)
-        .toList();
+    final nameParts =
+        fullName.split(RegExp(r'\s+')).where((e) => e.isNotEmpty).toList();
     final firstName = nameParts.isNotEmpty ? nameParts.first : '';
     final lastName = nameParts.length > 1 ? nameParts.sublist(1).join(' ') : '';
 

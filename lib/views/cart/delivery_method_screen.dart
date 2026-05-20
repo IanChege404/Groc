@@ -50,7 +50,7 @@ class _DeliveryMethodScreenState extends State<DeliveryMethodScreen> {
     _selectedMethod = DeliveryMethod.standard; // Default selection
     // Initialize options after build
   }
-  
+
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
@@ -59,7 +59,7 @@ class _DeliveryMethodScreenState extends State<DeliveryMethodScreen> {
 
   void _initializeDeliveryOptions(BuildContext context) {
     final isEnglish = Localizations.localeOf(context).languageCode == 'en';
-    
+
     _deliveryOptions = [
       DeliveryOption(
         method: DeliveryMethod.standard,
@@ -80,7 +80,9 @@ class _DeliveryMethodScreenState extends State<DeliveryMethodScreen> {
       DeliveryOption(
         method: DeliveryMethod.bodaSameDay,
         title: isEnglish ? 'Boda Boda Same-Day' : 'Sarakasi Siku Moja',
-        description: isEnglish ? 'Today (Nairobi & Kampala only)' : 'Leo (Nairobi & Kampala tu)',
+        description: isEnglish
+            ? 'Today (Nairobi & Kampala only)'
+            : 'Leo (Nairobi & Kampala tu)',
         eta: isEnglish ? 'Today' : 'Leo',
         price: 'KES 200',
         icon: Icons.two_wheeler,
@@ -88,7 +90,8 @@ class _DeliveryMethodScreenState extends State<DeliveryMethodScreen> {
       DeliveryOption(
         method: DeliveryMethod.storePickup,
         title: isEnglish ? 'Store Pickup' : 'Mkutano katika Duka',
-        description: isEnglish ? 'Pick up at our store' : 'Chukua katika duka letu',
+        description:
+            isEnglish ? 'Pick up at our store' : 'Chukua katika duka letu',
         eta: isEnglish ? '2–3 hours' : 'Saa 2-3',
         price: isEnglish ? 'FREE' : 'BURE',
         icon: Icons.store,
@@ -143,8 +146,8 @@ class _DeliveryMethodScreenState extends State<DeliveryMethodScreen> {
                         decoration: BoxDecoration(
                           color: isSelected
                               ? (isDarkMode
-                                    ? AppColors.surfaceVariantDark
-                                    : AppColors.surfaceVariantLight)
+                                  ? AppColors.surfaceVariantDark
+                                  : AppColors.surfaceVariantLight)
                               : Theme.of(context).colorScheme.surface,
                           border: Border.all(
                             color: isSelected
@@ -214,8 +217,10 @@ class _DeliveryMethodScreenState extends State<DeliveryMethodScreen> {
                                 // ignore: deprecated_member_use
                                 Radio<DeliveryMethod>(
                                   value: option.method,
-                                  groupValue: _selectedMethod, // ignore: deprecated_member_use
-                                  onChanged: (value) { // ignore: deprecated_member_use
+                                  groupValue:
+                                      _selectedMethod, // ignore: deprecated_member_use
+                                  onChanged: (value) {
+                                    // ignore: deprecated_member_use
                                     if (value != null) {
                                       setState(() {
                                         _selectedMethod = value;
@@ -255,8 +260,8 @@ class _DeliveryMethodScreenState extends State<DeliveryMethodScreen> {
                   child: Text(
                     'Continue',
                     style: Theme.of(context).textTheme.labelLarge?.copyWith(
-                      color: Theme.of(context).colorScheme.onPrimary,
-                    ),
+                          color: Theme.of(context).colorScheme.onPrimary,
+                        ),
                   ),
                 ),
               ),

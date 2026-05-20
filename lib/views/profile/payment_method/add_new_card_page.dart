@@ -221,8 +221,8 @@ class CreditCardForm extends StatelessWidget {
               Text(
                 'Remember My Card Details',
                 style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                  color: Theme.of(context).colorScheme.onSurface,
-                ),
+                      color: Theme.of(context).colorScheme.onSurface,
+                    ),
               ),
               const Spacer(),
               Transform.scale(

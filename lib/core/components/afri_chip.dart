@@ -53,8 +53,7 @@ class AfriChip extends StatelessWidget {
       label: Text(label),
       selected: selected,
       onSelected: (_) => onPressed?.call(),
-      backgroundColor:
-          backgroundColor ??
+      backgroundColor: backgroundColor ??
           (isDark
               ? AppColors.surfaceVariantDark
               : AppColors.surfaceVariantLight),
@@ -98,9 +97,8 @@ class AfriChip extends StatelessWidget {
             Text(
               label,
               style: TextStyle(
-                color: isDark
-                    ? AppColors.onSurfaceDark
-                    : AppColors.onSurfaceLight,
+                color:
+                    isDark ? AppColors.onSurfaceDark : AppColors.onSurfaceLight,
                 fontWeight: FontWeight.w500,
               ),
             ),

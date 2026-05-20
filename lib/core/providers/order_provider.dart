@@ -5,11 +5,11 @@ import 'auth_provider.dart';
 
 final ordersProvider =
     StateNotifierProvider<OrderNotifier, AsyncValue<List<OrderModel>>>((ref) {
-      final firestore = FirestoreService();
-      final authState = ref.watch(authProvider);
+  final firestore = FirestoreService();
+  final authState = ref.watch(authProvider);
 
-      return OrderNotifier(firestore: firestore, authState: authState);
-    });
+  return OrderNotifier(firestore: firestore, authState: authState);
+});
 
 final orderDetailProvider = StreamProvider.family<OrderModel?, String>((
   ref,
@@ -24,7 +24,7 @@ class OrderNotifier extends StateNotifier<AsyncValue<List<OrderModel>>> {
   final AsyncValue<String?> authState;
 
   OrderNotifier({required this.firestore, required this.authState})
-    : super(const AsyncValue.loading()) {
+      : super(const AsyncValue.loading()) {
     _loadOrders();
   }
 

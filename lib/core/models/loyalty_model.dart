@@ -23,7 +23,8 @@ class LoyaltyModel {
   });
 
   String get tierName {
-    final idx = (tier - 1).clamp(0, PaymentConstants.loyaltyTierNames.length - 1);
+    final idx =
+        (tier - 1).clamp(0, PaymentConstants.loyaltyTierNames.length - 1);
     return PaymentConstants.loyaltyTierNames[idx];
   }
 
@@ -48,8 +49,7 @@ class LoyaltyModel {
       transactions: ((data['transactions'] as List?) ?? [])
           .map((e) => LoyaltyTransaction.fromMap(e as Map<String, dynamic>))
           .toList(),
-      updatedAt:
-          (data['updatedAt'] as Timestamp?)?.toDate() ?? DateTime.now(),
+      updatedAt: (data['updatedAt'] as Timestamp?)?.toDate() ?? DateTime.now(),
     );
   }
 
@@ -111,8 +111,7 @@ class LoyaltyTransaction {
       type: data['type'] as String? ?? 'earn',
       description: data['description'] as String? ?? '',
       orderId: data['orderId'] as String?,
-      timestamp:
-          (data['timestamp'] as Timestamp?)?.toDate() ?? DateTime.now(),
+      timestamp: (data['timestamp'] as Timestamp?)?.toDate() ?? DateTime.now(),
     );
   }
 

@@ -168,8 +168,8 @@ class _NewAddressPageState extends ConsumerState<NewAddressPage> {
                             textInputAction: TextInputAction.next,
                             validator: (value) =>
                                 (value == null || value.trim().isEmpty)
-                                ? 'State is required'
-                                : null,
+                                    ? 'State is required'
+                                    : null,
                           ),
                         ],
                       ),
@@ -187,8 +187,8 @@ class _NewAddressPageState extends ConsumerState<NewAddressPage> {
                             textInputAction: TextInputAction.done,
                             validator: (value) =>
                                 (value == null || value.trim().isEmpty)
-                                ? 'Zip code is required'
-                                : null,
+                                    ? 'Zip code is required'
+                                    : null,
                           ),
                         ],
                       ),

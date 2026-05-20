@@ -36,12 +36,10 @@ class _BuyNowRowState extends State<BuyNowRow> {
     final cartBackground = widget.isInCart
         ? AppColors.primary.withValues(alpha: 0.14)
         : Colors.transparent;
-    final cartBorderColor = widget.isInCart
-        ? AppColors.primary
-        : Theme.of(context).dividerColor;
-    final cartIconColor = widget.isInCart
-        ? AppColors.primary
-        : Theme.of(context).iconTheme.color;
+    final cartBorderColor =
+        widget.isInCart ? AppColors.primary : Theme.of(context).dividerColor;
+    final cartIconColor =
+        widget.isInCart ? AppColors.primary : Theme.of(context).iconTheme.color;
 
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: AppDefaults.padding),

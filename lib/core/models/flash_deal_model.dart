@@ -55,12 +55,10 @@ class FlashDealModel {
       imageUrl: data['imageUrl'] as String? ?? '',
       originalPrice: (data['originalPrice'] as num?)?.toDouble() ?? 0.0,
       dealPrice: (data['dealPrice'] as num?)?.toDouble() ?? 0.0,
-      discountPercentage:
-          (data['discountPercentage'] as num?)?.toInt() ?? 0,
+      discountPercentage: (data['discountPercentage'] as num?)?.toInt() ?? 0,
       stockLeft: (data['stockLeft'] as num?)?.toInt() ?? 0,
       totalStock: (data['totalStock'] as num?)?.toInt() ?? 1,
-      startTime:
-          (data['startTime'] as Timestamp?)?.toDate() ?? DateTime.now(),
+      startTime: (data['startTime'] as Timestamp?)?.toDate() ?? DateTime.now(),
       endTime: (data['endTime'] as Timestamp?)?.toDate() ??
           DateTime.now().add(const Duration(hours: 24)),
       isActive: data['isActive'] as bool? ?? true,

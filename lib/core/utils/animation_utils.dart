@@ -83,9 +83,8 @@ class AnimationUtils {
     return AnimatedCrossFade(
       firstChild: skeleton,
       secondChild: content,
-      crossFadeState: isLoading
-          ? CrossFadeState.showFirst
-          : CrossFadeState.showSecond,
+      crossFadeState:
+          isLoading ? CrossFadeState.showFirst : CrossFadeState.showSecond,
       duration: duration,
       firstCurve: Curves.easeOut,
       secondCurve: Curves.easeIn,
@@ -104,9 +103,8 @@ class AnimationUtils {
       duration: duration,
       curve: shouldShake ? Curves.elasticInOut : Curves.easeOut,
       builder: (context, value, _) {
-        final shakeAmount = shouldShake
-            ? 10 * (value - value.truncate()).sign
-            : 0;
+        final shakeAmount =
+            shouldShake ? 10 * (value - value.truncate()).sign : 0;
         final dx = shakeAmount.toDouble();
         return Transform.translate(offset: Offset(dx, 0), child: child);
       },

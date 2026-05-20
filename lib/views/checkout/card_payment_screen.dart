@@ -101,8 +101,7 @@ class _CardPaymentScreenState extends ConsumerState<CardPaymentScreen> {
                     padding: const EdgeInsets.all(14),
                     decoration: BoxDecoration(
                       color: Colors.grey.shade50,
-                      borderRadius:
-                          BorderRadius.circular(AppDefaults.radius),
+                      borderRadius: BorderRadius.circular(AppDefaults.radius),
                       border: Border.all(color: Colors.grey.shade200),
                     ),
                     child: Row(
@@ -179,7 +178,8 @@ class _CardPaymentScreenState extends ConsumerState<CardPaymentScreen> {
     setState(() => _isProcessing = true);
 
     try {
-      final txRef = 'groc_${widget.orderId}_${DateTime.now().millisecondsSinceEpoch}';
+      final txRef =
+          'groc_${widget.orderId}_${DateTime.now().millisecondsSinceEpoch}';
 
       final response = await _flutterwaveService.initiatePayment(
         txRef: txRef,

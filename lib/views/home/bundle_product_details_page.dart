@@ -220,8 +220,8 @@ class _BundleProductDetailsPageState
                   Text(
                     bundle.name,
                     style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                      fontWeight: FontWeight.bold,
-                    ),
+                          fontWeight: FontWeight.bold,
+                        ),
                   ),
                   const SizedBox(height: 8),
                   PriceAndQuantityRow(

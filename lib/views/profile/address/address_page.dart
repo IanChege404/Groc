@@ -160,8 +160,8 @@ class AddressTile extends StatelessWidget {
               Text(
                 label,
                 style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                  color: Theme.of(context).colorScheme.onSurface,
-                ),
+                      color: Theme.of(context).colorScheme.onSurface,
+                    ),
               ),
               const SizedBox(height: 4),
               Text(address),
@@ -169,8 +169,8 @@ class AddressTile extends StatelessWidget {
               Text(
                 number,
                 style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                  color: Theme.of(context).colorScheme.onSurface,
-                ),
+                      color: Theme.of(context).colorScheme.onSurface,
+                    ),
               ),
             ],
           ),

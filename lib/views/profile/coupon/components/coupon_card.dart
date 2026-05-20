@@ -60,7 +60,9 @@ class CouponCard extends StatelessWidget {
                           children: [
                             Text(
                               discounts,
-                              style: Theme.of(context).textTheme.displaySmall
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .displaySmall
                                   ?.copyWith(
                                     fontWeight: FontWeight.bold,
                                     color: Theme.of(
@@ -70,7 +72,9 @@ class CouponCard extends StatelessWidget {
                             ),
                             Text(
                               'Off',
-                              style: Theme.of(context).textTheme.titleLarge
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .titleLarge
                                   ?.copyWith(
                                     color: Theme.of(
                                       context,
@@ -94,7 +98,9 @@ class CouponCard extends StatelessWidget {
                         padding: const EdgeInsets.all(AppDefaults.padding),
                         child: Text(
                           title,
-                          style: Theme.of(context).textTheme.headlineSmall
+                          style: Theme.of(context)
+                              .textTheme
+                              .headlineSmall
                               ?.copyWith(
                                 color: Theme.of(context).colorScheme.onPrimary,
                                 fontWeight: FontWeight.bold,
@@ -124,7 +130,9 @@ class CouponCard extends StatelessWidget {
                               ),
                               child: Text(
                                 'Collect',
-                                style: Theme.of(context).textTheme.bodySmall
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .bodySmall
                                     ?.copyWith(
                                       color: AppColors.primary,
                                       fontWeight: FontWeight.bold,
@@ -134,7 +142,9 @@ class CouponCard extends StatelessWidget {
                             const Spacer(),
                             Text(
                               expire,
-                              style: Theme.of(context).textTheme.bodyLarge
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .bodyLarge
                                   ?.copyWith(
                                     color: Theme.of(
                                       context,

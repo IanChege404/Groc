@@ -30,9 +30,9 @@ class EmptyCartPage extends StatelessWidget {
           Text(
             'Oppss!',
             style: Theme.of(context).textTheme.titleLarge?.copyWith(
-              fontWeight: FontWeight.bold,
-              color: Theme.of(context).colorScheme.onSurface,
-            ),
+                  fontWeight: FontWeight.bold,
+                  color: Theme.of(context).colorScheme.onSurface,
+                ),
           ),
           const SizedBox(height: 8),
           const Text('Sorry, you have no products in your cart'),

@@ -152,7 +152,9 @@ class _SingleCartItemTileState extends ConsumerState<SingleCartItemTile>
                           children: [
                             Text(
                               productName,
-                              style: Theme.of(context).textTheme.bodyLarge
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .bodyLarge
                                   ?.copyWith(
                                     color: Theme.of(
                                       context,
@@ -177,7 +179,9 @@ class _SingleCartItemTileState extends ConsumerState<SingleCartItemTile>
                             padding: const EdgeInsets.all(8.0),
                             child: Text(
                               '${widget.item.quantity}',
-                              style: Theme.of(context).textTheme.bodyLarge
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .bodyLarge
                                   ?.copyWith(
                                     fontWeight: FontWeight.bold,
                                     color: Theme.of(

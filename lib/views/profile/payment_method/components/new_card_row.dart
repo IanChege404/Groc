@@ -16,9 +16,9 @@ class AddNewCardRow extends StatelessWidget {
           Text(
             'My Card',
             style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-              fontWeight: FontWeight.bold,
-              color: Theme.of(context).colorScheme.onSurface,
-            ),
+                  fontWeight: FontWeight.bold,
+                  color: Theme.of(context).colorScheme.onSurface,
+                ),
           ),
           const Spacer(),
           IconButton(

@@ -51,8 +51,8 @@ class ReviewTile extends StatelessWidget {
                     Text(
                       userName,
                       style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                        color: Theme.of(context).colorScheme.onSurface,
-                      ),
+                            color: Theme.of(context).colorScheme.onSurface,
+                          ),
                     ),
                     const Spacer(),
                     Text(time, style: Theme.of(context).textTheme.bodySmall),

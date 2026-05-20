@@ -26,9 +26,8 @@ class OrderStatusRow extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Row(
-      crossAxisAlignment: isStart
-          ? CrossAxisAlignment.start
-          : CrossAxisAlignment.center,
+      crossAxisAlignment:
+          isStart ? CrossAxisAlignment.start : CrossAxisAlignment.center,
       children: [
         Container(
           padding: const EdgeInsets.all(8.0),
@@ -50,8 +49,8 @@ class OrderStatusRow extends StatelessWidget {
               Text(
                 _orderStatus(),
                 style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                  color: Theme.of(context).colorScheme.onSurface,
-                ),
+                      color: Theme.of(context).colorScheme.onSurface,
+                    ),
               ),
               const SizedBox(height: 4),
               Row(
