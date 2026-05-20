@@ -29,7 +29,7 @@ class _ProfilePageState extends ConsumerState<ProfilePage>
       body: SafeArea(
         child: RefreshIndicator(
           onRefresh: onRefreshRequested,
-          child: SingleChildScrollView(
+          child: const SingleChildScrollView(
             physics: const AlwaysScrollableScrollPhysics(),
             child: const Column(
               children: [ProfileHeader(), ProfileMenuOptions()],
