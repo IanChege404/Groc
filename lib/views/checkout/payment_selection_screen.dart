@@ -258,11 +258,9 @@ class _PaymentOption extends StatelessWidget {
                 ],
               ),
             ),
-            Radio<bool>(
-              value: true,
-              groupValue: selected,
-              onChanged: (_) => onTap(),
-              activeColor: AppColors.primary,
+            Icon(
+              selected ? Icons.radio_button_checked : Icons.radio_button_off,
+              color: selected ? AppColors.primary : Colors.grey.shade400,
             ),
           ],
         ),

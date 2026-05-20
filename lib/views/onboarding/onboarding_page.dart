@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import '../../core/constants/app_defaults.dart';
 import '../../core/constants/constants.dart';
 import '../../core/routes/app_routes.dart';
 import 'components/onboarding_view.dart';

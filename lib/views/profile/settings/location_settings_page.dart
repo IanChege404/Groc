@@ -66,20 +66,22 @@ class _LocationSettingsPageState extends ConsumerState<LocationSettingsPage> {
                     const SizedBox(height: AppDefaults.padding),
                     ..._options.map(
                       (option) => Card(
-                        child: RadioListTile<String>(
-                          value: option,
-                          groupValue: selected,
+                        child: ListTile(
+                          onTap: () => _selectLocation(userId, option),
                           title: Text(option),
                           subtitle: Text(
                             option == 'Current Location'
                                 ? 'Uses your live location preference'
                                 : 'Stored under users/$userId/settings',
                           ),
-                          onChanged: (value) {
-                            if (value != null) {
-                              _selectLocation(userId, value);
-                            }
-                          },
+                          trailing: Icon(
+                            option == selected
+                                ? Icons.radio_button_checked
+                                : Icons.radio_button_off,
+                            color: option == selected
+                                ? AppColors.primary
+                                : Colors.grey.shade400,
+                          ),
                         ),
                       ),
                     ),
