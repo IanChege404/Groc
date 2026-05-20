@@ -364,8 +364,9 @@ class _WalletScreenState extends ConsumerState<WalletScreen> {
                       amountController.text.trim(),
                     );
                     final toUserId = userIdController.text.trim();
-                    if (amount == null || amount <= 0 || toUserId.isEmpty)
+                    if (amount == null || amount <= 0 || toUserId.isEmpty) {
                       return;
+                    }
 
                     final real = await ref
                         .read(walletProvider.notifier)

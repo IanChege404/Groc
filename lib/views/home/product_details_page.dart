@@ -262,7 +262,7 @@ class _ProductDetailsPageState extends ConsumerState<ProductDetailsPage> {
 
             /// Review Row
             Padding(
-              padding: EdgeInsets.symmetric(
+              padding: const EdgeInsets.symmetric(
                 horizontal: AppDefaults.padding,
                 // vertical: AppDefaults.padding,
               ),

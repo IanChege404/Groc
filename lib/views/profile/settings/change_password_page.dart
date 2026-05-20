@@ -130,8 +130,9 @@ class _ChangePasswordPageState extends State<ChangePasswordPage> {
                     controller: _newController,
                     obscureText: _obscure,
                     validator: (value) {
-                      if (value == null || value.length < 8)
+                      if (value == null || value.length < 8) {
                         return 'Password must be at least 8 characters';
+                      }
                       return null;
                     },
                     decoration: InputDecoration(
@@ -150,8 +151,9 @@ class _ChangePasswordPageState extends State<ChangePasswordPage> {
                     controller: _confirmController,
                     obscureText: _obscure,
                     validator: (value) {
-                      if (value != _newController.text)
+                      if (value != _newController.text) {
                         return 'Passwords do not match';
+                      }
                       return null;
                     },
                     decoration: InputDecoration(
