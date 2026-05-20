@@ -346,7 +346,7 @@ class _MpesaProcessingScreenState extends State<MpesaProcessingScreen>
                       widget.orderId,
                       'cancelled',
                     );
-                    if (!mounted) {
+                    if (!mounted || !context.mounted) {
                       return;
                     }
                     Navigator.pop(context);

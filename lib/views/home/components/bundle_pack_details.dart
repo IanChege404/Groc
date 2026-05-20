@@ -43,7 +43,7 @@ class PackDetails extends StatelessWidget {
                     ),
                   ),
                   title: Text(entry.value),
-                  subtitle: Text('Included in this bundle'),
+                  subtitle: const Text('Included in this bundle'),
                   trailing: Text(
                     bundle.productIds.length > entry.key
                         ? 'Item ${entry.key + 1}'

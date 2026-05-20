@@ -45,7 +45,7 @@ class AllOrderPage extends ConsumerWidget {
           leading: const AppBackButton(),
           title: const Text('My Order'),
           bottom: TabBar(
-            physics: NeverScrollableScrollPhysics(),
+            physics: const NeverScrollableScrollPhysics(),
             tabs: [
               CustomTabLabel(label: 'All', value: '(${orders.length})'),
               CustomTabLabel(

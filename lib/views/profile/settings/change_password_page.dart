@@ -33,9 +33,9 @@ class _ChangePasswordPageState extends State<ChangePasswordPage> {
 
     final user = FirebaseAuth.instance.currentUser;
     if (user == null) {
-      ScaffoldMessenger.of(
-        context,
-      ).showSnackBar(const SnackBar(content: Text('Please sign in again')));
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Please sign in again')),
+      );
       return;
     }
 
@@ -74,9 +74,9 @@ class _ChangePasswordPageState extends State<ChangePasswordPage> {
     } catch (e) {
       if (!mounted) return;
       setState(() => _isSaving = false);
-      ScaffoldMessenger.of(
-        context,
-      ).showSnackBar(SnackBar(content: Text('Error updating password: $e')));
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Error updating password: $e')),
+      );
     }
   }
 

@@ -155,7 +155,7 @@ class LoyaltyNotifier extends StateNotifier<AsyncValue<LoyaltyModel?>> {
   }
 
   int _calculateTier(int totalPoints) {
-    final thresholds = PaymentConstants.loyaltyTierThresholds;
+    const thresholds = PaymentConstants.loyaltyTierThresholds;
     int tier = 1;
     for (int i = thresholds.length - 1; i >= 0; i--) {
       if (totalPoints >= thresholds[i]) {

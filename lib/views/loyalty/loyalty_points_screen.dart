@@ -126,8 +126,8 @@ class _TierProgress extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final tiers = PaymentConstants.loyaltyTierNames;
-    final thresholds = PaymentConstants.loyaltyTierThresholds;
+    const tiers = PaymentConstants.loyaltyTierNames;
+    const thresholds = PaymentConstants.loyaltyTierThresholds;
     final currentTierIdx = (loyalty.tier - 1).clamp(0, tiers.length - 1);
 
     return Card(

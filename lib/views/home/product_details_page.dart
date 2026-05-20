@@ -268,11 +268,11 @@ class _ProductDetailsPageState extends ConsumerState<ProductDetailsPage> {
               ),
               child: Column(
                 children: [
-                  Divider(thickness: 0.1),
+                  const Divider(thickness: 0.1),
                   ReviewRowButton(
                     totalStars: (product.rating.round()).clamp(1, 5),
                   ),
-                  Divider(thickness: 0.1),
+                  const Divider(thickness: 0.1),
                 ],
               ),
             ),

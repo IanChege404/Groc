@@ -214,22 +214,13 @@ class _DeliveryMethodScreenState extends State<DeliveryMethodScreen> {
                                   ),
                                 ),
                                 const SizedBox(height: 4),
-                                // ignore: deprecated_member_use
-                                Radio<DeliveryMethod>(
-                                  value: option.method,
-                                  groupValue:
-                                      _selectedMethod, // ignore: deprecated_member_use
-                                  onChanged: (value) {
-                                    // ignore: deprecated_member_use
-                                    if (value != null) {
-                                      setState(() {
-                                        _selectedMethod = value;
-                                      });
-                                    }
-                                  },
-                                  activeColor: Theme.of(
-                                    context,
-                                  ).colorScheme.primary,
+                                Icon(
+                                  _selectedMethod == option.method
+                                      ? Icons.radio_button_checked
+                                      : Icons.radio_button_off,
+                                  color: _selectedMethod == option.method
+                                      ? Theme.of(context).colorScheme.primary
+                                      : Theme.of(context).colorScheme.outline,
                                 ),
                               ],
                             ),

@@ -229,7 +229,7 @@ class _WalletScreenState extends ConsumerState<WalletScreen> {
                         .read(walletProvider.notifier)
                         .topUp(userId, amount, method: 'manual');
 
-                    if (!mounted) return;
+                    if (!mounted || !context.mounted) return;
                     Navigator.pop(context);
                     ScaffoldMessenger.of(context).showSnackBar(
                       SnackBar(
@@ -300,7 +300,7 @@ class _WalletScreenState extends ConsumerState<WalletScreen> {
                               description: 'User withdrawal',
                             );
 
-                    if (!mounted) return;
+                    if (!mounted || !context.mounted) return;
                     Navigator.pop(context);
                     ScaffoldMessenger.of(context).showSnackBar(
                       SnackBar(
@@ -371,7 +371,7 @@ class _WalletScreenState extends ConsumerState<WalletScreen> {
                         .read(walletProvider.notifier)
                         .transfer(fromUserId, toUserId, amount);
 
-                    if (!mounted) return;
+                    if (!mounted || !context.mounted) return;
                     Navigator.pop(context);
                     ScaffoldMessenger.of(context).showSnackBar(
                       SnackBar(

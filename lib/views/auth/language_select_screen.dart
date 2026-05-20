@@ -177,20 +177,13 @@ class _LanguageSelectScreenState extends State<LanguageSelectScreen> {
               ),
             ),
 
-            // Radio selector
-            // ignore: deprecated_member_use
-            Radio<String>(
-              value: languageCode,
-              groupValue: _selectedLanguage, // ignore: deprecated_member_use
-              onChanged: (value) {
-                // ignore: deprecated_member_use
-                if (value != null) {
-                  setState(() {
-                    _selectedLanguage = value;
-                  });
-                }
-              },
-              activeColor: Theme.of(context).colorScheme.primary,
+            Icon(
+              _selectedLanguage == languageCode
+                  ? Icons.radio_button_checked
+                  : Icons.radio_button_off,
+              color: _selectedLanguage == languageCode
+                  ? Theme.of(context).colorScheme.primary
+                  : Theme.of(context).colorScheme.outline,
             ),
           ],
         ),
