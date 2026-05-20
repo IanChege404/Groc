@@ -30,9 +30,12 @@ class _ProfilePageState extends ConsumerState<ProfilePage>
         child: RefreshIndicator(
           onRefresh: onRefreshRequested,
           child: const SingleChildScrollView(
-            physics: const AlwaysScrollableScrollPhysics(),
-            child: const Column(
-              children: [ProfileHeader(), ProfileMenuOptions()],
+            physics: AlwaysScrollableScrollPhysics(),
+            child: Column(
+              children: [
+                ProfileHeader(),
+                ProfileMenuOptions(),
+              ],
             ),
           ),
         ),
