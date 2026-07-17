@@ -4,7 +4,8 @@ import '../../core/components/app_back_button.dart';
 import '../../core/constants/app_colors.dart';
 import '../../core/constants/app_defaults.dart';
 import '../../core/constants/payment_constants.dart';
-import '../../core/routes/app_routes.dart';
+import '../../core/l10n/app_localizations.dart';
+import 'package:go_router/go_router.dart';
 
 class PaymentSelectionScreen extends ConsumerStatefulWidget {
   final double amount;
@@ -27,10 +28,11 @@ class _PaymentSelectionScreenState
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     return Scaffold(
       appBar: AppBar(
         leading: const AppBackButton(),
-        title: const Text('Select Payment Method'),
+        title: Text(l10n.selectPaymentMethod),
       ),
       body: Padding(
         padding: const EdgeInsets.all(AppDefaults.padding),
@@ -39,9 +41,9 @@ class _PaymentSelectionScreenState
           children: [
             _AmountSummary(amount: widget.amount),
             const SizedBox(height: 24),
-            const Text(
-              'Choose how to pay',
-              style: TextStyle(fontWeight: FontWeight.w700, fontSize: 16),
+            Text(
+              l10n.chooseHowToPay,
+              style: const TextStyle(fontWeight: FontWeight.w700, fontSize: 16),
             ),
             const SizedBox(height: 12),
             _PaymentOption(
@@ -126,28 +128,20 @@ class _PaymentSelectionScreenState
   void _proceed(BuildContext context) {
     switch (_selected) {
       case PaymentConstants.mpesa:
-        Navigator.pushNamed(
-          context,
-          AppRoutes.mpesaProcessing,
-          arguments: {
+        context.push('/mpesaProcessing', extra: {
             'amount': widget.amount,
             'orderId': widget.orderId,
             'phoneNumber': '',
-          },
-        );
+          });
         break;
       case PaymentConstants.card:
-        Navigator.pushNamed(
-          context,
-          AppRoutes.cardPayment,
-          arguments: {
+        context.push('/cardPayment', extra: {
             'amount': widget.amount,
             'orderId': widget.orderId,
-          },
-        );
+          });
         break;
       default:
-        Navigator.pushNamed(context, AppRoutes.orderSuccessfull);
+        context.push('/orderSuccessfull');
     }
   }
 }

@@ -4,6 +4,7 @@ import 'package:flutter_svg/svg.dart';
 
 import '../../../core/components/network_image.dart';
 import '../../../core/constants/constants.dart';
+import '../../../core/l10n/app_localizations.dart';
 import '../../../core/models/cart_item_model.dart';
 import '../../../core/providers/product_cache_provider.dart';
 
@@ -65,9 +66,10 @@ class _SingleCartItemTileState extends ConsumerState<SingleCartItemTile>
     await _deleteController.forward();
     if (mounted) {
       widget.onRemove();
+      final l10n = AppLocalizations.of(context)!;
       ScaffoldMessenger.of(
         context,
-      ).showSnackBar(const SnackBar(content: Text('Item removed from cart')));
+      ).showSnackBar(SnackBar(content: Text(l10n.itemRemovedFromCart)));
     }
   }
 
@@ -86,11 +88,14 @@ class _SingleCartItemTileState extends ConsumerState<SingleCartItemTile>
     final productAsync = ref.watch(productByIdProvider(widget.item.productId));
 
     return productAsync.when(
-      loading: () => _buildCartItemTile(
-        context,
-        'Loading...',
-        'https://i.imgur.com/4YEHvGc.png',
-      ),
+      loading: () {
+        final l10n = AppLocalizations.of(context)!;
+        return _buildCartItemTile(
+          context,
+          l10n.loading,
+          'https://i.imgur.com/4YEHvGc.png',
+        );
+      },
       error: (_, __) => _buildCartItemTile(
         context,
         widget.item.productId,
@@ -115,6 +120,7 @@ class _SingleCartItemTileState extends ConsumerState<SingleCartItemTile>
     String productName,
     String productImage,
   ) {
+    final l10n = AppLocalizations.of(context)!;
     return SlideTransition(
       position: _slideAnimation,
       child: FadeTransition(
@@ -170,10 +176,17 @@ class _SingleCartItemTileState extends ConsumerState<SingleCartItemTile>
                       ),
                       Row(
                         children: [
-                          IconButton(
-                            onPressed: widget.onIncrease,
-                            icon: SvgPicture.asset(AppIcons.addQuantity),
-                            constraints: const BoxConstraints(),
+                          Semantics(
+                            button: true,
+                            label: l10n.increaseQuantity(
+                              productName,
+                              widget.item.quantity + 1,
+                            ),
+                            child: IconButton(
+                              onPressed: widget.onIncrease,
+                              icon: SvgPicture.asset(AppIcons.addQuantity),
+                              constraints: const BoxConstraints(),
+                            ),
                           ),
                           Padding(
                             padding: const EdgeInsets.all(8.0),
@@ -190,12 +203,19 @@ class _SingleCartItemTileState extends ConsumerState<SingleCartItemTile>
                                   ),
                             ),
                           ),
-                          IconButton(
-                            onPressed: widget.item.quantity > 1
-                                ? widget.onDecrease
-                                : null,
-                            icon: SvgPicture.asset(AppIcons.removeQuantity),
-                            constraints: const BoxConstraints(),
+                          Semantics(
+                            button: true,
+                            label: l10n.decreaseQuantity(
+                              productName,
+                              widget.item.quantity - 1,
+                            ),
+                            child: IconButton(
+                              onPressed: widget.item.quantity > 1
+                                  ? widget.onDecrease
+                                  : null,
+                              icon: SvgPicture.asset(AppIcons.removeQuantity),
+                              constraints: const BoxConstraints(),
+                            ),
                           ),
                         ],
                       ),
@@ -206,14 +226,18 @@ class _SingleCartItemTileState extends ConsumerState<SingleCartItemTile>
                   /// Price and Delete labelLarge
                   Column(
                     children: [
-                      IconButton(
-                        constraints: const BoxConstraints(),
-                        onPressed: _isDeleting ? null : _triggerDelete,
-                        icon: SvgPicture.asset(AppIcons.delete),
+                      Semantics(
+                        button: true,
+                        label: l10n.removeFromCart(productName),
+                        child: IconButton(
+                          constraints: const BoxConstraints(),
+                          onPressed: _isDeleting ? null : _triggerDelete,
+                          icon: SvgPicture.asset(AppIcons.delete),
+                        ),
                       ),
                       const SizedBox(height: 16),
                       Text(
-                        '\$${(widget.item.priceAtTimeOfAdd * widget.item.quantity).toStringAsFixed(2)}',
+                        'KES ${(widget.item.priceAtTimeOfAdd * widget.item.quantity).toStringAsFixed(2)}',
                       ),
                     ],
                   ),

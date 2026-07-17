@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import '../../../core/components/network_image.dart';
 import '../../../core/constants/app_colors.dart';
 import '../../../core/constants/app_defaults.dart';
-import '../../../core/routes/app_routes.dart';
+import 'package:go_router/go_router.dart';
 
 class DeliverySuccessfullDialog extends StatelessWidget {
   const DeliverySuccessfullDialog({super.key});
@@ -49,7 +49,7 @@ class DeliverySuccessfullDialog extends StatelessWidget {
               width: double.infinity,
               child: ElevatedButton(
                 onPressed: () {
-                  Navigator.pushNamed(context, AppRoutes.submitReview);
+                  context.push('/submitReview');
                 },
                 child: const Text('Rate The Product'),
               ),
@@ -59,7 +59,7 @@ class DeliverySuccessfullDialog extends StatelessWidget {
               width: double.infinity,
               child: OutlinedButton(
                 onPressed: () {
-                  Navigator.pushNamed(context, AppRoutes.entryPoint);
+                  context.push('/entry_point');
                 },
                 style: OutlinedButton.styleFrom(
                   foregroundColor: AppColors.primary,

@@ -4,14 +4,18 @@ import 'package:firebase_auth/firebase_auth.dart';
 
 import '../../core/components/app_back_button.dart';
 import '../../core/constants/app_defaults.dart';
+import '../../core/l10n/app_localizations.dart';
 import '../../core/models/order_model.dart';
 import '../../core/providers/auth_provider.dart';
 import '../../core/providers/cart_provider.dart';
 import '../../core/providers/order_provider.dart';
-import '../../core/routes/app_routes.dart';
 import 'components/checkout_address_selector.dart';
 import 'components/checkout_card_details.dart';
 import 'components/checkout_payment_systems.dart';
+import 'package:go_router/go_router.dart';
+
+/// Kenyan phone numbers in E.164 format, e.g. +254712345678
+final RegExp _kenyanPhoneRegExp = RegExp(r'^\+254[17]\d{8}$');
 
 class CheckoutPage extends ConsumerWidget {
   const CheckoutPage({super.key});
@@ -50,11 +54,36 @@ class PayNowButton extends ConsumerStatefulWidget {
 class _PayNowButtonState extends ConsumerState<PayNowButton> {
   bool _isSubmitting = false;
 
+  Future<bool> _confirmPayment(double amount, String phoneNumber) async {
+    final l10n = AppLocalizations.of(context)!;
+    final confirmed = await showDialog<bool>(
+      context: context,
+      builder: (dialogContext) => AlertDialog(
+        title: Text(l10n.confirmPaymentTitle),
+        content: Text(
+          l10n.confirmPaymentMessage(amount.toStringAsFixed(0), phoneNumber),
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.of(dialogContext).pop(false),
+            child: Text(l10n.cancel),
+          ),
+          ElevatedButton(
+            onPressed: () => Navigator.of(dialogContext).pop(true),
+            child: Text(l10n.confirm),
+          ),
+        ],
+      ),
+    );
+    return confirmed ?? false;
+  }
+
   Future<void> _onPayNow() async {
     if (_isSubmitting) {
       return;
     }
 
+    final l10n = AppLocalizations.of(context)!;
     final authState = ref.read(authProvider);
     final cartState = ref.read(cartItemsProvider);
 
@@ -78,10 +107,23 @@ class _PayNowButtonState extends ConsumerState<PayNowButton> {
       return;
     }
 
+    final phoneNumber = FirebaseAuth.instance.currentUser?.phoneNumber;
+    if (phoneNumber == null || !_kenyanPhoneRegExp.hasMatch(phoneNumber)) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text(l10n.invalidPhoneNumber)),
+      );
+      return;
+    }
+
     final totalAmount = cartItems.fold<double>(
       0,
       (sum, item) => sum + (item.priceAtTimeOfAdd * item.quantity),
     );
+
+    final confirmed = await _confirmPayment(totalAmount, phoneNumber);
+    if (!confirmed || !mounted) {
+      return;
+    }
 
     final orderId = 'ord_${DateTime.now().microsecondsSinceEpoch}';
     final order = OrderModel(
@@ -116,35 +158,21 @@ class _PayNowButtonState extends ConsumerState<PayNowButton> {
         return;
       }
 
-      final phoneNumber = FirebaseAuth.instance.currentUser?.phoneNumber;
-      if (phoneNumber == null || phoneNumber.trim().isEmpty) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text(
-              'Phone number is required for M-Pesa checkout. Update your account phone number and try again.',
-            ),
-          ),
-        );
-        await ref.read(ordersProvider.notifier).cancelOrder(orderId);
-        return;
-      }
-
-      Navigator.pushNamed(
-        context,
-        AppRoutes.mpesaProcessing,
-        arguments: {
-          'amount': totalAmount,
-          'phoneNumber': phoneNumber,
-          'orderId': orderId,
-        },
-      );
+      context.push('/mpesaProcessing', extra: {
+        'amount': totalAmount,
+        'phoneNumber': phoneNumber,
+        'orderId': orderId,
+      });
     } catch (e) {
       if (!mounted) {
         return;
       }
-      ScaffoldMessenger.of(
-        context,
-      ).showSnackBar(SnackBar(content: Text('Failed to create order: $e')));
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(l10n.orderCreationFailed),
+          action: SnackBarAction(label: l10n.retry, onPressed: _onPayNow),
+        ),
+      );
     } finally {
       if (mounted) {
         setState(() {
@@ -156,13 +184,31 @@ class _PayNowButtonState extends ConsumerState<PayNowButton> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     return SizedBox(
       width: double.infinity,
       child: Padding(
         padding: const EdgeInsets.all(AppDefaults.padding),
         child: ElevatedButton(
           onPressed: _isSubmitting ? null : _onPayNow,
-          child: Text(_isSubmitting ? 'Processing...' : 'Pay Now'),
+          child: _isSubmitting
+              ? Row(
+                  mainAxisSize: MainAxisSize.min,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    const SizedBox(
+                      width: 18,
+                      height: 18,
+                      child: CircularProgressIndicator(
+                        strokeWidth: 2,
+                        valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+                      ),
+                    ),
+                    const SizedBox(width: 12),
+                    Text(l10n.processingPayment),
+                  ],
+                )
+              : Text(l10n.payNow),
         ),
       ),
     );

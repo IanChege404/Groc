@@ -9,11 +9,15 @@ class PriceAndQuantityRow extends StatefulWidget {
     required this.currentPrice,
     required this.orginalPrice,
     required this.quantity,
+    this.maxQuantity,
   });
 
   final double currentPrice;
   final double orginalPrice;
   final int quantity;
+
+  /// Caps quantity selection (e.g. available stock). Null means unlimited.
+  final int? maxQuantity;
 
   @override
   State<PriceAndQuantityRow> createState() => PriceAndQuantityRowState();
@@ -23,6 +27,10 @@ class PriceAndQuantityRowState extends State<PriceAndQuantityRow> {
   int quantity = 1;
 
   onQuantityIncrease() {
+    final max = widget.maxQuantity;
+    if (max != null && quantity >= max) {
+      return;
+    }
     quantity++;
     setState(() {});
   }
@@ -45,20 +53,24 @@ class PriceAndQuantityRowState extends State<PriceAndQuantityRow> {
 
   @override
   Widget build(BuildContext context) {
+    final max = widget.maxQuantity;
+    final canIncrease = max == null || quantity < max;
+
     return Row(
       crossAxisAlignment: CrossAxisAlignment.end,
       children: [
         /* <---- Price -----> */
-        Text(
-          '\$30',
-          style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                decoration: TextDecoration.lineThrough,
-                fontWeight: FontWeight.bold,
-              ),
-        ),
+        if (widget.orginalPrice > widget.currentPrice)
+          Text(
+            '\$${widget.orginalPrice.toStringAsFixed(2)}',
+            style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                  decoration: TextDecoration.lineThrough,
+                  fontWeight: FontWeight.bold,
+                ),
+          ),
         const SizedBox(width: AppDefaults.padding),
         Text(
-          '\$20',
+          '\$${widget.currentPrice.toStringAsFixed(2)}',
           style: Theme.of(context).textTheme.headlineSmall?.copyWith(
                 color: AppColors.primary,
                 fontWeight: FontWeight.bold,
@@ -70,8 +82,11 @@ class PriceAndQuantityRowState extends State<PriceAndQuantityRow> {
         Row(
           children: [
             IconButton(
-              onPressed: onQuantityIncrease,
-              icon: SvgPicture.asset(AppIcons.addQuantity),
+              onPressed: canIncrease ? onQuantityIncrease : null,
+              icon: Opacity(
+                opacity: canIncrease ? 1 : 0.4,
+                child: SvgPicture.asset(AppIcons.addQuantity),
+              ),
               constraints: const BoxConstraints(),
             ),
             Padding(

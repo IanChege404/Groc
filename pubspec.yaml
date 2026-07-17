@@ -42,7 +42,10 @@ dependencies:
   cloud_firestore: ^5.0.0
   firebase_auth: ^5.7.0
   flutter_riverpod: ^2.6.1
+  go_router: ^14.8.1
   path: any
+  # Social Auth
+  google_sign_in: ^6.2.1
   # Payment
   url_launcher: ^6.3.1
   # Notifications
@@ -54,15 +57,45 @@ dependencies:
   # Image Processing
   image_picker: ^1.1.2
   flutter_image_compress: ^2.4.0
+  # Video
+  video_player: ^2.9.2
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
   flutter_lints: ^4.0.0
+  flutter_launcher_icons: ^0.14.3
+  flutter_native_splash: ^2.4.3
+
+flutter_launcher_icons:
+  android: true
+  ios: true
+  image_path: "assets/images/app_logo.png"
+  adaptive_icon_background: "#2E7D32"
+  adaptive_icon_foreground: "assets/images/app_logo.png"
+
+flutter_native_splash:
+  color: "#2E7D32"
+  image: assets/images/app_logo_splash.png
+  color_dark: "#1B5E20"
+  image_dark: assets/images/app_logo_splash.png
+  android_12:
+    color: "#2E7D32"
+    image: assets/images/app_logo_splash.png
+    color_dark: "#1B5E20"
+    image_dark: assets/images/app_logo_splash.png
+  android: true
+  ios: true
+  web: true
 
 flutter:
+  generate: true
   uses-material-design: true
   assets:
     - assets/images/
     - assets/icons/
     - assets/fonts/
+    - assets/icon/
+    - assets/splash_animation.mp4
+    - lib/core/l10n/en.arb
+    - lib/core/l10n/sw.arb

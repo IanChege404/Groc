@@ -2,12 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_svg/svg.dart';
 
+import '../../../core/components/afri_button.dart';
 import '../../../core/constants/constants.dart';
-import '../../../core/routes/app_routes.dart';
+import '../../../core/l10n/app_localizations.dart';
 import '../../../core/services/firestore_auth_service.dart';
 import '../../../core/utils/validators.dart';
 import 'already_have_accout.dart';
-import 'sign_up_button.dart';
+import 'package:go_router/go_router.dart';
 
 class SignUpForm extends StatefulWidget {
   const SignUpForm({super.key});
@@ -79,21 +80,20 @@ class _SignUpFormState extends State<SignUpForm> {
     });
 
     if (result.success) {
-      Navigator.pushNamedAndRemoveUntil(
-        context,
-        AppRoutes.entryPoint,
-        (route) => false,
-      );
+      context.go('/entry_point');
       return;
     }
 
-    ScaffoldMessenger.of(
-      context,
-    ).showSnackBar(SnackBar(content: Text(result.message ?? 'Signup failed')));
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+          content: Text(
+              result.message ?? AppLocalizations.of(context)!.signupFailed)),
+    );
   }
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     return Container(
       margin: const EdgeInsets.all(AppDefaults.margin),
       padding: const EdgeInsets.all(AppDefaults.padding),
@@ -107,56 +107,133 @@ class _SignUpFormState extends State<SignUpForm> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const Text("Name"),
-            const SizedBox(height: 8),
-            TextFormField(
-              controller: nameController,
-              validator: Validators.requiredWithFieldName('Name').call,
-              textInputAction: TextInputAction.next,
+            Semantics(
+              label: l10n.name,
+              child: Text(l10n.name),
             ),
-            const SizedBox(height: AppDefaults.padding),
-            const Text("Email"),
             const SizedBox(height: 8),
-            TextFormField(
-              controller: emailController,
-              textInputAction: TextInputAction.next,
-              validator: Validators.email.call,
-              keyboardType: TextInputType.emailAddress,
-            ),
-            const SizedBox(height: AppDefaults.padding),
-            const Text("Phone Number"),
-            const SizedBox(height: 8),
-            TextFormField(
-              controller: phoneController,
-              textInputAction: TextInputAction.next,
-              validator: Validators.required.call,
-              keyboardType: TextInputType.number,
-              inputFormatters: [FilteringTextInputFormatter.digitsOnly],
-            ),
-            const SizedBox(height: AppDefaults.padding),
-            const Text("Password"),
-            const SizedBox(height: 8),
-            TextFormField(
-              controller: passwordController,
-              validator: Validators.password.call,
-              textInputAction: TextInputAction.done,
-              obscureText: !isPasswordVisible,
-              decoration: InputDecoration(
-                suffixIcon: Material(
-                  color: Colors.transparent,
-                  child: IconButton(
-                    onPressed: () {
-                      setState(() {
-                        isPasswordVisible = !isPasswordVisible;
-                      });
-                    },
-                    icon: SvgPicture.asset(AppIcons.eye, width: 24),
+            Semantics(
+              label: l10n.name,
+              child: TextFormField(
+                controller: nameController,
+                validator: Validators.requiredWithFieldName(l10n.name).call,
+                textInputAction: TextInputAction.next,
+                autofillHints: const [AutofillHints.name],
+                decoration: InputDecoration(
+                  labelText: l10n.name,
+                  hintText: l10n.nameHint,
+                  suffixIcon: const Text(
+                    '*',
+                    style: TextStyle(color: Colors.red, fontSize: 18),
                   ),
                 ),
               ),
             ),
             const SizedBox(height: AppDefaults.padding),
-            SignUpButton(onPressed: isSubmitting ? null : _onSignup),
+            Semantics(
+              label: l10n.email,
+              child: Text(l10n.email),
+            ),
+            const SizedBox(height: 8),
+            Semantics(
+              label: l10n.email,
+              child: TextFormField(
+                controller: emailController,
+                textInputAction: TextInputAction.next,
+                validator: Validators.email.call,
+                keyboardType: TextInputType.emailAddress,
+                autofillHints: const [AutofillHints.email],
+                decoration: InputDecoration(
+                  labelText: l10n.email,
+                  hintText: l10n.emailHint,
+                  suffixIcon: const Text(
+                    '*',
+                    style: TextStyle(color: Colors.red, fontSize: 18),
+                  ),
+                ),
+              ),
+            ),
+            const SizedBox(height: AppDefaults.padding),
+            Semantics(
+              label: l10n.phoneNumber,
+              child: Text(l10n.phoneNumber),
+            ),
+            const SizedBox(height: 8),
+            Semantics(
+              label: l10n.phoneNumber,
+              child: TextFormField(
+                controller: phoneController,
+                textInputAction: TextInputAction.next,
+                validator: Validators.required.call,
+                keyboardType: TextInputType.number,
+                inputFormatters: [
+                  FilteringTextInputFormatter.digitsOnly,
+                  LengthLimitingTextInputFormatter(15),
+                ],
+                autofillHints: const [AutofillHints.telephoneNumber],
+                decoration: InputDecoration(
+                  labelText: l10n.phoneNumber,
+                  hintText: l10n.phoneHint,
+                  suffixIcon: const Text(
+                    '*',
+                    style: TextStyle(color: Colors.red, fontSize: 18),
+                  ),
+                ),
+              ),
+            ),
+            const SizedBox(height: AppDefaults.padding),
+            Semantics(
+              label: l10n.password,
+              child: Text(l10n.password),
+            ),
+            const SizedBox(height: 8),
+            Semantics(
+              label: l10n.password,
+              child: TextFormField(
+                controller: passwordController,
+                validator: Validators.password.call,
+                textInputAction: TextInputAction.done,
+                obscureText: !isPasswordVisible,
+                autofillHints: const [AutofillHints.newPassword],
+                decoration: InputDecoration(
+                  labelText: l10n.password,
+                  hintText: l10n.passwordHint,
+                  suffixIcon: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      const Text(
+                        '*',
+                        style: TextStyle(color: Colors.red, fontSize: 18),
+                      ),
+                      Material(
+                        color: Colors.transparent,
+                        child: Semantics(
+                          button: true,
+                          label: isPasswordVisible
+                              ? 'Hide password'
+                              : 'Show password',
+                          child: IconButton(
+                            onPressed: () {
+                              setState(() {
+                                isPasswordVisible = !isPasswordVisible;
+                              });
+                            },
+                            icon: SvgPicture.asset(AppIcons.eye, width: 24),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ),
+            const SizedBox(height: AppDefaults.padding),
+            AfriButton(
+              label: l10n.signUp,
+              isLoading: isSubmitting,
+              isDisabled: isSubmitting,
+              onPressed: _onSignup,
+            ),
             const AlreadyHaveAnAccount(),
             const SizedBox(height: AppDefaults.padding),
           ],

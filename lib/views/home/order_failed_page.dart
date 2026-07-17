@@ -1,13 +1,17 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 
 import '../../core/components/network_image.dart';
 import '../../core/constants/app_defaults.dart';
+import '../../core/l10n/app_localizations.dart';
 
 class OrderFailedPage extends StatelessWidget {
   const OrderFailedPage({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+
     return Scaffold(
       body: Column(
         children: [
@@ -16,11 +20,14 @@ class OrderFailedPage extends StatelessWidget {
             padding: const EdgeInsets.all(AppDefaults.padding),
             child: SizedBox(
               width: MediaQuery.of(context).size.width * 0.7,
-              child: const AspectRatio(
+              child: AspectRatio(
                 aspectRatio: 1 / 1,
-                child: NetworkImageWithLoader(
-                  'https://i.imgur.com/vPVGf8C.png',
-                  fit: BoxFit.contain,
+                child: Semantics(
+                  label: l10n.orderFailedTitle,
+                  child: const NetworkImageWithLoader(
+                    'https://i.imgur.com/vPVGf8C.png',
+                    fit: BoxFit.contain,
+                  ),
                 ),
               ),
             ),
@@ -30,7 +37,7 @@ class OrderFailedPage extends StatelessWidget {
             child: Column(
               children: [
                 Text(
-                  'Sorry, Order has Failed',
+                  l10n.orderFailedTitle,
                   style: Theme.of(context).textTheme.titleLarge?.copyWith(
                         fontWeight: FontWeight.bold,
                         color: Theme.of(context).colorScheme.onSurface,
@@ -38,12 +45,12 @@ class OrderFailedPage extends StatelessWidget {
                   textAlign: TextAlign.center,
                 ),
                 const SizedBox(height: 16),
-                const Padding(
-                  padding: EdgeInsets.symmetric(
+                Padding(
+                  padding: const EdgeInsets.symmetric(
                     horizontal: AppDefaults.padding,
                   ),
                   child: Text(
-                    'Sorry, somethings went wrong.\nPlease try again continue your order',
+                    l10n.orderFailedDesc,
                     textAlign: TextAlign.center,
                   ),
                 ),
@@ -56,8 +63,20 @@ class OrderFailedPage extends StatelessWidget {
             child: SizedBox(
               width: double.infinity,
               child: ElevatedButton(
-                onPressed: () {},
-                child: const Text('Try Again'),
+                onPressed: () => context.go('/cartPage'),
+                child: Text(l10n.tryAgain),
+              ),
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.symmetric(
+              horizontal: AppDefaults.padding * 2,
+            ),
+            child: SizedBox(
+              width: double.infinity,
+              child: TextButton(
+                onPressed: () => context.go('/entry_point'),
+                child: Text(l10n.goToHome),
               ),
             ),
           ),

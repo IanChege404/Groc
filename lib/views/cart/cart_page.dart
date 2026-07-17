@@ -3,12 +3,13 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../core/components/app_back_button.dart';
 import '../../core/constants/app_defaults.dart';
-import '../../core/routes/app_routes.dart';
+import '../../core/l10n/app_localizations.dart';
 import '../../core/providers/cart_provider.dart';
 import 'components/coupon_code_field.dart';
 import 'components/items_totals_price.dart';
 import 'components/single_cart_item_tile.dart';
 import 'empty_cart_page.dart';
+import 'package:go_router/go_router.dart';
 
 class CartPage extends ConsumerStatefulWidget {
   const CartPage({super.key, this.isHomePage = false});
@@ -22,6 +23,7 @@ class CartPage extends ConsumerStatefulWidget {
 class _CartPageState extends ConsumerState<CartPage> {
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     final cartState = ref.watch(cartItemsProvider);
 
     return Scaffold(
@@ -29,7 +31,7 @@ class _CartPageState extends ConsumerState<CartPage> {
           ? null
           : AppBar(
               leading: const AppBackButton(),
-              title: const Text('Cart Page'),
+              title: Text(l10n.cart),
             ),
       body: SafeArea(
         child: cartState.when(
@@ -40,14 +42,14 @@ class _CartPageState extends ConsumerState<CartPage> {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Text('Failed to load cart: $error'),
+                  Text(l10n.checkConnectionAndRetry),
                   const SizedBox(height: 16),
                   ElevatedButton(
                     onPressed: () {
                       // Refresh the cart data
                       ref.invalidate(cartItemsProvider);
                     },
-                    child: const Text('Retry'),
+                    child: Text(l10n.retry),
                   ),
                 ],
               ),
@@ -104,10 +106,7 @@ class _CartPageState extends ConsumerState<CartPage> {
                         padding: const EdgeInsets.all(AppDefaults.padding),
                         child: ElevatedButton(
                           onPressed: () {
-                            Navigator.pushNamed(
-                              context,
-                              AppRoutes.checkoutPage,
-                            );
+                            context.push('/checkoutPage');
                           },
                           child: const Text('Checkout'),
                         ),

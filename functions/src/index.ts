@@ -11,6 +11,9 @@ if (!admin.apps.length) {
 
 const db = admin.firestore();
 
+export {onReviewWrite} from "./rating_aggregation";
+export {onReturnStatusUpdate} from "./return_notifications";
+
 type PaymentStatus = "pending" | "processing" | "completed" | "failed";
 
 interface PaymentRecord {

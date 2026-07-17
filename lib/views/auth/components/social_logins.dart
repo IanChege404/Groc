@@ -1,13 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:go_router/go_router.dart';
 
 import '../../../core/constants/constants.dart';
+import '../../../core/services/firestore_auth_service.dart';
 
-class SocialLogins extends StatelessWidget {
+class SocialLogins extends ConsumerWidget {
   const SocialLogins({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     return Padding(
       padding: const EdgeInsets.all(AppDefaults.padding),
       child: Row(
@@ -15,7 +18,7 @@ class SocialLogins extends StatelessWidget {
         children: [
           Expanded(
             child: OutlinedButton(
-              onPressed: () {},
+              onPressed: () => _handleGoogleSignIn(context),
               style: OutlinedButton.styleFrom(
                 side: const BorderSide(color: Colors.red),
                 padding: const EdgeInsets.symmetric(
@@ -42,7 +45,7 @@ class SocialLogins extends StatelessWidget {
           const SizedBox(width: AppDefaults.margin),
           Expanded(
             child: OutlinedButton(
-              onPressed: () {},
+              onPressed: () => _showComingSoon(context),
               style: OutlinedButton.styleFrom(
                 side: BorderSide(color: Theme.of(context).dividerColor),
                 padding: const EdgeInsets.symmetric(
@@ -67,6 +70,34 @@ class SocialLogins extends StatelessWidget {
             ),
           ),
         ],
+      ),
+    );
+  }
+
+  Future<void> _handleGoogleSignIn(BuildContext context) async {
+    try {
+      final authService = FirestoreAuthService();
+      await authService.signInWithGoogle();
+      if (context.mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Signed in with Google')),
+        );
+        context.go('/entry_point');
+      }
+    } catch (e) {
+      if (context.mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Sign in failed: $e')),
+        );
+      }
+    }
+  }
+
+  void _showComingSoon(BuildContext context) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(
+        content: Text('Apple Sign-In coming soon'),
+        duration: Duration(seconds: 2),
       ),
     );
   }

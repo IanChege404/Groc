@@ -10,10 +10,37 @@ service cloud.firestore {
     }
 
     // Public read access to products, categories, and bundles
-    // Writes allowed only from authenticated/admin context
+    // Writes to the product document itself allowed only from authenticated/admin context.
+    // Scoped to the doc (not recursive) so the reviews subcollection below is governed
+    // solely by its own, stricter rules.
     match /products/{document=**} {
       allow read: if true;
+    }
+
+    match /products/{productId} {
       allow create, update, delete: if signedIn();
+    }
+
+    // Reviews: public read; a user may create/update/delete only their own review,
+    // and is capped at one review per product by using their uid as the doc ID —
+    // a second submission becomes an `update` (not `create`) and is rejected below.
+    match /products/{productId}/reviews/{reviewId} {
+      allow read: if true;
+      allow create: if signedIn()
+                 && reviewId == request.auth.uid
+                 && request.resource.data.userId == request.auth.uid
+                 && request.resource.data.productId == productId
+                 && request.resource.data.rating is number
+                 && request.resource.data.rating >= 1
+                 && request.resource.data.rating <= 5;
+      allow update: if signedIn()
+                 && reviewId == request.auth.uid
+                 && request.resource.data.userId == resource.data.userId
+                 && request.resource.data.productId == resource.data.productId
+                 && request.resource.data.rating is number
+                 && request.resource.data.rating >= 1
+                 && request.resource.data.rating <= 5;
+      allow delete: if signedIn() && reviewId == request.auth.uid;
     }
 
     match /categories/{document=**} {
@@ -27,9 +54,18 @@ service cloud.firestore {
     }
 
     // Global coupons collection used for redeeming by code
+    // Enhanced validation: code must be uppercase alphanumeric, discount constraints
     match /coupons/{couponId} {
       allow read: if signedIn();
-      allow create, update, delete: if signedIn();
+      allow create: if signedIn()
+                 && request.resource.data.code is string
+                 && request.resource.data.code.matches('[A-Z0-9]+')
+                 && (request.resource.data.discountType == 'percentage'
+                     ? (request.resource.data.discount >= 0 && request.resource.data.discount <= 100)
+                     : request.resource.data.discount > 0)
+                 && request.resource.data.expireDate > now;
+      allow update: if signedIn() && request.resource.data.code == resource.data.code;
+      allow delete: if signedIn();
     }
 
     // Users can read/write their own user document
@@ -75,12 +111,21 @@ service cloud.firestore {
     }
 
     // Wishlist: users can manage only their own wishlist entries
+    // Enhanced: validate itemType enum and ensure item exists in catalog
     match /wishlist/{wishlistId} {
       allow read: if signedIn() && request.auth.uid == resource.data.userId;
-      allow create: if signedIn() && request.auth.uid == request.resource.data.userId;
+      allow create: if signedIn()
+                 && request.auth.uid == request.resource.data.userId
+                 && request.resource.data.itemType in ['product', 'bundle']
+                 && ((request.resource.data.itemType == 'product'
+                      && exists(/databases/$(database)/documents/products/$(request.resource.data.itemId)))
+                     || (request.resource.data.itemType == 'bundle'
+                         && exists(/databases/$(database)/documents/bundles/$(request.resource.data.itemId))));
       allow update: if signedIn()
                     && request.auth.uid == resource.data.userId
-                    && request.resource.data.userId == resource.data.userId;
+                    && request.resource.data.userId == resource.data.userId
+                    && request.resource.data.itemType == resource.data.itemType
+                    && request.resource.data.itemId == resource.data.itemId;
       allow delete: if signedIn() && request.auth.uid == resource.data.userId;
     }
 
@@ -99,13 +144,6 @@ service cloud.firestore {
       allow delete: if false;
     }
 
-    // Reviews: public read, authenticated users can create
-    match /reviews/{reviewId} {
-      allow read: if true;
-      allow create: if signedIn();
-      allow update, delete: if signedIn() && request.auth.uid == resource.data.userId;
-    }
-
     // Recipes: public read
     match /recipes/{recipeId} {
       allow read: if true;
@@ -121,6 +159,24 @@ service cloud.firestore {
     // Loyalty accounts: users can read/write their own
     match /loyalty/{userId} {
       allow read, write: if isOwner(userId);
+    }
+
+    // Return Requests: users can read/create their own, admins can update status
+    match /return_requests/{returnId} {
+      allow read: if signedIn() && request.auth.uid == resource.data.userId;
+      allow create: if signedIn()
+                 && request.resource.data.userId == request.auth.uid
+                 && request.resource.data.status == 'pending'
+                 && request.resource.data.refundAmount > 0;
+      allow update: if signedIn()
+                 && (request.auth.uid == resource.data.userId
+                     || get(/databases/$(database)/documents/users/$(request.auth.uid)).data.isAdmin == true);
+      allow delete: if false;
+    }
+
+    // Return requests are also readable by admins for dashboard
+    match /return_requests/{document=**} {
+      allow read: if signedIn() && get(/databases/$(database)/documents/users/$(request.auth.uid)).data.isAdmin == true;
     }
 
     // Default deny all other access

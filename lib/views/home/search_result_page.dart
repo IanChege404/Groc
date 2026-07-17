@@ -4,7 +4,9 @@ import 'package:flutter_svg/svg.dart';
 
 import '../../core/components/app_back_button.dart';
 import '../../core/components/product_tile_square.dart';
+import '../../core/components/retryable_error_view.dart';
 import '../../core/constants/constants.dart';
+import '../../core/l10n/app_localizations.dart';
 import '../../core/providers/catalog_provider.dart';
 
 class SearchResultPage extends ConsumerStatefulWidget {
@@ -26,6 +28,7 @@ class _SearchResultPageState extends ConsumerState<SearchResultPage> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     final trimmedQuery = _query.trim();
     final resultsAsync = trimmedQuery.isEmpty
         ? null
@@ -33,23 +36,26 @@ class _SearchResultPageState extends ConsumerState<SearchResultPage> {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Search Results'),
+        title: Text(l10n.searchResults),
         leading: const AppBackButton(),
       ),
       body: Column(
         children: [
           Padding(
             padding: const EdgeInsets.all(AppDefaults.padding),
-            child: TextField(
-              controller: _controller,
-              onChanged: (value) => setState(() => _query = value),
-              decoration: InputDecoration(
-                labelText: 'Search Field',
-                suffixIcon: Padding(
-                  padding: const EdgeInsets.all(AppDefaults.padding),
-                  child: SvgPicture.asset(AppIcons.search),
+            child: Semantics(
+              label: l10n.searchField,
+              child: TextField(
+                controller: _controller,
+                onChanged: (value) => setState(() => _query = value),
+                decoration: InputDecoration(
+                  labelText: l10n.searchField,
+                  suffixIcon: Padding(
+                    padding: const EdgeInsets.all(AppDefaults.padding),
+                    child: SvgPicture.asset(AppIcons.search),
+                  ),
+                  suffixIconConstraints: const BoxConstraints(),
                 ),
-                suffixIconConstraints: const BoxConstraints(),
               ),
             ),
           ),
@@ -61,8 +67,8 @@ class _SearchResultPageState extends ConsumerState<SearchResultPage> {
               ),
               child: Text(
                 trimmedQuery.isEmpty
-                    ? 'Start typing to search products'
-                    : 'Search results for "$trimmedQuery"',
+                    ? l10n.startTypingToSearch
+                    : l10n.searchResultsFor(trimmedQuery),
                 style: Theme.of(context).textTheme.bodyLarge?.copyWith(
                       color: Theme.of(context).colorScheme.onSurface,
                     ),
@@ -71,31 +77,37 @@ class _SearchResultPageState extends ConsumerState<SearchResultPage> {
           ),
           Expanded(
             child: resultsAsync == null
-                ? const Center(child: Text('Enter a product name to search'))
+                ? Center(child: Text(l10n.enterProductNameToSearch))
                 : resultsAsync.when(
                     loading: () =>
                         const Center(child: CircularProgressIndicator()),
-                    error: (error, _) => Center(
-                      child: Text('Failed to search products: $error'),
+                    error: (error, _) => RetryableErrorView(
+                      title: l10n.failedToSearchProducts,
+                      message: l10n.checkConnectionAndRetry,
+                      onRetry: () => setState(() {}),
                     ),
                     data: (products) {
                       if (products.isEmpty) {
-                        return const Center(child: Text('No products found'));
+                        return Center(child: Text(l10n.noProductsFound));
                       }
-                      return GridView.builder(
-                        padding: const EdgeInsets.only(
-                          top: AppDefaults.padding,
+                      return Semantics(
+                        container: true,
+                        label: l10n.resultsFound(products.length),
+                        child: GridView.builder(
+                          padding: const EdgeInsets.only(
+                            top: AppDefaults.padding,
+                          ),
+                          gridDelegate:
+                              const SliverGridDelegateWithFixedCrossAxisCount(
+                            crossAxisCount: 2,
+                            mainAxisSpacing: 16,
+                            childAspectRatio: 0.72,
+                          ),
+                          itemCount: products.length,
+                          itemBuilder: (context, index) {
+                            return ProductTileSquare(data: products[index]);
+                          },
                         ),
-                        gridDelegate:
-                            const SliverGridDelegateWithFixedCrossAxisCount(
-                          crossAxisCount: 2,
-                          mainAxisSpacing: 16,
-                          childAspectRatio: 0.72,
-                        ),
-                        itemCount: products.length,
-                        itemBuilder: (context, index) {
-                          return ProductTileSquare(data: products[index]);
-                        },
                       );
                     },
                   ),

@@ -2,16 +2,19 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../core/components/product_tile_square.dart';
+import '../../../core/components/retryable_error_view.dart';
 import '../../../core/components/title_and_action_button.dart';
 import '../../../core/constants/constants.dart';
+import '../../../core/l10n/app_localizations.dart';
 import '../../../core/providers/catalog_provider.dart';
-import '../../../core/routes/app_routes.dart';
+import 'package:go_router/go_router.dart';
 
 class OurNewItem extends ConsumerWidget {
   const OurNewItem({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final l10n = AppLocalizations.of(context)!;
     final productsAsync = ref.watch(newProductsProvider);
 
     return productsAsync.when(
@@ -21,7 +24,11 @@ class OurNewItem extends ConsumerWidget {
       ),
       error: (error, _) => Padding(
         padding: const EdgeInsets.all(AppDefaults.padding),
-        child: Text('Failed to load new items: $error'),
+        child: RetryableErrorView(
+          title: l10n.failedToLoadNewItems,
+          message: l10n.checkConnectionAndRetry,
+          onRetry: () => ref.invalidate(newProductsProvider),
+        ),
       ),
       data: (products) {
         if (products.isEmpty) {
@@ -31,8 +38,8 @@ class OurNewItem extends ConsumerWidget {
         return Column(
           children: [
             TitleAndActionButton(
-              title: 'Our New Item',
-              onTap: () => Navigator.pushNamed(context, AppRoutes.newItems),
+              title: l10n.ourNewItem,
+              onTap: () => context.push('/newItems'),
             ),
             SizedBox(
               height: 340,

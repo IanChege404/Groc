@@ -5,9 +5,9 @@ import '../../core/components/app_back_button.dart';
 import '../../core/constants/app_colors.dart';
 import '../../core/constants/app_defaults.dart';
 import '../../core/constants/app_icons.dart';
-import '../../core/routes/app_routes.dart';
 import '../../core/utils/ui_util.dart';
 import 'dialogs/product_filters_dialog.dart';
+import 'package:go_router/go_router.dart';
 
 class SearchPage extends StatelessWidget {
   const SearchPage({super.key});
@@ -104,7 +104,7 @@ class _SearchPageHeader extends StatelessWidget {
                     autofocus: true,
                     onChanged: (String? value) {},
                     onFieldSubmitted: (v) {
-                      Navigator.pushNamed(context, AppRoutes.searchResult);
+                      context.push('/searchResult');
                     },
                   ),
                 ),

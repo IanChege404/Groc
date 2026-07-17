@@ -1,13 +1,25 @@
 import 'package:flutter/material.dart';
 
 import '../../../core/constants/constants.dart';
+import '../../../core/l10n/app_localizations.dart';
 import '../components/categories_chip.dart';
 
-class ProductFiltersDialog extends StatelessWidget {
+class ProductFiltersDialog extends StatefulWidget {
   const ProductFiltersDialog({super.key});
 
   @override
+  State<ProductFiltersDialog> createState() => _ProductFiltersDialogState();
+}
+
+class _ProductFiltersDialogState extends State<ProductFiltersDialog> {
+  int _selectedRating = 4;
+  String _selectedSort = 'Popularity';
+  String? _selectedBrand;
+  String? _selectedCategory;
+
+  @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     return SafeArea(
       child: SingleChildScrollView(
         padding: const EdgeInsets.all(AppDefaults.padding),
@@ -24,14 +36,34 @@ class ProductFiltersDialog extends StatelessWidget {
               margin: const EdgeInsets.all(8),
             ),
             const _FilterHeader(),
-            const _SortBy(),
+            _SortBy(
+              selectedValue: _selectedSort,
+              onChanged: (value) {
+                setState(() => _selectedSort = value ?? _selectedSort);
+              },
+            ),
             const _PriceRange(),
-            const _CategoriesSelector(),
-            const _BrandSelector(),
+            _CategoriesSelector(
+              selectedCategory: _selectedCategory,
+              onCategorySelected: (category) {
+                setState(() {
+                  _selectedCategory =
+                      _selectedCategory == category ? null : category;
+                });
+              },
+            ),
+            _BrandSelector(
+              selectedBrand: _selectedBrand,
+              onBrandSelected: (brand) {
+                setState(() {
+                  _selectedBrand = _selectedBrand == brand ? null : brand;
+                });
+              },
+            ),
             _RatingStar(
-              totalStarsSelected: 4,
+              totalStarsSelected: _selectedRating,
               onStarSelect: (v) {
-                debugPrint('Star selected $v');
+                setState(() => _selectedRating = v);
               },
             ),
             SizedBox(
@@ -39,8 +71,15 @@ class ProductFiltersDialog extends StatelessWidget {
               child: Padding(
                 padding: const EdgeInsets.all(AppDefaults.padding),
                 child: ElevatedButton(
-                  onPressed: () {},
-                  child: const Text('Apply Filter'),
+                  onPressed: () {
+                    Navigator.pop(context, {
+                      'sort': _selectedSort,
+                      'rating': _selectedRating,
+                      'brand': _selectedBrand,
+                      'category': _selectedCategory,
+                    });
+                  },
+                  child: Text(l10n.applyFilters),
                 ),
               ),
             ),
@@ -63,46 +102,49 @@ class _RatingStar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     return Padding(
       padding: const EdgeInsets.all(AppDefaults.padding),
       child: Column(
         children: [
           Align(
             alignment: Alignment.centerLeft,
-            child: Text(
-              'Rating Star',
-              style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                    fontWeight: FontWeight.bold,
-                    color: Theme.of(context).colorScheme.onSurface,
-                  ),
+            child: Semantics(
+              label: l10n.ratingStar,
+              child: Text(
+                l10n.ratingStar,
+                style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                      fontWeight: FontWeight.bold,
+                      color: Theme.of(context).colorScheme.onSurface,
+                    ),
+              ),
             ),
           ),
           const SizedBox(height: 8),
-          Row(
-            children: List.generate(
-              /// You cannot add more than 5 star or less than 0 star
-              5,
-              (index) {
-                if (index < totalStarsSelected) {
-                  return InkWell(
-                    onTap: () => onStarSelect(index + 1),
-                    child: const Icon(
-                      Icons.star_rounded,
-                      color: Color(0xFFFFC107),
-                      size: 32,
+          Semantics(
+            label: '${l10n.ratingStar}: $totalStarsSelected of 5',
+            child: Row(
+              children: List.generate(
+                5,
+                (index) {
+                  final isSelected = index < totalStarsSelected;
+                  return Semantics(
+                    button: true,
+                    selected: isSelected,
+                    label: '${index + 1} star',
+                    child: InkWell(
+                      onTap: () => onStarSelect(index + 1),
+                      child: Icon(
+                        Icons.star_rounded,
+                        color: isSelected
+                            ? const Color(0xFFFFC107)
+                            : AppColors.placeholder,
+                        size: 32,
+                      ),
                     ),
                   );
-                } else {
-                  return InkWell(
-                    onTap: () => onStarSelect(index + 1),
-                    child: const Icon(
-                      Icons.star_rounded,
-                      color: AppColors.placeholder,
-                      size: 32,
-                    ),
-                  );
-                }
-              },
+                },
+              ),
             ),
           ),
         ],
@@ -112,54 +154,72 @@ class _RatingStar extends StatelessWidget {
 }
 
 class _BrandSelector extends StatelessWidget {
-  const _BrandSelector();
+  final String? selectedBrand;
+  final ValueChanged<String> onBrandSelected;
+
+  const _BrandSelector({
+    required this.selectedBrand,
+    required this.onBrandSelected,
+  });
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     return Padding(
       padding: const EdgeInsets.all(AppDefaults.padding),
       child: Column(
         children: [
           Align(
             alignment: Alignment.centerLeft,
-            child: Text(
-              'Brand',
-              style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                    fontWeight: FontWeight.bold,
-                    color: Theme.of(context).colorScheme.onSurface,
-                  ),
+            child: Semantics(
+              label: l10n.brand,
+              child: Text(
+                l10n.brand,
+                style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                      fontWeight: FontWeight.bold,
+                      color: Theme.of(context).colorScheme.onSurface,
+                    ),
+              ),
             ),
           ),
           const SizedBox(height: 16),
-          SizedBox(
-            width: double.infinity,
-            child: Wrap(
-              alignment: WrapAlignment.start,
-              spacing: 16,
-              runSpacing: 16,
-              children: [
-                CategoriesChip(isActive: true, label: 'Any', onPressed: () {}),
-                CategoriesChip(
-                  isActive: false,
-                  label: 'Square',
-                  onPressed: () {},
-                ),
-                CategoriesChip(
-                  isActive: false,
-                  label: 'Beximco Pharma',
-                  onPressed: () {},
-                ),
-                CategoriesChip(
-                  isActive: false,
-                  label: 'ACI Limited',
-                  onPressed: () {},
-                ),
-                CategoriesChip(
-                  isActive: false,
-                  label: 'See All',
-                  onPressed: () {},
-                ),
-              ],
+          Semantics(
+            container: true,
+            label: '${l10n.brand} filter',
+            child: SizedBox(
+              width: double.infinity,
+              child: Wrap(
+                alignment: WrapAlignment.start,
+                spacing: 16,
+                runSpacing: 16,
+                children: [
+                  CategoriesChip(
+                    isActive: selectedBrand == null,
+                    label: l10n.any,
+                    onPressed: () => onBrandSelected(''),
+                  ),
+                  CategoriesChip(
+                    isActive: selectedBrand == 'Square',
+                    label: 'Square',
+                    onPressed: () => onBrandSelected('Square'),
+                  ),
+                  CategoriesChip(
+                    isActive: selectedBrand == 'Beximco Pharma',
+                    label: 'Beximco Pharma',
+                    onPressed: () => onBrandSelected('Beximco Pharma'),
+                  ),
+                  CategoriesChip(
+                    isActive: selectedBrand == 'ACI Limited',
+                    label: 'ACI Limited',
+                    onPressed: () => onBrandSelected('ACI Limited'),
+                  ),
+                  CategoriesChip(
+                    isActive: false,
+                    label: l10n.seeAll,
+                    onPressed: () {},
+                  ),
+                ],
+              ),
             ),
           ),
         ],
@@ -169,60 +229,74 @@ class _BrandSelector extends StatelessWidget {
 }
 
 class _CategoriesSelector extends StatelessWidget {
-  const _CategoriesSelector();
+  final String? selectedCategory;
+  final ValueChanged<String> onCategorySelected;
+
+  const _CategoriesSelector({
+    required this.selectedCategory,
+    required this.onCategorySelected,
+  });
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     return Padding(
       padding: const EdgeInsets.all(AppDefaults.padding),
       child: Column(
         children: [
           Align(
             alignment: Alignment.centerLeft,
-            child: Text(
-              'Categories',
-              style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                    fontWeight: FontWeight.bold,
-                    color: Theme.of(context).colorScheme.onSurface,
-                  ),
+            child: Semantics(
+              label: l10n.categories,
+              child: Text(
+                l10n.categories,
+                style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                      fontWeight: FontWeight.bold,
+                      color: Theme.of(context).colorScheme.onSurface,
+                    ),
+              ),
             ),
           ),
           const SizedBox(height: 16),
-          SizedBox(
-            width: double.infinity,
-            child: Wrap(
-              alignment: WrapAlignment.start,
-              runAlignment: WrapAlignment.spaceAround,
-              crossAxisAlignment: WrapCrossAlignment.start,
-              spacing: 16,
-              runSpacing: 16,
-              children: [
-                CategoriesChip(
-                  isActive: true,
-                  label: 'Office Supplies',
-                  onPressed: () {},
-                ),
-                CategoriesChip(
-                  isActive: false,
-                  label: 'Gardening',
-                  onPressed: () {},
-                ),
-                CategoriesChip(
-                  isActive: false,
-                  label: 'Vegetables',
-                  onPressed: () {},
-                ),
-                CategoriesChip(
-                  isActive: false,
-                  label: 'Fish And Meat',
-                  onPressed: () {},
-                ),
-                CategoriesChip(
-                  isActive: false,
-                  label: 'See All',
-                  onPressed: () {},
-                ),
-              ],
+          Semantics(
+            container: true,
+            label: '${l10n.categories} filter',
+            child: SizedBox(
+              width: double.infinity,
+              child: Wrap(
+                alignment: WrapAlignment.start,
+                runAlignment: WrapAlignment.spaceAround,
+                crossAxisAlignment: WrapCrossAlignment.start,
+                spacing: 16,
+                runSpacing: 16,
+                children: [
+                  CategoriesChip(
+                    isActive: selectedCategory == l10n.officeSupplies,
+                    label: l10n.officeSupplies,
+                    onPressed: () => onCategorySelected(l10n.officeSupplies),
+                  ),
+                  CategoriesChip(
+                    isActive: selectedCategory == l10n.gardening,
+                    label: l10n.gardening,
+                    onPressed: () => onCategorySelected(l10n.gardening),
+                  ),
+                  CategoriesChip(
+                    isActive: selectedCategory == l10n.vegetables,
+                    label: l10n.vegetables,
+                    onPressed: () => onCategorySelected(l10n.vegetables),
+                  ),
+                  CategoriesChip(
+                    isActive: selectedCategory == l10n.fishAndMeat,
+                    label: l10n.fishAndMeat,
+                    onPressed: () => onCategorySelected(l10n.fishAndMeat),
+                  ),
+                  CategoriesChip(
+                    isActive: false,
+                    label: l10n.seeAll,
+                    onPressed: () {},
+                  ),
+                ],
+              ),
             ),
           ),
         ],
@@ -243,35 +317,43 @@ class _PriceRangeState extends State<_PriceRange> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     return Padding(
       padding: const EdgeInsets.all(AppDefaults.padding),
       child: Column(
         children: [
           Align(
             alignment: Alignment.centerLeft,
-            child: Text(
-              'Price Range',
-              style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                    fontWeight: FontWeight.bold,
-                    color: Theme.of(context).colorScheme.onSurface,
-                  ),
+            child: Semantics(
+              label: l10n.priceRange,
+              child: Text(
+                l10n.priceRange,
+                style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                      fontWeight: FontWeight.bold,
+                      color: Theme.of(context).colorScheme.onSurface,
+                    ),
+              ),
             ),
           ),
-          RangeSlider(
-            max: 100,
-            min: 0,
-            labels: RangeLabels(
-              _currentRangeValues.start.round().toString(),
-              _currentRangeValues.end.round().toString(),
+          Semantics(
+            label:
+                '${l10n.priceRange}: KES ${_currentRangeValues.start.round()} to KES ${_currentRangeValues.end.round()}',
+            child: RangeSlider(
+              max: 100,
+              min: 0,
+              labels: RangeLabels(
+                _currentRangeValues.start.round().toString(),
+                _currentRangeValues.end.round().toString(),
+              ),
+              onChanged: (RangeValues values) {
+                setState(() {
+                  _currentRangeValues = values;
+                });
+              },
+              activeColor: AppColors.primary,
+              inactiveColor: AppColors.gray,
+              values: _currentRangeValues,
             ),
-            onChanged: (RangeValues values) {
-              setState(() {
-                _currentRangeValues = values;
-              });
-            },
-            activeColor: AppColors.primary,
-            inactiveColor: AppColors.gray,
-            values: _currentRangeValues,
           ),
           const Padding(
             padding: EdgeInsets.symmetric(horizontal: 20.0),
@@ -287,31 +369,45 @@ class _PriceRangeState extends State<_PriceRange> {
 }
 
 class _SortBy extends StatelessWidget {
-  const _SortBy();
+  final String selectedValue;
+  final ValueChanged<String?> onChanged;
+
+  const _SortBy({
+    required this.selectedValue,
+    required this.onChanged,
+  });
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     return Padding(
       padding: const EdgeInsets.all(AppDefaults.padding),
       child: Row(
         children: [
-          Text(
-            'Sort By',
-            style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                  fontWeight: FontWeight.bold,
-                  color: Theme.of(context).colorScheme.onSurface,
-                ),
+          Semantics(
+            label: l10n.sortBy,
+            child: Text(
+              l10n.sortBy,
+              style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                    fontWeight: FontWeight.bold,
+                    color: Theme.of(context).colorScheme.onSurface,
+                  ),
+            ),
           ),
           const Spacer(),
-          DropdownButton(
-            value: 'Popularity',
-            underline: const SizedBox(),
-            icon: const Icon(Icons.arrow_drop_down, color: AppColors.primary),
-            items: const [
-              DropdownMenuItem(value: 'Popularity', child: Text('Popularity')),
-              DropdownMenuItem(value: 'Price', child: Text('Price')),
-            ],
-            onChanged: (v) {},
+          Semantics(
+            label: '${l10n.sortBy}: $selectedValue',
+            child: DropdownButton(
+              value: selectedValue,
+              underline: const SizedBox(),
+              icon: const Icon(Icons.arrow_drop_down, color: AppColors.primary),
+              items: [
+                DropdownMenuItem(
+                    value: 'Popularity', child: Text(l10n.popularity)),
+                DropdownMenuItem(value: 'Price', child: Text(l10n.price)),
+              ],
+              onChanged: onChanged,
+            ),
           ),
         ],
       ),
@@ -324,6 +420,7 @@ class _FilterHeader extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
@@ -333,18 +430,22 @@ class _FilterHeader extends StatelessWidget {
           child: SizedBox(
             height: 40,
             width: 40,
-            child: ElevatedButton(
-              onPressed: () {},
-              style: ElevatedButton.styleFrom(
-                padding: EdgeInsets.zero,
-                backgroundColor: AppColors.scaffoldWithBoxBackground,
+            child: Semantics(
+              button: true,
+              label: l10n.cancel,
+              child: ElevatedButton(
+                onPressed: () => Navigator.pop(context),
+                style: ElevatedButton.styleFrom(
+                  padding: EdgeInsets.zero,
+                  backgroundColor: AppColors.scaffoldWithBoxBackground,
+                ),
+                child: const Icon(Icons.close, color: AppColors.primary),
               ),
-              child: const Icon(Icons.close, color: AppColors.primary),
             ),
           ),
         ),
         Text(
-          'Filter',
+          l10n.filter,
           style: Theme.of(context).textTheme.bodyLarge?.copyWith(
                 fontWeight: FontWeight.bold,
                 color: Theme.of(context).colorScheme.onSurface,
@@ -352,13 +453,19 @@ class _FilterHeader extends StatelessWidget {
         ),
         SizedBox(
           width: 56,
-          child: TextButton(
-            onPressed: () {},
-            child: Text(
-              'Reset',
-              style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                    color: Theme.of(context).colorScheme.onSurface,
-                  ),
+          child: Semantics(
+            button: true,
+            label: l10n.reset,
+            child: TextButton(
+              onPressed: () {
+                Navigator.pop(context, 'reset');
+              },
+              child: Text(
+                l10n.reset,
+                style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                      color: Theme.of(context).colorScheme.onSurface,
+                    ),
+              ),
             ),
           ),
         ),

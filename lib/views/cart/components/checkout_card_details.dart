@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 import '../../../core/constants/constants.dart';
+import '../../../core/l10n/app_localizations.dart';
 
 class CardDetails extends StatefulWidget {
   const CardDetails({super.key});
@@ -36,28 +37,27 @@ class _CardDetailsState extends State<CardDetails> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     return Padding(
       padding: const EdgeInsets.all(AppDefaults.padding),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           // Name Field
-          const Text("Card Name"),
-          const SizedBox(height: 8),
           TextFormField(
             controller: cardNameController,
-            keyboardType: TextInputType.number,
+            keyboardType: TextInputType.text,
+            decoration: InputDecoration(labelText: l10n.cardName),
             // validator: Validators.requiredWithFieldName('Card'),
             textInputAction: TextInputAction.next,
           ),
           const SizedBox(height: AppDefaults.padding),
 
           // Number Field
-          const Text("Card Number"),
-          const SizedBox(height: 8),
           TextFormField(
             controller: cardNumberController,
             keyboardType: TextInputType.number,
+            decoration: InputDecoration(labelText: l10n.cardNumber),
             // validator: Validators.requiredWithFieldName('Card Number'),
             textInputAction: TextInputAction.next,
           ),
@@ -67,53 +67,42 @@ class _CardDetailsState extends State<CardDetails> {
           Row(
             children: [
               Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    // Number Field
-                    const Text("Expiration Date"),
-                    const SizedBox(height: 8),
-                    TextFormField(
-                      controller: expirationDateController,
-                      keyboardType: TextInputType.number,
-                      // validator: Validators.requiredWithFieldName('Card'),
-                      textInputAction: TextInputAction.next,
-                    ),
-                    const SizedBox(height: AppDefaults.padding),
-                  ],
+                child: TextFormField(
+                  controller: expirationDateController,
+                  keyboardType: TextInputType.number,
+                  decoration: InputDecoration(labelText: l10n.expirationDate),
+                  // validator: Validators.requiredWithFieldName('Card'),
+                  textInputAction: TextInputAction.next,
                 ),
               ),
               const SizedBox(width: 16),
               Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    // Number Field
-                    const Text("CVV"),
-                    const SizedBox(height: 8),
-                    TextFormField(
-                      controller: cvvController,
-                      keyboardType: TextInputType.number,
-                      // validator: Validators.requiredWithFieldName('Card'),
-                      textInputAction: TextInputAction.next,
-                    ),
-                    const SizedBox(height: AppDefaults.padding),
-                  ],
+                child: TextFormField(
+                  controller: cvvController,
+                  keyboardType: TextInputType.number,
+                  decoration: InputDecoration(labelText: l10n.cvv),
+                  // validator: Validators.requiredWithFieldName('Card'),
+                  textInputAction: TextInputAction.next,
                 ),
               ),
             ],
           ),
+          const SizedBox(height: AppDefaults.padding),
 
           Row(
             children: [
               Text(
-                'Remember My Card Details',
+                l10n.rememberCardDetails,
                 style: Theme.of(context).textTheme.bodyLarge?.copyWith(
                       color: Theme.of(context).colorScheme.onSurface,
                     ),
               ),
               const Spacer(),
-              CupertinoSwitch(value: true, onChanged: (v) {}),
+              Semantics(
+                label: l10n.rememberCardDetails,
+                toggled: true,
+                child: CupertinoSwitch(value: true, onChanged: (v) {}),
+              ),
             ],
           ),
         ],

@@ -8,7 +8,7 @@ import '../../core/constants/app_text_styles.dart';
 import '../../core/l10n/locale_provider.dart';
 import '../../core/models/order_model.dart';
 import '../../core/providers/order_provider.dart';
-import '../../core/routes/app_routes.dart';
+import 'package:go_router/go_router.dart';
 
 class OrderTrackingScreen extends ConsumerWidget {
   final String orderId;
@@ -200,11 +200,7 @@ class _OrderTrackingBody extends StatelessWidget {
                   Expanded(
                     child: OutlinedButton(
                       onPressed: () {
-                        Navigator.pushNamed(
-                          context,
-                          AppRoutes.submitReview,
-                          arguments: {'orderId': order.id},
-                        );
+                        context.push('/submitReview', extra: {'orderId': order.id});
                       },
                       child: const Text('Return/Refund'),
                     ),

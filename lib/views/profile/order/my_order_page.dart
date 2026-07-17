@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../core/components/app_back_button.dart';
 import '../../../core/constants/app_colors.dart';
+import '../../../core/l10n/app_localizations.dart';
 import '../../../core/models/order_model.dart';
 import '../../../core/providers/order_provider.dart';
 import 'components/custom_tab_label.dart';
@@ -26,6 +27,7 @@ class AllOrderPage extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final l10n = AppLocalizations.of(context)!;
     final ordersState = ref.watch(ordersProvider);
 
     final orders = ordersState.maybeWhen(
@@ -43,17 +45,18 @@ class AllOrderPage extends ConsumerWidget {
       child: Scaffold(
         appBar: AppBar(
           leading: const AppBackButton(),
-          title: const Text('My Order'),
+          title: Text(l10n.myOrder),
           bottom: TabBar(
             physics: const NeverScrollableScrollPhysics(),
             tabs: [
-              CustomTabLabel(label: 'All', value: '(${orders.length})'),
               CustomTabLabel(
-                label: 'Running',
+                  label: l10n.allOrders, value: '(${orders.length})'),
+              CustomTabLabel(
+                label: l10n.activeOrders,
                 value: '(${runningOrders.length})',
               ),
               CustomTabLabel(
-                label: 'Previous',
+                label: l10n.completedOrders,
                 value: '(${completedOrders.length})',
               ),
             ],

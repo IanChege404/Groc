@@ -1,5 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 import '../network/api_client.dart';
+import '../utils/logger.dart';
 
 class FirestoreAuthService {
   static final FirestoreAuthService _instance =
@@ -179,6 +181,79 @@ class FirestoreAuthService {
     } on FirebaseAuthException catch (e) {
       return ApiResponse.error(e.message ?? 'Phone update failed');
     } catch (e) {
+      return ApiResponse.error('Unexpected error: $e');
+    }
+  }
+
+  /// Sign in with Google
+  Future<ApiResponse<Map<String, dynamic>>> signInWithGoogle() async {
+    try {
+      final googleUser = await GoogleSignIn(scopes: ['email']).signIn();
+      if (googleUser == null) {
+        return ApiResponse.error('Google sign-in was cancelled');
+      }
+
+      final googleAuth = await googleUser.authentication;
+      final credential = GoogleAuthProvider.credential(
+        accessToken: googleAuth.accessToken,
+        idToken: googleAuth.idToken,
+      );
+
+      final userCredential = await _auth.signInWithCredential(credential);
+      final user = userCredential.user;
+      if (user == null) {
+        return ApiResponse.error('Google sign-in failed: User is null');
+      }
+
+      final userData = {
+        'id': user.uid,
+        'email': user.email,
+        'firstName': user.displayName?.split(' ').first ?? '',
+        'lastName': user.displayName?.split(' ').skip(1).join(' ') ?? '',
+        'photoUrl': user.photoURL,
+        'phone': user.phoneNumber,
+        'provider': 'google',
+      };
+
+      Logger.info('Google sign-in successful: ${user.uid}', 'FirestoreAuth');
+      return ApiResponse.success(data: userData);
+    } on FirebaseAuthException catch (e) {
+      return ApiResponse.error(e.message ?? 'Google sign-in failed');
+    } catch (e) {
+      Logger.error('Google sign-in error: $e', 'FirestoreAuth');
+      return ApiResponse.error('Unexpected error: $e');
+    }
+  }
+
+  /// Sign in with Apple
+  Future<ApiResponse<Map<String, dynamic>>> signInWithApple() async {
+    try {
+      final appleProvider = AppleAuthProvider()
+        ..addScope('email')
+        ..addScope('name');
+
+      final userCredential = await _auth.signInWithProvider(appleProvider);
+      final user = userCredential.user;
+      if (user == null) {
+        return ApiResponse.error('Apple sign-in failed: User is null');
+      }
+
+      final userData = {
+        'id': user.uid,
+        'email': user.email,
+        'firstName': user.displayName?.split(' ').first ?? '',
+        'lastName': user.displayName?.split(' ').skip(1).join(' ') ?? '',
+        'photoUrl': user.photoURL,
+        'phone': user.phoneNumber,
+        'provider': 'apple',
+      };
+
+      Logger.info('Apple sign-in successful: ${user.uid}', 'FirestoreAuth');
+      return ApiResponse.success(data: userData);
+    } on FirebaseAuthException catch (e) {
+      return ApiResponse.error(e.message ?? 'Apple sign-in failed');
+    } catch (e) {
+      Logger.error('Apple sign-in error: $e', 'FirestoreAuth');
       return ApiResponse.error('Unexpected error: $e');
     }
   }

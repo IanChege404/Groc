@@ -10,9 +10,9 @@ import '../../core/constants/constants.dart';
 import '../../core/models/bundle_model.dart';
 import '../../core/models/cart_item_model.dart';
 import '../../core/providers/cart_provider.dart';
-import '../../core/routes/app_routes.dart';
 import 'components/bundle_meta_data.dart';
 import 'components/bundle_pack_details.dart';
+import 'package:go_router/go_router.dart';
 
 class BundleProductDetailsPage extends ConsumerStatefulWidget {
   const BundleProductDetailsPage({super.key, this.bundle});
@@ -139,7 +139,7 @@ class _BundleProductDetailsPageState
         return;
       }
 
-      Navigator.pushNamed(context, AppRoutes.checkoutPage);
+      context.push('/checkoutPage');
     } catch (e) {
       if (mounted) {
         _showSnackBar(

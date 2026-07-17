@@ -3,7 +3,7 @@ import 'package:flutter_svg/svg.dart';
 
 import '../../core/components/network_image.dart';
 import '../../core/constants/constants.dart';
-import '../../core/routes/app_routes.dart';
+import 'package:go_router/go_router.dart';
 
 class LoginOrSignUpPage extends StatelessWidget {
   const LoginOrSignUpPage({super.key});
@@ -36,7 +36,7 @@ class _Footer extends StatelessWidget {
           child: Padding(
             padding: const EdgeInsets.all(AppDefaults.padding),
             child: ElevatedButton(
-              onPressed: () => Navigator.pushNamed(context, AppRoutes.login),
+              onPressed: () => context.push('/login'),
               child: const Text('Login With Email'),
             ),
           ),

@@ -4,7 +4,7 @@ import 'package:provider/provider.dart';
 import '../../core/constants/app_colors.dart';
 import '../../core/constants/app_defaults.dart';
 import '../../core/l10n/locale_provider.dart';
-import '../../core/routes/app_routes.dart';
+import 'package:go_router/go_router.dart';
 
 /// Language Selection Screen
 ///
@@ -32,7 +32,7 @@ class _LanguageSelectScreenState extends State<LanguageSelectScreen> {
     await localeProvider.setLocale(_selectedLanguage);
 
     if (mounted) {
-      Navigator.pushReplacementNamed(context, AppRoutes.login);
+      context.go('/login');
     }
   }
 

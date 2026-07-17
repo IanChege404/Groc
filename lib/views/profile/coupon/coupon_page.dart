@@ -4,6 +4,7 @@ import 'package:intl/intl.dart';
 
 import '../../../core/components/app_back_button.dart';
 import '../../../core/constants/constants.dart';
+import '../../../core/l10n/app_localizations.dart';
 import '../../../core/models/coupon_model.dart';
 import '../../../core/providers/auth_provider.dart';
 import '../../../core/providers/coupon_provider.dart';
@@ -28,11 +29,12 @@ class _CouponAndOffersPageState extends ConsumerState<CouponAndOffersPage> {
   }
 
   Future<void> _redeemNow() async {
+    final l10n = AppLocalizations.of(context)!;
     final uid = ref.read(authProvider).value;
     if (uid == null || uid.isEmpty) {
       ScaffoldMessenger.of(
         context,
-      ).showSnackBar(const SnackBar(content: Text('Please sign in first')));
+      ).showSnackBar(SnackBar(content: Text(l10n.pleaseSignInFirst)));
       return;
     }
 
@@ -40,7 +42,7 @@ class _CouponAndOffersPageState extends ConsumerState<CouponAndOffersPage> {
     if (code.isEmpty) {
       ScaffoldMessenger.of(
         context,
-      ).showSnackBar(const SnackBar(content: Text('Enter coupon code')));
+      ).showSnackBar(SnackBar(content: Text(l10n.enterCouponCode)));
       return;
     }
 
@@ -52,8 +54,8 @@ class _CouponAndOffersPageState extends ConsumerState<CouponAndOffersPage> {
       SnackBar(
         content: Text(
           ok
-              ? 'Coupon redeemed successfully'
-              : 'Invalid or already-used coupon',
+              ? l10n.couponRedeemedSuccessfully
+              : l10n.invalidOrAlreadyUsedCoupon,
         ),
       ),
     );
@@ -65,13 +67,14 @@ class _CouponAndOffersPageState extends ConsumerState<CouponAndOffersPage> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     final couponsAsync = ref.watch(userCouponsProvider);
     final uidAsync = ref.watch(authProvider);
 
     return Scaffold(
       appBar: AppBar(
         leading: const AppBackButton(),
-        title: const Text('Offer And Promos'),
+        title: Text(l10n.offersAndPromos),
       ),
       body: Column(
         children: [

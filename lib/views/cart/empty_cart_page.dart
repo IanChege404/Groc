@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../../core/components/network_image.dart';
 import '../../core/constants/app_defaults.dart';
-import '../../core/routes/app_routes.dart';
+import 'package:go_router/go_router.dart';
 
 class EmptyCartPage extends StatelessWidget {
   const EmptyCartPage({super.key});
@@ -43,7 +43,7 @@ class EmptyCartPage extends StatelessWidget {
               padding: const EdgeInsets.all(AppDefaults.padding * 2),
               child: ElevatedButton(
                 onPressed: () {
-                  Navigator.pushNamed(context, AppRoutes.entryPoint);
+                  context.push('/entry_point');
                 },
                 child: const Text('Start Browsing'),
               ),

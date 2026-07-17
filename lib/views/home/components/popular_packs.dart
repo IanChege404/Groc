@@ -2,16 +2,19 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../core/components/bundle_tile_square.dart';
+import '../../../core/components/retryable_error_view.dart';
 import '../../../core/components/title_and_action_button.dart';
 import '../../../core/constants/constants.dart';
+import '../../../core/l10n/app_localizations.dart';
 import '../../../core/providers/catalog_provider.dart';
-import '../../../core/routes/app_routes.dart';
+import 'package:go_router/go_router.dart';
 
 class PopularPacks extends ConsumerWidget {
   const PopularPacks({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final l10n = AppLocalizations.of(context)!;
     final bundlesAsync = ref.watch(featuredBundlesProvider);
 
     return bundlesAsync.when(
@@ -21,7 +24,11 @@ class PopularPacks extends ConsumerWidget {
       ),
       error: (error, _) => Padding(
         padding: const EdgeInsets.all(AppDefaults.padding),
-        child: Text('Failed to load popular packs: $error'),
+        child: RetryableErrorView(
+          title: l10n.failedToLoadPopularPacks,
+          message: l10n.checkConnectionAndRetry,
+          onRetry: () => ref.invalidate(featuredBundlesProvider),
+        ),
       ),
       data: (bundles) {
         if (bundles.isEmpty) {
@@ -31,8 +38,8 @@ class PopularPacks extends ConsumerWidget {
         return Column(
           children: [
             TitleAndActionButton(
-              title: 'Popular Packs',
-              onTap: () => Navigator.pushNamed(context, AppRoutes.popularItems),
+              title: l10n.popularPacks,
+              onTap: () => context.push('/popularItems'),
             ),
             SizedBox(
               height: 340,

@@ -7,7 +7,7 @@ import '../../core/constants/app_colors.dart';
 import '../../core/constants/app_defaults.dart';
 import '../../core/models/recipe_model.dart';
 import '../../core/providers/recipe_provider.dart';
-import '../../core/routes/app_routes.dart';
+import 'package:go_router/go_router.dart';
 
 class RecipesScreen extends ConsumerWidget {
   const RecipesScreen({super.key});
@@ -90,11 +90,7 @@ class _RecipeCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: () => Navigator.pushNamed(
-        context,
-        AppRoutes.recipeDetail,
-        arguments: {'recipe': recipe},
-      ),
+      onTap: () => context.push('/recipeDetail', extra: {'recipe': recipe}),
       child: Container(
         decoration: BoxDecoration(
           color: Colors.white,

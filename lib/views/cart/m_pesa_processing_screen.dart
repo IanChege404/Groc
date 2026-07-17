@@ -4,10 +4,10 @@ import '../../core/constants/app_colors.dart';
 import '../../core/constants/app_defaults.dart';
 import '../../core/constants/app_text_styles.dart';
 import '../../core/l10n/locale_provider.dart';
-import '../../core/routes/app_routes.dart';
 import '../../core/services/firestore_service.dart';
 import '../../core/services/payment_service.dart';
 import 'package:provider/provider.dart';
+import 'package:go_router/go_router.dart';
 
 /// M-Pesa STK Push Processing Screen
 /// Shown while waiting for M-Pesa STK push confirmation on user's phone
@@ -85,11 +85,7 @@ class _MpesaProcessingScreenState extends State<MpesaProcessingScreen>
       if (!mounted) {
         return;
       }
-      Navigator.pushNamedAndRemoveUntil(
-        context,
-        AppRoutes.orderFailed,
-        (route) => false,
-      );
+      context.go('/orderFailed');
       return;
     }
 
@@ -127,11 +123,7 @@ class _MpesaProcessingScreenState extends State<MpesaProcessingScreen>
         if (!mounted) {
           return;
         }
-        Navigator.pushNamedAndRemoveUntil(
-          context,
-          AppRoutes.orderSuccessfull,
-          (route) => false,
-        );
+        context.go('/orderSuccessfull');
         return;
       }
 
@@ -140,11 +132,7 @@ class _MpesaProcessingScreenState extends State<MpesaProcessingScreen>
         if (!mounted) {
           return;
         }
-        Navigator.pushNamedAndRemoveUntil(
-          context,
-          AppRoutes.orderFailed,
-          (route) => false,
-        );
+        context.go('/orderFailed');
         return;
       }
     }

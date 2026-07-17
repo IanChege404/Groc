@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 
 import '../../../core/constants/constants.dart';
-import '../../../core/routes/app_routes.dart';
 import '../../../core/services/firestore_auth_service.dart';
 import 'profile_list_tile.dart';
+import 'package:go_router/go_router.dart';
 
 class ProfileMenuOptions extends StatelessWidget {
   const ProfileMenuOptions({super.key});
@@ -13,11 +13,7 @@ class ProfileMenuOptions extends StatelessWidget {
     if (!context.mounted) {
       return;
     }
-    Navigator.pushNamedAndRemoveUntil(
-      context,
-      AppRoutes.loginOrSignup,
-      (route) => false,
-    );
+    context.go('/loginOrSignup');
   }
 
   @override
@@ -35,25 +31,25 @@ class ProfileMenuOptions extends StatelessWidget {
           ProfileListTile(
             title: 'My Profile',
             icon: AppIcons.profilePerson,
-            onTap: () => Navigator.pushNamed(context, AppRoutes.profileEdit),
+            onTap: () => context.push('/profileEdit')
           ),
           const Divider(thickness: 0.1),
           ProfileListTile(
             title: 'Notification',
             icon: AppIcons.profileNotification,
-            onTap: () => Navigator.pushNamed(context, AppRoutes.notifications),
+            onTap: () => context.push('/notifications')
           ),
           const Divider(thickness: 0.1),
           ProfileListTile(
             title: 'Setting',
             icon: AppIcons.profileSetting,
-            onTap: () => Navigator.pushNamed(context, AppRoutes.settings),
+            onTap: () => context.push('/settings')
           ),
           const Divider(thickness: 0.1),
           ProfileListTile(
             title: 'Payment',
             icon: AppIcons.profilePayment,
-            onTap: () => Navigator.pushNamed(context, AppRoutes.paymentMethod),
+            onTap: () => context.push('/paymentMethod')
           ),
           const Divider(thickness: 0.1),
           ProfileListTile(

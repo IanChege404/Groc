@@ -393,6 +393,152 @@ class FirestoreService {
     }
   }
 
+  /// Pre-checkout validation: ensures all cart items exist and have sufficient stock
+  /// Returns true if checkout is safe to proceed, false if any items are unavailable
+  Future<bool> validateCheckoutCart(List<CartItemModel> items) async {
+    try {
+      for (final item in items) {
+        final product = await _withRetry(() => _firestore
+            .collection('products')
+            .doc(item.productId)
+            .get());
+
+        if (!product.exists) {
+          Logger.warn(
+            'Product not found: ${item.productId}',
+            'FirestoreService.validateCheckoutCart',
+          );
+          return false;
+        }
+
+        final stock = (product.data()?['stock'] as num?)?.toInt() ?? 0;
+        if (stock < item.quantity) {
+          Logger.warn(
+            'Insufficient stock for ${item.productId}. Required: ${item.quantity}, Available: $stock',
+            'FirestoreService.validateCheckoutCart',
+          );
+          return false;
+        }
+      }
+      return true;
+    } catch (e) {
+      Logger.error(
+        'Error validating checkout: $e',
+        'FirestoreService.validateCheckoutCart',
+      );
+      rethrow;
+    }
+  }
+
+  /// Create order with wallet payment in atomic transaction
+  /// Ensures order and payment deduction happen together or not at all
+  Future<String> createOrderWithWalletTransaction({
+    required String userId,
+    required List<OrderItemModel> items,
+    required double totalAmount,
+    required String paymentMethod,
+    required String? shippingAddress,
+  }) async {
+    try {
+      final orderId = _firestore.collection('orders').doc().id;
+      final order = OrderModel(
+        id: orderId,
+        userId: userId,
+        items: items,
+        totalAmount: totalAmount,
+        status: 'pending',
+        paymentMethod: paymentMethod,
+        shippingAddress: shippingAddress,
+        trackingNumber: null,
+        createdAt: DateTime.now(),
+        updatedAt: DateTime.now(),
+      );
+
+      await _firestore.runTransaction((transaction) async {
+        final orderRef = _firestore.collection('orders').doc(orderId);
+        final walletRef = _firestore
+            .collection('users')
+            .doc(userId)
+            .collection('wallet')
+            .doc('balance');
+
+        transaction.set(orderRef, order.toFirestore());
+
+        transaction.update(walletRef, {
+          'balance': FieldValue.increment(-totalAmount),
+          'totalSpent': FieldValue.increment(totalAmount),
+          'lastUpdated': FieldValue.serverTimestamp(),
+        });
+
+        final transactionId = _firestore
+            .collection('users')
+            .doc(userId)
+            .collection('transactions')
+            .doc().id;
+        final txRef = _firestore
+            .collection('users')
+            .doc(userId)
+            .collection('transactions')
+            .doc(transactionId);
+
+        transaction.set(txRef, {
+          'type': 'debit',
+          'amount': totalAmount,
+          'category': 'purchase',
+          'timestamp': FieldValue.serverTimestamp(),
+          'description': 'Purchase Order #$orderId',
+          'relatedOrderId': orderId,
+          'reference': 'wallet_purchase',
+        });
+      });
+
+      return orderId;
+    } catch (e) {
+      Logger.error(
+        'Error creating order with transaction: $e',
+        'FirestoreService.createOrderWithWalletTransaction',
+      );
+      rethrow;
+    }
+  }
+
+  /// Soft delete an order (archive without removing)
+  Future<void> softDeleteOrder(
+    String orderId,
+    String reason,
+  ) async {
+    try {
+      await _firestore.collection('orders').doc(orderId).update({
+        'deletedAt': FieldValue.serverTimestamp(),
+        'deletionReason': reason,
+        'updatedAt': FieldValue.serverTimestamp(),
+      });
+    } catch (e) {
+      Logger.error(
+        'Error soft-deleting order: $e',
+        'FirestoreService.softDeleteOrder',
+      );
+      rethrow;
+    }
+  }
+
+  /// Restore a soft-deleted order
+  Future<void> restoreOrder(String orderId) async {
+    try {
+      await _firestore.collection('orders').doc(orderId).update({
+        'deletedAt': FieldValue.delete(),
+        'deletionReason': FieldValue.delete(),
+        'updatedAt': FieldValue.serverTimestamp(),
+      });
+    } catch (e) {
+      Logger.error(
+        'Error restoring order: $e',
+        'FirestoreService.restoreOrder',
+      );
+      rethrow;
+    }
+  }
+
   // USER PROFILE METHODS
   Future<Map<String, dynamic>?> getUserProfile(String userId) async {
     try {

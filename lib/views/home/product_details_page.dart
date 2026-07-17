@@ -10,7 +10,7 @@ import '../../core/constants/app_defaults.dart';
 import '../../core/models/cart_item_model.dart';
 import '../../core/models/product_model.dart';
 import '../../core/providers/cart_provider.dart';
-import '../../core/routes/app_routes.dart';
+import 'package:go_router/go_router.dart';
 
 class ProductDetailsPage extends ConsumerStatefulWidget {
   const ProductDetailsPage({super.key, this.product});
@@ -66,6 +66,10 @@ class _ProductDetailsPageState extends ConsumerState<ProductDetailsPage> {
     final product = _product;
     if (product == null) {
       _showSnackBar('Product information is missing');
+      return;
+    }
+    if (product.stock <= 0) {
+      _showSnackBar('${product.name} is out of stock');
       return;
     }
 
@@ -136,7 +140,7 @@ class _ProductDetailsPageState extends ConsumerState<ProductDetailsPage> {
         return;
       }
 
-      Navigator.pushNamed(context, AppRoutes.checkoutPage);
+      context.push('/checkoutPage');
     } catch (e) {
       if (mounted) {
         _showSnackBar(
@@ -202,6 +206,7 @@ class _ProductDetailsPageState extends ConsumerState<ProductDetailsPage> {
             onBuyButtonTap: _buyNow,
             onCartButtonTap: _toggleCart,
             isInCart: isInCart,
+            isOutOfStock: product.stock <= 0 && !isInCart,
           ),
         ),
       ),
@@ -224,6 +229,18 @@ class _ProductDetailsPageState extends ConsumerState<ProductDetailsPage> {
                     ),
                     const SizedBox(height: 8),
                     Text('Weight: ${product.weight}'),
+                    const SizedBox(height: 4),
+                    Text(
+                      product.stock > 0
+                          ? 'In Stock (${product.stock} available)'
+                          : 'Out of Stock',
+                      style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                            color: product.stock > 0
+                                ? Colors.green
+                                : Colors.red,
+                            fontWeight: FontWeight.w600,
+                          ),
+                    ),
                   ],
                 ),
               ),
@@ -236,7 +253,8 @@ class _ProductDetailsPageState extends ConsumerState<ProductDetailsPage> {
                 key: _quantityKey,
                 currentPrice: product.price,
                 orginalPrice: product.mainPrice,
-                quantity: 1,
+                quantity: product.stock > 0 ? 1 : 0,
+                maxQuantity: product.stock,
               ),
             ),
             const SizedBox(height: 8),
@@ -271,6 +289,9 @@ class _ProductDetailsPageState extends ConsumerState<ProductDetailsPage> {
                   const Divider(thickness: 0.1),
                   ReviewRowButton(
                     totalStars: (product.rating.round()).clamp(1, 5),
+                    productId: product.id,
+                    productName: product.productName,
+                    productImage: product.image,
                   ),
                   const Divider(thickness: 0.1),
                 ],

@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 
 import '../../../../core/constants/constants.dart';
-import '../../../../core/routes/app_routes.dart';
+import 'package:go_router/go_router.dart';
 
 class AddNewCardRow extends StatelessWidget {
   const AddNewCardRow({super.key});
@@ -23,7 +23,7 @@ class AddNewCardRow extends StatelessWidget {
           const Spacer(),
           IconButton(
             onPressed: () {
-              Navigator.pushNamed(context, AppRoutes.paymentCardAdd);
+              context.push('/paymentCardAdd');
             },
             icon: SvgPicture.asset(AppIcons.cardAdd),
           ),

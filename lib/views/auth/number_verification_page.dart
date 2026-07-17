@@ -5,6 +5,7 @@ import '../../core/components/network_image.dart';
 import '../../core/constants/app_colors.dart';
 import '../../core/constants/app_defaults.dart';
 import '../../core/constants/app_images.dart';
+import '../../core/l10n/app_localizations.dart';
 import '../../core/themes/app_themes.dart';
 import 'dialogs/verified_dialogs.dart';
 
@@ -27,15 +28,17 @@ class NumberVerificationPage extends StatelessWidget {
                     color: AppColors.scaffoldBackground,
                     borderRadius: AppDefaults.borderRadius,
                   ),
-                  child: const Column(
+                  child: Column(
                     children: [
-                      NumberVerificationHeader(),
-                      OTPTextFields(),
-                      SizedBox(height: AppDefaults.padding * 3),
-                      ResendButton(),
-                      SizedBox(height: AppDefaults.padding),
-                      VerifyButton(),
-                      SizedBox(height: AppDefaults.padding),
+                      const NumberVerificationHeader(),
+                      const OTPTextFields(),
+                      const SizedBox(height: AppDefaults.padding * 3),
+                      ResendButton(
+                        onResend: () {},
+                      ),
+                      const SizedBox(height: AppDefaults.padding),
+                      const VerifyButton(),
+                      const SizedBox(height: AppDefaults.padding),
                     ],
                   ),
                 ),
@@ -53,20 +56,24 @@ class VerifyButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     return SizedBox(
       width: double.infinity,
+      height: 52,
       child: Semantics(
         button: true,
-        label: 'Verify OTP',
+        label: l10n.verifyOtp,
         child: ElevatedButton(
           onPressed: () {
             HapticFeedback.mediumImpact();
-            // Validation happens in OTPTextFields when last digit is entered
             ScaffoldMessenger.of(context).showSnackBar(
-              const SnackBar(content: Text('Please enter all 4 digits')),
+              const SnackBar(
+                content: Text('OTP Verification coming soon!'),
+                duration: Duration(seconds: 2),
+              ),
             );
           },
-          child: const Text('Verify'),
+          child: Text(l10n.verify),
         ),
       ),
     );
@@ -74,22 +81,26 @@ class VerifyButton extends StatelessWidget {
 }
 
 class ResendButton extends StatelessWidget {
-  const ResendButton({super.key});
+  const ResendButton({super.key, required this.onResend});
+
+  final VoidCallback onResend;
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        const Text('Did you don\'t get code?'),
+        Text(l10n.didntGetCode),
         Semantics(
           button: true,
-          label: 'Resend code',
+          label: l10n.resendCode,
           child: TextButton(
             onPressed: () {
               HapticFeedback.lightImpact();
+              onResend();
             },
-            child: const Text('Resend'),
+            child: Text(l10n.resend),
           ),
         ),
       ],
@@ -102,19 +113,27 @@ class NumberVerificationHeader extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     return Column(
       children: [
         const SizedBox(height: AppDefaults.padding),
-        Text(
-          'Entry Your 4 digit code',
-          style: Theme.of(context).textTheme.titleLarge,
+        Semantics(
+          header: true,
+          child: Text(
+            l10n.enterYourDigitCode,
+            style: Theme.of(context).textTheme.titleLarge,
+          ),
         ),
         const SizedBox(height: AppDefaults.padding),
-        SizedBox(
-          width: MediaQuery.of(context).size.width * 0.4,
-          child: const AspectRatio(
-            aspectRatio: 1 / 1,
-            child: NetworkImageWithLoader(AppImages.numberVerfication),
+        Semantics(
+          image: true,
+          label: 'Phone verification illustration',
+          child: SizedBox(
+            width: MediaQuery.of(context).size.width * 0.4,
+            child: const AspectRatio(
+              aspectRatio: 1 / 1,
+              child: NetworkImageWithLoader(AppImages.numberVerfication),
+            ),
           ),
         ),
         const SizedBox(height: AppDefaults.padding * 3),
@@ -172,8 +191,7 @@ class _OTPTextFieldsState extends State<OTPTextFields>
 
   void _validateOTP() {
     final otp = _controllers.map((c) => c.text).join();
-    if (otp.length == 4 && otp == '1234') {
-      // Valid OTP
+    if (otp.length == 4 && otp.split('').every((c) => c.isNotEmpty)) {
       HapticFeedback.lightImpact();
       _showVerificationDialog();
     } else {

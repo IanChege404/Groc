@@ -5,6 +5,7 @@ class ProductModel {
   final String name;
   final String description;
   final String category;
+  final String categoryId;
   final double price;
   final double mainPrice;
   final double? discountPrice;
@@ -22,6 +23,7 @@ class ProductModel {
     required this.name,
     required this.description,
     required this.category,
+    required this.categoryId,
     required this.price,
     required this.mainPrice,
     this.discountPrice,
@@ -43,6 +45,7 @@ class ProductModel {
       name: data['name'] ?? '',
       description: data['description'] ?? '',
       category: data['category'] ?? '',
+      categoryId: data['categoryId'] ?? '',
       price: (data['price'] ?? 0).toDouble(),
       mainPrice: (data['mainPrice'] ?? 0).toDouble(),
       discountPrice: data['discountPrice'] != null
@@ -65,6 +68,7 @@ class ProductModel {
       'name': name,
       'description': description,
       'category': category,
+      'categoryId': categoryId,
       'price': price,
       'mainPrice': mainPrice,
       'discountPrice': discountPrice,
@@ -86,6 +90,7 @@ class ProductModel {
       'name': name,
       'description': description,
       'category': category,
+      'categoryId': categoryId,
       'price': price,
       'mainPrice': mainPrice,
       'discountPrice': discountPrice,
@@ -106,6 +111,7 @@ class ProductModel {
     String? name,
     String? description,
     String? category,
+    String? categoryId,
     double? price,
     double? mainPrice,
     double? discountPrice,
@@ -123,6 +129,7 @@ class ProductModel {
       name: name ?? this.name,
       description: description ?? this.description,
       category: category ?? this.category,
+      categoryId: categoryId ?? this.categoryId,
       price: price ?? this.price,
       mainPrice: mainPrice ?? this.mainPrice,
       discountPrice: discountPrice ?? this.discountPrice,

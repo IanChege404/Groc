@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../../../../core/components/network_image.dart';
 import '../../../../core/constants/constants.dart';
+import '../../../../core/l10n/app_localizations.dart';
 
 class PaymentOptionTile extends StatelessWidget {
   const PaymentOptionTile({
@@ -19,15 +20,19 @@ class PaymentOptionTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     return Padding(
       padding: const EdgeInsets.symmetric(
         vertical: AppDefaults.padding / 2,
         horizontal: AppDefaults.padding,
       ),
-      child: InkWell(
-        onTap: onTap,
-        borderRadius: AppDefaults.borderRadius,
-        child: Container(
+      child: Semantics(
+        button: true,
+        label: l10n.paymentMethodSelected(label),
+        child: InkWell(
+          onTap: onTap,
+          borderRadius: AppDefaults.borderRadius,
+          child: Container(
           padding: const EdgeInsets.all(AppDefaults.padding),
           decoration: BoxDecoration(
             border: Border.all(width: 0.1, color: AppColors.placeholder),
@@ -64,6 +69,7 @@ class PaymentOptionTile extends StatelessWidget {
               ),
             ],
           ),
+        ),
         ),
       ),
     );

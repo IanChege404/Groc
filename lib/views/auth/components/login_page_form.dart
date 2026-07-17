@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
+import '../../../core/components/afri_button.dart';
 import '../../../core/constants/constants.dart';
-import '../../../core/routes/app_routes.dart';
+import '../../../core/l10n/app_localizations.dart';
 import '../../../core/services/firestore_auth_service.dart';
 import '../../../core/themes/app_themes.dart';
 import '../../../core/utils/validators.dart';
-import 'login_button.dart';
+import 'package:go_router/go_router.dart';
 
 class LoginPageForm extends StatefulWidget {
   const LoginPageForm({super.key});
@@ -67,21 +68,20 @@ class _LoginPageFormState extends State<LoginPageForm> {
     });
 
     if (result.success) {
-      Navigator.pushNamedAndRemoveUntil(
-        context,
-        AppRoutes.entryPoint,
-        (route) => false,
-      );
+      context.go('/entry_point');
       return;
     }
 
-    ScaffoldMessenger.of(
-      context,
-    ).showSnackBar(SnackBar(content: Text(result.message ?? 'Login failed')));
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+          content:
+              Text(result.message ?? AppLocalizations.of(context)!.loginFailed)),
+    );
   }
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     return Theme(
       data: AppTheme.defaultTheme.copyWith(
         inputDecorationTheme: AppTheme.secondaryInputDecorationTheme,
@@ -93,50 +93,73 @@ class _LoginPageFormState extends State<LoginPageForm> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              // Email Field
-              const Text("Email"),
+              Semantics(
+                label: l10n.email,
+                child: Text(l10n.email),
+              ),
               const SizedBox(height: 8),
-              TextFormField(
-                controller: emailController,
-                keyboardType: TextInputType.emailAddress,
-                validator: Validators.email.call,
-                textInputAction: TextInputAction.next,
+              Semantics(
+                label: l10n.email,
+                child: TextFormField(
+                  controller: emailController,
+                  keyboardType: TextInputType.emailAddress,
+                  validator: Validators.email.call,
+                  textInputAction: TextInputAction.next,
+                  autofillHints: const [AutofillHints.email],
+                  decoration: InputDecoration(
+                    labelText: l10n.email,
+                    hintText: l10n.emailHint,
+                  ),
+                ),
               ),
               const SizedBox(height: AppDefaults.padding),
-
-              // Password Field
-              const Text("Password"),
+              Semantics(
+                label: l10n.password,
+                child: Text(l10n.password),
+              ),
               const SizedBox(height: 8),
-              TextFormField(
-                controller: passwordController,
-                validator: Validators.password.call,
-                onFieldSubmitted: (v) => onLogin(),
-                textInputAction: TextInputAction.done,
-                obscureText: !isPasswordShown,
-                decoration: InputDecoration(
-                  suffixIcon: Material(
-                    color: Colors.transparent,
-                    child: IconButton(
-                      onPressed: onPassShowClicked,
-                      icon: SvgPicture.asset(AppIcons.eye, width: 24),
+              Semantics(
+                label: l10n.password,
+                child: TextFormField(
+                  controller: passwordController,
+                  validator: Validators.password.call,
+                  onFieldSubmitted: (v) => onLogin(),
+                  textInputAction: TextInputAction.done,
+                  obscureText: !isPasswordShown,
+                  autofillHints: const [AutofillHints.password],
+                  decoration: InputDecoration(
+                    labelText: l10n.password,
+                    hintText: l10n.passwordHint,
+                    suffixIcon: Material(
+                      color: Colors.transparent,
+                      child: Semantics(
+                        button: true,
+                        label:
+                            isPasswordShown ? 'Hide password' : 'Show password',
+                        child: IconButton(
+                          onPressed: onPassShowClicked,
+                          icon: SvgPicture.asset(AppIcons.eye, width: 24),
+                        ),
+                      ),
                     ),
                   ),
                 ),
               ),
-
-              // Forget Password labelLarge
               Align(
                 alignment: Alignment.centerRight,
                 child: TextButton(
                   onPressed: () {
-                    Navigator.pushNamed(context, AppRoutes.forgotPassword);
+                    context.push('/forgotPassword');
                   },
-                  child: const Text('Forget Password?'),
+                  child: Text(l10n.forgotPassword),
                 ),
               ),
-
-              // Login labelLarge
-              LoginButton(onPressed: isSubmitting ? null : onLogin),
+              AfriButton(
+                label: l10n.login,
+                isLoading: isSubmitting,
+                isDisabled: isSubmitting,
+                onPressed: onLogin,
+              ),
             ],
           ),
         ),

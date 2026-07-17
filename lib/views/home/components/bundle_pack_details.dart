@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../../../core/constants/constants.dart';
+import '../../../core/l10n/app_localizations.dart';
 import '../../../core/models/bundle_model.dart';
 
 class PackDetails extends StatelessWidget {
@@ -11,6 +12,7 @@ class PackDetails extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    final l10n = AppLocalizations.of(context)!;
 
     return Container(
       margin: EdgeInsets.only(right: MediaQuery.of(context).size.width * 0.12),
@@ -19,7 +21,7 @@ class PackDetails extends StatelessWidget {
           Align(
             alignment: Alignment.centerLeft,
             child: Text(
-              'Pack Details',
+              l10n.packDetails,
               style: theme.textTheme.bodyLarge?.copyWith(
                 fontWeight: FontWeight.bold,
                 color: theme.colorScheme.onSurface,
@@ -43,10 +45,10 @@ class PackDetails extends StatelessWidget {
                     ),
                   ),
                   title: Text(entry.value),
-                  subtitle: const Text('Included in this bundle'),
+                  subtitle: Text(l10n.includedInThisBundle),
                   trailing: Text(
                     bundle.productIds.length > entry.key
-                        ? 'Item ${entry.key + 1}'
+                        ? l10n.itemCount(entry.key + 1)
                         : '',
                     style: theme.textTheme.bodySmall?.copyWith(
                       color: theme.colorScheme.onSurfaceVariant,

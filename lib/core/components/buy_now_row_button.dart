@@ -9,11 +9,13 @@ class BuyNowRow extends StatefulWidget {
     required this.onCartButtonTap,
     required this.onBuyButtonTap,
     this.isInCart = false,
+    this.isOutOfStock = false,
   });
 
   final void Function() onCartButtonTap;
   final void Function() onBuyButtonTap;
   final bool isInCart;
+  final bool isOutOfStock;
 
   @override
   State<BuyNowRow> createState() => _BuyNowRowState();
@@ -50,7 +52,7 @@ class _BuyNowRowState extends State<BuyNowRow> {
             duration: const Duration(milliseconds: 170),
             curve: Curves.easeOutBack,
             child: OutlinedButton(
-              onPressed: _onCartTap,
+              onPressed: widget.isOutOfStock ? null : _onCartTap,
               style: OutlinedButton.styleFrom(
                 backgroundColor: cartBackground,
                 side: BorderSide(color: cartBorderColor),
@@ -66,11 +68,11 @@ class _BuyNowRowState extends State<BuyNowRow> {
           const SizedBox(width: AppDefaults.padding),
           Expanded(
             child: ElevatedButton(
-              onPressed: widget.onBuyButtonTap,
+              onPressed: widget.isOutOfStock ? null : widget.onBuyButtonTap,
               style: ElevatedButton.styleFrom(
                 padding: const EdgeInsets.all(AppDefaults.padding * 1.2),
               ),
-              child: const Text('Buy Now'),
+              child: Text(widget.isOutOfStock ? 'Out of Stock' : 'Buy Now'),
             ),
           ),
         ],

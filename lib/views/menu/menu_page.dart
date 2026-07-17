@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 
 import '../../core/constants/constants.dart';
-import '../../core/routes/app_routes.dart';
 import 'components/category_tile.dart';
+import 'package:go_router/go_router.dart';
 
 class MenuPage extends StatelessWidget {
   const MenuPage({super.key});
@@ -42,84 +42,84 @@ class CateogoriesGrid extends StatelessWidget {
             label: 'Vegetables',
             backgroundColor: AppColors.primary,
             onTap: () {
-              Navigator.pushNamed(context, AppRoutes.categoryDetails);
+              context.push('/categoryDetails');
             },
           ),
           CategoryTile(
             imageLink: 'https://i.imgur.com/yOFxoIP.png',
             label: 'Meat And Fish',
             onTap: () {
-              Navigator.pushNamed(context, AppRoutes.categoryDetails);
+              context.push('/categoryDetails');
             },
           ),
           CategoryTile(
             imageLink: 'https://i.imgur.com/GPsRaFC.png',
             label: 'Medicine',
             onTap: () {
-              Navigator.pushNamed(context, AppRoutes.categoryDetails);
+              context.push('/categoryDetails');
             },
           ),
           CategoryTile(
             imageLink: 'https://i.imgur.com/mGRqfnc.png',
             label: 'Baby Care',
             onTap: () {
-              Navigator.pushNamed(context, AppRoutes.categoryDetails);
+              context.push('/categoryDetails');
             },
           ),
           CategoryTile(
             imageLink: 'https://i.imgur.com/fwyz4oC.png',
             label: 'Office Supplies',
             onTap: () {
-              Navigator.pushNamed(context, AppRoutes.categoryDetails);
+              context.push('/categoryDetails');
             },
           ),
           CategoryTile(
             imageLink: 'https://i.imgur.com/DNr8a6R.png',
             label: 'Beauty',
             onTap: () {
-              Navigator.pushNamed(context, AppRoutes.categoryDetails);
+              context.push('/categoryDetails');
             },
           ),
           CategoryTile(
             imageLink: 'https://i.imgur.com/O2ZX5nR.png',
             label: 'Gym Equipment',
             onTap: () {
-              Navigator.pushNamed(context, AppRoutes.categoryDetails);
+              context.push('/categoryDetails');
             },
           ),
           CategoryTile(
             imageLink: 'https://i.imgur.com/wJBopjL.png',
             label: 'Gardening Tools',
             onTap: () {
-              Navigator.pushNamed(context, AppRoutes.categoryDetails);
+              context.push('/categoryDetails');
             },
           ),
           CategoryTile(
             imageLink: 'https://i.imgur.com/P4yJA9t.png',
             label: 'Pet Care',
             onTap: () {
-              Navigator.pushNamed(context, AppRoutes.categoryDetails);
+              context.push('/categoryDetails');
             },
           ),
           CategoryTile(
             imageLink: 'https://i.imgur.com/sxGf76e.png',
             label: 'Eye Wears',
             onTap: () {
-              Navigator.pushNamed(context, AppRoutes.categoryDetails);
+              context.push('/categoryDetails');
             },
           ),
           CategoryTile(
             imageLink: 'https://i.imgur.com/BPvKeXl.png',
             label: 'Pack',
             onTap: () {
-              Navigator.pushNamed(context, AppRoutes.categoryDetails);
+              context.push('/categoryDetails');
             },
           ),
           CategoryTile(
             imageLink: 'https://i.imgur.com/m65fusg.png',
             label: 'Others',
             onTap: () {
-              Navigator.pushNamed(context, AppRoutes.categoryDetails);
+              context.push('/categoryDetails');
             },
           ),
         ],

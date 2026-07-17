@@ -1,16 +1,33 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 
 import '../constants/app_colors.dart';
 
 class ReviewRowButton extends StatelessWidget {
-  const ReviewRowButton({super.key, required this.totalStars});
+  const ReviewRowButton({
+    super.key,
+    required this.totalStars,
+    this.productId = '',
+    this.productName,
+    this.productImage,
+  });
 
   final int totalStars;
+  final String productId;
+  final String? productName;
+  final String? productImage;
 
   @override
   Widget build(BuildContext context) {
     return InkWell(
-      onTap: () {},
+      onTap: () => context.push(
+        '/review',
+        extra: {
+          'productId': productId,
+          'productName': productName,
+          'productImage': productImage,
+        },
+      ),
       child: Row(
         children: [
           Text(

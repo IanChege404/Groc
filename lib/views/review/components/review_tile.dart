@@ -4,26 +4,15 @@ import 'package:flutter_svg/svg.dart';
 import '../../../core/components/network_image.dart';
 import '../../../core/components/review_stars.dart';
 import '../../../core/constants/constants.dart';
+import '../../../core/models/review_model.dart';
 
 class ReviewTile extends StatelessWidget {
+  final ReviewModel review;
+
   const ReviewTile({
     super.key,
     required this.review,
-    required this.starsGiven,
-    required this.userName,
-    required this.userPicture,
-    required this.time,
-    required this.isFavourite,
-    required this.totalLikes,
   });
-
-  final String review;
-  final int starsGiven;
-  final String userName;
-  final String userPicture;
-  final String time;
-  final bool isFavourite;
-  final int totalLikes;
 
   @override
   Widget build(BuildContext context) {
@@ -38,40 +27,56 @@ class ReviewTile extends StatelessWidget {
             child: ClipOval(
               child: AspectRatio(
                 aspectRatio: 1 / 1,
-                child: NetworkImageWithLoader(userPicture),
+                child: review.userImage.isNotEmpty
+                    ? NetworkImageWithLoader(review.userImage)
+                    : Container(
+                        color: Theme.of(context).colorScheme.secondary,
+                        child: Center(
+                          child: Text(
+                            review.userName[0].toUpperCase(),
+                            style: Theme.of(context).textTheme.headlineSmall,
+                          ),
+                        ),
+                      ),
               ),
             ),
           ),
           const SizedBox(width: AppDefaults.padding),
           Expanded(
             child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Row(
                   children: [
                     Text(
-                      userName,
+                      review.userName,
                       style: Theme.of(context).textTheme.bodyLarge?.copyWith(
                             color: Theme.of(context).colorScheme.onSurface,
                           ),
                     ),
                     const Spacer(),
-                    Text(time, style: Theme.of(context).textTheme.bodySmall),
+                    Text(review.formattedDate,
+                        style: Theme.of(context).textTheme.bodySmall),
                   ],
                 ),
                 const SizedBox(height: 4),
-                const ReviewStars(starsGiven: 3),
+                ReviewStars(starsGiven: review.rating.toInt()),
                 const SizedBox(height: 8),
-                Text(review),
+                if (review.title.isNotEmpty)
+                  Text(
+                    review.title,
+                    style: Theme.of(context).textTheme.labelLarge,
+                  ),
+                const SizedBox(height: 4),
+                Text(review.comment),
                 const SizedBox(height: AppDefaults.padding),
                 Row(
                   children: [
                     Row(
                       children: [
-                        isFavourite
-                            ? SvgPicture.asset(AppIcons.heartActive)
-                            : SvgPicture.asset(AppIcons.heartOutlined),
+                        SvgPicture.asset(AppIcons.heartOutlined),
                         const SizedBox(width: AppDefaults.padding / 2),
-                        Text('$totalLikes Like'),
+                        Text('${review.helpfulCount} Helpful'),
                       ],
                     ),
                     const SizedBox(width: AppDefaults.padding),

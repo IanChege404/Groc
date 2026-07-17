@@ -5,12 +5,14 @@ class OrderModel {
   final String userId;
   final List<OrderItemModel> items;
   final double totalAmount;
-  final String status; // pending, completed, cancelled
+  final String status; // pending, completed, cancelled, refunded
   final String paymentMethod; // mpesa, card, wallet
   final String? shippingAddress;
   final String? trackingNumber;
   final DateTime createdAt;
   final DateTime updatedAt;
+  final DateTime? deletedAt; // Soft delete: null = active, set = archived
+  final String? deletionReason; // why order was deleted (refund, user request, etc)
 
   OrderModel({
     required this.id,
@@ -23,7 +25,12 @@ class OrderModel {
     this.trackingNumber,
     required this.createdAt,
     required this.updatedAt,
+    this.deletedAt,
+    this.deletionReason,
   });
+
+  bool get isDeleted => deletedAt != null;
+  bool get isActive => deletedAt == null;
 
   factory OrderModel.fromFirestore(DocumentSnapshot doc) {
     final data = doc.data() as Map<String, dynamic>;
@@ -43,6 +50,8 @@ class OrderModel {
       trackingNumber: data['trackingNumber'],
       createdAt: (data['createdAt'] as Timestamp?)?.toDate() ?? DateTime.now(),
       updatedAt: (data['updatedAt'] as Timestamp?)?.toDate() ?? DateTime.now(),
+      deletedAt: (data['deletedAt'] as Timestamp?)?.toDate(),
+      deletionReason: data['deletionReason'],
     );
   }
 
@@ -57,6 +66,8 @@ class OrderModel {
       'trackingNumber': trackingNumber,
       'createdAt': Timestamp.fromDate(createdAt),
       'updatedAt': Timestamp.fromDate(updatedAt),
+      if (deletedAt != null) 'deletedAt': Timestamp.fromDate(deletedAt!),
+      if (deletionReason != null) 'deletionReason': deletionReason,
     };
   }
 
@@ -71,6 +82,8 @@ class OrderModel {
     String? trackingNumber,
     DateTime? createdAt,
     DateTime? updatedAt,
+    DateTime? deletedAt,
+    String? deletionReason,
   }) {
     return OrderModel(
       id: id ?? this.id,
@@ -83,6 +96,8 @@ class OrderModel {
       trackingNumber: trackingNumber ?? this.trackingNumber,
       createdAt: createdAt ?? this.createdAt,
       updatedAt: updatedAt ?? this.updatedAt,
+      deletedAt: deletedAt ?? this.deletedAt,
+      deletionReason: deletionReason ?? this.deletionReason,
     );
   }
 

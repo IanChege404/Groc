@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 
-import '../../../core/routes/app_routes.dart';
+import '../../../core/l10n/app_localizations.dart';
 
 class AlreadyHaveAnAccount extends StatelessWidget {
   const AlreadyHaveAnAccount({
@@ -9,13 +10,14 @@ class AlreadyHaveAnAccount extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        const Text('Already Have Account?'),
+        Text(l10n.haveAccount),
         TextButton(
-          onPressed: () => Navigator.pushNamed(context, AppRoutes.login),
-          child: const Text('Log In'),
+          onPressed: () => context.push('/login'),
+          child: Text(l10n.signIn),
         ),
       ],
     );

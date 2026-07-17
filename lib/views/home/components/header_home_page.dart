@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 import '../../../core/constants/constants.dart';
-import '../../../core/routes/app_routes.dart';
+import 'package:go_router/go_router.dart';
 
 class HeaderHomePage extends StatelessWidget {
   const HeaderHomePage({super.key});
@@ -31,7 +31,7 @@ class _SearchButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return IconButton(
-      onPressed: () => Navigator.pushNamed(context, AppRoutes.search),
+      onPressed: () => context.push('/search'),
       icon: Container(
         padding: const EdgeInsets.all(8),
         decoration: const BoxDecoration(
@@ -50,7 +50,7 @@ class _SideBarButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return IconButton(
-      onPressed: () => Navigator.pushNamed(context, AppRoutes.drawerPage),
+      onPressed: () => context.push('/drawerPage'),
       icon: Container(
         padding: const EdgeInsets.all(8),
         decoration: const BoxDecoration(

@@ -4,7 +4,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../core/constants/app_colors.dart';
 import '../../core/constants/app_defaults.dart';
-import '../../core/routes/app_routes.dart';
+import 'package:go_router/go_router.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
@@ -16,6 +16,7 @@ class SplashScreen extends StatefulWidget {
 class _SplashScreenState extends State<SplashScreen>
     with SingleTickerProviderStateMixin {
   late AnimationController _animationController;
+  late Animation<double> _scaleAnimation;
   late Animation<double> _fadeAnimation;
 
   static const String _onboardingKey = AppPreferenceKeys.onboardingCompleted;
@@ -25,12 +26,25 @@ class _SplashScreenState extends State<SplashScreen>
     super.initState();
     _animationController = AnimationController(
       vsync: this,
-      duration: const Duration(milliseconds: 800),
+      duration: const Duration(milliseconds: 1200),
     );
-    _fadeAnimation = CurvedAnimation(
+
+    _scaleAnimation = Tween<double>(
+      begin: 0.8,
+      end: 1.0,
+    ).animate(CurvedAnimation(
       parent: _animationController,
-      curve: Curves.easeIn,
-    );
+      curve: const Interval(0.0, 0.6, curve: Curves.easeOutBack),
+    ));
+
+    _fadeAnimation = Tween<double>(
+      begin: 0.0,
+      end: 1.0,
+    ).animate(CurvedAnimation(
+      parent: _animationController,
+      curve: const Interval(0.0, 0.5, curve: Curves.easeIn),
+    ));
+
     _animationController.forward();
     _determineInitialRoute();
   }
@@ -42,8 +56,7 @@ class _SplashScreenState extends State<SplashScreen>
   }
 
   Future<void> _determineInitialRoute() async {
-    // Allow the splash animation to play briefly
-    await Future.delayed(const Duration(milliseconds: 800));
+    await Future.delayed(const Duration(milliseconds: 1200));
 
     if (!mounted) return;
 
@@ -54,26 +67,11 @@ class _SplashScreenState extends State<SplashScreen>
     if (!mounted) return;
 
     if (currentUser != null) {
-      // User is already logged in — go straight to the app
-      Navigator.pushNamedAndRemoveUntil(
-        context,
-        AppRoutes.entryPoint,
-        (route) => false,
-      );
+      context.go('/entry_point');
     } else if (!onboardingDone) {
-      // First launch — show onboarding
-      Navigator.pushNamedAndRemoveUntil(
-        context,
-        AppRoutes.onboarding,
-        (route) => false,
-      );
+      context.go('/onboarding');
     } else {
-      // Returning user who is not logged in
-      Navigator.pushNamedAndRemoveUntil(
-        context,
-        AppRoutes.introLogin,
-        (route) => false,
-      );
+      context.go('/intro_login');
     }
   }
 
@@ -84,10 +82,37 @@ class _SplashScreenState extends State<SplashScreen>
       body: Center(
         child: FadeTransition(
           opacity: _fadeAnimation,
-          child: Image.asset(
-            'assets/images/app_logo_splash.png',
-            width: 120,
-            height: 120,
+          child: ScaleTransition(
+            scale: _scaleAnimation,
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Image.asset(
+                  'assets/images/app_logo_splash.png',
+                  width: 200,
+                  height: 200,
+                ),
+                const SizedBox(height: 24),
+                Text(
+                  'Pro Grocery',
+                  style: TextStyle(
+                    fontSize: 28,
+                    fontWeight: FontWeight.bold,
+                    color: Theme.of(context).colorScheme.primary,
+                    letterSpacing: 1.2,
+                  ),
+                ),
+                const SizedBox(height: 8),
+                Text(
+                  'Your daily needs, delivered',
+                  style: TextStyle(
+                    fontSize: 14,
+                    color: Theme.of(context).colorScheme.onSurfaceVariant,
+                    letterSpacing: 0.5,
+                  ),
+                ),
+              ],
+            ),
           ),
         ),
       ),

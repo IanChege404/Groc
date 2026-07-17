@@ -1,15 +1,17 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 
 import '../../core/components/network_image.dart';
 import '../../core/constants/app_defaults.dart';
-import '../../core/utils/ui_util.dart';
-import '../cart/dialogs/delivered_successfull.dart';
+import '../../core/l10n/app_localizations.dart';
 
 class OrderSuccessfullPage extends StatelessWidget {
   const OrderSuccessfullPage({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+
     return Scaffold(
       body: Column(
         children: [
@@ -18,11 +20,14 @@ class OrderSuccessfullPage extends StatelessWidget {
             padding: const EdgeInsets.all(AppDefaults.padding),
             child: SizedBox(
               width: MediaQuery.of(context).size.width * 0.7,
-              child: const AspectRatio(
+              child: AspectRatio(
                 aspectRatio: 1 / 1,
-                child: NetworkImageWithLoader(
-                  'https://i.imgur.com/Fj9gVGy.png',
-                  fit: BoxFit.contain,
+                child: Semantics(
+                  label: l10n.orderPlacedSuccess,
+                  child: const NetworkImageWithLoader(
+                    'https://i.imgur.com/Fj9gVGy.png',
+                    fit: BoxFit.contain,
+                  ),
                 ),
               ),
             ),
@@ -32,7 +37,7 @@ class OrderSuccessfullPage extends StatelessWidget {
             child: Column(
               children: [
                 Text(
-                  'Order Placed Successfully',
+                  l10n.orderPlacedSuccess,
                   style: Theme.of(context).textTheme.titleLarge?.copyWith(
                         fontWeight: FontWeight.bold,
                         color: Theme.of(context).colorScheme.onSurface,
@@ -40,13 +45,51 @@ class OrderSuccessfullPage extends StatelessWidget {
                   textAlign: TextAlign.center,
                 ),
                 const SizedBox(height: 16),
-                const Padding(
-                  padding: EdgeInsets.symmetric(
+                Padding(
+                  padding: const EdgeInsets.symmetric(
                     horizontal: AppDefaults.padding,
                   ),
                   child: Text(
-                    'Thanks for your order. Your order has placed successfully. Please continue your order.',
+                    l10n.orderPlacedSuccessDesc,
                     textAlign: TextAlign.center,
+                  ),
+                ),
+                const SizedBox(height: 24),
+                // Order confirmation details card
+                Container(
+                  padding: const EdgeInsets.all(AppDefaults.padding),
+                  decoration: BoxDecoration(
+                    border: Border.all(width: 0.1, color: const Color(0xFFE0E0E0)),
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        l10n.orderConfirmation,
+                        style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                              fontWeight: FontWeight.bold,
+                              color: Theme.of(context).colorScheme.onSurface,
+                            ),
+                      ),
+                      const SizedBox(height: 12),
+                      Text(
+                        '${l10n.orderIdLabel}: #12345',
+                        style: Theme.of(context).textTheme.bodyMedium,
+                      ),
+                      const SizedBox(height: 8),
+                      Text(
+                        '${l10n.totalAmount}: KES 5,420.00',
+                        style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                              fontWeight: FontWeight.w600,
+                            ),
+                      ),
+                      const SizedBox(height: 8),
+                      Text(
+                        '${l10n.estimatedDelivery}: 3-5 business days',
+                        style: Theme.of(context).textTheme.bodyMedium,
+                      ),
+                    ],
                   ),
                 ),
               ],
@@ -62,13 +105,8 @@ class OrderSuccessfullPage extends StatelessWidget {
                   child: SizedBox(
                     width: double.infinity,
                     child: ElevatedButton(
-                      onPressed: () {
-                        UiUtil.openDialog(
-                          context: context,
-                          widget: const DeliverySuccessfullDialog(),
-                        );
-                      },
-                      child: const Text('Continue'),
+                      onPressed: () => context.go('/entry_point'),
+                      child: Text(l10n.continueShopping),
                     ),
                   ),
                 ),
@@ -79,8 +117,8 @@ class OrderSuccessfullPage extends StatelessWidget {
                   child: SizedBox(
                     width: double.infinity,
                     child: TextButton(
-                      onPressed: () {},
-                      child: const Text('Track Order'),
+                      onPressed: () => context.go('/myOrder'),
+                      child: Text(l10n.trackMyOrder),
                     ),
                   ),
                 ),

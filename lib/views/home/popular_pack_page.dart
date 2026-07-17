@@ -6,7 +6,7 @@ import '../../core/components/app_back_button.dart';
 import '../../core/components/bundle_tile_square.dart';
 import '../../core/constants/constants.dart';
 import '../../core/providers/catalog_provider.dart';
-import '../../core/routes/app_routes.dart';
+import 'package:go_router/go_router.dart';
 
 class PopularPackPage extends ConsumerWidget {
   const PopularPackPage({super.key});
@@ -65,7 +65,7 @@ class PopularPackPage extends ConsumerWidget {
                 ),
                 child: ElevatedButton(
                   onPressed: () {
-                    Navigator.pushNamed(context, AppRoutes.createMyPack);
+                    context.push('/createMyPack');
                   },
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.center,

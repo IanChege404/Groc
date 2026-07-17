@@ -1,5 +1,6 @@
 import '../models/coupon_model.dart';
 import '../utils/logger.dart';
+import '../utils/data_integrity_validator.dart';
 import 'firestore_service.dart';
 
 class CouponService {
@@ -32,7 +33,7 @@ class CouponService {
     return _firestoreService.getUserCouponsStream(userId);
   }
 
-  /// Validate coupon code
+  /// Validate coupon code with comprehensive integrity checks
   Future<CouponModel?> validateCouponCode(String code) async {
     try {
       final coupon = await _firestoreService.getCouponByCode(code);
@@ -45,17 +46,11 @@ class CouponService {
         return null;
       }
 
-      if (coupon.isExpired) {
+      // Run comprehensive validation
+      final isValid = await DataIntegrityValidator.validateCoupon(coupon);
+      if (!isValid) {
         Logger.warning(
-          'Coupon expired: $code',
-          'CouponService.validateCouponCode',
-        );
-        return null;
-      }
-
-      if (coupon.isUsed) {
-        Logger.warning(
-          'Coupon already used: $code',
+          'Coupon validation failed: $code',
           'CouponService.validateCouponCode',
         );
         return null;

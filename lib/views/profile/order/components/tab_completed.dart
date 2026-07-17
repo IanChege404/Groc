@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 
+import '../../../../core/l10n/app_localizations.dart';
 import '../../../../core/models/order_model.dart';
-import '../../../../core/routes/app_routes.dart';
 import 'order_preview_tile.dart';
+import 'package:go_router/go_router.dart';
 
 class CompletedTab extends StatelessWidget {
   const CompletedTab({super.key, required this.orders});
@@ -11,8 +12,10 @@ class CompletedTab extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+
     if (orders.isEmpty) {
-      return const Center(child: Text('No previous orders'));
+      return Center(child: Text(l10n.noCompletedOrders));
     }
 
     return ListView(
@@ -23,11 +26,8 @@ class CompletedTab extends StatelessWidget {
               orderID: order.id,
               date: _formatDate(order.createdAt),
               status: order.status,
-              onTap: () => Navigator.pushNamed(
-                context,
-                AppRoutes.orderDetails,
-                arguments: {'orderId': order.id},
-              ),
+              onTap: () =>
+                  context.push('/orderDetails', extra: {'orderId': order.id}),
             ),
           )
           .toList(),

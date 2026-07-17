@@ -3,9 +3,13 @@ import 'package:flutter_svg/flutter_svg.dart';
 
 import '../../../core/components/app_settings_tile.dart';
 import '../../../core/constants/constants.dart';
+import 'help_models.dart';
 
 class TopQuestions extends StatelessWidget {
-  const TopQuestions({super.key});
+  const TopQuestions({super.key, required this.items, required this.onTap});
+
+  final List<HelpQuestionItem> items;
+  final ValueChanged<HelpQuestionItem> onTap;
 
   @override
   Widget build(BuildContext context) {
@@ -21,26 +25,12 @@ class TopQuestions extends StatelessWidget {
               ),
         ),
         const SizedBox(height: AppDefaults.padding / 2),
-        AppSettingsListTile(
-          label: 'How do I return my Items',
-          trailing: SvgPicture.asset(AppIcons.right),
-        ),
-        AppSettingsListTile(
-          label: 'How to use collection point?',
-          trailing: SvgPicture.asset(AppIcons.right),
-        ),
-        AppSettingsListTile(
-          label: 'What is Grocery?',
-          trailing: SvgPicture.asset(AppIcons.right),
-        ),
-        AppSettingsListTile(
-          label: 'How can i add new delivery address?',
-          trailing: SvgPicture.asset(AppIcons.right),
-        ),
-        AppSettingsListTile(
-          label: 'How can i avail Sticker Price?',
-          trailing: SvgPicture.asset(AppIcons.right),
-        ),
+        for (final question in items)
+          AppSettingsListTile(
+            label: question.question,
+            trailing: SvgPicture.asset(AppIcons.right),
+            onTap: () => onTap(question),
+          ),
       ],
     );
   }

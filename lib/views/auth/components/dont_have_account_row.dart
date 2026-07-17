@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-
-import '../../../core/routes/app_routes.dart';
+import 'package:go_router/go_router.dart';
 
 class DontHaveAccountRow extends StatelessWidget {
   const DontHaveAccountRow({
@@ -14,7 +13,7 @@ class DontHaveAccountRow extends StatelessWidget {
       children: [
         const Text('Don\'t Have Account?'),
         TextButton(
-          onPressed: () => Navigator.pushNamed(context, AppRoutes.signup),
+          onPressed: () => context.push('/signup'),
           child: const Text('Sign Up'),
         ),
       ],

@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import '../../../core/l10n/app_localizations.dart';
+
 class LoginButton extends StatelessWidget {
   const LoginButton({super.key, required this.onPressed});
 
@@ -7,9 +9,14 @@ class LoginButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     return SizedBox(
       width: double.infinity,
-      child: ElevatedButton(onPressed: onPressed, child: const Text('Login')),
+      height: 52,
+      child: ElevatedButton(
+        onPressed: onPressed,
+        child: Text(l10n.login),
+      ),
     );
   }
 }

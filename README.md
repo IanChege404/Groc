@@ -302,7 +302,7 @@ Complete dark theme with:
 - ✅ User-preferred contrast ratios maintained
 - ✅ System theme auto-detection
 
-📊 **Dark Mode Audit**: See docs/DARK_MODE_AUDIT.md
+📊 **Dark Mode Guide**: See [docs/DARK_MODE_GUIDE.md](docs/DARK_MODE_GUIDE.md)
 
 ## 📐 Responsive Design
 
@@ -423,6 +423,25 @@ npm run dev  # http://localhost:3000
 ```
 
 Deploy to Vercel: `vercel --prod`
+
+## 📚 Documentation
+
+| Document | Description |
+|----------|-------------|
+| [Architecture Overview](docs/ARCHITECTURE.md) | System architecture, directory structure, data flow |
+| [Environment Setup](docs/ENVIRONMENT_SETUP.md) | Prerequisites, env vars, Firebase/Cloudinary setup |
+| [API Reference](docs/API_REFERENCE.md) | Firestore schemas, M-Pesa/Flutterwave APIs, service methods |
+| [State Management](docs/STATE_MANAGEMENT.md) | Provider + Riverpod patterns, migration guide |
+| [Component Library](docs/COMPONENT_LIBRARY.md) | 23+ reusable UI components with usage examples |
+| [Localization Guide](docs/LOCALIZATION_GUIDE.md) | Adding translations, ARB format, Swahili support |
+| [Testing Strategy](docs/TESTING_STRATEGY.md) | Unit/widget/accessibility/performance testing |
+| [Deployment Guide](docs/DEPLOYMENT_GUIDE.md) | Build commands, CI/CD, store submission |
+| [Dark Mode Guide](docs/DARK_MODE_GUIDE.md) | Theme system, color tokens, testing checklist |
+| [Accessibility Audit](docs/ACCESSIBILITY_AUDIT.md) | WCAG 2.1 AA compliance checklist |
+| [Responsive Testing](docs/RESPONSIVE_TESTING.md) | Device sizes, screen-by-screen testing guide |
+| [Firebase Setup](docs/FIREBASE_SETUP.md) | Firebase project configuration |
+| [Firestore Collections](docs/FIRESTORE_COLLECTIONS_CONTRACT.md) | Complete Firestore schema reference |
+| [Seed Execution](docs/SEED_EXECUTION_GUIDE.md) | Cloudinary sync + Firestore seeding pipeline |
 
 ## 🤝 Support
 

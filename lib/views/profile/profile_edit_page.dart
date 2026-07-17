@@ -195,6 +195,9 @@ class _ProfileEditPageState extends ConsumerState<ProfileEditPage>
                               controller: _firstNameController,
                               keyboardType: TextInputType.text,
                               textInputAction: TextInputAction.next,
+                              decoration: InputDecoration(
+                                labelText: 'First Name',
+                              ),
                               validator: (value) =>
                                   (value == null || value.trim().isEmpty)
                                       ? 'First name is required'
@@ -207,6 +210,9 @@ class _ProfileEditPageState extends ConsumerState<ProfileEditPage>
                               controller: _lastNameController,
                               keyboardType: TextInputType.text,
                               textInputAction: TextInputAction.next,
+                              decoration: InputDecoration(
+                                labelText: 'Last Name',
+                              ),
                               validator: (value) =>
                                   (value == null || value.trim().isEmpty)
                                       ? 'Last name is required'
@@ -219,6 +225,9 @@ class _ProfileEditPageState extends ConsumerState<ProfileEditPage>
                               controller: _phoneController,
                               keyboardType: TextInputType.phone,
                               textInputAction: TextInputAction.next,
+                              decoration: InputDecoration(
+                                labelText: 'Phone Number',
+                              ),
                               validator: (value) =>
                                   (value == null || value.trim().isEmpty)
                                       ? 'Phone number is required'
@@ -231,6 +240,9 @@ class _ProfileEditPageState extends ConsumerState<ProfileEditPage>
                               controller: _genderController,
                               keyboardType: TextInputType.text,
                               textInputAction: TextInputAction.next,
+                              decoration: InputDecoration(
+                                labelText: 'Gender',
+                              ),
                             ),
                             const SizedBox(height: AppDefaults.padding),
                             const Text('Birthday'),
@@ -239,6 +251,9 @@ class _ProfileEditPageState extends ConsumerState<ProfileEditPage>
                               controller: _birthdayController,
                               keyboardType: TextInputType.datetime,
                               textInputAction: TextInputAction.done,
+                              decoration: InputDecoration(
+                                labelText: 'Birthday',
+                              ),
                             ),
                             const SizedBox(height: AppDefaults.padding),
                             SizedBox(

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 import '../../../core/constants/constants.dart';
+import '../../../core/l10n/app_localizations.dart';
 
 class PaymentCardTile extends StatelessWidget {
   const PaymentCardTile({
@@ -19,39 +20,47 @@ class PaymentCardTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     return Padding(
       padding: const EdgeInsets.all(8.0),
-      child: Material(
-        color: isActive
-            ? AppColors.coloredBackground
-            : AppColors.scaffoldBackground,
-        borderRadius: AppDefaults.borderRadius,
-        child: InkWell(
-          onTap: onTap,
+      child: Semantics(
+        button: true,
+        selected: isActive,
+        label: isActive
+            ? l10n.paymentMethodSelected(label)
+            : l10n.paymentMethodNotSelected(label),
+        child: Material(
+          color: isActive
+              ? AppColors.coloredBackground
+              : AppColors.scaffoldBackground,
           borderRadius: AppDefaults.borderRadius,
-          child: Container(
-            height: 66,
-            width: 135,
-            padding: const EdgeInsets.symmetric(),
-            decoration: BoxDecoration(
-              borderRadius: AppDefaults.borderRadius,
-              border: Border.all(
-                color: isActive ? AppColors.primary : AppColors.placeholder,
-                width: isActive ? 1 : 0.2,
-              ),
-            ),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                SvgPicture.asset(icon),
-                const SizedBox(height: 8),
-                Text(
-                  label,
-                  style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                        color: Theme.of(context).colorScheme.onSurface,
-                      ),
+          child: InkWell(
+            onTap: onTap,
+            borderRadius: AppDefaults.borderRadius,
+            child: Container(
+              height: 66,
+              width: 135,
+              padding: const EdgeInsets.symmetric(),
+              decoration: BoxDecoration(
+                borderRadius: AppDefaults.borderRadius,
+                border: Border.all(
+                  color: isActive ? AppColors.primary : AppColors.placeholder,
+                  width: isActive ? 1 : 0.2,
                 ),
-              ],
+              ),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  SvgPicture.asset(icon),
+                  const SizedBox(height: 8),
+                  Text(
+                    label,
+                    style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                          color: Theme.of(context).colorScheme.onSurface,
+                        ),
+                  ),
+                ],
+              ),
             ),
           ),
         ),

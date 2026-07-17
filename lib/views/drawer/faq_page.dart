@@ -13,17 +13,31 @@ class FAQPage extends StatelessWidget {
         leading: const AppBackButton(),
         title: const Text('FAQ'),
       ),
-      body: const Column(
-        children: [
-          TitleAndParagraph(
-              title: '1. How it will take to delivery?',
-              paragraph:
-                  '''In enim justo, rhoncus ut, imperdiet a, venenatis vitae, justo. Nullam dictum felis eu pede mollis pretium. Integer tincidunt. Cras dapibus. Vivamus elementum semper nisi.'''),
-          TitleAndParagraph(
-              title: '3. What is refund system?',
-              paragraph:
-                  '''In enim justo, rhoncus ut, imperdiet a, venenatis vitae, justo. Nullam dictum felis eu pede mollis pretium. Integer tincidunt. Cras dapibus. Vivamus elementum semper nisi.\n\nMaecenas tempus, tellus eget condimentum rhoncus, sem quam semper libero, sit amet adipiscing sem neque sed ipsum. Nam quam nunc, blandit vel, luctus pulvinar, hendrerit id, lorem. Maecenas nec odio et ante tincidunt tempus. Donec vitae sapien.\n\nAliquam lorem ante, dapibus in, viverra quis, feugiat a, tellus. Phasellus viverra nulla ut metus varius laoreet.'''),
-        ],
+      body: const SingleChildScrollView(
+        child: Column(
+          children: [
+            TitleAndParagraph(
+                title: '1. How long does delivery take?',
+                paragraph:
+                    '''Most orders arrive within 45–90 minutes in supported delivery zones. During peak hours or bad weather, delivery may take a little longer — you can track your rider's progress in real time from the Order Tracking screen.'''),
+            TitleAndParagraph(
+                title: '2. What payment methods are supported?',
+                paragraph:
+                    '''We support M-Pesa (via Safaricom Daraja), Flutterwave for card payments, and Pro Grocery Wallet. You can save a preferred payment method in Settings for faster checkout next time.'''),
+            TitleAndParagraph(
+                title: '3. What is the refund policy?',
+                paragraph:
+                    '''If an item arrives damaged, missing, or incorrect, open the order from My Orders and select "Report an Issue" within 24 hours of delivery. Approved refunds are credited to your Pro Grocery Wallet instantly, or reversed to your original payment method within 3–5 business days.'''),
+            TitleAndParagraph(
+                title: '4. Can I cancel or edit an order after placing it?',
+                paragraph:
+                    '''Orders can be cancelled or edited free of charge before a rider is assigned. Once your order is being prepared or is out for delivery, cancellation may no longer be possible — contact Help Center for assistance.'''),
+            TitleAndParagraph(
+                title: '5. Do you deliver outside city centers?',
+                paragraph:
+                    '''Delivery zones are expanding regularly. Enter your address at checkout to see instantly whether your location is covered — we'll notify you when we launch in new areas.'''),
+          ],
+        ),
       ),
     );
   }

@@ -3,8 +3,8 @@ import 'package:flutter_svg/svg.dart';
 
 import '../../../core/components/app_back_button.dart';
 import '../../../core/constants/constants.dart';
-import '../../../core/routes/app_routes.dart';
 import '../../../core/components/app_settings_tile.dart';
+import 'package:go_router/go_router.dart';
 
 class SettingsPage extends StatelessWidget {
   const SettingsPage({super.key});
@@ -33,47 +33,47 @@ class SettingsPage extends StatelessWidget {
               label: 'Language',
               trailing: SvgPicture.asset(AppIcons.right),
               onTap: () =>
-                  Navigator.pushNamed(context, AppRoutes.settingsLanguage),
+                  context.push('/settingsLanguage')
             ),
             AppSettingsListTile(
               label: 'Notification',
               trailing: SvgPicture.asset(AppIcons.right),
               onTap: () =>
-                  Navigator.pushNamed(context, AppRoutes.settingsNotifications),
+                  context.push('/settingsNotifications')
             ),
             AppSettingsListTile(
               label: 'Change Password',
               trailing: SvgPicture.asset(AppIcons.right),
               onTap: () =>
-                  Navigator.pushNamed(context, AppRoutes.changePassword),
+                  context.push('/changePassword')
             ),
             AppSettingsListTile(
               label: 'Change Phone Number',
               trailing: SvgPicture.asset(AppIcons.right),
               onTap: () =>
-                  Navigator.pushNamed(context, AppRoutes.changePhoneNumber),
+                  context.push('/changePhoneNumber')
             ),
             AppSettingsListTile(
               label: 'Edit Home Address',
               trailing: SvgPicture.asset(AppIcons.right),
               onTap: () =>
-                  Navigator.pushNamed(context, AppRoutes.deliveryAddress),
+                  context.push('/deliveryAddress')
             ),
             AppSettingsListTile(
               label: 'Location',
               trailing: SvgPicture.asset(AppIcons.right),
               onTap: () =>
-                  Navigator.pushNamed(context, AppRoutes.settingsLocation),
+                  context.push('/settingsLocation')
             ),
             AppSettingsListTile(
               label: 'Profile Setting',
               trailing: SvgPicture.asset(AppIcons.right),
-              onTap: () => Navigator.pushNamed(context, AppRoutes.profileEdit),
+              onTap: () => context.push('/profileEdit')
             ),
             AppSettingsListTile(
               label: 'Deactivate Account',
               trailing: SvgPicture.asset(AppIcons.right),
-              onTap: () => Navigator.pushNamed(context, AppRoutes.introLogin),
+              onTap: () => context.push('/intro_login')
             ),
           ],
         ),

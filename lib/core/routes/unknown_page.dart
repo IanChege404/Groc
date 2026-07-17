@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 
 import '../components/app_back_button.dart';
 import '../components/network_image.dart';
@@ -63,7 +64,7 @@ class UnknownPage extends StatelessWidget {
               width: double.infinity,
               child: ElevatedButton(
                 onPressed: () {
-                  Navigator.pushNamed(context, AppRoutes.entryPoint);
+                  context.go(AppRoutes.entryPoint);
                 },
                 child: const Text('Try Again'),
               ),

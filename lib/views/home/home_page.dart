@@ -3,10 +3,10 @@ import 'package:flutter_svg/svg.dart';
 import '../../core/constants/app_icons.dart';
 
 import '../../core/constants/app_defaults.dart';
-import '../../core/routes/app_routes.dart';
 import 'components/ad_space.dart';
 import 'components/our_new_item.dart';
 import 'components/popular_packs.dart';
+import 'package:go_router/go_router.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({super.key});
@@ -22,7 +22,7 @@ class HomePage extends StatelessWidget {
                 padding: const EdgeInsets.only(left: 8),
                 child: ElevatedButton(
                   onPressed: () {
-                    Navigator.pushNamed(context, AppRoutes.drawerPage);
+                    context.push('/drawerPage');
                   },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: const Color(0xFFF2F6F3),
@@ -41,7 +41,7 @@ class HomePage extends StatelessWidget {
                   padding: const EdgeInsets.only(right: 8, top: 4, bottom: 4),
                   child: ElevatedButton(
                     onPressed: () {
-                      Navigator.pushNamed(context, AppRoutes.search);
+                      context.push('/search');
                     },
                     style: ElevatedButton.styleFrom(
                       backgroundColor: const Color(0xFFF2F6F3),

@@ -10,7 +10,7 @@ import '../../../core/mixins/refresh_on_return_mixin.dart';
 import '../../../core/providers/auth_provider.dart';
 import '../../../core/providers/user_data_provider.dart';
 import '../../../core/services/firestore_service.dart';
-import '../../../core/routes/app_routes.dart';
+import 'package:go_router/go_router.dart';
 
 class AddressPage extends ConsumerStatefulWidget {
   const AddressPage({super.key});
@@ -109,7 +109,7 @@ class _AddressPageState extends ConsumerState<AddressPage>
                 right: 16,
                 child: FloatingActionButton(
                   onPressed: () {
-                    Navigator.pushNamed(context, AppRoutes.newAddress);
+                    context.push('/newAddress');
                   },
                   backgroundColor: AppColors.primary,
                   splashColor: AppColors.primary,

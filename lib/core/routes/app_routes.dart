@@ -77,6 +77,7 @@ class AppRoutes {
   static const termsAndConditions = '/termsAndConditions';
   static const help = '/help';
   static const contactUs = '/contactUs';
+  static const privacyPolicy = '/privacyPolicy';
 
   /* <---- Payment Method -----> */
   static const paymentMethod = '/paymentMethod';
@@ -93,4 +94,11 @@ class AppRoutes {
 
   /* <---- Loyalty -----> */
   static const loyaltyPoints = '/loyaltyPoints';
+
+  /* <---- Phase 4 Features -----> */
+  static const referral = '/referral';
+  static const referralCodeEntry = '/referralCodeEntry';
+  static const aiSearch = '/aiSearch';
+  static const bundleEdit = '/bundleEdit';
+  static const myBundles = '/myBundles';
 }

@@ -2,13 +2,15 @@ import 'package:flutter/material.dart';
 
 import '../../../core/constants/app_colors.dart';
 import '../../../core/constants/app_defaults.dart';
-import '../../../core/routes/app_routes.dart';
+import '../../../core/l10n/app_localizations.dart';
+import 'package:go_router/go_router.dart';
 
 class IntroPageBodyArea extends StatelessWidget {
   const IntroPageBodyArea({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     return SafeArea(
       child: Column(
         children: [
@@ -20,19 +22,27 @@ class IntroPageBodyArea extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(
-                    'Welcome to our',
-                    style: Theme.of(context).textTheme.headlineMedium?.copyWith(
-                          fontWeight: FontWeight.bold,
-                          color: Theme.of(context).colorScheme.onSurface,
-                        ),
+                  Semantics(
+                    header: true,
+                    child: Text(
+                      l10n.welcomeToOur,
+                      style:
+                          Theme.of(context).textTheme.headlineMedium?.copyWith(
+                                fontWeight: FontWeight.bold,
+                                color: Theme.of(context).colorScheme.onSurface,
+                              ),
+                    ),
                   ),
-                  Text(
-                    'E-Grocery',
-                    style: Theme.of(context).textTheme.headlineMedium?.copyWith(
-                          fontWeight: FontWeight.w700,
-                          color: AppColors.primary,
-                        ),
+                  Semantics(
+                    header: true,
+                    child: Text(
+                      l10n.eGrocery,
+                      style:
+                          Theme.of(context).textTheme.headlineMedium?.copyWith(
+                                fontWeight: FontWeight.w700,
+                                color: AppColors.primary,
+                              ),
+                    ),
                   ),
                 ],
               ),
@@ -45,23 +55,23 @@ class IntroPageBodyArea extends StatelessWidget {
               children: [
                 SizedBox(
                   width: double.infinity,
+                  height: 52,
                   child: ElevatedButton(
-                    onPressed: () =>
-                        Navigator.pushNamed(context, AppRoutes.loginOrSignup),
-                    child: const Text('Continue with Email or Phone'),
+                    onPressed: () => context.push('/loginOrSignup'),
+                    child: Text(l10n.continueWithEmailOrPhone),
                   ),
                 ),
                 const SizedBox(height: AppDefaults.padding),
                 SizedBox(
                   width: double.infinity,
+                  height: 52,
                   child: ElevatedButton(
-                    onPressed: () =>
-                        Navigator.pushNamed(context, AppRoutes.signup),
+                    onPressed: () => context.push('/signup'),
                     style: ElevatedButton.styleFrom(
                       foregroundColor: Theme.of(context).colorScheme.onSurface,
                       backgroundColor: Theme.of(context).colorScheme.surface,
                     ),
-                    child: const Text('Create an account'),
+                    child: Text(l10n.createAccount),
                   ),
                 ),
               ],

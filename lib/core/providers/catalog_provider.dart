@@ -2,6 +2,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../models/bundle_model.dart';
 import '../models/category_model.dart';
+import '../models/product_filter_state.dart';
 import '../models/product_model.dart';
 import '../services/firestore_product_service.dart';
 
@@ -18,6 +19,18 @@ final allProductsProvider = FutureProvider<List<ProductModel>>((ref) async {
     throw Exception(response.message ?? 'Failed to fetch products');
   }
   return response.data ?? [];
+});
+
+/// Filter state provider
+final productFilterProvider =
+    StateProvider<ProductFilterState>((ref) => ProductFilterState.defaultFilter);
+
+/// Filtered products derived from all products + active filter
+final filteredProductsProvider = Provider<AsyncValue<List<ProductModel>>>((ref) {
+  final productsAsync = ref.watch(allProductsProvider);
+  final filter = ref.watch(productFilterProvider);
+
+  return productsAsync.whenData((products) => filter.apply(products));
 });
 
 final newProductsProvider = FutureProvider<List<ProductModel>>((ref) async {

@@ -1,13 +1,17 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 
 import '../../core/components/network_image.dart';
 import '../../core/constants/constants.dart';
+import '../../core/l10n/app_localizations.dart';
 
 class OrderEmpty extends StatelessWidget {
   const OrderEmpty({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+
     return Column(
       children: [
         const Spacer(flex: 2),
@@ -15,11 +19,14 @@ class OrderEmpty extends StatelessWidget {
           padding: const EdgeInsets.all(AppDefaults.padding),
           child: SizedBox(
             width: MediaQuery.of(context).size.width * 0.7,
-            child: const AspectRatio(
+            child: AspectRatio(
               aspectRatio: 1 / 1,
-              child: NetworkImageWithLoader(
-                'https://i.imgur.com/EMI82tU.png',
-                fit: BoxFit.contain,
+              child: Semantics(
+                label: l10n.translate('noOrdersYet'),
+                child: const NetworkImageWithLoader(
+                  'https://i.imgur.com/EMI82tU.png',
+                  fit: BoxFit.contain,
+                ),
               ),
             ),
           ),
@@ -29,7 +36,7 @@ class OrderEmpty extends StatelessWidget {
           child: Column(
             children: [
               Text(
-                'No Orders Yet',
+                l10n.noOrdersYet,
                 style: Theme.of(context).textTheme.titleLarge?.copyWith(
                       fontWeight: FontWeight.bold,
                       color: Theme.of(context).colorScheme.onSurface,
@@ -37,10 +44,12 @@ class OrderEmpty extends StatelessWidget {
                 textAlign: TextAlign.center,
               ),
               const SizedBox(height: 16),
-              const Padding(
-                padding: EdgeInsets.symmetric(horizontal: AppDefaults.padding),
+              Padding(
+                padding: const EdgeInsets.symmetric(
+                  horizontal: AppDefaults.padding,
+                ),
                 child: Text(
-                  'Sorry you n\'t haven\'t placed\nany order yet.',
+                  l10n.noOrdersYetDescription,
                   textAlign: TextAlign.center,
                 ),
               ),
@@ -57,8 +66,8 @@ class OrderEmpty extends StatelessWidget {
                 child: SizedBox(
                   width: double.infinity,
                   child: ElevatedButton(
-                    onPressed: () {},
-                    child: const Text('Continue'),
+                    onPressed: () => context.go('/entry_point'),
+                    child: Text(l10n.continueShopping),
                   ),
                 ),
               ),
@@ -69,8 +78,8 @@ class OrderEmpty extends StatelessWidget {
                 child: SizedBox(
                   width: double.infinity,
                   child: TextButton(
-                    onPressed: () {},
-                    child: const Text('Track Order'),
+                    onPressed: () => context.go('/myOrder'),
+                    child: Text(l10n.trackMyOrder),
                   ),
                 ),
               ),

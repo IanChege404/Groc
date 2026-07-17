@@ -40,6 +40,50 @@ class DeliveryOption {
   });
 }
 
+/// Returns the available delivery options for the current locale.
+/// Used by both [DeliveryMethodScreen] and [DeliveryMethodInline].
+List<DeliveryOption> getDeliveryOptions(BuildContext context) {
+  final isEnglish = Localizations.localeOf(context).languageCode == 'en';
+
+  return [
+    DeliveryOption(
+      method: DeliveryMethod.standard,
+      title: isEnglish ? 'Standard Delivery' : 'Kuletwa Kawaida',
+      description: isEnglish ? '2–4 business days' : 'Siku 2–4 za biashara',
+      eta: isEnglish ? '2–4 days' : 'Siku 2-4',
+      price: 'KES 150',
+      icon: Icons.local_shipping,
+    ),
+    DeliveryOption(
+      method: DeliveryMethod.express,
+      title: isEnglish ? 'Express Delivery' : 'Kuletwa Haraka',
+      description: isEnglish ? 'Delivered next day' : 'Kuletwa siku ijayo',
+      eta: isEnglish ? 'Next day' : 'Siku ijayo',
+      price: 'KES 350',
+      icon: Icons.speed,
+    ),
+    DeliveryOption(
+      method: DeliveryMethod.bodaSameDay,
+      title: isEnglish ? 'Boda Boda Same-Day' : 'Sarakasi Siku Moja',
+      description: isEnglish
+          ? 'Today (Nairobi & Kampala only)'
+          : 'Leo (Nairobi & Kampala tu)',
+      eta: isEnglish ? 'Today' : 'Leo',
+      price: 'KES 200',
+      icon: Icons.two_wheeler,
+    ),
+    DeliveryOption(
+      method: DeliveryMethod.storePickup,
+      title: isEnglish ? 'Store Pickup' : 'Mkutano katika Duka',
+      description:
+          isEnglish ? 'Pick up at our store' : 'Chukua katika duka letu',
+      eta: isEnglish ? '2–3 hours' : 'Saa 2-3',
+      price: isEnglish ? 'FREE' : 'BURE',
+      icon: Icons.store,
+    ),
+  ];
+}
+
 class _DeliveryMethodScreenState extends State<DeliveryMethodScreen> {
   late DeliveryMethod _selectedMethod;
   late List<DeliveryOption> _deliveryOptions;

@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import '../../core/routes/app_routes.dart';
 
 import '../../core/components/app_back_button.dart';
 import '../../core/constants/constants.dart';
+import 'package:go_router/go_router.dart';
 
 class PasswordResetPage extends StatefulWidget {
   const PasswordResetPage({super.key});
@@ -82,7 +82,7 @@ class _PasswordResetPageState extends State<PasswordResetPage> {
                       width: double.infinity,
                       child: ElevatedButton(
                         onPressed: () {
-                          Navigator.pushNamed(context, AppRoutes.login);
+                          context.push('/login');
                         },
                         child: const Text('Done'),
                       ),

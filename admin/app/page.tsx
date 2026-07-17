@@ -1,10 +1,48 @@
+'use client';
+
+import { useEffect, useState } from 'react';
+import { db } from '@/lib/firebase-config';
+import { collection, getDocs } from 'firebase/firestore';
+
 export default function AdminDashboard() {
-  const stats = [
-    { label: 'Total Revenue', value: 'KES 0', icon: '💰', color: 'bg-green-100 text-green-700' },
-    { label: 'Total Orders', value: '0', icon: '🛒', color: 'bg-blue-100 text-blue-700' },
-    { label: 'Total Users', value: '0', icon: '👥', color: 'bg-purple-100 text-purple-700' },
-    { label: 'Active Products', value: '0', icon: '📦', color: 'bg-orange-100 text-orange-700' },
-  ];
+  const [stats, setStats] = useState([
+    { label: 'Total Revenue', value: '...', icon: '💰', color: 'bg-green-100 text-green-700' },
+    { label: 'Total Orders', value: '...', icon: '🛒', color: 'bg-blue-100 text-blue-700' },
+    { label: 'Total Users', value: '...', icon: '👥', color: 'bg-purple-100 text-purple-700' },
+    { label: 'Active Products', value: '...', icon: '📦', color: 'bg-orange-100 text-orange-700' },
+  ]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    async function fetchStats() {
+      try {
+        const [ordersSnap, usersSnap, productsSnap] = await Promise.all([
+          getDocs(collection(db, 'orders')),
+          getDocs(collection(db, 'users')),
+          getDocs(collection(db, 'products')),
+        ]);
+
+        let totalRevenue = 0;
+        ordersSnap.docs.forEach((doc) => {
+          const data = doc.data();
+          if (data.totalAmount) totalRevenue += data.totalAmount;
+        });
+
+        setStats([
+          { label: 'Total Revenue', value: `KES ${totalRevenue.toLocaleString()}`, icon: '💰', color: 'bg-green-100 text-green-700' },
+          { label: 'Total Orders', value: ordersSnap.size.toLocaleString(), icon: '🛒', color: 'bg-blue-100 text-blue-700' },
+          { label: 'Total Users', value: usersSnap.size.toLocaleString(), icon: '👥', color: 'bg-purple-100 text-purple-700' },
+          { label: 'Active Products', value: productsSnap.size.toLocaleString(), icon: '📦', color: 'bg-orange-100 text-orange-700' },
+        ]);
+      } catch (err) {
+        console.error('Failed to fetch stats:', err);
+        setStats((prev) => prev.map((s) => ({ ...s, value: 'Error' })));
+      } finally {
+        setLoading(false);
+      }
+    }
+    fetchStats();
+  }, []);
 
   const navLinks = [
     { href: '/products', label: 'Products', icon: '📦' },
@@ -55,7 +93,7 @@ export default function AdminDashboard() {
                 {stat.icon}
               </div>
               <p className="text-sm text-gray-500">{stat.label}</p>
-              <p className="text-2xl font-bold text-gray-800 mt-1">{stat.value}</p>
+              <p className="text-2xl font-bold text-gray-800 mt-1">{loading && stat.value === '...' ? '...' : stat.value}</p>
             </div>
           ))}
         </div>

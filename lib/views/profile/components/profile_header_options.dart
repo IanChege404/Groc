@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 
 import '../../../core/constants/constants.dart';
-import '../../../core/routes/app_routes.dart';
 import 'profile_squre_tile.dart';
+import 'package:go_router/go_router.dart';
 
 class ProfileHeaderOptions extends StatelessWidget {
   const ProfileHeaderOptions({super.key});
@@ -24,21 +24,21 @@ class ProfileHeaderOptions extends StatelessWidget {
             label: 'All Order',
             icon: AppIcons.truckIcon,
             onTap: () {
-              Navigator.pushNamed(context, AppRoutes.myOrder);
+              context.push('/myOrder');
             },
           ),
           ProfileSqureTile(
             label: 'Voucher',
             icon: AppIcons.voucher,
             onTap: () {
-              Navigator.pushNamed(context, AppRoutes.coupon);
+              context.push('/coupon');
             },
           ),
           ProfileSqureTile(
             label: 'Address',
             icon: AppIcons.homeProfile,
             onTap: () {
-              Navigator.pushNamed(context, AppRoutes.deliveryAddress);
+              context.push('/deliveryAddress');
             },
           ),
         ],

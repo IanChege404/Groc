@@ -3,10 +3,10 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../core/constants/constants.dart';
-import '../../core/routes/app_routes.dart';
 import 'components/onboarding_view.dart';
 import 'data/onboarding_data.dart';
 import 'data/onboarding_model.dart';
+import 'package:go_router/go_router.dart';
 
 class OnboardingPage extends StatefulWidget {
   const OnboardingPage({super.key});
@@ -37,11 +37,7 @@ class _OnboardingPageState extends State<OnboardingPage> {
     final prefs = await SharedPreferences.getInstance();
     await prefs.setBool(AppPreferenceKeys.onboardingCompleted, true);
     if (!mounted) return;
-    Navigator.pushNamedAndRemoveUntil(
-      context,
-      AppRoutes.introLogin,
-      (route) => false,
-    );
+    context.go('/intro_login');
   }
 
   @override

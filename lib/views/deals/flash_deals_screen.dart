@@ -6,8 +6,8 @@ import '../../core/constants/app_colors.dart';
 import '../../core/constants/app_defaults.dart';
 import '../../core/models/flash_deal_model.dart';
 import '../../core/providers/flash_deal_provider.dart';
-import '../../core/routes/app_routes.dart';
 import '../../widgets/deal_countdown.dart';
+import 'package:go_router/go_router.dart';
 
 class FlashDealsScreen extends ConsumerWidget {
   const FlashDealsScreen({super.key});
@@ -204,13 +204,9 @@ class _DealCard extends StatelessWidget {
                     const Spacer(),
                     ElevatedButton(
                       onPressed: deal.stockLeft > 0
-                          ? () => Navigator.pushNamed(
-                                context,
-                                AppRoutes.productDetails,
-                                arguments: {
+                          ? () => context.push('/productDetails', extra: {
                                   'productId': deal.productId,
-                                },
-                              )
+                                })
                           : null,
                       style: ElevatedButton.styleFrom(
                         backgroundColor: AppColors.primary,

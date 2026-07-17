@@ -4,9 +4,10 @@ import 'package:flutter_credit_card/flutter_credit_card.dart';
 import '../../core/components/app_back_button.dart';
 import '../../core/constants/app_colors.dart';
 import '../../core/constants/app_defaults.dart';
-import '../../core/routes/app_routes.dart';
+import '../../core/l10n/app_localizations.dart';
 import '../../core/services/flutterwave_service.dart';
 import '../../core/utils/logger.dart';
+import 'package:go_router/go_router.dart';
 
 class CardPaymentScreen extends ConsumerStatefulWidget {
   final double amount;
@@ -35,10 +36,11 @@ class _CardPaymentScreenState extends ConsumerState<CardPaymentScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     return Scaffold(
       appBar: AppBar(
         leading: const AppBackButton(),
-        title: const Text('Card Payment'),
+        title: Text(l10n.cardPayment),
       ),
       body: SingleChildScrollView(
         child: Column(
@@ -195,13 +197,9 @@ class _CardPaymentScreenState extends ConsumerState<CardPaymentScreen> {
       if (!mounted) return;
 
       if (response.isSuccessful) {
-        Navigator.pushNamedAndRemoveUntil(
-          context,
-          AppRoutes.orderSuccessfull,
-          (route) => route.settings.name == AppRoutes.entryPoint,
-        );
+        context.go('/orderSuccessfull');
       } else {
-        Navigator.pushNamed(context, AppRoutes.orderFailed);
+        context.go('/orderFailed');
       }
     } catch (e) {
       Logger.error('Card payment error: $e', 'CardPaymentScreen');
