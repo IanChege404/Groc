@@ -1,6 +1,6 @@
 {
-    "name": "new_proj",
-    "short_name": "new_proj",
+    "name": "Groc",
+    "short_name": "Groc",
     "start_url": ".",
     "display": "standalone",
     "background_color": "#0175C2",

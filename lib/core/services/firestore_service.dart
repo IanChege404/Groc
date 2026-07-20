@@ -404,7 +404,7 @@ class FirestoreService {
             .get());
 
         if (!product.exists) {
-          Logger.warn(
+          Logger.warning(
             'Product not found: ${item.productId}',
             'FirestoreService.validateCheckoutCart',
           );
@@ -413,7 +413,7 @@ class FirestoreService {
 
         final stock = (product.data()?['stock'] as num?)?.toInt() ?? 0;
         if (stock < item.quantity) {
-          Logger.warn(
+          Logger.warning(
             'Insufficient stock for ${item.productId}. Required: ${item.quantity}, Available: $stock',
             'FirestoreService.validateCheckoutCart',
           );

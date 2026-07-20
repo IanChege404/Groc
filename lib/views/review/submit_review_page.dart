@@ -50,7 +50,7 @@ class _SubmitReviewPageState extends ConsumerState<SubmitReviewPage> {
 
     try {
       final authService = FirestoreAuthService();
-      final currentUser = await authService.getCurrentUser();
+      final currentUser = authService.currentUser;
 
       if (currentUser == null) {
         ScaffoldMessenger.of(context).showSnackBar(

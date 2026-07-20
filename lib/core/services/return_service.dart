@@ -55,7 +55,7 @@ class ReturnService {
   Future<void> updateReturnStatus(
       String returnId, ReturnStatus status) async {
     try {
-      final updates = {
+      final updates = <String, dynamic>{
         'status': status.value,
       };
 

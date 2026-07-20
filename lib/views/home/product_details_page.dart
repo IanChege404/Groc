@@ -290,7 +290,7 @@ class _ProductDetailsPageState extends ConsumerState<ProductDetailsPage> {
                   ReviewRowButton(
                     totalStars: (product.rating.round()).clamp(1, 5),
                     productId: product.id,
-                    productName: product.productName,
+                    productName: product.name,
                     productImage: product.image,
                   ),
                   const Divider(thickness: 0.1),

@@ -111,12 +111,14 @@ class OrderItemModel {
   final int quantity;
   final double priceAtTimeOfOrder;
   final String productName;
+  final String image;
 
   OrderItemModel({
     required this.productId,
     required this.quantity,
     required this.priceAtTimeOfOrder,
     required this.productName,
+    required this.image,
   });
 
   factory OrderItemModel.fromMap(Map<String, dynamic> data) {
@@ -125,6 +127,7 @@ class OrderItemModel {
       quantity: data['quantity'] ?? 1,
       priceAtTimeOfOrder: (data['priceAtTimeOfOrder'] ?? 0).toDouble(),
       productName: data['productName'] ?? '',
+      image: data['image'] ?? '',
     );
   }
 
@@ -134,6 +137,7 @@ class OrderItemModel {
       'quantity': quantity,
       'priceAtTimeOfOrder': priceAtTimeOfOrder,
       'productName': productName,
+      'image': image,
     };
   }
 }

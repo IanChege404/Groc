@@ -13,7 +13,7 @@ class DataIntegrityValidator {
   /// Validates product price constraints: price ≤ mainPrice
   static bool validateProductPricing(ProductModel product) {
     if (product.price > product.mainPrice) {
-      Logger.warn(
+      Logger.warning(
         'Invalid pricing: price (${product.price}) > mainPrice (${product.mainPrice})',
         'DataIntegrityValidator.validateProductPricing',
       );
@@ -25,7 +25,7 @@ class DataIntegrityValidator {
   /// Validates product stock: must be >= 0
   static bool validateProductStock(int stock) {
     if (stock < 0) {
-      Logger.warn(
+      Logger.warning(
         'Invalid stock: $stock < 0',
         'DataIntegrityValidator.validateProductStock',
       );
@@ -37,7 +37,7 @@ class DataIntegrityValidator {
   /// Validates product rating: must be 0 ≤ rating ≤ 5
   static bool validateProductRating(double rating) {
     if (rating < 0 || rating > 5) {
-      Logger.warn(
+      Logger.warning(
         'Invalid rating: $rating (must be 0-5)',
         'DataIntegrityValidator.validateProductRating',
       );
@@ -54,7 +54,7 @@ class DataIntegrityValidator {
           .doc(categoryId)
           .get();
       if (!category.exists) {
-        Logger.warn(
+        Logger.warning(
           'Category not found: $categoryId',
           'DataIntegrityValidator.validateProductCategory',
         );
@@ -76,7 +76,7 @@ class DataIntegrityValidator {
   static bool validateCouponCodeFormat(String code) {
     final isValid = RegExp(r'^[A-Z0-9]+$').hasMatch(code);
     if (!isValid) {
-      Logger.warn(
+      Logger.warning(
         'Invalid coupon code format: $code (must be uppercase alphanumeric)',
         'DataIntegrityValidator.validateCouponCodeFormat',
       );
@@ -87,7 +87,7 @@ class DataIntegrityValidator {
   /// Validates coupon expiration: must not be in the past
   static bool validateCouponExpiration(DateTime expireDate) {
     if (DateTime.now().isAfter(expireDate)) {
-      Logger.warn(
+      Logger.warning(
         'Coupon expired: $expireDate',
         'DataIntegrityValidator.validateCouponExpiration',
       );
@@ -105,7 +105,7 @@ class DataIntegrityValidator {
   ) {
     if (discountType == 'percentage') {
       if (discount < 0 || discount > 100) {
-        Logger.warn(
+        Logger.warning(
           'Invalid percentage discount: $discount (must be 0-100)',
           'DataIntegrityValidator.validateCouponDiscount',
         );
@@ -113,7 +113,7 @@ class DataIntegrityValidator {
       }
     } else if (discountType == 'fixed') {
       if (discount <= 0) {
-        Logger.warn(
+        Logger.warning(
           'Invalid fixed discount: $discount (must be > 0)',
           'DataIntegrityValidator.validateCouponDiscount',
         );
@@ -126,7 +126,7 @@ class DataIntegrityValidator {
   /// Validates coupon is not already used
   static bool validateCouponNotUsed(CouponModel coupon) {
     if (coupon.isUsed) {
-      Logger.warn(
+      Logger.warning(
         'Coupon already used: ${coupon.code}',
         'DataIntegrityValidator.validateCouponNotUsed',
       );
@@ -146,7 +146,7 @@ class DataIntegrityValidator {
 
     if (coupon.minPurchaseAmount != null && coupon.maxDiscount != null) {
       if (coupon.minPurchaseAmount! <= 0 || coupon.maxDiscount! <= 0) {
-        Logger.warn(
+        Logger.warning(
           'Invalid coupon constraints: minPurchase=${coupon.minPurchaseAmount}, maxDiscount=${coupon.maxDiscount}',
           'DataIntegrityValidator.validateCoupon',
         );
@@ -170,7 +170,7 @@ class DataIntegrityValidator {
             .doc(productId)
             .get();
         if (!product.exists) {
-          Logger.warn(
+          Logger.warning(
             'Product not found in order: $productId',
             'DataIntegrityValidator.validateOrderItemReferences',
           );
@@ -190,7 +190,7 @@ class DataIntegrityValidator {
   /// Validates order total is positive
   static bool validateOrderTotal(double totalAmount) {
     if (totalAmount <= 0) {
-      Logger.warn(
+      Logger.warning(
         'Invalid order total: $totalAmount (must be > 0)',
         'DataIntegrityValidator.validateOrderTotal',
       );
@@ -203,7 +203,7 @@ class DataIntegrityValidator {
   static bool validatePaymentMethod(String method) {
     const validMethods = ['mpesa', 'card', 'wallet'];
     if (!validMethods.contains(method)) {
-      Logger.warn(
+      Logger.warning(
         'Invalid payment method: $method',
         'DataIntegrityValidator.validatePaymentMethod',
       );
@@ -220,7 +220,7 @@ class DataIntegrityValidator {
     double dealPrice,
   ) {
     if (dealPrice >= originalPrice) {
-      Logger.warn(
+      Logger.warning(
         'Invalid flash deal pricing: dealPrice ($dealPrice) >= originalPrice ($originalPrice)',
         'DataIntegrityValidator.validateFlashDealPricing',
       );
@@ -240,7 +240,7 @@ class DataIntegrityValidator {
     const tolerance = 0.01; // Allow 0.01% rounding error
 
     if ((calculatedDiscount - discountPercentage).abs() > tolerance) {
-      Logger.warn(
+      Logger.warning(
         'Discount mismatch: calculated ($calculatedDiscount%) != stated ($discountPercentage%)',
         'DataIntegrityValidator.validateFlashDealDiscount',
       );
@@ -252,7 +252,7 @@ class DataIntegrityValidator {
   /// Validates flash deal stock: stockLeft ≤ totalStock
   static bool validateFlashDealStock(int stockLeft, int totalStock) {
     if (stockLeft > totalStock || stockLeft < 0 || totalStock < 0) {
-      Logger.warn(
+      Logger.warning(
         'Invalid flash deal stock: stockLeft ($stockLeft) > totalStock ($totalStock)',
         'DataIntegrityValidator.validateFlashDealStock',
       );
@@ -267,7 +267,7 @@ class DataIntegrityValidator {
     DateTime endTime,
   ) {
     if (!startTime.isBefore(endTime)) {
-      Logger.warn(
+      Logger.warning(
         'Invalid flash deal window: startTime ($startTime) >= endTime ($endTime)',
         'DataIntegrityValidator.validateFlashDealTimeWindow',
       );
@@ -282,7 +282,7 @@ class DataIntegrityValidator {
   static bool validateRecipeDifficulty(String difficulty) {
     const validDifficulties = ['easy', 'medium', 'hard'];
     if (!validDifficulties.contains(difficulty)) {
-      Logger.warn(
+      Logger.warning(
         'Invalid recipe difficulty: $difficulty',
         'DataIntegrityValidator.validateRecipeDifficulty',
       );
@@ -294,7 +294,7 @@ class DataIntegrityValidator {
   /// Validates recipe time values: must be >= 0
   static bool validateRecipeTimes(int prepMinutes, int cookMinutes) {
     if (prepMinutes < 0 || cookMinutes < 0) {
-      Logger.warn(
+      Logger.warning(
         'Invalid recipe times: prep ($prepMinutes), cook ($cookMinutes)',
         'DataIntegrityValidator.validateRecipeTimes',
       );
@@ -306,7 +306,7 @@ class DataIntegrityValidator {
   /// Validates recipe servings: must be >= 1
   static bool validateRecipeServings(int servings) {
     if (servings < 1) {
-      Logger.warn(
+      Logger.warning(
         'Invalid recipe servings: $servings (must be >= 1)',
         'DataIntegrityValidator.validateRecipeServings',
       );
@@ -321,7 +321,7 @@ class DataIntegrityValidator {
   static bool validateWishlistItemType(String itemType) {
     const validTypes = ['product', 'bundle'];
     if (!validTypes.contains(itemType)) {
-      Logger.warn(
+      Logger.warning(
         'Invalid wishlist item type: $itemType',
         'DataIntegrityValidator.validateWishlistItemType',
       );
@@ -342,7 +342,7 @@ class DataIntegrityValidator {
       final exists = await ref.get();
 
       if (!exists.exists) {
-        Logger.warn(
+        Logger.warning(
           '$itemType not found: $itemId',
           'DataIntegrityValidator.validateWishlistItemExists',
         );
@@ -371,7 +371,7 @@ class DataIntegrityValidator {
       // Check categories exist
       final categories = await _firestore.collection('categories').get();
       if (categories.docs.isEmpty) {
-        Logger.warn(
+        Logger.warning(
           'No categories found - validate after seeding',
           'DataIntegrityValidator.validateAllBeforeSeeding',
         );

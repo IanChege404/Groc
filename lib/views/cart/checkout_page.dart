@@ -9,6 +9,7 @@ import '../../core/models/order_model.dart';
 import '../../core/providers/auth_provider.dart';
 import '../../core/providers/cart_provider.dart';
 import '../../core/providers/order_provider.dart';
+import '../../core/services/firestore_product_service.dart';
 import 'components/checkout_address_selector.dart';
 import 'components/checkout_card_details.dart';
 import 'components/checkout_payment_systems.dart';
@@ -126,19 +127,37 @@ class _PayNowButtonState extends ConsumerState<PayNowButton> {
     }
 
     final orderId = 'ord_${DateTime.now().microsecondsSinceEpoch}';
+
+    // Fetch product details for each cart item
+    final List<OrderItemModel> orderItems = [];
+    final productService = FirestoreProductService();
+    for (final item in cartItems) {
+      final productResult = await productService.getProductById(item.productId);
+      if (productResult.success && productResult.data != null) {
+        final product = productResult.data!;
+        orderItems.add(OrderItemModel(
+          productId: item.productId,
+          quantity: item.quantity,
+          priceAtTimeOfOrder: item.priceAtTimeOfAdd,
+          productName: product.name,
+          image: product.image,
+        ));
+      } else {
+        // Fallback if product fetch fails
+        orderItems.add(OrderItemModel(
+          productId: item.productId,
+          quantity: item.quantity,
+          priceAtTimeOfOrder: item.priceAtTimeOfAdd,
+          productName: 'Unknown Product',
+          image: '',
+        ));
+      }
+    }
+
     final order = OrderModel(
       id: orderId,
       userId: userId,
-      items: cartItems
-          .map(
-            (item) => OrderItemModel(
-              productId: item.productId,
-              quantity: item.quantity,
-              priceAtTimeOfOrder: item.priceAtTimeOfAdd,
-              productName: item.productId,
-            ),
-          )
-          .toList(),
+      items: orderItems,
       totalAmount: totalAmount,
       status: 'pending',
       paymentMethod: 'mpesa',

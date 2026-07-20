@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../../core/constants/constants.dart';
-import '../../../../core/models/order_item_model.dart';
+import '../../../../core/models/order_model.dart';
 import '../../../../core/models/return_request_model.dart';
 import '../../../../core/providers/return_provider.dart';
 import '../../../../core/services/firestore_auth_service.dart';
@@ -64,7 +64,7 @@ class _ReturnInitiationDialogState
 
     try {
       final authService = FirestoreAuthService();
-      final currentUser = await authService.getCurrentUser();
+      final currentUser = authService.currentUser;
 
       if (currentUser == null) {
         ScaffoldMessenger.of(context).showSnackBar(
@@ -77,7 +77,7 @@ class _ReturnInitiationDialogState
         id: '',
         orderId: widget.orderId,
         userId: currentUser.uid,
-        productId: widget.item.id,
+        productId: widget.item.productId,
         productName: widget.item.productName,
         productImage: widget.item.image,
         reason: _selectedReason,
