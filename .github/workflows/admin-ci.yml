@@ -107,7 +107,7 @@ jobs:
           vercel-args: '--pre'
 
       - name: Comment PR with preview URL
-        uses: actions/github-script@v7
+        uses: actions/github-script@v9
         with:
           script: |
             github.rest.issues.createComment({
