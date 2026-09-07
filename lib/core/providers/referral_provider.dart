@@ -24,7 +24,8 @@ final userReferralCodeProvider = FutureProvider((ref) async {
     final code = await service.generateReferralCode(userId);
     return code;
   } catch (e) {
-    Logger.error('Error generating referral code: $e', 'userReferralCodeProvider');
+    Logger.error(
+        'Error generating referral code: $e', 'userReferralCodeProvider');
     return null;
   }
 });
@@ -64,12 +65,14 @@ final referralSummaryProvider = FutureProvider((ref) async {
     final service = ref.read(referralServiceProvider);
     return await service.getReferralSummary(userId);
   } catch (e) {
-    Logger.error('Error getting referral summary: $e', 'referralSummaryProvider');
+    Logger.error(
+        'Error getting referral summary: $e', 'referralSummaryProvider');
     return ReferralSummary.empty();
   }
 });
 
-final topReferrersProvider = FutureProvider<List<Map<String, dynamic>>>((ref) async {
+final topReferrersProvider =
+    FutureProvider<List<Map<String, dynamic>>>((ref) async {
   try {
     final service = ref.read(referralServiceProvider);
     return await service.getTopReferrers();
@@ -117,7 +120,8 @@ final cancelReferralProvider = FutureProvider.family<void, String>((
   }
 });
 
-final getReferralByCodeProvider = FutureProvider.family<ReferralModel?, String>((
+final getReferralByCodeProvider =
+    FutureProvider.family<ReferralModel?, String>((
   ref,
   code,
 ) async {
@@ -125,14 +129,19 @@ final getReferralByCodeProvider = FutureProvider.family<ReferralModel?, String>(
     final service = ref.read(referralServiceProvider);
     return await service.getReferralByCode(code);
   } catch (e) {
-    Logger.error('Error getting referral by code: $e', 'getReferralByCodeProvider');
+    Logger.error(
+        'Error getting referral by code: $e', 'getReferralByCodeProvider');
     return null;
   }
 });
 
 final createReferralProvider = FutureProvider.family<
     ReferralModel,
-    (String refereeId, String referralCode, String refereeEmail)>((ref, params) async {
+    (
+      String refereeId,
+      String referralCode,
+      String refereeEmail
+    )>((ref, params) async {
   try {
     final (refereeId, referralCode, refereeEmail) = params;
 

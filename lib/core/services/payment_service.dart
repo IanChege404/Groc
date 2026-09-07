@@ -1,5 +1,7 @@
+import 'dart:io';
 import '../config/api_endpoints.dart';
 import '../network/api_client.dart';
+import '../utils/logger.dart';
 
 class PaymentService {
   final ApiClient _apiClient = ApiClient();
@@ -28,19 +30,60 @@ class PaymentService {
     required String phoneNumber,
     required double amount,
     required String orderId,
-  }) {
-    // Ensure phone number is in correct format (254XXXXXXXXX)
-    String formattedPhone = _formatPhoneNumber(phoneNumber);
+  }) async {
+    try {
+      // Validate phone number
+      if (phoneNumber.isEmpty) {
+        return ApiResponse<MpesaPaymentResponse>.error(
+          'Phone number is required for M-Pesa payment',
+        );
+      }
 
-    return _apiClient.post<MpesaPaymentResponse>(
-      ApiEndpoints.mpesaPayment,
-      body: {
-        'phone_number': formattedPhone,
-        'amount': amount,
-        'order_id': orderId,
-      },
-      fromJson: (json) => MpesaPaymentResponse.fromJson(json),
-    );
+      // Ensure phone number is in correct format (254XXXXXXXXX)
+      String formattedPhone = _formatPhoneNumber(phoneNumber);
+
+      // Validate amount
+      if (amount <= 0) {
+        return ApiResponse<MpesaPaymentResponse>.error(
+          'Amount must be greater than 0',
+        );
+      }
+
+      return await _apiClient
+          .post<MpesaPaymentResponse>(
+        ApiEndpoints.mpesaPayment,
+        body: {
+          'phone_number': formattedPhone,
+          'amount': amount,
+          'order_id': orderId,
+        },
+        fromJson: (json) => MpesaPaymentResponse.fromJson(json),
+      )
+          .timeout(
+        const Duration(seconds: 30),
+        onTimeout: () {
+          Logger.warning(
+              'M-Pesa payment request timeout for $orderId', 'PaymentService');
+          return ApiResponse<MpesaPaymentResponse>.error(
+            'Payment request timed out. Please try again.',
+            statusCode: 408,
+          );
+        },
+      );
+    } on SocketException catch (e) {
+      Logger.error('Network error during M-Pesa payment', 'PaymentService', e);
+      return ApiResponse<MpesaPaymentResponse>.error(
+        'Network error. Please check your connection and try again.',
+        statusCode: 0,
+      );
+    } catch (e, stackTrace) {
+      Logger.error('Unexpected error in M-Pesa payment', 'PaymentService', e,
+          stackTrace);
+      return ApiResponse<MpesaPaymentResponse>.error(
+        'Payment processing failed. Please try again.',
+        statusCode: 500,
+      );
+    }
   }
 
   /// Confirm payment after transaction

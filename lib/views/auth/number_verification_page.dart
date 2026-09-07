@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -6,11 +7,106 @@ import '../../core/constants/app_colors.dart';
 import '../../core/constants/app_defaults.dart';
 import '../../core/constants/app_images.dart';
 import '../../core/l10n/app_localizations.dart';
+import '../../core/services/firestore_auth_service.dart';
 import '../../core/themes/app_themes.dart';
 import 'dialogs/verified_dialogs.dart';
 
-class NumberVerificationPage extends StatelessWidget {
-  const NumberVerificationPage({super.key});
+class NumberVerificationPage extends StatefulWidget {
+  const NumberVerificationPage({super.key, this.phoneNumber});
+
+  final String? phoneNumber;
+
+  @override
+  State<NumberVerificationPage> createState() => _NumberVerificationPageState();
+}
+
+class _NumberVerificationPageState extends State<NumberVerificationPage> {
+  String? _verificationId;
+  bool _isVerifying = false;
+  bool _isResending = false;
+
+  @override
+  void initState() {
+    super.initState();
+    if (widget.phoneNumber != null) {
+      _sendVerificationCode();
+    }
+  }
+
+  Future<void> _sendVerificationCode() async {
+    if (widget.phoneNumber == null) return;
+
+    setState(() => _isResending = true);
+
+    final authService = FirestoreAuthService();
+    await authService.verifyPhoneNumber(
+      phoneNumber: widget.phoneNumber!,
+      onAutoVerified: (credential) async {
+        await FirebaseAuth.instance.signInWithCredential(credential);
+        if (mounted) _showVerificationDialog();
+      },
+      onCodeSent: (verificationId, _) {
+        setState(() {
+          _verificationId = verificationId;
+          _isResending = false;
+        });
+      },
+      onFailed: (error) {
+        if (!mounted) return;
+        setState(() => _isResending = false);
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(
+              error.message ??
+                  AppLocalizations.of(context)!.phoneVerificationFailed,
+            ),
+          ),
+        );
+      },
+    );
+  }
+
+  Future<void> _verifyOtp(String otp) async {
+    if (_verificationId == null) return;
+
+    setState(() => _isVerifying = true);
+
+    try {
+      final credential = PhoneAuthProvider.credential(
+        verificationId: _verificationId!,
+        smsCode: otp,
+      );
+      await FirebaseAuth.instance.signInWithCredential(credential);
+      if (mounted) _showVerificationDialog();
+    } on FirebaseAuthException catch (e) {
+      if (!mounted) return;
+      setState(() => _isVerifying = false);
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(
+            e.message ?? AppLocalizations.of(context)!.invalidOtp,
+          ),
+        ),
+      );
+    } catch (e) {
+      if (!mounted) return;
+      setState(() => _isVerifying = false);
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text(AppLocalizations.of(context)!.invalidOtp)),
+      );
+    }
+  }
+
+  void _showVerificationDialog() {
+    showGeneralDialog(
+      barrierLabel: 'Dialog',
+      barrierDismissible: true,
+      context: context,
+      pageBuilder: (ctx, anim1, anim2) => const VerifiedDialog(),
+      transitionBuilder: (ctx, anim1, anim2, child) =>
+          ScaleTransition(scale: anim1, child: child),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -31,13 +127,20 @@ class NumberVerificationPage extends StatelessWidget {
                   child: Column(
                     children: [
                       const NumberVerificationHeader(),
-                      const OTPTextFields(),
+                      OTPTextFields(
+                        onOtpComplete: _verifyOtp,
+                        isVerifying: _isVerifying,
+                      ),
                       const SizedBox(height: AppDefaults.padding * 3),
                       ResendButton(
-                        onResend: () {},
+                        onResend: _sendVerificationCode,
+                        isResending: _isResending,
                       ),
                       const SizedBox(height: AppDefaults.padding),
-                      const VerifyButton(),
+                      VerifyButton(
+                        onPressed: () {},
+                        isVerifying: _isVerifying,
+                      ),
                       const SizedBox(height: AppDefaults.padding),
                     ],
                   ),
@@ -52,7 +155,14 @@ class NumberVerificationPage extends StatelessWidget {
 }
 
 class VerifyButton extends StatelessWidget {
-  const VerifyButton({super.key});
+  const VerifyButton({
+    super.key,
+    required this.onPressed,
+    this.isVerifying = false,
+  });
+
+  final VoidCallback onPressed;
+  final bool isVerifying;
 
   @override
   Widget build(BuildContext context) {
@@ -64,16 +174,14 @@ class VerifyButton extends StatelessWidget {
         button: true,
         label: l10n.verifyOtp,
         child: ElevatedButton(
-          onPressed: () {
-            HapticFeedback.mediumImpact();
-            ScaffoldMessenger.of(context).showSnackBar(
-              const SnackBar(
-                content: Text('OTP Verification coming soon!'),
-                duration: Duration(seconds: 2),
-              ),
-            );
-          },
-          child: Text(l10n.verify),
+          onPressed: isVerifying ? null : onPressed,
+          child: isVerifying
+              ? const SizedBox(
+                  width: 20,
+                  height: 20,
+                  child: CircularProgressIndicator(strokeWidth: 2),
+                )
+              : Text(l10n.verify),
         ),
       ),
     );
@@ -81,9 +189,14 @@ class VerifyButton extends StatelessWidget {
 }
 
 class ResendButton extends StatelessWidget {
-  const ResendButton({super.key, required this.onResend});
+  const ResendButton({
+    super.key,
+    required this.onResend,
+    this.isResending = false,
+  });
 
   final VoidCallback onResend;
+  final bool isResending;
 
   @override
   Widget build(BuildContext context) {
@@ -96,11 +209,19 @@ class ResendButton extends StatelessWidget {
           button: true,
           label: l10n.resendCode,
           child: TextButton(
-            onPressed: () {
-              HapticFeedback.lightImpact();
-              onResend();
-            },
-            child: Text(l10n.resend),
+            onPressed: isResending
+                ? null
+                : () {
+                    HapticFeedback.lightImpact();
+                    onResend();
+                  },
+            child: isResending
+                ? const SizedBox(
+                    width: 16,
+                    height: 16,
+                    child: CircularProgressIndicator(strokeWidth: 2),
+                  )
+                : Text(l10n.resend),
           ),
         ),
       ],
@@ -143,7 +264,14 @@ class NumberVerificationHeader extends StatelessWidget {
 }
 
 class OTPTextFields extends StatefulWidget {
-  const OTPTextFields({super.key});
+  const OTPTextFields({
+    super.key,
+    required this.onOtpComplete,
+    this.isVerifying = false,
+  });
+
+  final Function(String otp) onOtpComplete;
+  final bool isVerifying;
 
   @override
   State<OTPTextFields> createState() => _OTPTextFieldsState();
@@ -193,21 +321,10 @@ class _OTPTextFieldsState extends State<OTPTextFields>
     final otp = _controllers.map((c) => c.text).join();
     if (otp.length == 4 && otp.split('').every((c) => c.isNotEmpty)) {
       HapticFeedback.lightImpact();
-      _showVerificationDialog();
+      widget.onOtpComplete(otp);
     } else {
       _triggerShake();
     }
-  }
-
-  void _showVerificationDialog() {
-    showGeneralDialog(
-      barrierLabel: 'Dialog',
-      barrierDismissible: true,
-      context: context,
-      pageBuilder: (ctx, anim1, anim2) => const VerifiedDialog(),
-      transitionBuilder: (ctx, anim1, anim2, child) =>
-          ScaleTransition(scale: anim1, child: child),
-    );
   }
 
   @override
@@ -233,6 +350,7 @@ class _OTPTextFieldsState extends State<OTPTextFields>
                   child: TextFormField(
                     controller: _controllers[index],
                     focusNode: _focusNodes[index],
+                    enabled: !widget.isVerifying,
                     onChanged: (v) {
                       if (v.length == 1) {
                         if (index < 3) {

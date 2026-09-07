@@ -148,78 +148,82 @@ class _SingleCartItemTileState extends ConsumerState<SingleCartItemTile>
                   const SizedBox(width: 16),
 
                   /// Quantity and Name
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.only(left: 8),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.only(left: 8),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                productName,
+                                maxLines: 2,
+                                overflow: TextOverflow.ellipsis,
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .bodyLarge
+                                    ?.copyWith(
+                                      color: Theme.of(
+                                        context,
+                                      ).colorScheme.onSurface,
+                                    ),
+                              ),
+                              Text(
+                                'Qty: ${widget.item.quantity}',
+                                style: Theme.of(context).textTheme.bodySmall,
+                              ),
+                            ],
+                          ),
+                        ),
+                        Row(
                           children: [
-                            Text(
-                              productName,
-                              style: Theme.of(context)
-                                  .textTheme
-                                  .bodyLarge
-                                  ?.copyWith(
-                                    color: Theme.of(
-                                      context,
-                                    ).colorScheme.onSurface,
-                                  ),
+                            Semantics(
+                              button: true,
+                              label: l10n.increaseQuantity(
+                                productName,
+                                widget.item.quantity + 1,
+                              ),
+                              child: IconButton(
+                                onPressed: widget.onIncrease,
+                                icon: SvgPicture.asset(AppIcons.addQuantity),
+                                constraints: const BoxConstraints(),
+                              ),
                             ),
-                            Text(
-                              'Qty: ${widget.item.quantity}',
-                              style: Theme.of(context).textTheme.bodySmall,
+                            Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Text(
+                                '${widget.item.quantity}',
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .bodyLarge
+                                    ?.copyWith(
+                                      fontWeight: FontWeight.bold,
+                                      color: Theme.of(
+                                        context,
+                                      ).colorScheme.onSurface,
+                                    ),
+                              ),
+                            ),
+                            Semantics(
+                              button: true,
+                              label: l10n.decreaseQuantity(
+                                productName,
+                                widget.item.quantity - 1,
+                              ),
+                              child: IconButton(
+                                onPressed: widget.item.quantity > 1
+                                    ? widget.onDecrease
+                                    : null,
+                                icon: SvgPicture.asset(AppIcons.removeQuantity),
+                                constraints: const BoxConstraints(),
+                              ),
                             ),
                           ],
                         ),
-                      ),
-                      Row(
-                        children: [
-                          Semantics(
-                            button: true,
-                            label: l10n.increaseQuantity(
-                              productName,
-                              widget.item.quantity + 1,
-                            ),
-                            child: IconButton(
-                              onPressed: widget.onIncrease,
-                              icon: SvgPicture.asset(AppIcons.addQuantity),
-                              constraints: const BoxConstraints(),
-                            ),
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: Text(
-                              '${widget.item.quantity}',
-                              style: Theme.of(context)
-                                  .textTheme
-                                  .bodyLarge
-                                  ?.copyWith(
-                                    fontWeight: FontWeight.bold,
-                                    color: Theme.of(
-                                      context,
-                                    ).colorScheme.onSurface,
-                                  ),
-                            ),
-                          ),
-                          Semantics(
-                            button: true,
-                            label: l10n.decreaseQuantity(
-                              productName,
-                              widget.item.quantity - 1,
-                            ),
-                            child: IconButton(
-                              onPressed: widget.item.quantity > 1
-                                  ? widget.onDecrease
-                                  : null,
-                              icon: SvgPicture.asset(AppIcons.removeQuantity),
-                              constraints: const BoxConstraints(),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
                   const Spacer(),
 

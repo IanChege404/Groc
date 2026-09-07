@@ -42,70 +42,100 @@ class CateogoriesGrid extends StatelessWidget {
             label: 'Vegetables',
             backgroundColor: AppColors.primary,
             onTap: () {
-              context.push('/categoryDetails');
+              context.push('/categoryDetails', extra: {
+                'categoryId': 'vegetables',
+                'categoryName': 'Vegetables',
+              });
             },
           ),
           CategoryTile(
             imageLink: 'https://i.imgur.com/yOFxoIP.png',
             label: 'Meat And Fish',
             onTap: () {
-              context.push('/categoryDetails');
+              context.push('/categoryDetails', extra: {
+                'categoryId': 'meat_fish',
+                'categoryName': 'Meat And Fish',
+              });
             },
           ),
           CategoryTile(
             imageLink: 'https://i.imgur.com/GPsRaFC.png',
             label: 'Medicine',
             onTap: () {
-              context.push('/categoryDetails');
+              context.push('/categoryDetails', extra: {
+                'categoryId': 'medicine',
+                'categoryName': 'Medicine',
+              });
             },
           ),
           CategoryTile(
             imageLink: 'https://i.imgur.com/mGRqfnc.png',
             label: 'Baby Care',
             onTap: () {
-              context.push('/categoryDetails');
+              context.push('/categoryDetails', extra: {
+                'categoryId': 'baby_care',
+                'categoryName': 'Baby Care',
+              });
             },
           ),
           CategoryTile(
             imageLink: 'https://i.imgur.com/fwyz4oC.png',
             label: 'Office Supplies',
             onTap: () {
-              context.push('/categoryDetails');
+              context.push('/categoryDetails', extra: {
+                'categoryId': 'office_supplies',
+                'categoryName': 'Office Supplies',
+              });
             },
           ),
           CategoryTile(
             imageLink: 'https://i.imgur.com/DNr8a6R.png',
             label: 'Beauty',
             onTap: () {
-              context.push('/categoryDetails');
+              context.push('/categoryDetails', extra: {
+                'categoryId': 'beauty',
+                'categoryName': 'Beauty',
+              });
             },
           ),
           CategoryTile(
             imageLink: 'https://i.imgur.com/O2ZX5nR.png',
             label: 'Gym Equipment',
             onTap: () {
-              context.push('/categoryDetails');
+              context.push('/categoryDetails', extra: {
+                'categoryId': 'gym_equipment',
+                'categoryName': 'Gym Equipment',
+              });
             },
           ),
           CategoryTile(
             imageLink: 'https://i.imgur.com/wJBopjL.png',
             label: 'Gardening Tools',
             onTap: () {
-              context.push('/categoryDetails');
+              context.push('/categoryDetails', extra: {
+                'categoryId': 'gardening_tools',
+                'categoryName': 'Gardening Tools',
+              });
             },
           ),
           CategoryTile(
             imageLink: 'https://i.imgur.com/P4yJA9t.png',
             label: 'Pet Care',
             onTap: () {
-              context.push('/categoryDetails');
+              context.push('/categoryDetails', extra: {
+                'categoryId': 'pet_care',
+                'categoryName': 'Pet Care',
+              });
             },
           ),
           CategoryTile(
             imageLink: 'https://i.imgur.com/sxGf76e.png',
             label: 'Eye Wears',
             onTap: () {
-              context.push('/categoryDetails');
+              context.push('/categoryDetails', extra: {
+                'categoryId': 'eye_wears',
+                'categoryName': 'Eye Wears',
+              });
             },
           ),
           CategoryTile(

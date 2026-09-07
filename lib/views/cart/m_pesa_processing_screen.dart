@@ -1,9 +1,12 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import '../../core/constants/app_colors.dart';
 import '../../core/constants/app_defaults.dart';
 import '../../core/constants/app_text_styles.dart';
 import '../../core/l10n/locale_provider.dart';
+import '../../core/l10n/app_localizations.dart';
 import '../../core/services/firestore_service.dart';
 import '../../core/services/payment_service.dart';
 import 'package:provider/provider.dart';
@@ -123,40 +126,55 @@ class _MpesaProcessingScreenState extends State<MpesaProcessingScreen>
         if (!mounted) {
           return;
         }
-        context.go('/orderSuccessfull');
+        context.go('/orderSuccessfull', extra: {
+          'orderId': widget.orderId,
+          'totalAmount': 'KES ${widget.amount.toStringAsFixed(2)}',
+        });
         return;
       }
 
       if (payment.isFailed) {
         await _firestoreService.updateOrderStatus(widget.orderId, 'failed');
-        if (!mounted) {
-          return;
-        }
-        context.go('/orderFailed');
+        if (!mounted) return;
+        final reason = payment.failureReason ?? 'Payment was not completed';
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text(reason)),
+        );
+        Future.delayed(const Duration(seconds: 1), () {
+          if (mounted) context.go('/orderFailed');
+        });
         return;
       }
     }
 
-    Future.delayed(const Duration(seconds: 5), _pollPaymentStatus);
+    _pollTimer = Timer(const Duration(seconds: 5), _pollPaymentStatus);
   }
 
+  Timer? _countdownTimer;
+  Timer? _pollTimer;
+
   void _startCountdown() {
-    Future.delayed(const Duration(seconds: 1), () {
-      if (mounted) {
-        setState(() {
-          _secondsRemaining--;
-          if (_secondsRemaining <= 0) {
-            _isResendEnabled = true;
-            _statusMessage = 'Payment request timed out';
-            if (!_timeoutHandled) {
-              _timeoutHandled = true;
-              _firestoreService.updateOrderStatus(widget.orderId, 'failed');
-            }
-          } else {
-            _startCountdown();
-          }
-        });
+    _countdownTimer = Timer.periodic(const Duration(seconds: 1), (timer) {
+      if (!mounted) {
+        timer.cancel();
+        return;
       }
+      setState(() {
+        _secondsRemaining--;
+        if (_secondsRemaining <= 0) {
+          timer.cancel();
+          _pollTimer?.cancel();
+          _isResendEnabled = true;
+          _statusMessage = 'Payment request timed out';
+          if (!_timeoutHandled) {
+            _timeoutHandled = true;
+            _firestoreService.updateOrderStatus(widget.orderId, 'failed');
+            Future.delayed(const Duration(seconds: 2), () {
+              if (mounted) context.go('/orderFailed');
+            });
+          }
+        }
+      });
     });
   }
 
@@ -168,24 +186,23 @@ class _MpesaProcessingScreenState extends State<MpesaProcessingScreen>
 
   @override
   void dispose() {
+    _countdownTimer?.cancel();
+    _pollTimer?.cancel();
     _pulseController.dispose();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     final localeProvider = context.watch<LocaleProvider>();
     final isDark = localeProvider.isDarkMode;
-    final isEnglish = localeProvider.locale.languageCode == 'en';
 
-    final checkYourPhone = isEnglish ? 'Check Your Phone' : 'Angalia Simu Yako';
-    final weVeSent = isEnglish
-        ? 'We sent a payment request of KES ${widget.amount.toStringAsFixed(0)} to ${widget.phoneNumber}. Enter your M-Pesa PIN to complete.'
-        : 'Tumetuma ombi la malipo la KES ${widget.amount.toStringAsFixed(0)} kwa ${widget.phoneNumber}. Ingiza nambari ya siri ya M-Pesa kumalizia.';
-    final requestExpires =
-        isEnglish ? 'Request expires in' : 'Ombi lilihitimisha katika';
-    const cancel = 'Cancel';
-    final tuma = isEnglish ? 'Resend' : 'Tuma';
+    final checkYourPhone = l10n.mpesaCheckYourPhone;
+    final weVeSent =
+        '${l10n.mpesaWeVeSent(widget.phoneNumber)}\n\n${l10n.mpesaEnterPin}';
+    final requestExpires = l10n.mpesaTimeoutTitle;
+    final tuma = l10n.mpesaResend;
 
     return Scaffold(
       backgroundColor:
@@ -298,12 +315,13 @@ class _MpesaProcessingScreenState extends State<MpesaProcessingScreen>
                     onPressed: _isRequestInFlight
                         ? null
                         : () {
+                            _countdownTimer?.cancel();
                             setState(() {
                               _secondsRemaining = 120;
                               _isResendEnabled = false;
                               _statusMessage = null;
-                              _startCountdown();
                             });
+                            _startCountdown();
                             _startPaymentFlow();
                           },
                     style: OutlinedButton.styleFrom(
@@ -340,7 +358,7 @@ class _MpesaProcessingScreenState extends State<MpesaProcessingScreen>
                     Navigator.pop(context);
                   },
                   child: Text(
-                    cancel,
+                    l10n.cancel,
                     style: AppTextStyles.label.copyWith(
                       color:
                           isDark ? AppColors.subtleDark : AppColors.subtleLight,

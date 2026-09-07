@@ -49,6 +49,9 @@ class EnvConfig {
 
   static String mpesaCallbackUrl() => dotenv.env['MPESA_CALLBACK_URL'] ?? '';
 
+  static String googleMapsApiKey() =>
+      dotenv.isInitialized ? (dotenv.env['GOOGLE_MAPS_API_KEY'] ?? '') : '';
+
   /// Flutterwave Configuration
   static String flutterwaveSecretKey() =>
       dotenv.env['FLUTTERWAVE_SECRET_KEY'] ?? '';
@@ -58,6 +61,17 @@ class EnvConfig {
 
   static String flutterwaveEncryptionKey() =>
       dotenv.env['FLUTTERWAVE_ENCRYPTION_KEY'] ?? '';
+
+  /// Stripe Configuration
+  static String stripePublishableKey() =>
+      dotenv.env['STRIPE_PUBLISHABLE_KEY'] ?? '';
+
+  static String stripeSecretKey() => dotenv.env['STRIPE_SECRET_KEY'] ?? '';
+
+  /// PayPal Configuration
+  static String paypalClientId() => dotenv.env['PAYPAL_CLIENT_ID'] ?? '';
+
+  static String paypalSecretKey() => dotenv.env['PAYPAL_SECRET_KEY'] ?? '';
 
   /// FCM Configuration
   static String fcmServerKey() => dotenv.env['FCM_SERVER_KEY'] ?? '';

@@ -97,21 +97,25 @@ class _BundleEditPageState extends ConsumerState<BundleEditPage> {
         .read(updateBundleDetailsProvider(
       (widget.bundle.id, updates),
     ).future)
-        .whenComplete(() {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text(l10n.bundleUpdatedSuccessfully)),
-      );
-      Navigator.pop(context);
+        .then((_) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text(l10n.bundleUpdatedSuccessfully)),
+        );
+        Navigator.pop(context);
+      }
     }).catchError((error) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text(l10n.failedToLoadProducts),
-          action: SnackBarAction(
-            label: l10n.tryAgain,
-            onPressed: _saveChanges,
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(l10n.bundleUpdateFailed),
+            action: SnackBarAction(
+              label: l10n.tryAgain,
+              onPressed: _saveChanges,
+            ),
           ),
-        ),
-      );
+        );
+      }
     });
   }
 
@@ -164,23 +168,27 @@ class _BundleEditPageState extends ConsumerState<BundleEditPage> {
                   ? () {
                       ref
                           .read(deleteBundleProvider(widget.bundle.id).future)
-                          .whenComplete(() {
-                        Navigator.pop(context);
-                        Navigator.pop(context);
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          SnackBar(content: Text(l10n.bundleDeleted)),
-                        );
+                          .then((_) {
+                        if (mounted) {
+                          Navigator.pop(context);
+                          Navigator.pop(context);
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(content: Text(l10n.bundleDeleted)),
+                          );
+                        }
                       }).catchError((error) {
-                        Navigator.pop(context);
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          SnackBar(
-                            content: Text(l10n.failedToLoadProducts),
-                            action: SnackBarAction(
-                              label: l10n.tryAgain,
-                              onPressed: _deleteBundle,
+                        if (mounted) {
+                          Navigator.pop(context);
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(
+                              content: Text(l10n.bundleDeleteFailed),
+                              action: SnackBarAction(
+                                label: l10n.tryAgain,
+                                onPressed: _deleteBundle,
+                              ),
                             ),
-                          ),
-                        );
+                          );
+                        }
                       });
                     }
                   : null,

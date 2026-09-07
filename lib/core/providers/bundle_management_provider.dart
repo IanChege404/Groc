@@ -40,9 +40,8 @@ final searchBundlesProvider =
   }
 });
 
-final updateBundleDetailsProvider =
-    FutureProvider.family<void, (String bundleId, Map<String, dynamic> updates)>(
-        (ref, params) async {
+final updateBundleDetailsProvider = FutureProvider.family<void,
+    (String bundleId, Map<String, dynamic> updates)>((ref, params) async {
   try {
     final (bundleId, updates) = params;
     final service = ref.read(bundleServiceProvider);
@@ -93,7 +92,8 @@ final updateBundleItemsProvider = FutureProvider.family<
 
     Logger.info('Bundle items updated: $bundleId', 'updateBundleItemsProvider');
   } catch (e) {
-    Logger.error('Error updating bundle items: $e', 'updateBundleItemsProvider');
+    Logger.error(
+        'Error updating bundle items: $e', 'updateBundleItemsProvider');
     rethrow;
   }
 });
@@ -121,7 +121,8 @@ final addProductToBundleProvider = FutureProvider.family<
     ref.invalidate(bundleByIdProvider(bundleId));
     ref.invalidate(allBundlesProvider);
 
-    Logger.info('Product added to bundle: $bundleId', 'addProductToBundleProvider');
+    Logger.info(
+        'Product added to bundle: $bundleId', 'addProductToBundleProvider');
   } catch (e) {
     Logger.error(
       'Error adding product to bundle: $e',

@@ -49,10 +49,8 @@ class DataIntegrityValidator {
   /// Validates product category reference exists
   static Future<bool> validateProductCategory(String categoryId) async {
     try {
-      final category = await _firestore
-          .collection('categories')
-          .doc(categoryId)
-          .get();
+      final category =
+          await _firestore.collection('categories').doc(categoryId).get();
       if (!category.exists) {
         Logger.warning(
           'Category not found: $categoryId',
@@ -165,10 +163,8 @@ class DataIntegrityValidator {
   ) async {
     try {
       for (final productId in productIds) {
-        final product = await _firestore
-            .collection('products')
-            .doc(productId)
-            .get();
+        final product =
+            await _firestore.collection('products').doc(productId).get();
         if (!product.exists) {
           Logger.warning(
             'Product not found in order: $productId',

@@ -398,10 +398,8 @@ class FirestoreService {
   Future<bool> validateCheckoutCart(List<CartItemModel> items) async {
     try {
       for (final item in items) {
-        final product = await _withRetry(() => _firestore
-            .collection('products')
-            .doc(item.productId)
-            .get());
+        final product = await _withRetry(
+            () => _firestore.collection('products').doc(item.productId).get());
 
         if (!product.exists) {
           Logger.warning(
@@ -474,7 +472,8 @@ class FirestoreService {
             .collection('users')
             .doc(userId)
             .collection('transactions')
-            .doc().id;
+            .doc()
+            .id;
         final txRef = _firestore
             .collection('users')
             .doc(userId)

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import '../../core/components/app_back_button.dart';
 import '../../core/constants/app_colors.dart';
 import '../../core/constants/app_defaults.dart';
@@ -49,7 +50,7 @@ class _PaymentSelectionScreenState
             _PaymentOption(
               method: PaymentConstants.mpesa,
               title: 'M-Pesa',
-              subtitle: 'Pay via Safaricom M-Pesa STK Push',
+              subtitle: l10n.payViaMpesaStkPush,
               icon: Icons.phone_android,
               iconColor: Colors.green,
               selected: _selected == PaymentConstants.mpesa,
@@ -59,7 +60,7 @@ class _PaymentSelectionScreenState
             _PaymentOption(
               method: PaymentConstants.card,
               title: 'Card Payment',
-              subtitle: 'Visa, Mastercard via Flutterwave',
+              subtitle: l10n.visaMastercardViaFlutterwave,
               icon: Icons.credit_card,
               iconColor: Colors.blue,
               selected: _selected == PaymentConstants.card,
@@ -68,8 +69,8 @@ class _PaymentSelectionScreenState
             const SizedBox(height: 10),
             _PaymentOption(
               method: PaymentConstants.wallet,
-              title: 'Wallet Balance',
-              subtitle: 'Pay using your Groc wallet',
+              title: l10n.walletBalance,
+              subtitle: l10n.payUsingYourWallet,
               icon: Icons.account_balance_wallet,
               iconColor: AppColors.primary,
               selected: _selected == PaymentConstants.wallet,
@@ -78,8 +79,8 @@ class _PaymentSelectionScreenState
             const SizedBox(height: 10),
             _PaymentOption(
               method: PaymentConstants.cashOnDelivery,
-              title: 'Cash on Delivery',
-              subtitle: 'Pay when your order arrives',
+              title: l10n.cashOnDelivery,
+              subtitle: l10n.cashOnDeliveryDesc,
               icon: Icons.local_shipping,
               iconColor: Colors.orange,
               selected: _selected == PaymentConstants.cashOnDelivery,
@@ -125,20 +126,83 @@ class _PaymentSelectionScreenState
     }
   }
 
-  void _proceed(BuildContext context) {
+  void _showPhoneEntryDialog() {
+    final phoneController = TextEditingController();
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: const Text('Phone Number Required'),
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            const Text('Please enter your phone number for M-Pesa payment'),
+            const SizedBox(height: 16),
+            TextField(
+              controller: phoneController,
+              keyboardType: TextInputType.phone,
+              decoration: const InputDecoration(
+                hintText: '+254712345678',
+                labelText: 'Phone Number',
+                border: OutlineInputBorder(),
+              ),
+            ),
+          ],
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context),
+            child: const Text('Cancel'),
+          ),
+          ElevatedButton(
+            onPressed: () {
+              if (phoneController.text.isNotEmpty) {
+                Navigator.pop(context);
+                // Retry payment with entered phone number
+                _proceedWithPhone(phoneController.text);
+              }
+            },
+            child: const Text('Confirm'),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Future<void> _proceedWithPhone(String phoneNumber) async {
+    if (!mounted) return;
+    context.push('/mpesaProcessing', extra: {
+      'amount': widget.amount,
+      'orderId': widget.orderId,
+      'phoneNumber': phoneNumber,
+    });
+  }
+
+  void _proceed(BuildContext context) async {
     switch (_selected) {
       case PaymentConstants.mpesa:
+        // Fetch phone number from Firebase auth or user profile
+        final user = FirebaseAuth.instance.currentUser;
+        final phoneNumber = user?.phoneNumber ?? '';
+
+        if (phoneNumber.isEmpty) {
+          // Show dialog to request phone number
+          if (!mounted) return;
+          _showPhoneEntryDialog();
+          return;
+        }
+
+        if (!mounted) return;
         context.push('/mpesaProcessing', extra: {
-            'amount': widget.amount,
-            'orderId': widget.orderId,
-            'phoneNumber': '',
-          });
+          'amount': widget.amount,
+          'orderId': widget.orderId,
+          'phoneNumber': phoneNumber,
+        });
         break;
       case PaymentConstants.card:
         context.push('/cardPayment', extra: {
-            'amount': widget.amount,
-            'orderId': widget.orderId,
-          });
+          'amount': widget.amount,
+          'orderId': widget.orderId,
+        });
         break;
       default:
         context.push('/orderSuccessfull');
@@ -165,14 +229,17 @@ class _AmountSummary extends StatelessWidget {
       ),
       child: Column(
         children: [
-          const Text('Total Amount', style: TextStyle(color: Colors.grey)),
+          Text(
+            AppLocalizations.of(context)!.totalAmountLabel,
+            style: TextStyle(color: Theme.of(context).colorScheme.outline),
+          ),
           const SizedBox(height: 4),
           Text(
             'KES ${amount.toStringAsFixed(2)}',
-            style: const TextStyle(
+            style: TextStyle(
               fontSize: 28,
               fontWeight: FontWeight.w800,
-              color: AppColors.primary,
+              color: Theme.of(context).colorScheme.primary,
             ),
           ),
         ],
@@ -202,58 +269,68 @@ class _PaymentOption extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: onTap,
-      child: Container(
-        padding: const EdgeInsets.all(14),
-        decoration: BoxDecoration(
-          color: selected
-              ? AppColors.primary.withValues(alpha: 0.06)
-              : Colors.white,
-          borderRadius: BorderRadius.circular(AppDefaults.radius),
-          border: Border.all(
-            color: selected ? AppColors.primary : Colors.grey.shade200,
-            width: selected ? 2 : 1,
+    return Semantics(
+      label: '$title - $subtitle',
+      selected: selected,
+      child: GestureDetector(
+        onTap: onTap,
+        child: Container(
+          padding: const EdgeInsets.all(14),
+          decoration: BoxDecoration(
+            color: selected
+                ? AppColors.primary.withValues(alpha: 0.06)
+                : Theme.of(context).colorScheme.surface,
+            borderRadius: BorderRadius.circular(AppDefaults.radius),
+            border: Border.all(
+              color: selected
+                  ? AppColors.primary
+                  : Theme.of(context).colorScheme.outlineVariant,
+              width: selected ? 2 : 1,
+            ),
           ),
-        ),
-        child: Row(
-          children: [
-            Container(
-              width: 44,
-              height: 44,
-              decoration: BoxDecoration(
-                color: iconColor.withValues(alpha: 0.12),
-                borderRadius: BorderRadius.circular(10),
+          child: Row(
+            children: [
+              Container(
+                width: 44,
+                height: 44,
+                decoration: BoxDecoration(
+                  color: iconColor.withValues(alpha: 0.12),
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                child: Icon(icon, color: iconColor),
               ),
-              child: Icon(icon, color: iconColor),
-            ),
-            const SizedBox(width: 14),
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    title,
-                    style: TextStyle(
-                      fontWeight: FontWeight.w700,
-                      color: selected ? AppColors.primary : Colors.black87,
+              const SizedBox(width: 14),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      title,
+                      style: TextStyle(
+                        fontWeight: FontWeight.w700,
+                        color: selected
+                            ? AppColors.primary
+                            : Theme.of(context).colorScheme.onSurface,
+                      ),
                     ),
-                  ),
-                  Text(
-                    subtitle,
-                    style: TextStyle(
-                      fontSize: 12,
-                      color: Colors.grey.shade600,
+                    Text(
+                      subtitle,
+                      style: TextStyle(
+                        fontSize: 12,
+                        color: Theme.of(context).colorScheme.outline,
+                      ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
-            ),
-            Icon(
-              selected ? Icons.radio_button_checked : Icons.radio_button_off,
-              color: selected ? AppColors.primary : Colors.grey.shade400,
-            ),
-          ],
+              Icon(
+                selected ? Icons.radio_button_checked : Icons.radio_button_off,
+                color: selected
+                    ? AppColors.primary
+                    : Theme.of(context).colorScheme.outline,
+              ),
+            ],
+          ),
         ),
       ),
     );

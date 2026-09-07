@@ -175,7 +175,8 @@ class BundleService {
           .map((e) => e.value)
           .toList();
 
-      final newPrice = (bundle.price - productPrice).clamp(0.0, double.infinity);
+      final newPrice =
+          (bundle.price - productPrice).clamp(0.0, double.infinity);
 
       if (updatedProductIds.isEmpty) {
         await deleteBundle(bundleId);
@@ -262,7 +263,9 @@ class BundleService {
       }
 
       final snapshot = await query.get();
-      return snapshot.docs.map((doc) => BundleModel.fromFirestore(doc)).toList();
+      return snapshot.docs
+          .map((doc) => BundleModel.fromFirestore(doc))
+          .toList();
     } catch (e, stack) {
       Logger.error(
         'Error getting all bundles: $e\nStack: $stack',
@@ -282,7 +285,9 @@ class BundleService {
           .where('name', isLessThan: searchTerm + 'z')
           .get();
 
-      return snapshot.docs.map((doc) => BundleModel.fromFirestore(doc)).toList();
+      return snapshot.docs
+          .map((doc) => BundleModel.fromFirestore(doc))
+          .toList();
     } catch (e, stack) {
       Logger.error(
         'Error searching bundles: $e\nStack: $stack',

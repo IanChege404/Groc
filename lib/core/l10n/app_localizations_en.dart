@@ -179,6 +179,77 @@ class AppLocalizationsEn extends AppLocalizations {
       'Phone verification failed. Please try again.';
 
   @override
+  String get newPassword => 'New Password';
+
+  @override
+  String get addNewPassword => 'Add New Password';
+
+  @override
+  String get done => 'Done';
+
+  @override
+  String get passwordsDoNotMatch => 'Passwords do not match';
+
+  @override
+  String get passwordTooShort => 'Password must be at least 8 characters';
+
+  @override
+  String get currentPassword => 'Current Password';
+
+  @override
+  String get updatePassword => 'Update Password';
+
+  @override
+  String get passwordUpdatedSuccess => 'Password updated successfully';
+
+  @override
+  String get passwordUpdateFailed => 'Password update failed';
+
+  @override
+  String get pleaseSignInAgain => 'Please sign in again';
+
+  @override
+  String get errorUpdatingPassword => 'Error updating password';
+
+  @override
+  String get showPassword => 'Show password';
+
+  @override
+  String get hidePassword => 'Hide password';
+
+  @override
+  String get passwordResetLinkSent => 'Password reset link sent to your phone';
+
+  @override
+  String get failedToSendResetLink =>
+      'Failed to send reset link. Please try again.';
+
+  @override
+  String get googleSignInSuccess => 'Signed in with Google';
+
+  @override
+  String get googleSignInFailed => 'Sign in failed. Please try again.';
+
+  @override
+  String get appleSignInComingSoon => 'Apple Sign-In coming soon';
+
+  @override
+  String get otpVerificationComingSoon => 'OTP verification coming soon';
+
+  @override
+  String get loginWithEmail => 'Login With Email';
+
+  @override
+  String get groceryShop => 'grocery shop';
+
+  @override
+  String get passwordRequired => 'Password is required';
+
+  @override
+  String get passwordMustHaveSpecialChar =>
+      'Password must have at least one special character';
+
+  @override
   String get fullName => 'Full Name';
 
   @override
@@ -454,10 +525,10 @@ class AppLocalizationsEn extends AppLocalizations {
   String get deliveryMethod => 'Delivery Method';
 
   @override
-  String get standardDelivery => 'Standard Delivery (2-4 days)';
+  String get standardDelivery => 'Standard Delivery';
 
   @override
-  String get expressDelivery => 'Express Delivery (Next day)';
+  String get expressDelivery => 'Express Delivery';
 
   @override
   String get sameDayDelivery => 'Same-Day Delivery (Today)';
@@ -466,7 +537,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get storePickup => 'Store Pickup';
 
   @override
-  String get free => 'Free';
+  String get free => 'FREE';
 
   @override
   String get reviewOrder => 'Review & Payment';
@@ -501,9 +572,7 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
-  String requestExpiresIn(Object minutes, Object seconds) {
-    return 'Request expires in $minutes:$seconds';
-  }
+  String get requestExpiresIn => 'Request expires in';
 
   @override
   String get tryAgain => 'Try Again';
@@ -518,8 +587,8 @@ class AppLocalizationsEn extends AppLocalizations {
   String get confirmPaymentTitle => 'Confirm Payment';
 
   @override
-  String confirmPaymentMessage(Object amount, Object phoneNumber) {
-    return 'You will be charged KES $amount via M-Pesa to $phoneNumber. Do you want to continue?';
+  String confirmPaymentMessage(Object amount, Object phone) {
+    return 'Confirm payment of KES $amount to $phone?';
   }
 
   @override
@@ -541,7 +610,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get cvv => 'CVV';
 
   @override
-  String get rememberCardDetails => 'Remember My Card Details';
+  String get rememberCardDetails => 'Remember card details';
 
   @override
   String increaseQuantity(Object productName, Object quantity) {
@@ -569,12 +638,10 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
-  String get invalidPhoneNumber =>
-      'Enter a valid Kenyan phone number, e.g. +254712345678';
+  String get invalidPhoneNumber => 'Invalid phone number';
 
   @override
-  String get orderCreationFailed =>
-      'We couldn\'t create your order. Please check your connection and try again.';
+  String get orderCreationFailed => 'Failed to create order';
 
   @override
   String get retry => 'Retry';
@@ -603,7 +670,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get myOrder => 'My Order';
 
   @override
-  String get allOrders => 'All';
+  String get allOrders => 'All Orders';
 
   @override
   String get activeOrders => 'Active';
@@ -939,8 +1006,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get ourNewItem => 'Our New Item';
 
   @override
-  String get failedToLoadProducts =>
-      'Could not load products. Check your connection and try again.';
+  String get failedToLoadProducts => 'Failed to load products';
 
   @override
   String get checkConnectionAndRetry =>
@@ -954,7 +1020,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get tryDifferentKeywords => 'Try searching with different keywords';
 
   @override
-  String get failedToLoadCategories => 'Could not load categories';
+  String get failedToLoadCategories => 'Failed to load categories';
 
   @override
   String get failedToLoadNewItems => 'Could not load new items';
@@ -1123,7 +1189,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get info => 'Information';
 
   @override
-  String get searchHint => 'Search products...';
+  String get searchHint => 'Search';
 
   @override
   String get aiSearchSubtitle => 'Type to see AI-powered recommendations';
@@ -1240,6 +1306,29 @@ class AppLocalizationsEn extends AppLocalizations {
   String get cardPayment => 'Card Payment';
 
   @override
+  String get stripePayment => 'Stripe';
+
+  @override
+  String get paypalPayment => 'PayPal';
+
+  @override
+  String payWith(Object method) {
+    return 'Pay with $method';
+  }
+
+  @override
+  String get secureHostedPaymentHint =>
+      'You will be redirected to a secure hosted payment page to complete your purchase.';
+
+  @override
+  String get paymentLaunchFailed =>
+      'Could not open the payment page. Please try again.';
+
+  @override
+  String get paymentInitiationFailed =>
+      'Payment could not be initiated. Please try again.';
+
+  @override
   String get statusLabel => 'Status';
 
   @override
@@ -1270,4 +1359,368 @@ class AppLocalizationsEn extends AppLocalizations {
   String continueWith(Object method) {
     return 'Continue with $method';
   }
+
+  @override
+  String get mpesaCheckYourPhone => 'Check Your Phone';
+
+  @override
+  String mpesaWeVeSent(Object phoneNumber) {
+    return 'We sent a payment request to SMS to $phoneNumber';
+  }
+
+  @override
+  String get mpesaEnterPin => 'Enter your M-Pesa PIN to complete payment';
+
+  @override
+  String get mpesaTimeoutTitle => 'Payment Timeout';
+
+  @override
+  String get mpesaTimeoutMessage => 'Your payment request has expired';
+
+  @override
+  String get mpesaProcessing => 'Processing Payment...';
+
+  @override
+  String get mpesaResend => 'Resend Request';
+
+  @override
+  String get recentSearch => 'Recent Search';
+
+  @override
+  String get createOwnPack => 'Create Own Pack';
+
+  @override
+  String get failedToLoadBundles => 'Could not load bundles';
+
+  @override
+  String get noBundlesFound => 'No bundles found';
+
+  @override
+  String get bundleInformationMissing => 'Bundle information is missing';
+
+  @override
+  String get productInformationMissing => 'Product information is missing';
+
+  @override
+  String get productDetailsTitle => 'Product Details';
+
+  @override
+  String get weight => 'Weight';
+
+  @override
+  String stockAvailable(Object count) {
+    return 'In Stock ($count available)';
+  }
+
+  @override
+  String get itemsLabel => 'Items';
+
+  @override
+  String get reviewsLabel => 'Reviews';
+
+  @override
+  String get saveLabel => 'Save';
+
+  @override
+  String get searchProductHint => 'Search Product';
+
+  @override
+  String get bundleUpdatedFailed =>
+      'Could not update bundle. Please try again.';
+
+  @override
+  String get searchFilters => 'Search Filters';
+
+  @override
+  String get clearSearch => 'Clear search';
+
+  @override
+  String get sidebarMenu => 'Sidebar menu';
+
+  @override
+  String get searchButton => 'Search';
+
+  @override
+  String get adSpace => 'Advertisement';
+
+  @override
+  String get filterButton => 'Filter products';
+
+  @override
+  String get createPackButton => 'Create your own pack';
+
+  @override
+  String get continueToHome => 'Go to home';
+
+  @override
+  String get emptyCartTitle => 'Oops!';
+
+  @override
+  String get emptyCartMessage => 'Sorry, you have no products in your cart';
+
+  @override
+  String get startBrowsing => 'Start Browsing';
+
+  @override
+  String get pleaseLogIn => 'Please log in to continue';
+
+  @override
+  String get cartIsEmpty => 'Your cart is empty';
+
+  @override
+  String get totalToPay => 'Total to pay:';
+
+  @override
+  String get processingPaymentLabel => 'Processing...';
+
+  @override
+  String get payNowButton => 'Pay Now';
+
+  @override
+  String get securedByFlutterwave => 'Secured by Flutterwave';
+
+  @override
+  String paymentFailedError(Object error) {
+    return 'Payment failed: $error';
+  }
+
+  @override
+  String get continueButton => 'Continue';
+
+  @override
+  String get selectDeliveryAddress => 'Select Delivery Address';
+
+  @override
+  String get addNew => 'Add New';
+
+  @override
+  String get homeAddress => 'Home Address';
+
+  @override
+  String get officeAddress => 'Office Address';
+
+  @override
+  String get cardNumberLabel => 'Card Number';
+
+  @override
+  String get expiryDateLabel => 'Expiry Date';
+
+  @override
+  String get cvvLabel => 'CVV';
+
+  @override
+  String get cardHolderNameLabel => 'Card Holder Name';
+
+  @override
+  String get totalAmountLabel => 'Total Amount';
+
+  @override
+  String get resendRequest => 'Resend Request';
+
+  @override
+  String get waiting => 'Waiting...';
+
+  @override
+  String get standardDeliveryDesc => '2–4 business days';
+
+  @override
+  String get standardDeliveryEta => '2–4 days';
+
+  @override
+  String get expressDeliveryDesc => 'Delivered next day';
+
+  @override
+  String get expressDeliveryEta => 'Next day';
+
+  @override
+  String get bodaBodaSameDay => 'Boda Boda Same-Day';
+
+  @override
+  String get bodaBodaSameDayDesc => 'Today (Nairobi & Kampala only)';
+
+  @override
+  String get bodaBodaSameDayEta => 'Today';
+
+  @override
+  String get storePickupDesc => 'Pick up at our store';
+
+  @override
+  String get storePickupEta => '2–3 hours';
+
+  @override
+  String get chooseACategory => 'Choose a category';
+
+  @override
+  String get allProducts => 'All Products';
+
+  @override
+  String categoryLabel(Object name) {
+    return '$name category';
+  }
+
+  @override
+  String browseCategory(Object name) {
+    return 'Browse $name';
+  }
+
+  @override
+  String get goBack => 'Go back';
+
+  @override
+  String get vouchers => 'Vouchers';
+
+  @override
+  String get address => 'Address';
+
+  @override
+  String get notifications => 'Notifications';
+
+  @override
+  String get setting => 'Settings';
+
+  @override
+  String get payment => 'Payment';
+
+  @override
+  String get logout => 'Logout';
+
+  @override
+  String get firstName => 'First Name';
+
+  @override
+  String get lastName => 'Last Name';
+
+  @override
+  String get phone => 'Phone';
+
+  @override
+  String get gender => 'Gender';
+
+  @override
+  String get birthday => 'Birthday';
+
+  @override
+  String get save => 'Save';
+
+  @override
+  String get saving => 'Saving...';
+
+  @override
+  String get profileSavedSuccess => 'Profile saved successfully';
+
+  @override
+  String get profileSaveError => 'Error saving profile';
+
+  @override
+  String get unableToLoadProfile => 'Unable to load profile';
+
+  @override
+  String get couldNotLoadProfile => 'Could not load profile';
+
+  @override
+  String get checkConnectionRetry =>
+      'Please check your connection and try again.';
+
+  @override
+  String get noSavedPaymentMethodsYet => 'No saved payment methods yet';
+
+  @override
+  String get savedPaymentMethods => 'Saved Payment Methods';
+
+  @override
+  String get paymentOption => 'Payment Option';
+
+  @override
+  String get deletePaymentMethodTitle => 'Delete Payment Method';
+
+  @override
+  String get deletePaymentMethodConfirm =>
+      'Are you sure you want to remove this payment method? This action cannot be undone.';
+
+  @override
+  String get newAddress => 'New Address';
+
+  @override
+  String get phoneRequired => 'Phone number is required';
+
+  @override
+  String get fullAddressName => 'Full Name';
+
+  @override
+  String get addressLine1 => 'Address Line 1';
+
+  @override
+  String get addressLine2 => 'Address Line 2';
+
+  @override
+  String get state => 'State';
+
+  @override
+  String get zipCode => 'Zip Code';
+
+  @override
+  String get makeDefaultShippingAddress => 'Make Default Shipping Address';
+
+  @override
+  String get pleaseSignInAgainToSave => 'Please sign in again to save address';
+
+  @override
+  String get pleaseSignInAgainToEdit =>
+      'Please sign in again to edit your profile.';
+
+  @override
+  String get errorLoadingProfile =>
+      'Could not load your profile details. Pull to refresh or retry.';
+
+  @override
+  String get pleaseSignInAgainToSaveProfile =>
+      'Please sign in again to save profile';
+
+  @override
+  String get unableToLoadPaymentMethods => 'Unable to load payment methods';
+
+  @override
+  String get changePassword => 'Change Password';
+
+  @override
+  String get changePhoneNumber => 'Change Phone Number';
+
+  @override
+  String get editHomeAddress => 'Edit Home Address';
+
+  @override
+  String get location => 'Location';
+
+  @override
+  String get profileSetting => 'Profile Setting';
+
+  @override
+  String get deactivateAccount => 'Deactivate Account';
+
+  @override
+  String get pickLocationOnMap => 'Pick Location on Map';
+
+  @override
+  String get useThisLocation => 'Use This Location';
+
+  @override
+  String get currentLocation => 'Current Location';
+
+  @override
+  String get searchAddress => 'Search address';
+
+  @override
+  String get dragToAdjust => 'Drag map to adjust location';
+
+  @override
+  String get locationPermissionDenied => 'Location permission denied';
+
+  @override
+  String get enableLocationServices => 'Enable location services';
+
+  @override
+  String get selectedLocation => 'Selected Location';
+
+  @override
+  String get noLocationSelected => 'No location selected';
 }

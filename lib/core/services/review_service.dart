@@ -140,7 +140,8 @@ class ReviewService {
         .snapshots()
         .map((snapshot) {
       return snapshot.docs
-          .map((doc) => ReviewModel.fromMap(doc.data() as Map<String, dynamic>, doc.id))
+          .map((doc) =>
+              ReviewModel.fromMap(doc.data() as Map<String, dynamic>, doc.id))
           .toList();
     });
   }

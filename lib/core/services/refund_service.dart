@@ -59,7 +59,8 @@ class RefundRecord {
       'phoneNumber': phoneNumber,
       'status': status.name,
       'createdAt': Timestamp.fromDate(createdAt),
-      'completedAt': completedAt != null ? Timestamp.fromDate(completedAt!) : null,
+      'completedAt':
+          completedAt != null ? Timestamp.fromDate(completedAt!) : null,
       'transactionId': transactionId,
       'errorMessage': errorMessage,
     };
@@ -99,8 +100,7 @@ class RefundService {
         createdAt: DateTime.now(),
       );
 
-      final docRef =
-          await _firestore.collection('refunds').add(refund.toMap());
+      final docRef = await _firestore.collection('refunds').add(refund.toMap());
 
       return docRef.id;
     } catch (e) {
@@ -181,7 +181,8 @@ class RefundService {
           .get();
 
       if (snapshot.docs.isEmpty) return null;
-      return RefundRecord.fromMap(snapshot.docs.first.data(), snapshot.docs.first.id);
+      return RefundRecord.fromMap(
+          snapshot.docs.first.data(), snapshot.docs.first.id);
     } catch (e) {
       throw Exception('Failed to get refund record: $e');
     }
@@ -189,7 +190,8 @@ class RefundService {
 
   Future<void> retryRefund(String refundId) async {
     try {
-      final refundDoc = await _firestore.collection('refunds').doc(refundId).get();
+      final refundDoc =
+          await _firestore.collection('refunds').doc(refundId).get();
       if (!refundDoc.exists) {
         throw Exception('Refund not found');
       }

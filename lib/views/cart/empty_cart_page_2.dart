@@ -2,12 +2,15 @@ import 'package:flutter/material.dart';
 
 import '../../core/components/network_image.dart';
 import '../../core/constants/app_defaults.dart';
+import '../../core/l10n/app_localizations.dart';
+import 'package:go_router/go_router.dart';
 
 class EmptyCartPageSecond extends StatelessWidget {
   const EmptyCartPageSecond({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     return SizedBox(
       width: MediaQuery.of(context).size.width,
       child: Column(
@@ -16,9 +19,9 @@ class EmptyCartPageSecond extends StatelessWidget {
           const Spacer(flex: 2),
           SizedBox(
             width: MediaQuery.of(context).size.width * 0.7,
-            child: const Padding(
-              padding: EdgeInsets.all(AppDefaults.padding * 2),
-              child: AspectRatio(
+            child: Padding(
+              padding: const EdgeInsets.all(AppDefaults.padding * 2),
+              child: const AspectRatio(
                 aspectRatio: 1 / 1,
                 child: NetworkImageWithLoader(
                   'https://i.imgur.com/znE8Gir.png',
@@ -26,23 +29,28 @@ class EmptyCartPageSecond extends StatelessWidget {
               ),
             ),
           ),
-          Text(
-            'Oppss!',
-            style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                  fontWeight: FontWeight.bold,
-                  color: Theme.of(context).colorScheme.onSurface,
-                ),
+          Semantics(
+            header: true,
+            child: Text(
+              l10n.emptyCartTitle,
+              style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                    fontWeight: FontWeight.bold,
+                    color: Theme.of(context).colorScheme.onSurface,
+                  ),
+            ),
           ),
           const SizedBox(height: 8),
-          const Text('Sorry, you have no products in your cart'),
+          Text(l10n.emptyCartMessage),
           const Spacer(),
           SizedBox(
             width: double.infinity,
             child: Padding(
               padding: const EdgeInsets.all(AppDefaults.padding * 2),
               child: ElevatedButton(
-                onPressed: () {},
-                child: const Text('Start Browsing'),
+                onPressed: () {
+                  context.push('/entry_point');
+                },
+                child: Text(l10n.startBrowsing),
               ),
             ),
           ),

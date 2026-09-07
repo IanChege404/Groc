@@ -1,12 +1,21 @@
 import 'package:flutter/material.dart';
 
 import '../../../../core/constants/constants.dart';
+import '../../../../core/l10n/app_localizations.dart';
 
 class TotalAmountAndPaidData extends StatelessWidget {
-  const TotalAmountAndPaidData({super.key});
+  const TotalAmountAndPaidData({
+    super.key,
+    required this.totalAmount,
+    required this.paidFrom,
+  });
+
+  final String totalAmount;
+  final String paidFrom;
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: AppDefaults.padding),
       child: Column(
@@ -14,7 +23,7 @@ class TotalAmountAndPaidData extends StatelessWidget {
           Row(
             children: [
               Text(
-                'Total Amount',
+                l10n.totalAmount,
                 style: Theme.of(context).textTheme.bodyLarge?.copyWith(
                       fontWeight: FontWeight.bold,
                       color: Theme.of(context).colorScheme.onSurface,
@@ -22,7 +31,7 @@ class TotalAmountAndPaidData extends StatelessWidget {
               ),
               const Spacer(),
               Text(
-                '\$120',
+                totalAmount,
                 style: Theme.of(context).textTheme.bodyLarge?.copyWith(
                       fontWeight: FontWeight.bold,
                       color: Theme.of(context).colorScheme.onSurface,
@@ -34,7 +43,7 @@ class TotalAmountAndPaidData extends StatelessWidget {
           Row(
             children: [
               Text(
-                'Paid From',
+                l10n.paidFrom,
                 style: Theme.of(context).textTheme.bodyLarge?.copyWith(
                       fontWeight: FontWeight.bold,
                       color: Theme.of(context).colorScheme.onSurface,
@@ -42,7 +51,7 @@ class TotalAmountAndPaidData extends StatelessWidget {
               ),
               const Spacer(),
               Text(
-                'Credit Card',
+                paidFrom,
                 style: Theme.of(context).textTheme.bodyLarge?.copyWith(
                       fontWeight: FontWeight.bold,
                       color: Theme.of(context).colorScheme.onSurface,

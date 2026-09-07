@@ -10,7 +10,12 @@ import '../../core/l10n/app_localizations.dart';
 import '../../core/providers/catalog_provider.dart';
 
 class SearchResultPage extends ConsumerStatefulWidget {
-  const SearchResultPage({super.key});
+  final String? initialQuery;
+
+  const SearchResultPage({
+    super.key,
+    this.initialQuery,
+  });
 
   @override
   ConsumerState<SearchResultPage> createState() => _SearchResultPageState();
@@ -19,6 +24,16 @@ class SearchResultPage extends ConsumerStatefulWidget {
 class _SearchResultPageState extends ConsumerState<SearchResultPage> {
   final TextEditingController _controller = TextEditingController();
   String _query = '';
+
+  @override
+  void initState() {
+    super.initState();
+    // Initialize query from route parameter if provided
+    if (widget.initialQuery != null && widget.initialQuery!.isNotEmpty) {
+      _query = widget.initialQuery!;
+      _controller.text = _query;
+    }
+  }
 
   @override
   void dispose() {

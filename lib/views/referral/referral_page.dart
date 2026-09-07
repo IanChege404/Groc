@@ -154,7 +154,8 @@ class ReferralPage extends ConsumerWidget {
     );
   }
 
-  void _showCompleteDialog(BuildContext context, WidgetRef ref, String referralId) {
+  void _showCompleteDialog(
+      BuildContext context, WidgetRef ref, String referralId) {
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
@@ -182,7 +183,8 @@ class ReferralPage extends ConsumerWidget {
     );
   }
 
-  void _showCancelDialog(BuildContext context, WidgetRef ref, String referralId) {
+  void _showCancelDialog(
+      BuildContext context, WidgetRef ref, String referralId) {
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
@@ -228,7 +230,8 @@ class _ReferralCodeSection extends StatelessWidget {
         return Container(
           padding: const EdgeInsets.all(AppDefaults.padding),
           decoration: BoxDecoration(
-            color: Theme.of(context).colorScheme.primaryContainer.withOpacity(0.1),
+            color:
+                Theme.of(context).colorScheme.primaryContainer.withOpacity(0.1),
             borderRadius: BorderRadius.circular(12),
             border: Border.all(
               color: Theme.of(context).colorScheme.primary.withOpacity(0.3),

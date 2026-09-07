@@ -1,4 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../views/auth/forget_password_page.dart';
@@ -46,6 +48,7 @@ import '../../views/profile/order_tracking_screen.dart';
 import '../../views/profile/payment_method/add_new_card_page.dart';
 import '../../views/checkout/payment_selection_screen.dart';
 import '../../views/checkout/card_payment_screen.dart';
+import '../../views/checkout/web_payment_screen.dart';
 import '../../views/recipes/recipes_screen.dart';
 import '../../views/recipes/recipe_detail_screen.dart';
 import '../../views/deals/flash_deals_screen.dart';
@@ -53,6 +56,7 @@ import '../../views/loyalty/loyalty_points_screen.dart';
 import '../../views/profile/wallet_screen.dart';
 import '../../views/profile/payment_method/payment_method_page.dart';
 import '../../views/profile/profile_edit_page.dart';
+import '../../views/profile/profile_page.dart';
 import '../../views/profile/settings/change_password_page.dart';
 import '../../views/profile/settings/change_phone_number_page.dart';
 import '../../views/profile/settings/language_settings_page.dart';
@@ -74,6 +78,29 @@ import '../../core/models/recipe_model.dart';
 import 'unknown_page.dart';
 
 bool _isAuthenticated() => FirebaseAuth.instance.currentUser != null;
+
+/// Helper function to create a custom transition page with slide and fade animations
+CustomTransitionPage<T> _buildTransitionPage<T>({
+  required Widget child,
+  required String name,
+}) {
+  return CustomTransitionPage<T>(
+    name: name,
+    child: child,
+    transitionsBuilder: (context, animation, secondaryAnimation, child) {
+      return SlideTransition(
+        position: Tween(begin: const Offset(1.0, 0.0), end: Offset.zero)
+            .animate(CurvedAnimation(
+                parent: animation, curve: Curves.easeInOutCubic)),
+        child: FadeTransition(
+          opacity: CurvedAnimation(parent: animation, curve: Curves.easeIn),
+          child: child,
+        ),
+      );
+    },
+    transitionDuration: const Duration(milliseconds: 350),
+  );
+}
 
 final GoRouter appRouter = GoRouter(
   initialLocation: '/',
@@ -108,6 +135,7 @@ final GoRouter appRouter = GoRouter(
       '/settingsLocation',
       '/changePassword',
       '/changePhoneNumber',
+      '/profile',
       '/coupon',
       '/couponDetails',
       '/review',
@@ -167,11 +195,21 @@ final GoRouter appRouter = GoRouter(
     ),
     GoRoute(
       path: '/searchResult',
-      builder: (context, state) => const SearchResultPage(),
+      pageBuilder: (context, state) {
+        final extra = state.extra as Map<String, dynamic>?;
+        final query = extra?['query'] as String?;
+        return _buildTransitionPage(
+          name: 'searchResult',
+          child: SearchResultPage(initialQuery: query),
+        );
+      },
     ),
     GoRoute(
       path: '/cartPage',
-      builder: (context, state) => const CartPage(),
+      pageBuilder: (context, state) => _buildTransitionPage(
+        name: 'cartPage',
+        child: const CartPage(),
+      ),
     ),
     GoRoute(
       path: '/favouriteList',
@@ -179,30 +217,42 @@ final GoRouter appRouter = GoRouter(
     ),
     GoRoute(
       path: '/checkoutPage',
-      builder: (context, state) => const CheckoutPage(),
+      pageBuilder: (context, state) => _buildTransitionPage(
+        name: 'checkoutPage',
+        child: const CheckoutPage(),
+      ),
     ),
     GoRoute(
       path: '/deliveryMethod',
-      builder: (context, state) => const DeliveryMethodScreen(),
+      pageBuilder: (context, state) => _buildTransitionPage(
+        name: 'deliveryMethod',
+        child: const DeliveryMethodScreen(),
+      ),
     ),
     GoRoute(
       path: '/mpesaProcessing',
-      builder: (context, state) {
+      pageBuilder: (context, state) {
         final extra = state.extra as Map<String, dynamic>?;
-        return MpesaProcessingScreen(
-          amount: extra?['amount'] ?? 0.0,
-          phoneNumber: extra?['phoneNumber'] ?? '+254 XXX XXX XXX',
-          orderId: extra?['orderId'] ?? '',
+        return _buildTransitionPage(
+          name: 'mpesaProcessing',
+          child: MpesaProcessingScreen(
+            amount: extra?['amount'] ?? 0.0,
+            phoneNumber: extra?['phoneNumber'] ?? '+254 XXX XXX XXX',
+            orderId: extra?['orderId'] ?? '',
+          ),
         );
       },
     ),
     GoRoute(
       path: '/categoryDetails',
-      builder: (context, state) {
+      pageBuilder: (context, state) {
         final extra = state.extra as Map<String, dynamic>?;
-        return CategoryProductPage(
-          categoryId: extra?['categoryId'] as String?,
-          categoryName: extra?['categoryName'] as String?,
+        return _buildTransitionPage(
+          name: 'categoryDetails',
+          child: CategoryProductPage(
+            categoryId: extra?['categoryId'] as String?,
+            categoryName: extra?['categoryName'] as String?,
+          ),
         );
       },
     ),
@@ -240,10 +290,13 @@ final GoRouter appRouter = GoRouter(
     ),
     GoRoute(
       path: '/bundleProduct',
-      builder: (context, state) {
+      pageBuilder: (context, state) {
         final extra = state.extra as Map<String, dynamic>?;
-        return BundleProductDetailsPage(
-          bundle: extra?['bundle'] as BundleModel?,
+        return _buildTransitionPage(
+          name: 'bundleProduct',
+          child: BundleProductDetailsPage(
+            bundle: extra?['bundle'] as BundleModel?,
+          ),
         );
       },
     ),
@@ -253,10 +306,13 @@ final GoRouter appRouter = GoRouter(
     ),
     GoRoute(
       path: '/productDetails',
-      builder: (context, state) {
+      pageBuilder: (context, state) {
         final extra = state.extra as Map<String, dynamic>?;
-        return ProductDetailsPage(
-          product: extra?['product'] as ProductModel?,
+        return _buildTransitionPage(
+          name: 'productDetails',
+          child: ProductDetailsPage(
+            product: extra?['product'] as ProductModel?,
+          ),
         );
       },
     ),
@@ -278,9 +334,12 @@ final GoRouter appRouter = GoRouter(
     ),
     GoRoute(
       path: '/orderDetails',
-      builder: (context, state) {
+      pageBuilder: (context, state) {
         final extra = state.extra as Map<String, dynamic>?;
-        return OrderDetailsPage(orderId: extra?['orderId'] ?? '');
+        return _buildTransitionPage(
+          name: 'orderDetails',
+          child: OrderDetailsPage(orderId: extra?['orderId'] ?? ''),
+        );
       },
     ),
     GoRoute(
@@ -298,15 +357,24 @@ final GoRouter appRouter = GoRouter(
     ),
     GoRoute(
       path: '/profileEdit',
-      builder: (context, state) => const ProfileEditPage(),
+      pageBuilder: (context, state) => _buildTransitionPage(
+        name: 'profileEdit',
+        child: const ProfileEditPage(),
+      ),
     ),
     GoRoute(
       path: '/newAddress',
-      builder: (context, state) => const NewAddressPage(),
+      pageBuilder: (context, state) => _buildTransitionPage(
+        name: 'newAddress',
+        child: const NewAddressPage(),
+      ),
     ),
     GoRoute(
       path: '/deliveryAddress',
-      builder: (context, state) => const AddressPage(),
+      pageBuilder: (context, state) => _buildTransitionPage(
+        name: 'deliveryAddress',
+        child: const AddressPage(),
+      ),
     ),
     GoRoute(
       path: '/notifications',
@@ -318,11 +386,17 @@ final GoRouter appRouter = GoRouter(
     ),
     GoRoute(
       path: '/settings',
-      builder: (context, state) => const SettingsPage(),
+      pageBuilder: (context, state) => _buildTransitionPage(
+        name: 'settings',
+        child: const SettingsPage(),
+      ),
     ),
     GoRoute(
       path: '/settingsLanguage',
-      builder: (context, state) => const LanguageSettingsPage(),
+      pageBuilder: (context, state) => _buildTransitionPage(
+        name: 'settingsLanguage',
+        child: const LanguageSettingsPage(),
+      ),
     ),
     GoRoute(
       path: '/settingsLocation',
@@ -415,6 +489,28 @@ final GoRouter appRouter = GoRouter(
       },
     ),
     GoRoute(
+      path: '/stripePayment',
+      builder: (context, state) {
+        final extra = state.extra as Map<String, dynamic>?;
+        return WebPaymentScreen(
+          provider: WebPaymentProvider.stripe,
+          amount: (extra?['amount'] as num?)?.toDouble() ?? 0.0,
+          orderId: extra?['orderId'] as String? ?? '',
+        );
+      },
+    ),
+    GoRoute(
+      path: '/paypalPayment',
+      builder: (context, state) {
+        final extra = state.extra as Map<String, dynamic>?;
+        return WebPaymentScreen(
+          provider: WebPaymentProvider.paypal,
+          amount: (extra?['amount'] as num?)?.toDouble() ?? 0.0,
+          orderId: extra?['orderId'] as String? ?? '',
+        );
+      },
+    ),
+    GoRoute(
       path: '/recipes',
       builder: (context, state) => const RecipesScreen(),
     ),
@@ -473,6 +569,13 @@ final GoRouter appRouter = GoRouter(
     GoRoute(
       path: '/myBundles',
       builder: (context, state) => const MyBundlesPage(),
+    ),
+    GoRoute(
+      path: '/profile',
+      pageBuilder: (context, state) => _buildTransitionPage(
+        name: 'profile',
+        child: const ProfilePage(),
+      ),
     ),
   ],
 );

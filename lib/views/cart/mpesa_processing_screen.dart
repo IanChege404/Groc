@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 
 import '../../core/constants/app_colors.dart';
 import '../../core/constants/app_defaults.dart';
+import '../../core/l10n/app_localizations.dart';
 
 /// M-Pesa STK Push Processing Screen
 ///
@@ -25,13 +26,9 @@ class _MpesaProcessingScreenState extends State<MpesaProcessingScreen>
   Timer? _timer;
   bool _canResend = false;
   late AnimationController _pulseController;
-  late AnimationController _rotateController;
-  late AnimationController _waveController;
   late Animation<double> _pulseAnimation;
-  late Animation<double> _rotateAnimation;
-  late Animation<double> _waveAnimation;
 
-  static const int _countdownSeconds = 120; // 2 minutes
+  static const int _countdownSeconds = 120;
 
   @override
   void initState() {
@@ -42,35 +39,13 @@ class _MpesaProcessingScreenState extends State<MpesaProcessingScreen>
   }
 
   void _setupAnimations() {
-    // Pulse animation
     _pulseController = AnimationController(
       duration: const Duration(milliseconds: 1500),
       vsync: this,
-    )..repeat();
+    )..repeat(reverse: true);
 
-    _pulseAnimation = Tween<double>(begin: 0.8, end: 1.2).animate(
+    _pulseAnimation = Tween<double>(begin: 0.85, end: 1.15).animate(
       CurvedAnimation(parent: _pulseController, curve: Curves.easeInOut),
-    );
-
-    // Rotate animation for logo
-    _rotateController = AnimationController(
-      duration: const Duration(milliseconds: 3000),
-      vsync: this,
-    )..repeat();
-
-    _rotateAnimation = Tween<double>(
-      begin: 0,
-      end: 1,
-    ).animate(CurvedAnimation(parent: _rotateController, curve: Curves.linear));
-
-    // Wave animation for phone icon
-    _waveController = AnimationController(
-      duration: const Duration(milliseconds: 1200),
-      vsync: this,
-    )..repeat();
-
-    _waveAnimation = Tween<double>(begin: 0, end: 1).animate(
-      CurvedAnimation(parent: _waveController, curve: Curves.easeInOut),
     );
   }
 
@@ -99,7 +74,6 @@ class _MpesaProcessingScreenState extends State<MpesaProcessingScreen>
 
   void _cancel() {
     _timer?.cancel();
-    _pulseController.dispose();
     Navigator.of(context).pop();
   }
 
@@ -113,13 +87,12 @@ class _MpesaProcessingScreenState extends State<MpesaProcessingScreen>
   void dispose() {
     _timer?.cancel();
     _pulseController.dispose();
-    _rotateController.dispose();
-    _waveController.dispose();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     final isDarkMode = Theme.of(context).brightness == Brightness.dark;
 
     return Scaffold(
@@ -134,98 +107,51 @@ class _MpesaProcessingScreenState extends State<MpesaProcessingScreen>
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               const Spacer(flex: 2),
-
-              // M-Pesa Logo / Identity with rotation
-              RotationTransition(
-                turns: _rotateAnimation,
-                child: Container(
-                  width: 100,
-                  height: 100,
-                  decoration: const BoxDecoration(
-                    shape: BoxShape.circle,
-                    color: Color(0xFF00A651), // M-Pesa Green
-                  ),
-                  child: Center(
-                    child: Text(
-                      'M',
-                      style: TextStyle(
-                        color: Theme.of(context).colorScheme.onPrimary,
-                        fontSize: 48,
-                        fontWeight: FontWeight.bold,
-                        fontFamily: 'Sora',
-                      ),
+              Container(
+                width: 100,
+                height: 100,
+                decoration: const BoxDecoration(
+                  shape: BoxShape.circle,
+                  color: Color(0xFF00A651),
+                ),
+                child: Center(
+                  child: Text(
+                    'M',
+                    style: TextStyle(
+                      color: Theme.of(context).colorScheme.onPrimary,
+                      fontSize: 48,
+                      fontWeight: FontWeight.bold,
                     ),
                   ),
                 ),
               ),
-
               const SizedBox(height: AppDefaults.spacingXl),
-
-              // Pulsing Phone Icon with wave effect
-              Stack(
-                alignment: Alignment.center,
-                children: [
-                  // Outer wave circle
-                  ScaleTransition(
-                    scale: Tween<double>(begin: 1.0, end: 1.8).animate(
-                      CurvedAnimation(
-                        parent: _waveController,
-                        curve: Curves.easeOut,
-                      ),
-                    ),
-                    child: Container(
-                      width: 120,
-                      height: 120,
-                      decoration: BoxDecoration(
-                        shape: BoxShape.circle,
-                        border: Border.all(
-                          color:
-                              Theme.of(context).colorScheme.primary.withValues(
-                                    alpha: (1 - _waveAnimation.value) * 0.3,
-                                  ),
-                          width: 2,
-                        ),
-                      ),
-                    ),
-                  ),
-                  // Phone icon with pulse
-                  ScaleTransition(
-                    scale: _pulseAnimation,
-                    child: Icon(
-                      Icons.phone,
-                      size: 80,
-                      color: Theme.of(context).colorScheme.primary,
-                    ),
-                  ),
-                ],
+              ScaleTransition(
+                scale: _pulseAnimation,
+                child: Icon(
+                  Icons.phone,
+                  size: 80,
+                  color: Theme.of(context).colorScheme.primary,
+                ),
               ),
-
               const SizedBox(height: AppDefaults.spacingXl),
-
-              // "Check your phone" Message
               Text(
-                'Check Your Phone',
+                l10n.mpesaCheckYourPhone,
                 style: Theme.of(context).textTheme.displayMedium,
                 textAlign: TextAlign.center,
               ),
-
               const SizedBox(height: AppDefaults.spacingMd),
-
-              // Instruction Subtext
               Padding(
                 padding: const EdgeInsets.symmetric(
                   horizontal: AppDefaults.spacingMd,
                 ),
                 child: Text(
-                  'We\'ve sent a payment request of ${widget.amount ?? 'KES 1,400'} to ${widget.phoneNumber ?? '+254 7XX XXX XXX'}. Enter your M-Pesa PIN to complete.',
+                  '${l10n.mpesaWeVeSent(widget.phoneNumber ?? '')}\n\n${l10n.mpesaEnterPin}',
                   style: Theme.of(context).textTheme.bodyLarge,
                   textAlign: TextAlign.center,
                 ),
               ),
-
               const SizedBox(height: AppDefaults.spacingXl),
-
-              // Countdown Timer
               Container(
                 padding: const EdgeInsets.symmetric(
                   horizontal: AppDefaults.spacingLg,
@@ -240,7 +166,7 @@ class _MpesaProcessingScreenState extends State<MpesaProcessingScreen>
                 child: Column(
                   children: [
                     Text(
-                      'Request expires in',
+                      l10n.mpesaTimeoutTitle,
                       style: Theme.of(context).textTheme.bodySmall,
                     ),
                     const SizedBox(height: AppDefaults.spacingSm),
@@ -254,52 +180,23 @@ class _MpesaProcessingScreenState extends State<MpesaProcessingScreen>
                   ],
                 ),
               ),
-
               const SizedBox(height: AppDefaults.spacingXl),
-
               const Spacer(flex: 1),
-
-              // Action Buttons
               SizedBox(
                 width: double.infinity,
                 height: 52,
                 child: ElevatedButton(
                   onPressed: _canResend ? _resendRequest : null,
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: _canResend
-                        ? Theme.of(context).colorScheme.primary
-                        : Theme.of(context).disabledColor,
-                    foregroundColor: Theme.of(context).colorScheme.onPrimary,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: AppDefaults.borderRadius,
-                    ),
-                    disabledBackgroundColor: Theme.of(context).disabledColor,
-                  ),
                   child: Text(
-                    _canResend ? 'Resend Request' : 'Waiting...',
-                    style: Theme.of(context).textTheme.labelLarge?.copyWith(
-                          color: Theme.of(context).colorScheme.onPrimary,
-                        ),
+                    _canResend ? l10n.mpesaResend : l10n.waiting,
                   ),
                 ),
               ),
-
               const SizedBox(height: AppDefaults.spacingMd),
-
-              // Cancel Button
-              GestureDetector(
-                onTap: _cancel,
-                child: Center(
-                  child: Text(
-                    'Cancel',
-                    style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                          color: Theme.of(context).colorScheme.primary,
-                          decoration: TextDecoration.underline,
-                        ),
-                  ),
-                ),
+              TextButton(
+                onPressed: _cancel,
+                child: Text(l10n.cancel),
               ),
-
               const SizedBox(height: AppDefaults.spacingLg),
             ],
           ),

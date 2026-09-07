@@ -6,7 +6,9 @@ import '../../core/components/buy_now_row_button.dart';
 import '../../core/components/price_and_quantity.dart';
 import '../../core/components/product_images_slider.dart';
 import '../../core/components/review_row_button.dart';
+import '../../core/constants/app_colors.dart';
 import '../../core/constants/app_defaults.dart';
+import '../../core/l10n/app_localizations.dart';
 import '../../core/models/cart_item_model.dart';
 import '../../core/models/product_model.dart';
 import '../../core/providers/cart_provider.dart';
@@ -42,18 +44,15 @@ class _ProductDetailsPageState extends ConsumerState<ProductDetailsPage> {
 
   bool _isProductInCart(List<CartItemModel> items) {
     final product = _product;
-    if (product == null) {
-      return false;
-    }
-
+    if (product == null) return false;
     return items.any((item) => item.productId == product.id);
   }
 
   CartItemModel _buildCartItem({required int quantity}) {
     final product = _product!;
     return CartItemModel(
-      id: '', // Deterministic ID (userId_productId) is set by the provider
-      userId: '', // Will be set by the provider
+      id: '',
+      userId: '',
       productId: product.id,
       quantity: quantity,
       priceAtTimeOfAdd: product.price,
@@ -64,12 +63,13 @@ class _ProductDetailsPageState extends ConsumerState<ProductDetailsPage> {
 
   Future<void> _addProductToCart({required int quantity}) async {
     final product = _product;
+    final l10n = AppLocalizations.of(context)!;
     if (product == null) {
-      _showSnackBar('Product information is missing');
+      _showSnackBar(l10n.productInformationMissing);
       return;
     }
     if (product.stock <= 0) {
-      _showSnackBar('${product.name} is out of stock');
+      _showSnackBar('${product.name} ${l10n.outOfStock}');
       return;
     }
 
@@ -80,8 +80,9 @@ class _ProductDetailsPageState extends ConsumerState<ProductDetailsPage> {
 
   Future<void> _toggleCart() async {
     final product = _product;
+    final l10n = AppLocalizations.of(context)!;
     if (product == null) {
-      _showSnackBar('Product information is missing');
+      _showSnackBar(l10n.productInformationMissing);
       return;
     }
 
@@ -97,7 +98,7 @@ class _ProductDetailsPageState extends ConsumerState<ProductDetailsPage> {
           .read(cartItemsProvider.notifier)
           .removeFromCart(existingItem.id);
       if (mounted) {
-        _showSnackBar('${product.name} removed from cart');
+        _showSnackBar('${product.name} ${l10n.removedFromWishlist}');
       }
       return;
     }
@@ -105,13 +106,13 @@ class _ProductDetailsPageState extends ConsumerState<ProductDetailsPage> {
     try {
       await _addProductToCart(quantity: _selectedQuantity);
       if (mounted) {
-        _showSnackBar('${product.name} added to cart');
+        _showSnackBar('${product.name} ${l10n.addToCart}');
       }
     } catch (e) {
       if (mounted) {
         _showSnackBar(
-          'Failed to add item to cart: $e',
-          backgroundColor: Colors.red,
+          l10n.failedToLoadProducts,
+          backgroundColor: AppColors.error,
         );
       }
     }
@@ -119,8 +120,9 @@ class _ProductDetailsPageState extends ConsumerState<ProductDetailsPage> {
 
   Future<void> _buyNow() async {
     final product = _product;
+    final l10n = AppLocalizations.of(context)!;
     if (product == null) {
-      _showSnackBar('Product information is missing');
+      _showSnackBar(l10n.productInformationMissing);
       return;
     }
 
@@ -136,16 +138,13 @@ class _ProductDetailsPageState extends ConsumerState<ProductDetailsPage> {
         await _addProductToCart(quantity: _selectedQuantity);
       }
 
-      if (!mounted) {
-        return;
-      }
-
+      if (!mounted) return;
       context.push('/checkoutPage');
     } catch (e) {
       if (mounted) {
         _showSnackBar(
-          'Unable to start checkout: $e',
-          backgroundColor: Colors.red,
+          l10n.failedToLoadProducts,
+          backgroundColor: AppColors.error,
         );
       }
     }
@@ -154,6 +153,7 @@ class _ProductDetailsPageState extends ConsumerState<ProductDetailsPage> {
   @override
   Widget build(BuildContext context) {
     final product = _product;
+    final l10n = AppLocalizations.of(context)!;
     final cartState = ref.watch(cartItemsProvider);
     final isInCart = cartState.maybeWhen(
       data: (items) => _isProductInCart(items),
@@ -170,7 +170,7 @@ class _ProductDetailsPageState extends ConsumerState<ProductDetailsPage> {
       return Scaffold(
         appBar: AppBar(
           leading: const AppBackButton(),
-          title: const Text('Product Details'),
+          title: Text(l10n.productDetailsTitle),
         ),
         body: Center(
           child: Padding(
@@ -185,7 +185,7 @@ class _ProductDetailsPageState extends ConsumerState<ProductDetailsPage> {
                 ),
                 const SizedBox(height: 16),
                 Text(
-                  'Product information is missing',
+                  l10n.productInformationMissing,
                   textAlign: TextAlign.center,
                   style: Theme.of(context).textTheme.titleMedium,
                 ),
@@ -228,16 +228,16 @@ class _ProductDetailsPageState extends ConsumerState<ProductDetailsPage> {
                           ),
                     ),
                     const SizedBox(height: 8),
-                    Text('Weight: ${product.weight}'),
+                    Text('${l10n.weight}: ${product.weight}'),
                     const SizedBox(height: 4),
                     Text(
                       product.stock > 0
-                          ? 'In Stock (${product.stock} available)'
-                          : 'Out of Stock',
+                          ? l10n.stockAvailable(product.stock)
+                          : l10n.outOfStock,
                       style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                             color: product.stock > 0
-                                ? Colors.green
-                                : Colors.red,
+                                ? AppColors.success
+                                : AppColors.error,
                             fontWeight: FontWeight.w600,
                           ),
                     ),
@@ -266,7 +266,7 @@ class _ProductDetailsPageState extends ConsumerState<ProductDetailsPage> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    'Product Details',
+                    l10n.productDetails,
                     style: Theme.of(context).textTheme.bodyLarge?.copyWith(
                           fontWeight: FontWeight.bold,
                           color: Theme.of(context).colorScheme.onSurface,
@@ -282,7 +282,6 @@ class _ProductDetailsPageState extends ConsumerState<ProductDetailsPage> {
             Padding(
               padding: const EdgeInsets.symmetric(
                 horizontal: AppDefaults.padding,
-                // vertical: AppDefaults.padding,
               ),
               child: Column(
                 children: [

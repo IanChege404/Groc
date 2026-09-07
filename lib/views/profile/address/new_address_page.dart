@@ -1,12 +1,17 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+
 import '../../../core/components/app_radio.dart';
+import '../../../core/components/app_back_button.dart';
 import '../../../core/constants/app_colors.dart';
 import '../../../core/constants/app_defaults.dart';
-
-import '../../../core/components/app_back_button.dart';
+import '../../../core/l10n/app_localizations.dart';
+import '../../../core/models/map_location.dart';
+import '../../../core/providers/auth_provider.dart';
 import '../../../core/services/firestore_service.dart';
-import '../../../core/providers/user_provider.dart';
+import '../../../views/profile/address/components/map_preview_widget.dart';
+import '../../../views/profile/address/map_location_picker.dart';
 
 class NewAddressPage extends ConsumerStatefulWidget {
   const NewAddressPage({super.key});
@@ -18,7 +23,6 @@ class NewAddressPage extends ConsumerStatefulWidget {
 class _NewAddressPageState extends ConsumerState<NewAddressPage> {
   final _formKey = GlobalKey<FormState>();
   final _firestoreService = FirestoreService();
-  final _fullNameController = TextEditingController();
   final _phoneController = TextEditingController();
   final _address1Controller = TextEditingController();
   final _address2Controller = TextEditingController();
@@ -27,10 +31,11 @@ class _NewAddressPageState extends ConsumerState<NewAddressPage> {
   final _zipController = TextEditingController();
   bool _isDefault = true;
   bool _isSaving = false;
+  MapLocation? _selectedLocation;
+  String _selectedLabel = 'Home';
 
   @override
   void dispose() {
-    _fullNameController.dispose();
     _phoneController.dispose();
     _address1Controller.dispose();
     _address2Controller.dispose();
@@ -40,50 +45,87 @@ class _NewAddressPageState extends ConsumerState<NewAddressPage> {
     super.dispose();
   }
 
+  Future<void> _openMapPicker() async {
+    final result = await Navigator.push<MapLocation>(
+      context,
+      MaterialPageRoute(builder: (context) => const MapLocationPicker()),
+    );
+    if (result == null || !mounted) return;
+
+    setState(() {
+      _selectedLocation = result;
+      if (result.street != null && result.street!.isNotEmpty) {
+        _address1Controller.text = result.street!;
+      }
+      if (result.city != null && result.city!.isNotEmpty) {
+        _cityController.text = result.city!;
+      }
+      if (result.state != null && result.state!.isNotEmpty) {
+        _stateController.text = result.state!;
+      }
+      if (result.zipCode != null && result.zipCode!.isNotEmpty) {
+        _zipController.text = result.zipCode!;
+      }
+    });
+  }
+
   Future<void> _saveAddress() async {
     if (!(_formKey.currentState?.validate() ?? false) || _isSaving) {
       return;
     }
 
-    /// Get user ID from the provider instead of FirebaseAuth
-    final userProfile = ref.read(userProfileProvider);
+    final userId = ref.read(authProvider).value ??
+        FirebaseAuth.instance.currentUser?.uid;
 
-    String? userId;
-    userProfile.whenData((user) {
-      userId = user.id;
-    });
-
-    if (userId == null || userId!.isEmpty) {
+    if (userId == null || userId.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Please sign in again to save address')),
+        SnackBar(
+          content:
+              Text(AppLocalizations.of(context)!.pleaseSignInAgainToSave),
+        ),
       );
       return;
     }
 
     setState(() => _isSaving = true);
-    await _firestoreService.addUserAddress(userId!, {
-      'label': _fullNameController.text.trim(),
-      'phone': _phoneController.text.trim(),
-      'line1': _address1Controller.text.trim(),
-      'line2': _address2Controller.text.trim(),
-      'city': _cityController.text.trim(),
-      'state': _stateController.text.trim(),
-      'zipCode': _zipController.text.trim(),
-      'isDefault': _isDefault,
-    });
+    try {
+      await _firestoreService.addUserAddress(userId, {
+        'label': _selectedLabel,
+        'phone': _phoneController.text.trim(),
+        'line1': _address1Controller.text.trim(),
+        'line2': _address2Controller.text.trim(),
+        'city': _cityController.text.trim(),
+        'state': _stateController.text.trim(),
+        'zipCode': _zipController.text.trim(),
+        'isDefault': _isDefault,
+        if (_selectedLocation != null) ...{
+          'latitude': _selectedLocation!.latitude,
+          'longitude': _selectedLocation!.longitude,
+        },
+      });
 
-    if (!mounted) return;
-    setState(() => _isSaving = false);
-    Navigator.pop(context, true);
+      if (!mounted) return;
+      Navigator.pop(context, true);
+    } catch (e) {
+      if (!mounted) return;
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Failed to save address: $e')),
+      );
+    } finally {
+      if (mounted) {
+        setState(() => _isSaving = false);
+      }
+    }
   }
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     return Scaffold(
       backgroundColor: AppColors.cardColor,
       appBar: AppBar(
         leading: const AppBackButton(),
-        title: const Text('New Address'),
+        title: Text(l10n.newAddress),
       ),
       body: SingleChildScrollView(
         child: Container(
@@ -98,19 +140,64 @@ class _NewAddressPageState extends ConsumerState<NewAddressPage> {
           ),
           child: Form(
             key: _formKey,
+            autovalidateMode: AutovalidateMode.onUserInteraction,
             child: Column(
               mainAxisSize: MainAxisSize.min,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const Text('Full Name'),
+                ElevatedButton.icon(
+                  onPressed: _openMapPicker,
+                  icon: const Icon(Icons.map_outlined),
+                  label: Text(l10n.pickLocationOnMap),
+                  style: ElevatedButton.styleFrom(
+                    minimumSize: const Size(double.infinity, 48),
+                  ),
+                ),
+                const SizedBox(height: AppDefaults.padding),
+                if (_selectedLocation != null)
+                  Column(
+                    children: [
+                      MapPreviewWidget(
+                        latitude: _selectedLocation!.latitude,
+                        longitude: _selectedLocation!.longitude,
+                        formattedAddress: _selectedLocation!.formattedAddress,
+                        height: 120,
+                      ),
+                      const SizedBox(height: 8),
+                      Text(
+                        _selectedLocation!.formattedAddress,
+                        style: Theme.of(context).textTheme.bodySmall,
+                        maxLines: 2,
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                      const SizedBox(height: AppDefaults.padding),
+                    ],
+                  ),
+                const Text('Address Label'),
                 const SizedBox(height: 8),
-                TextFormField(
-                  controller: _fullNameController,
-                  keyboardType: TextInputType.text,
-                  textInputAction: TextInputAction.next,
-                  validator: (value) => (value == null || value.trim().isEmpty)
-                      ? 'Full name is required'
+                DropdownButtonFormField<String>(
+                  initialValue: _selectedLabel,
+                  decoration: InputDecoration(
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                    contentPadding:
+                        const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                  ),
+                  items: const [
+                    DropdownMenuItem(value: 'Home', child: Text('Home')),
+                    DropdownMenuItem(value: 'Work', child: Text('Work')),
+                    DropdownMenuItem(value: 'Office', child: Text('Office')),
+                    DropdownMenuItem(value: 'Other', child: Text('Other')),
+                  ],
+                  validator: (value) => (value == null || value.isEmpty)
+                      ? 'Please select a label'
                       : null,
+                  onChanged: (value) {
+                    if (value != null) {
+                      setState(() => _selectedLabel = value);
+                    }
+                  },
                 ),
                 const SizedBox(height: AppDefaults.padding),
                 const Text('Phone Number'),
@@ -119,6 +206,14 @@ class _NewAddressPageState extends ConsumerState<NewAddressPage> {
                   controller: _phoneController,
                   keyboardType: TextInputType.phone,
                   textInputAction: TextInputAction.next,
+                  decoration: InputDecoration(
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                    contentPadding:
+                        const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                    hintText: 'Enter your phone number',
+                  ),
                   validator: (value) => (value == null || value.trim().isEmpty)
                       ? 'Phone number is required'
                       : null,
@@ -130,6 +225,14 @@ class _NewAddressPageState extends ConsumerState<NewAddressPage> {
                   controller: _address1Controller,
                   keyboardType: TextInputType.text,
                   textInputAction: TextInputAction.next,
+                  decoration: InputDecoration(
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                    contentPadding:
+                        const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                    hintText: 'Enter street address',
+                  ),
                   validator: (value) => (value == null || value.trim().isEmpty)
                       ? 'Address line 1 is required'
                       : null,
@@ -141,6 +244,14 @@ class _NewAddressPageState extends ConsumerState<NewAddressPage> {
                   controller: _address2Controller,
                   keyboardType: TextInputType.text,
                   textInputAction: TextInputAction.next,
+                  decoration: InputDecoration(
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                    contentPadding:
+                        const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                    hintText: 'Apartment, suite, etc. (optional)',
+                  ),
                 ),
                 const SizedBox(height: AppDefaults.padding),
                 const Text('City'),
@@ -149,6 +260,14 @@ class _NewAddressPageState extends ConsumerState<NewAddressPage> {
                   controller: _cityController,
                   keyboardType: TextInputType.text,
                   textInputAction: TextInputAction.next,
+                  decoration: InputDecoration(
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                    contentPadding:
+                        const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                    hintText: 'Enter city',
+                  ),
                   validator: (value) => (value == null || value.trim().isEmpty)
                       ? 'City is required'
                       : null,
@@ -166,6 +285,14 @@ class _NewAddressPageState extends ConsumerState<NewAddressPage> {
                             controller: _stateController,
                             keyboardType: TextInputType.text,
                             textInputAction: TextInputAction.next,
+                            decoration: InputDecoration(
+                              border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(8),
+                              ),
+                              contentPadding: const EdgeInsets.symmetric(
+                                  horizontal: 12, vertical: 8),
+                              hintText: 'State',
+                            ),
                             validator: (value) =>
                                 (value == null || value.trim().isEmpty)
                                     ? 'State is required'
@@ -185,10 +312,14 @@ class _NewAddressPageState extends ConsumerState<NewAddressPage> {
                             controller: _zipController,
                             keyboardType: TextInputType.number,
                             textInputAction: TextInputAction.done,
-                            validator: (value) =>
-                                (value == null || value.trim().isEmpty)
-                                    ? 'Zip code is required'
-                                    : null,
+                            decoration: InputDecoration(
+                              border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(8),
+                              ),
+                              contentPadding: const EdgeInsets.symmetric(
+                                  horizontal: 12, vertical: 8),
+                              hintText: 'Zip code',
+                            ),
                           ),
                         ],
                       ),
@@ -203,7 +334,7 @@ class _NewAddressPageState extends ConsumerState<NewAddressPage> {
                       child: AppRadio(isActive: _isDefault),
                     ),
                     const SizedBox(width: AppDefaults.padding),
-                    const Text('Make Default Shipping Address'),
+                    Text(l10n.makeDefaultShippingAddress),
                   ],
                 ),
                 const SizedBox(height: AppDefaults.padding),
@@ -211,7 +342,7 @@ class _NewAddressPageState extends ConsumerState<NewAddressPage> {
                   width: double.infinity,
                   child: ElevatedButton(
                     onPressed: _isSaving ? null : _saveAddress,
-                    child: Text(_isSaving ? 'Saving...' : 'Save Address'),
+                    child: Text(_isSaving ? l10n.saving : l10n.saveAddress),
                   ),
                 ),
               ],

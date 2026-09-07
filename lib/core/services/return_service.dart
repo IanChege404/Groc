@@ -6,9 +6,8 @@ class ReturnService {
 
   Future<String> initializeReturn(ReturnRequestModel request) async {
     try {
-      final docRef = await _firestore
-          .collection('return_requests')
-          .add(request.toMap());
+      final docRef =
+          await _firestore.collection('return_requests').add(request.toMap());
       return docRef.id;
     } catch (e) {
       throw Exception('Failed to initialize return: $e');
@@ -52,8 +51,7 @@ class ReturnService {
     });
   }
 
-  Future<void> updateReturnStatus(
-      String returnId, ReturnStatus status) async {
+  Future<void> updateReturnStatus(String returnId, ReturnStatus status) async {
     try {
       final updates = <String, dynamic>{
         'status': status.value,

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../../../core/constants/constants.dart';
+import '../../../core/l10n/app_localizations.dart';
 import '../../../core/services/firestore_auth_service.dart';
 import 'profile_list_tile.dart';
 import 'package:go_router/go_router.dart';
@@ -18,6 +19,7 @@ class ProfileMenuOptions extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     return Container(
       margin: const EdgeInsets.all(AppDefaults.padding),
       padding: const EdgeInsets.all(AppDefaults.padding),
@@ -29,31 +31,27 @@ class ProfileMenuOptions extends StatelessWidget {
       child: Column(
         children: [
           ProfileListTile(
-            title: 'My Profile',
-            icon: AppIcons.profilePerson,
-            onTap: () => context.push('/profileEdit')
-          ),
+              title: l10n.myProfile,
+              icon: AppIcons.profilePerson,
+              onTap: () => context.push('/profileEdit')),
           const Divider(thickness: 0.1),
           ProfileListTile(
-            title: 'Notification',
-            icon: AppIcons.profileNotification,
-            onTap: () => context.push('/notifications')
-          ),
+              title: l10n.notifications,
+              icon: AppIcons.profileNotification,
+              onTap: () => context.push('/notifications')),
           const Divider(thickness: 0.1),
           ProfileListTile(
-            title: 'Setting',
-            icon: AppIcons.profileSetting,
-            onTap: () => context.push('/settings')
-          ),
+              title: l10n.settings,
+              icon: AppIcons.profileSetting,
+              onTap: () => context.push('/settings')),
           const Divider(thickness: 0.1),
           ProfileListTile(
-            title: 'Payment',
-            icon: AppIcons.profilePayment,
-            onTap: () => context.push('/paymentMethod')
-          ),
+              title: l10n.paymentMethods,
+              icon: AppIcons.profilePayment,
+              onTap: () => context.push('/paymentMethod')),
           const Divider(thickness: 0.1),
           ProfileListTile(
-            title: 'Logout',
+            title: l10n.logout,
             icon: AppIcons.profileLogout,
             onTap: () => _logout(context),
           ),

@@ -22,7 +22,7 @@ class OrderEmpty extends StatelessWidget {
             child: AspectRatio(
               aspectRatio: 1 / 1,
               child: Semantics(
-                label: l10n.translate('noOrdersYet'),
+                label: l10n.noOrdersYet,
                 child: const NetworkImageWithLoader(
                   'https://i.imgur.com/EMI82tU.png',
                   fit: BoxFit.contain,

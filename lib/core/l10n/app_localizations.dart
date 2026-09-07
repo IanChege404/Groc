@@ -416,6 +416,144 @@ abstract class AppLocalizations {
   /// **'Phone verification failed. Please try again.'**
   String get phoneVerificationFailed;
 
+  /// No description provided for @newPassword.
+  ///
+  /// In en, this message translates to:
+  /// **'New Password'**
+  String get newPassword;
+
+  /// No description provided for @addNewPassword.
+  ///
+  /// In en, this message translates to:
+  /// **'Add New Password'**
+  String get addNewPassword;
+
+  /// No description provided for @done.
+  ///
+  /// In en, this message translates to:
+  /// **'Done'**
+  String get done;
+
+  /// No description provided for @passwordsDoNotMatch.
+  ///
+  /// In en, this message translates to:
+  /// **'Passwords do not match'**
+  String get passwordsDoNotMatch;
+
+  /// No description provided for @passwordTooShort.
+  ///
+  /// In en, this message translates to:
+  /// **'Password must be at least 8 characters'**
+  String get passwordTooShort;
+
+  /// No description provided for @currentPassword.
+  ///
+  /// In en, this message translates to:
+  /// **'Current Password'**
+  String get currentPassword;
+
+  /// No description provided for @updatePassword.
+  ///
+  /// In en, this message translates to:
+  /// **'Update Password'**
+  String get updatePassword;
+
+  /// No description provided for @passwordUpdatedSuccess.
+  ///
+  /// In en, this message translates to:
+  /// **'Password updated successfully'**
+  String get passwordUpdatedSuccess;
+
+  /// No description provided for @passwordUpdateFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Password update failed'**
+  String get passwordUpdateFailed;
+
+  /// No description provided for @pleaseSignInAgain.
+  ///
+  /// In en, this message translates to:
+  /// **'Please sign in again'**
+  String get pleaseSignInAgain;
+
+  /// No description provided for @errorUpdatingPassword.
+  ///
+  /// In en, this message translates to:
+  /// **'Error updating password'**
+  String get errorUpdatingPassword;
+
+  /// No description provided for @showPassword.
+  ///
+  /// In en, this message translates to:
+  /// **'Show password'**
+  String get showPassword;
+
+  /// No description provided for @hidePassword.
+  ///
+  /// In en, this message translates to:
+  /// **'Hide password'**
+  String get hidePassword;
+
+  /// No description provided for @passwordResetLinkSent.
+  ///
+  /// In en, this message translates to:
+  /// **'Password reset link sent to your phone'**
+  String get passwordResetLinkSent;
+
+  /// No description provided for @failedToSendResetLink.
+  ///
+  /// In en, this message translates to:
+  /// **'Failed to send reset link. Please try again.'**
+  String get failedToSendResetLink;
+
+  /// No description provided for @googleSignInSuccess.
+  ///
+  /// In en, this message translates to:
+  /// **'Signed in with Google'**
+  String get googleSignInSuccess;
+
+  /// No description provided for @googleSignInFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Sign in failed. Please try again.'**
+  String get googleSignInFailed;
+
+  /// No description provided for @appleSignInComingSoon.
+  ///
+  /// In en, this message translates to:
+  /// **'Apple Sign-In coming soon'**
+  String get appleSignInComingSoon;
+
+  /// No description provided for @otpVerificationComingSoon.
+  ///
+  /// In en, this message translates to:
+  /// **'OTP verification coming soon'**
+  String get otpVerificationComingSoon;
+
+  /// No description provided for @loginWithEmail.
+  ///
+  /// In en, this message translates to:
+  /// **'Login With Email'**
+  String get loginWithEmail;
+
+  /// No description provided for @groceryShop.
+  ///
+  /// In en, this message translates to:
+  /// **'grocery shop'**
+  String get groceryShop;
+
+  /// No description provided for @passwordRequired.
+  ///
+  /// In en, this message translates to:
+  /// **'Password is required'**
+  String get passwordRequired;
+
+  /// No description provided for @passwordMustHaveSpecialChar.
+  ///
+  /// In en, this message translates to:
+  /// **'Password must have at least one special character'**
+  String get passwordMustHaveSpecialChar;
+
   /// No description provided for @fullName.
   ///
   /// In en, this message translates to:
@@ -917,13 +1055,13 @@ abstract class AppLocalizations {
   /// No description provided for @standardDelivery.
   ///
   /// In en, this message translates to:
-  /// **'Standard Delivery (2-4 days)'**
+  /// **'Standard Delivery'**
   String get standardDelivery;
 
   /// No description provided for @expressDelivery.
   ///
   /// In en, this message translates to:
-  /// **'Express Delivery (Next day)'**
+  /// **'Express Delivery'**
   String get expressDelivery;
 
   /// No description provided for @sameDayDelivery.
@@ -941,7 +1079,7 @@ abstract class AppLocalizations {
   /// No description provided for @free.
   ///
   /// In en, this message translates to:
-  /// **'Free'**
+  /// **'FREE'**
   String get free;
 
   /// No description provided for @reviewOrder.
@@ -1007,8 +1145,8 @@ abstract class AppLocalizations {
   /// No description provided for @requestExpiresIn.
   ///
   /// In en, this message translates to:
-  /// **'Request expires in {minutes}:{seconds}'**
-  String requestExpiresIn(Object minutes, Object seconds);
+  /// **'Request expires in'**
+  String get requestExpiresIn;
 
   /// No description provided for @tryAgain.
   ///
@@ -1037,8 +1175,8 @@ abstract class AppLocalizations {
   /// No description provided for @confirmPaymentMessage.
   ///
   /// In en, this message translates to:
-  /// **'You will be charged KES {amount} via M-Pesa to {phoneNumber}. Do you want to continue?'**
-  String confirmPaymentMessage(Object amount, Object phoneNumber);
+  /// **'Confirm payment of KES {amount} to {phone}?'**
+  String confirmPaymentMessage(Object amount, Object phone);
 
   /// No description provided for @confirm.
   ///
@@ -1079,7 +1217,7 @@ abstract class AppLocalizations {
   /// No description provided for @rememberCardDetails.
   ///
   /// In en, this message translates to:
-  /// **'Remember My Card Details'**
+  /// **'Remember card details'**
   String get rememberCardDetails;
 
   /// No description provided for @increaseQuantity.
@@ -1115,13 +1253,13 @@ abstract class AppLocalizations {
   /// No description provided for @invalidPhoneNumber.
   ///
   /// In en, this message translates to:
-  /// **'Enter a valid Kenyan phone number, e.g. +254712345678'**
+  /// **'Invalid phone number'**
   String get invalidPhoneNumber;
 
   /// No description provided for @orderCreationFailed.
   ///
   /// In en, this message translates to:
-  /// **'We couldn\'t create your order. Please check your connection and try again.'**
+  /// **'Failed to create order'**
   String get orderCreationFailed;
 
   /// No description provided for @retry.
@@ -1175,7 +1313,7 @@ abstract class AppLocalizations {
   /// No description provided for @allOrders.
   ///
   /// In en, this message translates to:
-  /// **'All'**
+  /// **'All Orders'**
   String get allOrders;
 
   /// No description provided for @activeOrders.
@@ -1817,7 +1955,7 @@ abstract class AppLocalizations {
   /// No description provided for @failedToLoadProducts.
   ///
   /// In en, this message translates to:
-  /// **'Could not load products. Check your connection and try again.'**
+  /// **'Failed to load products'**
   String get failedToLoadProducts;
 
   /// No description provided for @checkConnectionAndRetry.
@@ -1841,7 +1979,7 @@ abstract class AppLocalizations {
   /// No description provided for @failedToLoadCategories.
   ///
   /// In en, this message translates to:
-  /// **'Could not load categories'**
+  /// **'Failed to load categories'**
   String get failedToLoadCategories;
 
   /// No description provided for @failedToLoadNewItems.
@@ -2147,7 +2285,7 @@ abstract class AppLocalizations {
   /// No description provided for @searchHint.
   ///
   /// In en, this message translates to:
-  /// **'Search products...'**
+  /// **'Search'**
   String get searchHint;
 
   /// No description provided for @aiSearchSubtitle.
@@ -2354,6 +2492,42 @@ abstract class AppLocalizations {
   /// **'Card Payment'**
   String get cardPayment;
 
+  /// No description provided for @stripePayment.
+  ///
+  /// In en, this message translates to:
+  /// **'Stripe'**
+  String get stripePayment;
+
+  /// No description provided for @paypalPayment.
+  ///
+  /// In en, this message translates to:
+  /// **'PayPal'**
+  String get paypalPayment;
+
+  /// No description provided for @payWith.
+  ///
+  /// In en, this message translates to:
+  /// **'Pay with {method}'**
+  String payWith(Object method);
+
+  /// No description provided for @secureHostedPaymentHint.
+  ///
+  /// In en, this message translates to:
+  /// **'You will be redirected to a secure hosted payment page to complete your purchase.'**
+  String get secureHostedPaymentHint;
+
+  /// No description provided for @paymentLaunchFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Could not open the payment page. Please try again.'**
+  String get paymentLaunchFailed;
+
+  /// No description provided for @paymentInitiationFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Payment could not be initiated. Please try again.'**
+  String get paymentInitiationFailed;
+
   /// No description provided for @statusLabel.
   ///
   /// In en, this message translates to:
@@ -2413,6 +2587,702 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Continue with {method}'**
   String continueWith(Object method);
+
+  /// No description provided for @mpesaCheckYourPhone.
+  ///
+  /// In en, this message translates to:
+  /// **'Check Your Phone'**
+  String get mpesaCheckYourPhone;
+
+  /// No description provided for @mpesaWeVeSent.
+  ///
+  /// In en, this message translates to:
+  /// **'We sent a payment request to SMS to {phoneNumber}'**
+  String mpesaWeVeSent(Object phoneNumber);
+
+  /// No description provided for @mpesaEnterPin.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter your M-Pesa PIN to complete payment'**
+  String get mpesaEnterPin;
+
+  /// No description provided for @mpesaTimeoutTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Payment Timeout'**
+  String get mpesaTimeoutTitle;
+
+  /// No description provided for @mpesaTimeoutMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Your payment request has expired'**
+  String get mpesaTimeoutMessage;
+
+  /// No description provided for @mpesaProcessing.
+  ///
+  /// In en, this message translates to:
+  /// **'Processing Payment...'**
+  String get mpesaProcessing;
+
+  /// No description provided for @mpesaResend.
+  ///
+  /// In en, this message translates to:
+  /// **'Resend Request'**
+  String get mpesaResend;
+
+  /// No description provided for @recentSearch.
+  ///
+  /// In en, this message translates to:
+  /// **'Recent Search'**
+  String get recentSearch;
+
+  /// No description provided for @createOwnPack.
+  ///
+  /// In en, this message translates to:
+  /// **'Create Own Pack'**
+  String get createOwnPack;
+
+  /// No description provided for @failedToLoadBundles.
+  ///
+  /// In en, this message translates to:
+  /// **'Could not load bundles'**
+  String get failedToLoadBundles;
+
+  /// No description provided for @noBundlesFound.
+  ///
+  /// In en, this message translates to:
+  /// **'No bundles found'**
+  String get noBundlesFound;
+
+  /// No description provided for @bundleInformationMissing.
+  ///
+  /// In en, this message translates to:
+  /// **'Bundle information is missing'**
+  String get bundleInformationMissing;
+
+  /// No description provided for @productInformationMissing.
+  ///
+  /// In en, this message translates to:
+  /// **'Product information is missing'**
+  String get productInformationMissing;
+
+  /// No description provided for @productDetailsTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Product Details'**
+  String get productDetailsTitle;
+
+  /// No description provided for @weight.
+  ///
+  /// In en, this message translates to:
+  /// **'Weight'**
+  String get weight;
+
+  /// No description provided for @stockAvailable.
+  ///
+  /// In en, this message translates to:
+  /// **'In Stock ({count} available)'**
+  String stockAvailable(Object count);
+
+  /// No description provided for @itemsLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Items'**
+  String get itemsLabel;
+
+  /// No description provided for @reviewsLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Reviews'**
+  String get reviewsLabel;
+
+  /// No description provided for @saveLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Save'**
+  String get saveLabel;
+
+  /// No description provided for @searchProductHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Search Product'**
+  String get searchProductHint;
+
+  /// No description provided for @bundleUpdatedFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Could not update bundle. Please try again.'**
+  String get bundleUpdatedFailed;
+
+  /// No description provided for @searchFilters.
+  ///
+  /// In en, this message translates to:
+  /// **'Search Filters'**
+  String get searchFilters;
+
+  /// No description provided for @clearSearch.
+  ///
+  /// In en, this message translates to:
+  /// **'Clear search'**
+  String get clearSearch;
+
+  /// No description provided for @sidebarMenu.
+  ///
+  /// In en, this message translates to:
+  /// **'Sidebar menu'**
+  String get sidebarMenu;
+
+  /// No description provided for @searchButton.
+  ///
+  /// In en, this message translates to:
+  /// **'Search'**
+  String get searchButton;
+
+  /// No description provided for @adSpace.
+  ///
+  /// In en, this message translates to:
+  /// **'Advertisement'**
+  String get adSpace;
+
+  /// No description provided for @filterButton.
+  ///
+  /// In en, this message translates to:
+  /// **'Filter products'**
+  String get filterButton;
+
+  /// No description provided for @createPackButton.
+  ///
+  /// In en, this message translates to:
+  /// **'Create your own pack'**
+  String get createPackButton;
+
+  /// No description provided for @continueToHome.
+  ///
+  /// In en, this message translates to:
+  /// **'Go to home'**
+  String get continueToHome;
+
+  /// No description provided for @emptyCartTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Oops!'**
+  String get emptyCartTitle;
+
+  /// No description provided for @emptyCartMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Sorry, you have no products in your cart'**
+  String get emptyCartMessage;
+
+  /// No description provided for @startBrowsing.
+  ///
+  /// In en, this message translates to:
+  /// **'Start Browsing'**
+  String get startBrowsing;
+
+  /// No description provided for @pleaseLogIn.
+  ///
+  /// In en, this message translates to:
+  /// **'Please log in to continue'**
+  String get pleaseLogIn;
+
+  /// No description provided for @cartIsEmpty.
+  ///
+  /// In en, this message translates to:
+  /// **'Your cart is empty'**
+  String get cartIsEmpty;
+
+  /// No description provided for @totalToPay.
+  ///
+  /// In en, this message translates to:
+  /// **'Total to pay:'**
+  String get totalToPay;
+
+  /// No description provided for @processingPaymentLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Processing...'**
+  String get processingPaymentLabel;
+
+  /// No description provided for @payNowButton.
+  ///
+  /// In en, this message translates to:
+  /// **'Pay Now'**
+  String get payNowButton;
+
+  /// No description provided for @securedByFlutterwave.
+  ///
+  /// In en, this message translates to:
+  /// **'Secured by Flutterwave'**
+  String get securedByFlutterwave;
+
+  /// No description provided for @paymentFailedError.
+  ///
+  /// In en, this message translates to:
+  /// **'Payment failed: {error}'**
+  String paymentFailedError(Object error);
+
+  /// No description provided for @continueButton.
+  ///
+  /// In en, this message translates to:
+  /// **'Continue'**
+  String get continueButton;
+
+  /// No description provided for @selectDeliveryAddress.
+  ///
+  /// In en, this message translates to:
+  /// **'Select Delivery Address'**
+  String get selectDeliveryAddress;
+
+  /// No description provided for @addNew.
+  ///
+  /// In en, this message translates to:
+  /// **'Add New'**
+  String get addNew;
+
+  /// No description provided for @homeAddress.
+  ///
+  /// In en, this message translates to:
+  /// **'Home Address'**
+  String get homeAddress;
+
+  /// No description provided for @officeAddress.
+  ///
+  /// In en, this message translates to:
+  /// **'Office Address'**
+  String get officeAddress;
+
+  /// No description provided for @cardNumberLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Card Number'**
+  String get cardNumberLabel;
+
+  /// No description provided for @expiryDateLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Expiry Date'**
+  String get expiryDateLabel;
+
+  /// No description provided for @cvvLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'CVV'**
+  String get cvvLabel;
+
+  /// No description provided for @cardHolderNameLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Card Holder Name'**
+  String get cardHolderNameLabel;
+
+  /// No description provided for @totalAmountLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Total Amount'**
+  String get totalAmountLabel;
+
+  /// No description provided for @resendRequest.
+  ///
+  /// In en, this message translates to:
+  /// **'Resend Request'**
+  String get resendRequest;
+
+  /// No description provided for @waiting.
+  ///
+  /// In en, this message translates to:
+  /// **'Waiting...'**
+  String get waiting;
+
+  /// No description provided for @standardDeliveryDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'2–4 business days'**
+  String get standardDeliveryDesc;
+
+  /// No description provided for @standardDeliveryEta.
+  ///
+  /// In en, this message translates to:
+  /// **'2–4 days'**
+  String get standardDeliveryEta;
+
+  /// No description provided for @expressDeliveryDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'Delivered next day'**
+  String get expressDeliveryDesc;
+
+  /// No description provided for @expressDeliveryEta.
+  ///
+  /// In en, this message translates to:
+  /// **'Next day'**
+  String get expressDeliveryEta;
+
+  /// No description provided for @bodaBodaSameDay.
+  ///
+  /// In en, this message translates to:
+  /// **'Boda Boda Same-Day'**
+  String get bodaBodaSameDay;
+
+  /// No description provided for @bodaBodaSameDayDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'Today (Nairobi & Kampala only)'**
+  String get bodaBodaSameDayDesc;
+
+  /// No description provided for @bodaBodaSameDayEta.
+  ///
+  /// In en, this message translates to:
+  /// **'Today'**
+  String get bodaBodaSameDayEta;
+
+  /// No description provided for @storePickupDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'Pick up at our store'**
+  String get storePickupDesc;
+
+  /// No description provided for @storePickupEta.
+  ///
+  /// In en, this message translates to:
+  /// **'2–3 hours'**
+  String get storePickupEta;
+
+  /// No description provided for @chooseACategory.
+  ///
+  /// In en, this message translates to:
+  /// **'Choose a category'**
+  String get chooseACategory;
+
+  /// No description provided for @allProducts.
+  ///
+  /// In en, this message translates to:
+  /// **'All Products'**
+  String get allProducts;
+
+  /// No description provided for @categoryLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'{name} category'**
+  String categoryLabel(Object name);
+
+  /// No description provided for @browseCategory.
+  ///
+  /// In en, this message translates to:
+  /// **'Browse {name}'**
+  String browseCategory(Object name);
+
+  /// No description provided for @goBack.
+  ///
+  /// In en, this message translates to:
+  /// **'Go back'**
+  String get goBack;
+
+  /// No description provided for @vouchers.
+  ///
+  /// In en, this message translates to:
+  /// **'Vouchers'**
+  String get vouchers;
+
+  /// No description provided for @address.
+  ///
+  /// In en, this message translates to:
+  /// **'Address'**
+  String get address;
+
+  /// No description provided for @notifications.
+  ///
+  /// In en, this message translates to:
+  /// **'Notifications'**
+  String get notifications;
+
+  /// No description provided for @setting.
+  ///
+  /// In en, this message translates to:
+  /// **'Settings'**
+  String get setting;
+
+  /// No description provided for @payment.
+  ///
+  /// In en, this message translates to:
+  /// **'Payment'**
+  String get payment;
+
+  /// No description provided for @logout.
+  ///
+  /// In en, this message translates to:
+  /// **'Logout'**
+  String get logout;
+
+  /// No description provided for @firstName.
+  ///
+  /// In en, this message translates to:
+  /// **'First Name'**
+  String get firstName;
+
+  /// No description provided for @lastName.
+  ///
+  /// In en, this message translates to:
+  /// **'Last Name'**
+  String get lastName;
+
+  /// No description provided for @phone.
+  ///
+  /// In en, this message translates to:
+  /// **'Phone'**
+  String get phone;
+
+  /// No description provided for @gender.
+  ///
+  /// In en, this message translates to:
+  /// **'Gender'**
+  String get gender;
+
+  /// No description provided for @birthday.
+  ///
+  /// In en, this message translates to:
+  /// **'Birthday'**
+  String get birthday;
+
+  /// No description provided for @save.
+  ///
+  /// In en, this message translates to:
+  /// **'Save'**
+  String get save;
+
+  /// No description provided for @saving.
+  ///
+  /// In en, this message translates to:
+  /// **'Saving...'**
+  String get saving;
+
+  /// No description provided for @profileSavedSuccess.
+  ///
+  /// In en, this message translates to:
+  /// **'Profile saved successfully'**
+  String get profileSavedSuccess;
+
+  /// No description provided for @profileSaveError.
+  ///
+  /// In en, this message translates to:
+  /// **'Error saving profile'**
+  String get profileSaveError;
+
+  /// No description provided for @unableToLoadProfile.
+  ///
+  /// In en, this message translates to:
+  /// **'Unable to load profile'**
+  String get unableToLoadProfile;
+
+  /// No description provided for @couldNotLoadProfile.
+  ///
+  /// In en, this message translates to:
+  /// **'Could not load profile'**
+  String get couldNotLoadProfile;
+
+  /// No description provided for @checkConnectionRetry.
+  ///
+  /// In en, this message translates to:
+  /// **'Please check your connection and try again.'**
+  String get checkConnectionRetry;
+
+  /// No description provided for @noSavedPaymentMethodsYet.
+  ///
+  /// In en, this message translates to:
+  /// **'No saved payment methods yet'**
+  String get noSavedPaymentMethodsYet;
+
+  /// No description provided for @savedPaymentMethods.
+  ///
+  /// In en, this message translates to:
+  /// **'Saved Payment Methods'**
+  String get savedPaymentMethods;
+
+  /// No description provided for @paymentOption.
+  ///
+  /// In en, this message translates to:
+  /// **'Payment Option'**
+  String get paymentOption;
+
+  /// No description provided for @deletePaymentMethodTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete Payment Method'**
+  String get deletePaymentMethodTitle;
+
+  /// No description provided for @deletePaymentMethodConfirm.
+  ///
+  /// In en, this message translates to:
+  /// **'Are you sure you want to remove this payment method? This action cannot be undone.'**
+  String get deletePaymentMethodConfirm;
+
+  /// No description provided for @newAddress.
+  ///
+  /// In en, this message translates to:
+  /// **'New Address'**
+  String get newAddress;
+
+  /// No description provided for @phoneRequired.
+  ///
+  /// In en, this message translates to:
+  /// **'Phone number is required'**
+  String get phoneRequired;
+
+  /// No description provided for @fullAddressName.
+  ///
+  /// In en, this message translates to:
+  /// **'Full Name'**
+  String get fullAddressName;
+
+  /// No description provided for @addressLine1.
+  ///
+  /// In en, this message translates to:
+  /// **'Address Line 1'**
+  String get addressLine1;
+
+  /// No description provided for @addressLine2.
+  ///
+  /// In en, this message translates to:
+  /// **'Address Line 2'**
+  String get addressLine2;
+
+  /// No description provided for @state.
+  ///
+  /// In en, this message translates to:
+  /// **'State'**
+  String get state;
+
+  /// No description provided for @zipCode.
+  ///
+  /// In en, this message translates to:
+  /// **'Zip Code'**
+  String get zipCode;
+
+  /// No description provided for @makeDefaultShippingAddress.
+  ///
+  /// In en, this message translates to:
+  /// **'Make Default Shipping Address'**
+  String get makeDefaultShippingAddress;
+
+  /// No description provided for @pleaseSignInAgainToSave.
+  ///
+  /// In en, this message translates to:
+  /// **'Please sign in again to save address'**
+  String get pleaseSignInAgainToSave;
+
+  /// No description provided for @pleaseSignInAgainToEdit.
+  ///
+  /// In en, this message translates to:
+  /// **'Please sign in again to edit your profile.'**
+  String get pleaseSignInAgainToEdit;
+
+  /// No description provided for @errorLoadingProfile.
+  ///
+  /// In en, this message translates to:
+  /// **'Could not load your profile details. Pull to refresh or retry.'**
+  String get errorLoadingProfile;
+
+  /// No description provided for @pleaseSignInAgainToSaveProfile.
+  ///
+  /// In en, this message translates to:
+  /// **'Please sign in again to save profile'**
+  String get pleaseSignInAgainToSaveProfile;
+
+  /// No description provided for @unableToLoadPaymentMethods.
+  ///
+  /// In en, this message translates to:
+  /// **'Unable to load payment methods'**
+  String get unableToLoadPaymentMethods;
+
+  /// No description provided for @changePassword.
+  ///
+  /// In en, this message translates to:
+  /// **'Change Password'**
+  String get changePassword;
+
+  /// No description provided for @changePhoneNumber.
+  ///
+  /// In en, this message translates to:
+  /// **'Change Phone Number'**
+  String get changePhoneNumber;
+
+  /// No description provided for @editHomeAddress.
+  ///
+  /// In en, this message translates to:
+  /// **'Edit Home Address'**
+  String get editHomeAddress;
+
+  /// No description provided for @location.
+  ///
+  /// In en, this message translates to:
+  /// **'Location'**
+  String get location;
+
+  /// No description provided for @profileSetting.
+  ///
+  /// In en, this message translates to:
+  /// **'Profile Setting'**
+  String get profileSetting;
+
+  /// No description provided for @deactivateAccount.
+  ///
+  /// In en, this message translates to:
+  /// **'Deactivate Account'**
+  String get deactivateAccount;
+
+  /// No description provided for @pickLocationOnMap.
+  ///
+  /// In en, this message translates to:
+  /// **'Pick Location on Map'**
+  String get pickLocationOnMap;
+
+  /// No description provided for @useThisLocation.
+  ///
+  /// In en, this message translates to:
+  /// **'Use This Location'**
+  String get useThisLocation;
+
+  /// No description provided for @currentLocation.
+  ///
+  /// In en, this message translates to:
+  /// **'Current Location'**
+  String get currentLocation;
+
+  /// No description provided for @searchAddress.
+  ///
+  /// In en, this message translates to:
+  /// **'Search address'**
+  String get searchAddress;
+
+  /// No description provided for @dragToAdjust.
+  ///
+  /// In en, this message translates to:
+  /// **'Drag map to adjust location'**
+  String get dragToAdjust;
+
+  /// No description provided for @locationPermissionDenied.
+  ///
+  /// In en, this message translates to:
+  /// **'Location permission denied'**
+  String get locationPermissionDenied;
+
+  /// No description provided for @enableLocationServices.
+  ///
+  /// In en, this message translates to:
+  /// **'Enable location services'**
+  String get enableLocationServices;
+
+  /// No description provided for @selectedLocation.
+  ///
+  /// In en, this message translates to:
+  /// **'Selected Location'**
+  String get selectedLocation;
+
+  /// No description provided for @noLocationSelected.
+  ///
+  /// In en, this message translates to:
+  /// **'No location selected'**
+  String get noLocationSelected;
 }
 
 class _AppLocalizationsDelegate

@@ -21,7 +21,8 @@ class ReferralService {
 
       return code;
     } catch (e) {
-      Logger.error('Error generating referral code: $e', 'ReferralService.generateReferralCode');
+      Logger.error('Error generating referral code: $e',
+          'ReferralService.generateReferralCode');
       rethrow;
     }
   }
@@ -222,36 +223,31 @@ class ReferralService {
   }
 
   /// Helper: Update user's referral code
-  Future<void> _updateUserReferralCode(String userId, String referralCode) async {
+  Future<void> _updateUserReferralCode(
+      String userId, String referralCode) async {
     try {
-      final userDoc = await _firestore
-          .collection(_userCollectionName)
-          .doc(userId)
-          .get();
+      final userDoc =
+          await _firestore.collection(_userCollectionName).doc(userId).get();
 
       if (!userDoc.exists) return;
 
       final userData = userDoc.data()!;
-      if (userData['referralCode'] == null || userData['referralCode'].isEmpty) {
-        await _firestore
-            .collection(_userCollectionName)
-            .doc(userId)
-            .update({
+      if (userData['referralCode'] == null ||
+          userData['referralCode'].isEmpty) {
+        await _firestore.collection(_userCollectionName).doc(userId).update({
           'referralCode': referralCode,
         });
       }
     } catch (e) {
-      Logger.warning('Error updating user referral code: $e', 'ReferralService._updateUserReferralCode');
+      Logger.warning('Error updating user referral code: $e',
+          'ReferralService._updateUserReferralCode');
     }
   }
 
   /// Helper: Add reward to user's wallet
   Future<void> _addRewardToUser(String userId, double amount) async {
     try {
-      await _firestore
-          .collection(_userCollectionName)
-          .doc(userId)
-          .update({
+      await _firestore.collection(_userCollectionName).doc(userId).update({
         'walletBalance': FieldValue.increment(amount),
       });
 
@@ -260,21 +256,20 @@ class ReferralService {
         'ReferralService._addRewardToUser',
       );
     } catch (e) {
-      Logger.error('Error adding reward to user: $e', 'ReferralService._addRewardToUser');
+      Logger.error('Error adding reward to user: $e',
+          'ReferralService._addRewardToUser');
     }
   }
 
   /// Helper: Increment referral count
   Future<void> _incrementReferralCount(String userId) async {
     try {
-      await _firestore
-          .collection(_userCollectionName)
-          .doc(userId)
-          .update({
+      await _firestore.collection(_userCollectionName).doc(userId).update({
         'referralCount': FieldValue.increment(1),
       });
     } catch (e) {
-      Logger.error('Error incrementing referral count: $e', 'ReferralService._incrementReferralCount');
+      Logger.error('Error incrementing referral count: $e',
+          'ReferralService._incrementReferralCount');
     }
   }
 

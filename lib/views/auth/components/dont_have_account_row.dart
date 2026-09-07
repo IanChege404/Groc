@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../../core/l10n/app_localizations.dart';
+
 class DontHaveAccountRow extends StatelessWidget {
   const DontHaveAccountRow({
     super.key,
@@ -8,13 +10,14 @@ class DontHaveAccountRow extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        const Text('Don\'t Have Account?'),
+        Text(l10n.dontHaveAccount),
         TextButton(
           onPressed: () => context.push('/signup'),
-          child: const Text('Sign Up'),
+          child: Text(l10n.signUp),
         ),
       ],
     );

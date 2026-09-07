@@ -57,7 +57,8 @@ class ReferralModel {
       'refereeRewardAmount': refereeRewardAmount,
       'status': status.name,
       'createdAt': Timestamp.fromDate(createdAt),
-      'completedAt': completedAt != null ? Timestamp.fromDate(completedAt!) : null,
+      'completedAt':
+          completedAt != null ? Timestamp.fromDate(completedAt!) : null,
       'refereeEmail': refereeEmail,
       'referralCount': referralCount,
     };

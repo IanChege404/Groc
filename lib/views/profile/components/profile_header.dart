@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../core/components/network_image.dart';
 import '../../../core/components/retryable_error_view.dart';
 import '../../../core/constants/constants.dart';
+import '../../../core/l10n/app_localizations.dart';
 import '../../../core/providers/user_provider.dart';
 import 'profile_header_options.dart';
 
@@ -21,7 +22,7 @@ class ProfileHeader extends ConsumerWidget {
         Column(
           children: [
             AppBar(
-              title: const Text('Profile'),
+              title: Text(AppLocalizations.of(context)!.profile),
               elevation: 0,
               backgroundColor: Colors.transparent,
               titleTextStyle: Theme.of(context).textTheme.titleLarge?.copyWith(
@@ -109,7 +110,9 @@ class _UserData extends ConsumerWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    user.fullName.isNotEmpty ? user.fullName : 'User Profile',
+                    user.fullName.isNotEmpty
+                        ? user.fullName
+                        : AppLocalizations.of(context)!.profile,
                     style: Theme.of(context).textTheme.titleLarge?.copyWith(
                           fontWeight: FontWeight.bold,
                           color: Theme.of(context).colorScheme.onPrimary,
@@ -132,8 +135,8 @@ class _UserData extends ConsumerWidget {
       error: (error, stackTrace) => SizedBox(
         height: 180,
         child: RetryableErrorView(
-          title: 'Could not load profile',
-          message: 'Please check your connection and try again.',
+          title: AppLocalizations.of(context)!.couldNotLoadProfile,
+          message: AppLocalizations.of(context)!.checkConnectionRetry,
           onRetry: () => ref.invalidate(userProfileProvider),
         ),
       ),

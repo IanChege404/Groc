@@ -10,8 +10,6 @@ import '../../core/providers/cart_provider.dart';
 import '../../core/providers/order_provider.dart';
 import '../../core/services/firestore_product_service.dart';
 import 'components/checkout_address_selector.dart';
-import 'components/checkout_card_details.dart';
-import 'components/checkout_payment_systems.dart';
 import 'components/items_totals_price.dart';
 import 'delivery_method_screen.dart';
 import 'package:go_router/go_router.dart';
@@ -30,6 +28,9 @@ class _CheckoutWizardState extends ConsumerState<CheckoutWizard> {
   int _currentStep = 0;
   bool _isSubmitting = false;
   DeliveryMethod _selectedDeliveryMethod = DeliveryMethod.standard;
+  String? _selectedAddressId;
+  String _selectedAddressLabel = '';
+  String _selectedAddressFull = '';
 
   static const _stepLabels = ['Address', 'Delivery', 'Review', 'Payment'];
 
@@ -147,9 +148,18 @@ class _CheckoutWizardState extends ConsumerState<CheckoutWizard> {
   }
 
   Widget _buildAddressStep() {
-    return const SingleChildScrollView(
-      padding: EdgeInsets.symmetric(horizontal: AppDefaults.padding),
-      child: AddressSelector(),
+    return SingleChildScrollView(
+      padding: const EdgeInsets.symmetric(horizontal: AppDefaults.padding),
+      child: AddressSelector(
+        selectedAddressId: _selectedAddressId,
+        onAddressSelected: (id, label, full, {latitude, longitude}) {
+          setState(() {
+            _selectedAddressId = id;
+            _selectedAddressLabel = label;
+            _selectedAddressFull = full;
+          });
+        },
+      ),
     );
   }
 
@@ -212,7 +222,9 @@ class _CheckoutWizardState extends ConsumerState<CheckoutWizard> {
           ),
           const SizedBox(height: 4),
           Text(
-            'Office Address\n1749 Custom Road, Chhatak',
+            _selectedAddressFull.isNotEmpty
+                ? '$_selectedAddressLabel\n$_selectedAddressFull'
+                : 'No address selected',
             style: Theme.of(context).textTheme.bodyMedium,
           ),
           const SizedBox(height: AppDefaults.spacingMd),
@@ -241,10 +253,7 @@ class _CheckoutWizardState extends ConsumerState<CheckoutWizard> {
   Widget _buildPaymentStep() {
     return const SingleChildScrollView(
       child: Column(
-        children: [
-          PaymentSystem(),
-          CardDetails(),
-        ],
+        children: [],
       ),
     );
   }

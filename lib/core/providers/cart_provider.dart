@@ -166,6 +166,17 @@ class CartNotifier extends StateNotifier<AsyncValue<List<CartItemModel>>> {
         return;
       }
 
+      // If quantity is 0 or negative, remove item instead of setting to 0
+      if (quantity <= 0) {
+        await firestore.removeCartItem(userId, cartItemId);
+        return;
+      }
+
+      // Validate quantity doesn't exceed reasonable limits
+      if (quantity > 999) {
+        throw ArgumentError('Quantity cannot exceed 999 items');
+      }
+
       await firestore.updateCartItemQuantity(userId, cartItemId, quantity);
       // Real-time listener will automatically update state
     } catch (e) {

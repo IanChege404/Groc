@@ -1,11 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:provider/provider.dart' as p;
 
 import '../../core/constants/app_colors.dart';
 import '../../core/constants/app_defaults.dart';
 import '../../core/constants/app_text_styles.dart';
-import '../../core/l10n/locale_provider.dart';
 import '../../core/models/order_model.dart';
 import '../../core/providers/order_provider.dart';
 import 'package:go_router/go_router.dart';
@@ -53,9 +51,9 @@ class OrderTrackingScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final localeProvider = p.Provider.of<LocaleProvider>(context);
-    final isDark = localeProvider.isDarkMode;
-    final isEnglish = localeProvider.locale.languageCode == 'en';
+    // Get locale and theme from context (single source of truth)
+    final isEnglish = Localizations.localeOf(context).languageCode == 'en';
+    final isDark = Theme.of(context).brightness == Brightness.dark;
     final orderState = ref.watch(orderDetailProvider(orderId));
 
     return orderState.when(
@@ -63,10 +61,44 @@ class OrderTrackingScreen extends ConsumerWidget {
         appBar: AppBar(title: const Text('Order Tracking')),
         body: const Center(child: CircularProgressIndicator()),
       ),
-      error: (error, _) => Scaffold(
-        appBar: AppBar(title: const Text('Order Tracking')),
-        body: Center(child: Text('Failed to load order: $error')),
-      ),
+      error: (error, stackTrace) {
+        // Log error for debugging
+        debugPrint('Order tracking error: $error\n$stackTrace');
+
+        return Scaffold(
+          appBar: AppBar(title: const Text('Order Tracking')),
+          body: Center(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Icon(
+                  Icons.error_outline,
+                  size: 64,
+                  color: AppColors.primary.withValues(alpha: 0.7),
+                ),
+                const SizedBox(height: 16),
+                Text(
+                  'Unable to load tracking information',
+                  textAlign: TextAlign.center,
+                  style: Theme.of(context).textTheme.titleLarge,
+                ),
+                const SizedBox(height: 8),
+                Text(
+                  'Please try again or contact support',
+                  textAlign: TextAlign.center,
+                  style: Theme.of(context).textTheme.bodyMedium,
+                ),
+                const SizedBox(height: 24),
+                ElevatedButton.icon(
+                  onPressed: () => ref.refresh(orderDetailProvider(orderId)),
+                  icon: const Icon(Icons.refresh),
+                  label: const Text('Retry'),
+                ),
+              ],
+            ),
+          ),
+        );
+      },
       data: (order) {
         if (order == null) {
           return Scaffold(
@@ -200,7 +232,8 @@ class _OrderTrackingBody extends StatelessWidget {
                   Expanded(
                     child: OutlinedButton(
                       onPressed: () {
-                        context.push('/submitReview', extra: {'orderId': order.id});
+                        context.push('/submitReview',
+                            extra: {'orderId': order.id});
                       },
                       child: const Text('Return/Refund'),
                     ),

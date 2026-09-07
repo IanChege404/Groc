@@ -5,6 +5,7 @@ import '../../core/components/app_back_button.dart';
 import '../../core/constants/app_colors.dart';
 import '../../core/constants/app_defaults.dart';
 import '../../core/l10n/app_localizations.dart';
+import '../../core/services/firestore_auth_service.dart';
 import 'package:go_router/go_router.dart';
 
 class ForgetPasswordPage extends StatefulWidget {
@@ -31,15 +32,36 @@ class _ForgetPasswordPageState extends State<ForgetPasswordPage> {
     super.dispose();
   }
 
-  void _onSubmit() {
-    if (_formKey.currentState?.validate() ?? false) {
-      setState(() => _isSubmitting = true);
-      Future.delayed(const Duration(seconds: 1), () {
-        if (mounted) {
-          setState(() => _isSubmitting = false);
-          context.push('/passwordReset');
-        }
-      });
+  Future<void> _onSubmit() async {
+    if (!(_formKey.currentState?.validate() ?? false)) return;
+
+    setState(() => _isSubmitting = true);
+
+    final authService = FirestoreAuthService();
+    final result = await authService.sendPasswordResetEmail(
+      phoneController.text.trim(),
+    );
+
+    if (!mounted) return;
+
+    setState(() => _isSubmitting = false);
+
+    if (result.success) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(AppLocalizations.of(context)!.passwordResetLinkSent),
+        ),
+      );
+      context.push('/passwordReset');
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(
+            result.message ??
+                AppLocalizations.of(context)!.failedToSendResetLink,
+          ),
+        ),
+      );
     }
   }
 
@@ -100,7 +122,7 @@ class _ForgetPasswordPageState extends State<ForgetPasswordPage> {
                             controller: phoneController,
                             autofocus: true,
                             textInputAction: TextInputAction.done,
-                            keyboardType: TextInputType.number,
+                            keyboardType: TextInputType.emailAddress,
                             onFieldSubmitted: (_) => _onSubmit(),
                             validator: (value) {
                               if (value == null || value.trim().isEmpty) {
@@ -110,7 +132,7 @@ class _ForgetPasswordPageState extends State<ForgetPasswordPage> {
                             },
                             decoration: InputDecoration(
                               labelText: l10n.phoneNumber,
-                              hintText: l10n.phoneHint,
+                              hintText: l10n.emailHint,
                             ),
                           ),
                         ),

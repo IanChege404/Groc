@@ -13,9 +13,8 @@ final aiSearchProvider =
     // Get all products first
     final firestore = FirebaseFirestore.instance;
     final snapshot = await firestore.collection('products').get();
-    final allProducts = snapshot.docs
-        .map((doc) => ProductModel.fromFirestore(doc))
-        .toList();
+    final allProducts =
+        snapshot.docs.map((doc) => ProductModel.fromFirestore(doc)).toList();
 
     if (allProducts.isEmpty) return [];
 
@@ -24,7 +23,8 @@ final aiSearchProvider =
       'ANTHROPIC_API_KEY',
       defaultValue: 'sk-ant-placeholder-your-api-key-here',
     );
-    const systemPrompt = '''You are a product search assistant for an African grocery e-commerce platform.
+    const systemPrompt =
+        '''You are a product search assistant for an African grocery e-commerce platform.
 Given a user search query and a list of products, rank the products by relevance.
 Return ONLY a JSON array of product IDs in order of relevance.
 Example: ["product_id_1", "product_id_2", "product_id_3"]
@@ -69,9 +69,10 @@ Do not include any other text.''';
 
     final responseData = jsonDecode(response.body);
     final responseText = (responseData['content'] as List<dynamic>?)
-        ?.where((block) => block['type'] == 'text')
-        .map((block) => block['text'] as String)
-        .join() ?? '';
+            ?.where((block) => block['type'] == 'text')
+            .map((block) => block['text'] as String)
+            .join() ??
+        '';
 
     // Parse the response
     final jsonMatch = RegExp(r'\[.*\]', dotAll: true).firstMatch(responseText);
@@ -155,7 +156,8 @@ final searchRecommendationsProvider =
 
     return recommendations;
   } catch (e) {
-    Logger.error('Error getting search recommendations: $e', 'searchRecommendationsProvider');
+    Logger.error('Error getting search recommendations: $e',
+        'searchRecommendationsProvider');
     return [];
   }
 });

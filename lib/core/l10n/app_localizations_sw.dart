@@ -179,6 +179,80 @@ class AppLocalizationsSw extends AppLocalizations {
       'Uthibitishaji wa simu umeshindikana. Tafadhali jaribu tena.';
 
   @override
+  String get newPassword => 'Nenosiri Jipya';
+
+  @override
+  String get addNewPassword => 'Ongeza Nenosiri Jipya';
+
+  @override
+  String get done => 'Imekamilika';
+
+  @override
+  String get passwordsDoNotMatch => 'Nenosiri hazifanani';
+
+  @override
+  String get passwordTooShort => 'Nenosiri lazima iwe na angalau herufi 8';
+
+  @override
+  String get currentPassword => 'Nenosiri ya Sasa';
+
+  @override
+  String get updatePassword => 'Sasisha Nenosiri';
+
+  @override
+  String get passwordUpdatedSuccess => 'Nenosiri imesasishwa kwa mafanikio';
+
+  @override
+  String get passwordUpdateFailed => 'Usasishaji wa nenosiri umeshindikana';
+
+  @override
+  String get pleaseSignInAgain => 'Tafadhali ingia tena';
+
+  @override
+  String get errorUpdatingPassword => 'Hitilafu wakati wa kusasisha nenosiri';
+
+  @override
+  String get showPassword => 'Onyesha nenosiri';
+
+  @override
+  String get hidePassword => 'Ficha nenosiri';
+
+  @override
+  String get passwordResetLinkSent =>
+      'Kiungo cha kuweka upya nenosiri kimetumwa kwa simu yako';
+
+  @override
+  String get failedToSendResetLink =>
+      'Imeshindikana kutuma kiungo. Tafadhali jaribu tena.';
+
+  @override
+  String get googleSignInSuccess => 'Umeingia na Google';
+
+  @override
+  String get googleSignInFailed =>
+      'Kuingia kumeshindikana. Tafadhali jaribu tena.';
+
+  @override
+  String get appleSignInComingSoon => 'Kuingia na Apple kinakuja hivi karibuni';
+
+  @override
+  String get otpVerificationComingSoon =>
+      'Uthibitishaji wa OTP unakuja hivi karibuni';
+
+  @override
+  String get loginWithEmail => 'Ingia na Barua Pepe';
+
+  @override
+  String get groceryShop => 'soko la mboga';
+
+  @override
+  String get passwordRequired => 'Nenosiri inahitajika';
+
+  @override
+  String get passwordMustHaveSpecialChar =>
+      'Nenosiri lazima iwe na angalau herufi maalum';
+
+  @override
   String get fullName => 'Jina Kamili';
 
   @override
@@ -454,10 +528,10 @@ class AppLocalizationsSw extends AppLocalizations {
   String get deliveryMethod => 'Njia ya Kuletwa';
 
   @override
-  String get standardDelivery => 'Kuletwa Kawaida (Siku 2-4)';
+  String get standardDelivery => 'Kuletwa Kawaida';
 
   @override
-  String get expressDelivery => 'Kuletwa Haraka (Siku ijayo)';
+  String get expressDelivery => 'Kuletwa Haraka';
 
   @override
   String get sameDayDelivery => 'Kuletwa Siku Moja (Leo)';
@@ -466,7 +540,7 @@ class AppLocalizationsSw extends AppLocalizations {
   String get storePickup => 'Mkutano katika Duka';
 
   @override
-  String get free => 'Bure';
+  String get free => 'BURE';
 
   @override
   String get reviewOrder => 'Tathmini & Kulipwa';
@@ -501,9 +575,7 @@ class AppLocalizationsSw extends AppLocalizations {
   }
 
   @override
-  String requestExpiresIn(Object minutes, Object seconds) {
-    return 'Ombi linaishia $minutes:$seconds';
-  }
+  String get requestExpiresIn => 'Ombi linaisha katika';
 
   @override
   String get tryAgain => 'Jaribu Tena';
@@ -518,8 +590,8 @@ class AppLocalizationsSw extends AppLocalizations {
   String get confirmPaymentTitle => 'Thibitisha Malipo';
 
   @override
-  String confirmPaymentMessage(Object amount, Object phoneNumber) {
-    return 'Utatozwa KES $amount kupitia M-Pesa kwa $phoneNumber. Je, unataka kuendelea?';
+  String confirmPaymentMessage(Object amount, Object phone) {
+    return 'Thibitisha malipo ya KES $amount kwa $phone?';
   }
 
   @override
@@ -541,7 +613,7 @@ class AppLocalizationsSw extends AppLocalizations {
   String get cvv => 'CVV';
 
   @override
-  String get rememberCardDetails => 'Kumbuka Maelezo ya Kadi Yangu';
+  String get rememberCardDetails => 'Kumbuka maelezo ya kadi';
 
   @override
   String increaseQuantity(Object productName, Object quantity) {
@@ -569,12 +641,10 @@ class AppLocalizationsSw extends AppLocalizations {
   }
 
   @override
-  String get invalidPhoneNumber =>
-      'Weka nambari sahihi ya simu ya Kenya, mfano +254712345678';
+  String get invalidPhoneNumber => 'Nambari ya simu si sahihi';
 
   @override
-  String get orderCreationFailed =>
-      'Hatukuweza kuunda agizo lako. Tafadhali angalia muunganisho wako na ujaribu tena.';
+  String get orderCreationFailed => 'Imeshindikana kuunda agizo';
 
   @override
   String get retry => 'Jaribu Tena';
@@ -603,7 +673,7 @@ class AppLocalizationsSw extends AppLocalizations {
   String get myOrder => 'Agizo Langu';
 
   @override
-  String get allOrders => 'Zote';
+  String get allOrders => 'Agizo Zote';
 
   @override
   String get activeOrders => 'Zinazofanya Kazi';
@@ -940,8 +1010,7 @@ class AppLocalizationsSw extends AppLocalizations {
   String get ourNewItem => 'Bidhaa yetu Mpya';
 
   @override
-  String get failedToLoadProducts =>
-      'Imeshindikana kupakia bidhaa. Angalia muunganisho wako na ujaribu tena.';
+  String get failedToLoadProducts => 'Imeshindikana kupakia bidhaa';
 
   @override
   String get checkConnectionAndRetry =>
@@ -1126,7 +1195,7 @@ class AppLocalizationsSw extends AppLocalizations {
   String get info => 'Habari';
 
   @override
-  String get searchHint => 'Tafuta bidhaa...';
+  String get searchHint => 'Tafuta';
 
   @override
   String get aiSearchSubtitle => 'Andika kuona mapendekezo ya AI';
@@ -1248,6 +1317,29 @@ class AppLocalizationsSw extends AppLocalizations {
   String get cardPayment => 'Malipo ya Kadi';
 
   @override
+  String get stripePayment => 'Stripe';
+
+  @override
+  String get paypalPayment => 'PayPal';
+
+  @override
+  String payWith(Object method) {
+    return 'Lipa kwa $method';
+  }
+
+  @override
+  String get secureHostedPaymentHint =>
+      'Utaelekezwa kwenye ukurasa salama wa malipo ili kukamilisha ununuzi wako.';
+
+  @override
+  String get paymentLaunchFailed =>
+      'Imeshindwa kufungua ukurasa wa malipo. Tafadhali jaribu tena.';
+
+  @override
+  String get paymentInitiationFailed =>
+      'Malipo hayakuweza kuanzishwa. Tafadhali jaribu tena.';
+
+  @override
   String get statusLabel => 'Hali';
 
   @override
@@ -1279,4 +1371,372 @@ class AppLocalizationsSw extends AppLocalizations {
   String continueWith(Object method) {
     return 'Endelea na $method';
   }
+
+  @override
+  String get mpesaCheckYourPhone => 'Angalia Simu Yako';
+
+  @override
+  String mpesaWeVeSent(Object phoneNumber) {
+    return 'Tumetuma ombi la malipo kupitia SMS kwa $phoneNumber';
+  }
+
+  @override
+  String get mpesaEnterPin =>
+      'Ingiza PIN yako ya M-Pesa ili kukamilisha malipo';
+
+  @override
+  String get mpesaTimeoutTitle => 'Wakati wa Malipo Umepita';
+
+  @override
+  String get mpesaTimeoutMessage => 'Ombi lako la malipo limepita wakati';
+
+  @override
+  String get mpesaProcessing => 'Inaprosesa Malipo...';
+
+  @override
+  String get mpesaResend => 'Tuma Tena Ombi';
+
+  @override
+  String get recentSearch => 'Utafutaji wa Karibuni';
+
+  @override
+  String get createOwnPack => 'Unda Kifurushi Chako';
+
+  @override
+  String get failedToLoadBundles => 'Imeshindikana kupakia vifurushi';
+
+  @override
+  String get noBundlesFound => 'Hakuna vifurushi vilivyopatikana';
+
+  @override
+  String get bundleInformationMissing => 'Taarifa za kifurushi hazipatikani';
+
+  @override
+  String get productInformationMissing => 'Taarifa za bidhaa hazipatikani';
+
+  @override
+  String get productDetailsTitle => 'Maelezo ya Bidhaa';
+
+  @override
+  String get weight => 'Uzito';
+
+  @override
+  String stockAvailable(Object count) {
+    return 'Inapatikana ($count zimebaki)';
+  }
+
+  @override
+  String get itemsLabel => 'Bidhaa';
+
+  @override
+  String get reviewsLabel => 'Maoni';
+
+  @override
+  String get saveLabel => 'Okoa';
+
+  @override
+  String get searchProductHint => 'Tafuta Bidhaa';
+
+  @override
+  String get bundleUpdatedFailed =>
+      'Imeshindikana kusasisha kifurushi. Tafadhali jaribu tena.';
+
+  @override
+  String get searchFilters => 'Vichujio vya Utafutaji';
+
+  @override
+  String get clearSearch => 'Futa utafutaji';
+
+  @override
+  String get sidebarMenu => 'Menyu ya upande';
+
+  @override
+  String get searchButton => 'Tafuta';
+
+  @override
+  String get adSpace => 'Matangazo';
+
+  @override
+  String get filterButton => 'Chuja bidhaa';
+
+  @override
+  String get createPackButton => 'Unda kifurushi chako mwenyewe';
+
+  @override
+  String get continueToHome => 'Rudi nyumbani';
+
+  @override
+  String get emptyCartTitle => 'Oops!';
+
+  @override
+  String get emptyCartMessage => 'Pole, huna bidhaa katika karata yako';
+
+  @override
+  String get startBrowsing => 'Anza Kutafuta';
+
+  @override
+  String get pleaseLogIn => 'Tafadhali ingia ili kuendelea';
+
+  @override
+  String get cartIsEmpty => 'Karata yako ni tupu';
+
+  @override
+  String get totalToPay => 'Jumla ya kulipa:';
+
+  @override
+  String get processingPaymentLabel => 'Inaprosesa...';
+
+  @override
+  String get payNowButton => 'Lipa Sasa';
+
+  @override
+  String get securedByFlutterwave => 'Imelindwa na Flutterwave';
+
+  @override
+  String paymentFailedError(Object error) {
+    return 'Malipo yameshindikana: $error';
+  }
+
+  @override
+  String get continueButton => 'Endelea';
+
+  @override
+  String get selectDeliveryAddress => 'Chagua Anwani ya Kuletwa';
+
+  @override
+  String get addNew => 'Ongeza Mpya';
+
+  @override
+  String get homeAddress => 'Anwani ya Nyumbani';
+
+  @override
+  String get officeAddress => 'Anwani ya Ofisi';
+
+  @override
+  String get cardNumberLabel => 'Nambari ya Kadi';
+
+  @override
+  String get expiryDateLabel => 'Tarehe ya Kufa';
+
+  @override
+  String get cvvLabel => 'CVV';
+
+  @override
+  String get cardHolderNameLabel => 'Jina la Mmiliki wa Kadi';
+
+  @override
+  String get totalAmountLabel => 'Jumla ya Kiasi';
+
+  @override
+  String get resendRequest => 'Tuma Tena Ombi';
+
+  @override
+  String get waiting => 'Inasubiri...';
+
+  @override
+  String get standardDeliveryDesc => 'Siku 2–4 za biashara';
+
+  @override
+  String get standardDeliveryEta => 'Siku 2-4';
+
+  @override
+  String get expressDeliveryDesc => 'Kuletwa siku ijayo';
+
+  @override
+  String get expressDeliveryEta => 'Siku ijayo';
+
+  @override
+  String get bodaBodaSameDay => 'Sarakasi Siku Moja';
+
+  @override
+  String get bodaBodaSameDayDesc => 'Leo (Nairobi & Kampala tu)';
+
+  @override
+  String get bodaBodaSameDayEta => 'Leo';
+
+  @override
+  String get storePickupDesc => 'Chukua katika duka letu';
+
+  @override
+  String get storePickupEta => 'Saa 2-3';
+
+  @override
+  String get chooseACategory => 'Chagua aina';
+
+  @override
+  String get allProducts => 'Bidhaa Zote';
+
+  @override
+  String categoryLabel(Object name) {
+    return 'Aina ya $name';
+  }
+
+  @override
+  String browseCategory(Object name) {
+    return 'Vinjari $name';
+  }
+
+  @override
+  String get goBack => 'Rudi';
+
+  @override
+  String get vouchers => 'Vochi';
+
+  @override
+  String get address => 'Anwani';
+
+  @override
+  String get notifications => 'Arifa';
+
+  @override
+  String get setting => 'Mipangilio';
+
+  @override
+  String get payment => 'Malipo';
+
+  @override
+  String get logout => 'Toka';
+
+  @override
+  String get firstName => 'Jina la Kwanza';
+
+  @override
+  String get lastName => 'Jina la Mwisho';
+
+  @override
+  String get phone => 'Simu';
+
+  @override
+  String get gender => 'Jinsia';
+
+  @override
+  String get birthday => 'Siku ya Kuzaliwa';
+
+  @override
+  String get save => 'Hifadhi';
+
+  @override
+  String get saving => 'Inahifadhi...';
+
+  @override
+  String get profileSavedSuccess => 'Wasifu umehifadhiwa kwa mafanikio';
+
+  @override
+  String get profileSaveError => 'Hitilafu wakati wa kuhifadhi wasifu';
+
+  @override
+  String get unableToLoadProfile => 'Haiwezi kupakia wasifu';
+
+  @override
+  String get couldNotLoadProfile => 'Haiwezi kupakia maelezo ya wasifu';
+
+  @override
+  String get checkConnectionRetry =>
+      'Tafadhali angalia muunganisho wako na jaribu tena.';
+
+  @override
+  String get noSavedPaymentMethodsYet =>
+      'Hakuna njia za kulipwa zilizohifadhiwa bado';
+
+  @override
+  String get savedPaymentMethods => 'Njia za Kulipwa Zilizohifadhiwa';
+
+  @override
+  String get paymentOption => 'Chaguo la Malipo';
+
+  @override
+  String get deletePaymentMethodTitle => 'Futa Njia ya Kulipwa';
+
+  @override
+  String get deletePaymentMethodConfirm =>
+      'Una uhakika unataka kuondoa njia hii ya kulipwa? Kitendo hiki hakiwezi kutenduliwa.';
+
+  @override
+  String get newAddress => 'Anwani Mpya';
+
+  @override
+  String get phoneRequired => 'Nambari ya simu inahitajika';
+
+  @override
+  String get fullAddressName => 'Jina Kamili';
+
+  @override
+  String get addressLine1 => 'Anwani Mstari wa 1';
+
+  @override
+  String get addressLine2 => 'Anwani Mstari wa 2';
+
+  @override
+  String get state => 'Jimbo';
+
+  @override
+  String get zipCode => 'Msimu wa Posta';
+
+  @override
+  String get makeDefaultShippingAddress =>
+      'Weka Kama Anwani ya Kuletwa ya Kawaida';
+
+  @override
+  String get pleaseSignInAgainToSave =>
+      'Tafadhali ingia tena ili kuhifadhi anwani';
+
+  @override
+  String get pleaseSignInAgainToEdit =>
+      'Tafadhali ingia tena ili kuhariri wasifu wako.';
+
+  @override
+  String get errorLoadingProfile =>
+      'Haiwezi kupakia maelezo ya wasifu wako. Buruta kupitia kusasisha au jaribu tena.';
+
+  @override
+  String get pleaseSignInAgainToSaveProfile =>
+      'Tafadhali ingia tena ili kuhifadhi wasifu';
+
+  @override
+  String get unableToLoadPaymentMethods => 'Haiwezi kupakia njia za kulipwa';
+
+  @override
+  String get changePassword => 'Badilisha Nenosiri';
+
+  @override
+  String get changePhoneNumber => 'Badilisha Nambari ya Simu';
+
+  @override
+  String get editHomeAddress => 'Hariri Anwani ya Nyumbani';
+
+  @override
+  String get location => 'Eneo';
+
+  @override
+  String get profileSetting => 'Mipangilio ya Wasifu';
+
+  @override
+  String get deactivateAccount => 'Katisha Akaunti';
+
+  @override
+  String get pickLocationOnMap => 'Chagua Eneo kwenye Ramani';
+
+  @override
+  String get useThisLocation => 'Tumia Eneo Hili';
+
+  @override
+  String get currentLocation => 'Eneo la Sasa';
+
+  @override
+  String get searchAddress => 'Tafuta anwani';
+
+  @override
+  String get dragToAdjust => 'Sogea ramani kubadilisha eneo';
+
+  @override
+  String get locationPermissionDenied => 'Ruhusa ya eneo imekataliwa';
+
+  @override
+  String get enableLocationServices => 'Washa huduma za eneo';
+
+  @override
+  String get selectedLocation => 'Eneo lililochaguliwa';
+
+  @override
+  String get noLocationSelected => 'Hakuna eneo lililochaguliwa';
 }

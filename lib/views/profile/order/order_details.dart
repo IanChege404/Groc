@@ -244,7 +244,8 @@ class OrderDetailsPage extends ConsumerWidget {
                         ),
                   ),
                   const SizedBox(height: 8),
-                  ...order.items.map((item) => _buildItemTile(context, item, order.id, order.status)),
+                  ...order.items.map((item) =>
+                      _buildItemTile(context, item, order.id, order.status)),
                   const Divider(height: 24),
                   Row(
                     children: [

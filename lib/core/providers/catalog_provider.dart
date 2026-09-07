@@ -22,11 +22,12 @@ final allProductsProvider = FutureProvider<List<ProductModel>>((ref) async {
 });
 
 /// Filter state provider
-final productFilterProvider =
-    StateProvider<ProductFilterState>((ref) => ProductFilterState.defaultFilter);
+final productFilterProvider = StateProvider<ProductFilterState>(
+    (ref) => ProductFilterState.defaultFilter);
 
 /// Filtered products derived from all products + active filter
-final filteredProductsProvider = Provider<AsyncValue<List<ProductModel>>>((ref) {
+final filteredProductsProvider =
+    Provider<AsyncValue<List<ProductModel>>>((ref) {
   final productsAsync = ref.watch(allProductsProvider);
   final filter = ref.watch(productFilterProvider);
 

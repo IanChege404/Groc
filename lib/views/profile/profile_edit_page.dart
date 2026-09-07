@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../core/components/app_back_button.dart';
 import '../../core/components/retryable_error_view.dart';
+import '../../core/l10n/app_localizations.dart';
 import '../../core/mixins/refresh_on_return_mixin.dart';
 import '../../core/providers/auth_provider.dart';
 import '../../core/providers/user_data_provider.dart';
@@ -48,8 +49,8 @@ class _ProfileEditPageState extends ConsumerState<ProfileEditPage>
   }
 
   Future<void> _loadProfile() async {
-    final user = FirebaseAuth.instance.currentUser;
-    if (user == null) {
+    final uid = ref.read(authProvider).value;
+    if (uid == null || uid.isEmpty) {
       if (!mounted) return;
       setState(() {
         _isLoading = false;
@@ -59,8 +60,9 @@ class _ProfileEditPageState extends ConsumerState<ProfileEditPage>
     }
 
     try {
-      final profile = await ref.read(userDataProvider(user.uid).future);
-      final displayName = user.displayName?.trim() ?? '';
+      final profile = await ref.read(userDataProvider(uid).future);
+      final user = FirebaseAuth.instance.currentUser;
+      final displayName = user?.displayName?.trim() ?? '';
       final nameParts = displayName.isNotEmpty
           ? displayName
               .split(RegExp(r'\s+'))
@@ -74,7 +76,7 @@ class _ProfileEditPageState extends ConsumerState<ProfileEditPage>
       _lastNameController.text = (profile?['lastName'] as String?) ??
           (nameParts.length > 1 ? nameParts.sublist(1).join(' ') : '');
       _phoneController.text =
-          (profile?['phone'] as String?) ?? user.phoneNumber ?? '';
+          (profile?['phone'] as String?) ?? user?.phoneNumber ?? '';
       _genderController.text = (profile?['gender'] as String?) ?? '';
       _birthdayController.text = (profile?['birthday'] as String?) ?? '';
       setState(() {
@@ -105,37 +107,42 @@ class _ProfileEditPageState extends ConsumerState<ProfileEditPage>
       return;
     }
 
-    final user = FirebaseAuth.instance.currentUser;
-    if (user == null) {
+    final uid = ref.read(authProvider).value;
+    if (uid == null || uid.isEmpty) {
+      if (!mounted) return;
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text('Please sign in again to save profile')),
       );
       return;
     }
 
+    final user = FirebaseAuth.instance.currentUser;
+
     setState(() => _isSaving = true);
     final firstName = _firstNameController.text.trim();
     final lastName = _lastNameController.text.trim();
 
     try {
-      await _firestoreService.updateUserProfile(user.uid, {
+      await _firestoreService.updateUserProfile(uid, {
         'firstName': firstName,
         'lastName': lastName,
         'phone': _phoneController.text.trim(),
         'gender': _genderController.text.trim(),
         'birthday': _birthdayController.text.trim(),
-        'email': user.email,
+        'email': user?.email,
         'displayName': '$firstName $lastName'.trim(),
       });
 
-      await user.updateDisplayName('$firstName $lastName'.trim());
+      await user?.updateDisplayName('$firstName $lastName'.trim());
 
       if (!mounted) return;
       setState(() => _isSaving = false);
 
       /// Refresh the user profile provider to sync header and other UI elements
-      ref.invalidate(userProfileProvider);
+      /// Await the refresh to ensure new data is available before showing success
+      await ref.read(userProfileProvider.notifier).refresh();
 
+      if (!mounted) return;
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text('Profile saved successfully')),
       );
@@ -155,17 +162,18 @@ class _ProfileEditPageState extends ConsumerState<ProfileEditPage>
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     return Scaffold(
       backgroundColor: AppColors.cardColor,
       appBar: AppBar(
         leading: const AppBackButton(),
-        title: const Text('Profile'),
+        title: Text(l10n.profile),
       ),
       body: _isLoading
           ? const Center(child: CircularProgressIndicator())
           : _loadingError != null
               ? RetryableErrorView(
-                  title: 'Unable to load profile',
+                  title: l10n.unableToLoadProfile,
                   message: _loadingError!,
                   onRetry: _loadProfile,
                 )
@@ -189,70 +197,70 @@ class _ProfileEditPageState extends ConsumerState<ProfileEditPage>
                           mainAxisSize: MainAxisSize.min,
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            const Text('First Name'),
+                            Text(l10n.firstName),
                             const SizedBox(height: 8),
                             TextFormField(
                               controller: _firstNameController,
                               keyboardType: TextInputType.text,
                               textInputAction: TextInputAction.next,
                               decoration: InputDecoration(
-                                labelText: 'First Name',
+                                labelText: l10n.firstName,
                               ),
                               validator: (value) =>
                                   (value == null || value.trim().isEmpty)
-                                      ? 'First name is required'
+                                      ? l10n.requiredField(l10n.firstName)
                                       : null,
                             ),
                             const SizedBox(height: AppDefaults.padding),
-                            const Text('Last Name'),
+                            Text(l10n.lastName),
                             const SizedBox(height: 8),
                             TextFormField(
                               controller: _lastNameController,
                               keyboardType: TextInputType.text,
                               textInputAction: TextInputAction.next,
                               decoration: InputDecoration(
-                                labelText: 'Last Name',
+                                labelText: l10n.lastName,
                               ),
                               validator: (value) =>
                                   (value == null || value.trim().isEmpty)
-                                      ? 'Last name is required'
+                                      ? l10n.requiredField(l10n.lastName)
                                       : null,
                             ),
                             const SizedBox(height: AppDefaults.padding),
-                            const Text('Phone Number'),
+                            Text(l10n.phoneNumber),
                             const SizedBox(height: 8),
                             TextFormField(
                               controller: _phoneController,
                               keyboardType: TextInputType.phone,
                               textInputAction: TextInputAction.next,
                               decoration: InputDecoration(
-                                labelText: 'Phone Number',
+                                labelText: l10n.phoneNumber,
                               ),
                               validator: (value) =>
                                   (value == null || value.trim().isEmpty)
-                                      ? 'Phone number is required'
+                                      ? l10n.requiredField(l10n.phoneNumber)
                                       : null,
                             ),
                             const SizedBox(height: AppDefaults.padding),
-                            const Text('Gender'),
+                            Text(l10n.gender),
                             const SizedBox(height: 8),
                             TextFormField(
                               controller: _genderController,
                               keyboardType: TextInputType.text,
                               textInputAction: TextInputAction.next,
                               decoration: InputDecoration(
-                                labelText: 'Gender',
+                                labelText: l10n.gender,
                               ),
                             ),
                             const SizedBox(height: AppDefaults.padding),
-                            const Text('Birthday'),
+                            Text(l10n.birthday),
                             const SizedBox(height: 8),
                             TextFormField(
                               controller: _birthdayController,
                               keyboardType: TextInputType.datetime,
                               textInputAction: TextInputAction.done,
                               decoration: InputDecoration(
-                                labelText: 'Birthday',
+                                labelText: l10n.birthday,
                               ),
                             ),
                             const SizedBox(height: AppDefaults.padding),
@@ -260,7 +268,8 @@ class _ProfileEditPageState extends ConsumerState<ProfileEditPage>
                               width: double.infinity,
                               child: ElevatedButton(
                                 onPressed: _isSaving ? null : _saveProfile,
-                                child: Text(_isSaving ? 'Saving...' : 'Save'),
+                                child:
+                                    Text(_isSaving ? l10n.saving : l10n.save),
                               ),
                             ),
                           ],

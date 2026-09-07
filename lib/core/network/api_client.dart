@@ -1,12 +1,16 @@
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'dart:async';
+import 'dart:math';
 
 import '../config/env_config.dart';
 import '../utils/logger.dart';
 
 class ApiClient {
   static final ApiClient _instance = ApiClient._internal();
+
+  static const int _maxRetries = 3;
+  static const int _baseDelayMs = 1000;
 
   late http.Client _httpClient;
   late String _baseUrl;
@@ -68,9 +72,10 @@ class ApiClient {
         Logger.debug('GET $uri', 'ApiClient.get');
       }
 
-      final response = await _httpClient
-          .get(uri, headers: _buildHeaders(includeAuth: includeAuth))
-          .timeout(Duration(seconds: _timeoutSeconds));
+      final response = await _retryRequest(
+        () => _httpClient.get(uri,
+            headers: _buildHeaders(includeAuth: includeAuth)),
+      );
 
       return _parseResponse<T>(response, fromJson);
     } on TimeoutException {
@@ -101,16 +106,16 @@ class ApiClient {
         }
       }
 
-      final response = await _httpClient
-          .post(
-            uri,
-            headers: _buildHeaders(
-              includeAuth: includeAuth,
-              customHeaders: customHeaders,
-            ),
-            body: body != null ? jsonEncode(body) : null,
-          )
-          .timeout(Duration(seconds: _timeoutSeconds));
+      final response = await _retryRequest(
+        () => _httpClient.post(
+          uri,
+          headers: _buildHeaders(
+            includeAuth: includeAuth,
+            customHeaders: customHeaders,
+          ),
+          body: body != null ? jsonEncode(body) : null,
+        ),
+      );
 
       return _parseResponse<T>(response, fromJson);
     } on TimeoutException {
@@ -141,16 +146,16 @@ class ApiClient {
         }
       }
 
-      final response = await _httpClient
-          .put(
-            uri,
-            headers: _buildHeaders(
-              includeAuth: includeAuth,
-              customHeaders: customHeaders,
-            ),
-            body: body != null ? jsonEncode(body) : null,
-          )
-          .timeout(Duration(seconds: _timeoutSeconds));
+      final response = await _retryRequest(
+        () => _httpClient.put(
+          uri,
+          headers: _buildHeaders(
+            includeAuth: includeAuth,
+            customHeaders: customHeaders,
+          ),
+          body: body != null ? jsonEncode(body) : null,
+        ),
+      );
 
       return _parseResponse<T>(response, fromJson);
     } on TimeoutException {
@@ -181,16 +186,16 @@ class ApiClient {
         }
       }
 
-      final response = await _httpClient
-          .patch(
-            uri,
-            headers: _buildHeaders(
-              includeAuth: includeAuth,
-              customHeaders: customHeaders,
-            ),
-            body: body != null ? jsonEncode(body) : null,
-          )
-          .timeout(Duration(seconds: _timeoutSeconds));
+      final response = await _retryRequest(
+        () => _httpClient.patch(
+          uri,
+          headers: _buildHeaders(
+            includeAuth: includeAuth,
+            customHeaders: customHeaders,
+          ),
+          body: body != null ? jsonEncode(body) : null,
+        ),
+      );
 
       return _parseResponse<T>(response, fromJson);
     } on TimeoutException {
@@ -217,13 +222,13 @@ class ApiClient {
         Logger.debug('DELETE $uri', 'ApiClient.delete');
       }
 
-      final response = await _httpClient
-          .delete(
-            uri,
-            headers: _buildHeaders(includeAuth: includeAuth),
-            body: body != null ? jsonEncode(body) : null,
-          )
-          .timeout(Duration(seconds: _timeoutSeconds));
+      final response = await _retryRequest(
+        () => _httpClient.delete(
+          uri,
+          headers: _buildHeaders(includeAuth: includeAuth),
+          body: body != null ? jsonEncode(body) : null,
+        ),
+      );
 
       return _parseResponse<T>(response, fromJson);
     } on TimeoutException {
@@ -234,6 +239,50 @@ class ApiClient {
     } catch (e) {
       return ApiResponse.error(e.toString());
     }
+  }
+
+  /// Execute a request with exponential backoff retry for transient failures.
+  /// Retries on timeout, 429 (rate limit), and 5xx server errors.
+  Future<http.Response> _retryRequest(
+    Future<http.Response> Function() requestFn,
+  ) async {
+    int attempt = 0;
+    while (true) {
+      try {
+        final response = await requestFn().timeout(
+          Duration(seconds: _timeoutSeconds),
+        );
+
+        if (_isRetryable(response.statusCode) && attempt < _maxRetries) {
+          attempt++;
+          final delay = _baseDelayMs * pow(2, attempt - 1).toInt();
+          Logger.warning(
+            'Retryable status ${response.statusCode}, attempt $attempt/$_maxRetries after ${delay}ms',
+            'ApiClient',
+          );
+          await Future<void>.delayed(Duration(milliseconds: delay));
+          continue;
+        }
+
+        return response;
+      } on TimeoutException {
+        if (attempt < _maxRetries) {
+          attempt++;
+          final delay = _baseDelayMs * pow(2, attempt - 1).toInt();
+          Logger.warning(
+            'Timeout on attempt $attempt/$_maxRetries, retrying after ${delay}ms',
+            'ApiClient',
+          );
+          await Future<void>.delayed(Duration(milliseconds: delay));
+          continue;
+        }
+        rethrow;
+      }
+    }
+  }
+
+  bool _isRetryable(int statusCode) {
+    return statusCode == 429 || (statusCode >= 500 && statusCode < 600);
   }
 
   /// Build complete URI from endpoint

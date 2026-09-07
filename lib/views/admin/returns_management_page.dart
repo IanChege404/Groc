@@ -98,17 +98,16 @@ class _ReturnRequestCard extends ConsumerWidget {
                     vertical: 6,
                   ),
                   decoration: BoxDecoration(
-                    color: _getStatusColor(returnRequest.status)
-                        .withOpacity(0.1),
+                    color:
+                        _getStatusColor(returnRequest.status).withOpacity(0.1),
                     borderRadius: BorderRadius.circular(12),
                   ),
                   child: Text(
                     returnRequest.status.displayName,
-                    style:
-                        Theme.of(context).textTheme.labelSmall?.copyWith(
-                              color: _getStatusColor(returnRequest.status),
-                              fontWeight: FontWeight.bold,
-                            ),
+                    style: Theme.of(context).textTheme.labelSmall?.copyWith(
+                          color: _getStatusColor(returnRequest.status),
+                          fontWeight: FontWeight.bold,
+                        ),
                   ),
                 ),
               ],
@@ -120,7 +119,8 @@ class _ReturnRequestCard extends ConsumerWidget {
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text('Reason', style: Theme.of(context).textTheme.bodySmall),
+                    Text('Reason',
+                        style: Theme.of(context).textTheme.bodySmall),
                     Text(
                       returnRequest.reason,
                       style: Theme.of(context).textTheme.labelSmall,

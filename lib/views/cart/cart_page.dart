@@ -108,7 +108,7 @@ class _CartPageState extends ConsumerState<CartPage> {
                           onPressed: () {
                             context.push('/checkoutPage');
                           },
-                          child: const Text('Checkout'),
+                          child: Text(l10n.checkout),
                         ),
                       ),
                     ),

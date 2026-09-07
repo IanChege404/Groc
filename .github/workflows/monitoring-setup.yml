@@ -1,0 +1,165 @@
+name: Monitoring Setup
+
+on:
+  workflow_dispatch:
+    inputs:
+      environment:
+        description: 'Environment to setup monitoring'
+        required: true
+        default: 'production'
+        type: choice
+        options:
+          - production
+          - staging
+          - development
+
+jobs:
+  setup-monitoring:
+    name: Setup Monitoring & Logging
+    runs-on: ubuntu-latest
+    environment: ${{ inputs.environment }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Google Cloud
+        uses: google-github-actions/setup-gcloud@v2
+        with:
+          project_id: ${{ secrets.GCP_PROJECT_ID }}
+          service_account_key: ${{ secrets.GCP_SA_KEY }}
+          export_default_credentials: true
+
+      - name: Enable Required APIs
+        run: |
+          gcloud services enable monitoring.googleapis.com
+          gcloud services enable logging.googleapis.com
+          gcloud services enable clouderrorreporting.googleapis.com
+          gcloud services enable cloudtrace.googleapis.com
+
+      - name: Create Log Sink
+        run: |
+          gcloud logging sinks create groc-app-sink \
+            storage.googleapis.com/${{ secrets.GCP_LOGS_BUCKET }} \
+            --log-filter='resource.type="gae_app"' \
+            --project=${{ secrets.GCP_PROJECT_ID }} || true
+
+      - name: Create Uptime Checks
+        run: |
+          # Admin Dashboard
+          gcloud monitoring uptime create \
+            --display-name="Admin Dashboard" \
+            --resource-type="uptime_url" \
+            --hostname="${{ secrets.ADMIN_DOMAIN }}" \
+            --path="/" \
+            --check-interval=60 \
+            --project=${{ secrets.GCP_PROJECT_ID }} || true
+          
+          # Main App API
+          gcloud monitoring uptime create \
+            --display-name="App API" \
+            --resource-type="uptime_url" \
+            --hostname="${{ secrets.API_DOMAIN }}" \
+            --path="/health" \
+            --check-interval=60 \
+            --project=${{ secrets.GCP_PROJECT_ID }} || true
+
+      - name: Create Alert Policy - Error Rate
+        run: |
+          gcloud monitoring policies create \
+            --display-name="High Error Rate" \
+            --condition-display-name="Error rate > 5%" \
+            --condition-filter='resource.type="gae_app" AND severity >= ERROR' \
+            --condition-threshold-value=0.05 \
+            --condition-threshold-duration=300s \
+            --notification-channels="${{ secrets.ALERT_NOTIFICATION_CHANNEL }}" \
+            --project=${{ secrets.GCP_PROJECT_ID }} || true
+
+      - name: Create Alert Policy - Latency
+        run: |
+          gcloud monitoring policies create \
+            --display-name="High Latency" \
+            --condition-display-name="Latency > 2s" \
+            --condition-filter='resource.type="gae_app" AND metric.type="appengine.googleapis.com/system/network/latency"' \
+            --condition-threshold-value=2000 \
+            --condition-threshold-duration=300s \
+            --notification-channels="${{ secrets.ALERT_NOTIFICATION_CHANNEL }}" \
+            --project=${{ secrets.GCP_PROJECT_ID }} || true
+
+      - name: Create Dashboard
+        run: |
+          cat > /tmp/dashboard.json << 'EOF'
+          {
+            "displayName": "Pro Grocery Monitoring",
+            "mosaicLayout": {
+              "tiles": [
+                {
+                  "width": 6,
+                  "height": 4,
+                  "widget": {
+                    "title": "Request Count",
+                    "xyChart": {
+                      "dataSets": [{
+                        "timeSeriesQuery": {
+                          "timeSeriesFilter": {
+                            "filter": "resource.type=\"gae_app\"",
+                            "aggregation": {
+                              "alignmentPeriod": "60s",
+                              "perSeriesAligner": "ALIGN_RATE"
+                            }
+                          }
+                        }
+                      }]
+                    }
+                  }
+                },
+                {
+                  "width": 6,
+                  "height": 4,
+                  "widget": {
+                    "title": "Error Rate",
+                    "xyChart": {
+                      "dataSets": [{
+                        "timeSeriesQuery": {
+                          "timeSeriesFilter": {
+                            "filter": "resource.type=\"gae_app\" AND severity >= ERROR",
+                            "aggregation": {
+                              "alignmentPeriod": "60s",
+                              "perSeriesAligner": "ALIGN_RATE"
+                            }
+                          }
+                        }
+                      }]
+                    }
+                  }
+                }
+              ]
+            }
+          }
+          EOF
+          
+          gcloud monitoring dashboards create --config-from-file=/tmp/dashboard.json \
+            --project=${{ secrets.GCP_PROJECT_ID }} || true
+
+      - name: Create Log-Based Metrics
+        run: |
+          gcloud logging metrics create payment-success \
+            --description="Payment success count" \
+            --log-filter='textPayload=~"Payment successful" AND resource.type="gae_app"' \
+            --project=${{ secrets.GCP_PROJECT_ID }} || true
+          
+          gcloud logging metrics create payment-failure \
+            --description="Payment failure count" \
+            --log-filter='textPayload=~"Payment failed" AND resource.type="gae_app"' \
+            --project=${{ secrets.GCP_PROJECT_ID }} || true
+          
+          gcloud logging metrics create auth-failure \
+            --description="Auth failure count" \
+            --log-filter='textPayload=~"Authentication failed" AND resource.type="gae_app"' \
+            --project=${{ secrets.GCP_PROJECT_ID }} || true
+
+      - name: Verify Setup
+        run: |
+          echo "Monitoring setup complete!"
+          echo "Checking uptime checks..."
+          gcloud monitoring uptime list --project=${{ secrets.GCP_PROJECT_ID }} || true
+          echo "Checking alert policies..."
+          gcloud monitoring policies list --project=${{ secrets.GCP_PROJECT_ID }} || true

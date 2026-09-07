@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 
 import '../../../core/components/app_back_button.dart';
 import '../../../core/constants/constants.dart';
+import '../../../core/l10n/app_localizations.dart';
 import '../../../core/services/firestore_auth_service.dart';
 
 class ChangePasswordPage extends StatefulWidget {
@@ -18,7 +19,9 @@ class _ChangePasswordPageState extends State<ChangePasswordPage> {
   final _newController = TextEditingController();
   final _confirmController = TextEditingController();
   bool _isSaving = false;
-  bool _obscure = true;
+  bool _obscureCurrent = true;
+  bool _obscureNew = true;
+  bool _obscureConfirm = true;
 
   @override
   void dispose() {
@@ -33,8 +36,10 @@ class _ChangePasswordPageState extends State<ChangePasswordPage> {
 
     final user = FirebaseAuth.instance.currentUser;
     if (user == null) {
+      if (!mounted) return;
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Please sign in again')),
+        SnackBar(
+            content: Text(AppLocalizations.of(context)!.pleaseSignInAgain)),
       );
       return;
     }
@@ -44,12 +49,12 @@ class _ChangePasswordPageState extends State<ChangePasswordPage> {
     try {
       final credential = EmailAuthProvider.credential(
         email: user.email!,
-        password: _currentController.text.trim(),
+        password: _currentController.text,
       );
       await user.reauthenticateWithCredential(credential);
 
       final result = await FirestoreAuthService().changePassword(
-        _newController.text.trim(),
+        _newController.text,
       );
 
       if (!mounted) return;
@@ -57,35 +62,47 @@ class _ChangePasswordPageState extends State<ChangePasswordPage> {
 
       if (result.success) {
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Password updated successfully')),
+          SnackBar(
+              content:
+                  Text(AppLocalizations.of(context)!.passwordUpdatedSuccess)),
         );
         Navigator.pop(context);
       } else {
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text(result.message ?? 'Password update failed')),
+          SnackBar(
+            content: Text(
+              result.message ??
+                  AppLocalizations.of(context)!.passwordUpdateFailed,
+            ),
+          ),
         );
       }
     } on FirebaseAuthException catch (e) {
       if (!mounted) return;
       setState(() => _isSaving = false);
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text(e.message ?? 'Authentication failed')),
+        SnackBar(
+            content: Text(e.message ??
+                AppLocalizations.of(context)!.passwordUpdateFailed)),
       );
     } catch (e) {
       if (!mounted) return;
       setState(() => _isSaving = false);
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Error updating password: $e')),
+        SnackBar(
+            content: Text(
+                '${AppLocalizations.of(context)!.errorUpdatingPassword}: $e')),
       );
     }
   }
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     return Scaffold(
       appBar: AppBar(
         leading: const AppBackButton(),
-        title: const Text('Change Password'),
+        title: Text(l10n.updatePassword),
       ),
       backgroundColor: AppColors.cardColor,
       body: Center(
@@ -106,77 +123,136 @@ class _ChangePasswordPageState extends State<ChangePasswordPage> {
                 mainAxisSize: MainAxisSize.min,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const Text('Current Password'),
+                  Text(l10n.currentPassword),
                   const SizedBox(height: 8),
-                  TextFormField(
-                    controller: _currentController,
-                    obscureText: _obscure,
-                    validator: (value) => (value == null || value.isEmpty)
-                        ? 'Enter current password'
-                        : null,
-                    decoration: InputDecoration(
-                      suffixIcon: IconButton(
-                        icon: Icon(
-                          _obscure ? Icons.visibility : Icons.visibility_off,
+                  Semantics(
+                    label: l10n.currentPassword,
+                    child: TextFormField(
+                      controller: _currentController,
+                      obscureText: _obscureCurrent,
+                      validator: (value) => (value == null || value.isEmpty)
+                          ? l10n.requiredField(l10n.currentPassword)
+                          : null,
+                      decoration: InputDecoration(
+                        labelText: l10n.currentPassword,
+                        suffixIcon: Material(
+                          color: Colors.transparent,
+                          child: Semantics(
+                            button: true,
+                            label: _obscureCurrent
+                                ? l10n.showPassword
+                                : l10n.hidePassword,
+                            child: IconButton(
+                              icon: Icon(
+                                _obscureCurrent
+                                    ? Icons.visibility
+                                    : Icons.visibility_off,
+                              ),
+                              onPressed: () => setState(
+                                  () => _obscureCurrent = !_obscureCurrent),
+                            ),
+                          ),
                         ),
-                        onPressed: () => setState(() => _obscure = !_obscure),
                       ),
                     ),
                   ),
                   const SizedBox(height: AppDefaults.padding),
-                  const Text('New Password'),
+                  Text(l10n.newPassword),
                   const SizedBox(height: 8),
-                  TextFormField(
-                    controller: _newController,
-                    obscureText: _obscure,
-                    validator: (value) {
-                      if (value == null || value.length < 8) {
-                        return 'Password must be at least 8 characters';
-                      }
-                      return null;
-                    },
-                    decoration: InputDecoration(
-                      suffixIcon: IconButton(
-                        icon: Icon(
-                          _obscure ? Icons.visibility : Icons.visibility_off,
+                  Semantics(
+                    label: l10n.newPassword,
+                    child: TextFormField(
+                      controller: _newController,
+                      obscureText: _obscureNew,
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return l10n.requiredField(l10n.newPassword);
+                        }
+                        if (value.length < 8) {
+                          return l10n.passwordTooShort;
+                        }
+                        return null;
+                      },
+                      decoration: InputDecoration(
+                        labelText: l10n.newPassword,
+                        suffixIcon: Material(
+                          color: Colors.transparent,
+                          child: Semantics(
+                            button: true,
+                            label: _obscureNew
+                                ? l10n.showPassword
+                                : l10n.hidePassword,
+                            child: IconButton(
+                              icon: Icon(
+                                _obscureNew
+                                    ? Icons.visibility
+                                    : Icons.visibility_off,
+                              ),
+                              onPressed: () =>
+                                  setState(() => _obscureNew = !_obscureNew),
+                            ),
+                          ),
                         ),
-                        onPressed: () => setState(() => _obscure = !_obscure),
                       ),
                     ),
                   ),
                   const SizedBox(height: AppDefaults.padding),
-                  const Text('Confirm Password'),
+                  Text(l10n.confirmPassword),
                   const SizedBox(height: 8),
-                  TextFormField(
-                    controller: _confirmController,
-                    obscureText: _obscure,
-                    validator: (value) {
-                      if (value != _newController.text) {
-                        return 'Passwords do not match';
-                      }
-                      return null;
-                    },
-                    decoration: InputDecoration(
-                      suffixIcon: IconButton(
-                        icon: Icon(
-                          _obscure ? Icons.visibility : Icons.visibility_off,
+                  Semantics(
+                    label: l10n.confirmPassword,
+                    child: TextFormField(
+                      controller: _confirmController,
+                      obscureText: _obscureConfirm,
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return l10n.requiredField(l10n.confirmPassword);
+                        }
+                        if (value != _newController.text) {
+                          return l10n.passwordsDoNotMatch;
+                        }
+                        return null;
+                      },
+                      decoration: InputDecoration(
+                        labelText: l10n.confirmPassword,
+                        suffixIcon: Material(
+                          color: Colors.transparent,
+                          child: Semantics(
+                            button: true,
+                            label: _obscureConfirm
+                                ? l10n.showPassword
+                                : l10n.hidePassword,
+                            child: IconButton(
+                              icon: Icon(
+                                _obscureConfirm
+                                    ? Icons.visibility
+                                    : Icons.visibility_off,
+                              ),
+                              onPressed: () => setState(
+                                  () => _obscureConfirm = !_obscureConfirm),
+                            ),
+                          ),
                         ),
-                        onPressed: () => setState(() => _obscure = !_obscure),
                       ),
                     ),
                   ),
                   const SizedBox(height: AppDefaults.padding),
                   SizedBox(
                     width: double.infinity,
-                    child: ElevatedButton(
-                      onPressed: _isSaving ? null : _updatePassword,
-                      child: _isSaving
-                          ? const SizedBox(
-                              width: 20,
-                              height: 20,
-                              child: CircularProgressIndicator(strokeWidth: 2),
-                            )
-                          : const Text('Update Password'),
+                    child: Semantics(
+                      button: true,
+                      label: l10n.updatePassword,
+                      child: ElevatedButton(
+                        onPressed: _isSaving ? null : _updatePassword,
+                        child: _isSaving
+                            ? const SizedBox(
+                                width: 20,
+                                height: 20,
+                                child:
+                                    CircularProgressIndicator(strokeWidth: 2),
+                              )
+                            : Text(l10n.updatePassword),
+                      ),
                     ),
                   ),
                 ],

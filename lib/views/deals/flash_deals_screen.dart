@@ -205,8 +205,8 @@ class _DealCard extends StatelessWidget {
                     ElevatedButton(
                       onPressed: deal.stockLeft > 0
                           ? () => context.push('/productDetails', extra: {
-                                  'productId': deal.productId,
-                                })
+                                'productId': deal.productId,
+                              })
                           : null,
                       style: ElevatedButton.styleFrom(
                         backgroundColor: AppColors.primary,

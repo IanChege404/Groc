@@ -15,7 +15,10 @@ class IntroLoginBackgroundWrapper extends StatelessWidget {
       imageBuilder: (context, imageProvider) =>
           _IntroLoginBody(image: imageProvider),
       placeholder: (context, url) => const Skeleton(),
-      errorWidget: (context, url, error) => const Icon(Icons.error),
+      errorWidget: (context, url, error) => Semantics(
+        label: 'Failed to load background image',
+        child: const Icon(Icons.error),
+      ),
     );
   }
 }

@@ -74,8 +74,8 @@ class _LoginPageFormState extends State<LoginPageForm> {
 
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
-          content:
-              Text(result.message ?? AppLocalizations.of(context)!.loginFailed)),
+          content: Text(
+              result.message ?? AppLocalizations.of(context)!.loginFailed)),
     );
   }
 
@@ -134,8 +134,9 @@ class _LoginPageFormState extends State<LoginPageForm> {
                       color: Colors.transparent,
                       child: Semantics(
                         button: true,
-                        label:
-                            isPasswordShown ? 'Hide password' : 'Show password',
+                        label: isPasswordShown
+                            ? l10n.hidePassword
+                            : l10n.showPassword,
                         child: IconButton(
                           onPressed: onPassShowClicked,
                           icon: SvgPicture.asset(AppIcons.eye, width: 24),

@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:provider/provider.dart' as p;
+import 'package:sentry_flutter/sentry_flutter.dart';
 
 import 'core/config/env_config.dart';
 import 'core/l10n/app_localizations.dart';
@@ -24,61 +25,75 @@ Future<void> _onBackgroundMessage(RemoteMessage message) async {
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
-  // Initialize environment configuration
-  await EnvConfig.init();
+  // Initialize Sentry for error tracking
+  await SentryFlutter.init(
+    (options) {
+      options.dsn = const String.fromEnvironment('SENTRY_DSN');
+      options.tracesSampleRate = 0.2;
+      options.profilesSampleRate = 0.2;
+    },
+    appRunner: () async {
+      // Suppress debug logs in release builds
+      Logger.setDebugEnabled(
+          const bool.fromEnvironment('dart.vm.product') == false);
 
-  // Initialize Firebase
-  try {
-    await FirebaseService().initialize();
-  } catch (e) {
-    Logger.warning('Firebase init warning: $e', 'main');
-  }
+      // Initialize environment configuration
+      await EnvConfig.init();
 
-  // Initialize Hive local cache
-  try {
-    await HiveService().initialize();
-  } catch (e) {
-    Logger.warning('Hive init warning: $e', 'main');
-  }
+      // Initialize Firebase
+      try {
+        await FirebaseService().initialize();
+      } catch (e) {
+        Logger.warning('Firebase init warning: $e', 'main');
+      }
 
-  // Initialize FCM
-  try {
-    final fcm = FcmService();
-    await fcm.requestPermission();
-    fcm.initialize(
-      onForegroundMessage: (message) {
-        Logger.info(
-          'FCM foreground: ${message.notification?.title}',
-          'main',
+      // Initialize Hive local cache
+      try {
+        await HiveService().initialize();
+      } catch (e) {
+        Logger.warning('Hive init warning: $e', 'main');
+      }
+
+      // Initialize FCM
+      try {
+        final fcm = FcmService();
+        await fcm.requestPermission();
+        fcm.initialize(
+          onForegroundMessage: (message) {
+            Logger.info(
+              'FCM foreground: ${message.notification?.title}',
+              'main',
+            );
+          },
+          onBackgroundMessageTap: (message) {
+            Logger.info(
+              'FCM tapped: ${message.data}',
+              'main',
+            );
+          },
         );
-      },
-      onBackgroundMessageTap: (message) {
-        Logger.info(
-          'FCM tapped: ${message.data}',
-          'main',
-        );
-      },
-    );
 
-    // Save token for authenticated user
-    final user = FirebaseAuth.instance.currentUser;
-    if (user != null) {
-      await fcm.saveTokenToFirestore(user.uid);
-    }
-  } catch (e) {
-    Logger.warning('FCM init warning: $e', 'main');
-  }
+        // Save token for authenticated user
+        final user = FirebaseAuth.instance.currentUser;
+        if (user != null) {
+          await fcm.saveTokenToFirestore(user.uid);
+        }
+      } catch (e) {
+        Logger.warning('FCM init warning: $e', 'main');
+      }
 
-  // Register background message handler
-  FirebaseMessaging.onBackgroundMessage(_onBackgroundMessage);
+      // Register background message handler
+      FirebaseMessaging.onBackgroundMessage(_onBackgroundMessage);
 
-  runApp(
-    ProviderScope(
-      child: p.ChangeNotifierProvider(
-        create: (_) => LocaleProvider(),
-        child: const MyApp(),
-      ),
-    ),
+      runApp(
+        ProviderScope(
+          child: p.ChangeNotifierProvider(
+            create: (_) => LocaleProvider(),
+            child: const MyApp(),
+          ),
+        ),
+      );
+    },
   );
 }
 

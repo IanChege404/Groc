@@ -130,62 +130,64 @@ class _LanguageSelectScreenState extends State<LanguageSelectScreen> {
     final isSelected = _selectedLanguage == languageCode;
     final isDarkMode = Theme.of(context).brightness == Brightness.dark;
 
-    return GestureDetector(
-      onTap: () {
-        setState(() {
-          _selectedLanguage = languageCode;
-        });
-      },
-      child: Container(
-        decoration: BoxDecoration(
-          color: isSelected
-              ? (isDarkMode
-                  ? AppColors.surfaceVariantDark
-                  : AppColors.surfaceVariantLight)
-              : Colors.transparent,
-          borderRadius: BorderRadius.circular(12),
-          border: Border(
-            left: BorderSide(
-              color: isSelected
-                  ? Theme.of(context).colorScheme.primary
-                  : Colors.transparent,
-              width: 4,
-            ),
-          ),
-        ),
-        padding: const EdgeInsets.symmetric(
-          horizontal: AppDefaults.spacingMd,
-          vertical: AppDefaults.spacingMd,
-        ),
-        child: Row(
-          children: [
-            // Flag
-            Text(flag, style: const TextStyle(fontSize: 48)),
-            const SizedBox(width: AppDefaults.spacingMd),
-
-            // Language names
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(language, style: Theme.of(context).textTheme.bodyLarge),
-                  Text(
-                    nativeName,
-                    style: Theme.of(context).textTheme.bodySmall,
-                  ),
-                ],
+    return Semantics(
+      button: true,
+      selected: isSelected,
+      label: '$language, $nativeName',
+      child: GestureDetector(
+        onTap: () {
+          setState(() {
+            _selectedLanguage = languageCode;
+          });
+        },
+        child: Container(
+          decoration: BoxDecoration(
+            color: isSelected
+                ? (isDarkMode
+                    ? AppColors.surfaceVariantDark
+                    : AppColors.surfaceVariantLight)
+                : Colors.transparent,
+            borderRadius: BorderRadius.circular(12),
+            border: Border(
+              left: BorderSide(
+                color: isSelected
+                    ? Theme.of(context).colorScheme.primary
+                    : Colors.transparent,
+                width: 4,
               ),
             ),
-
-            Icon(
-              _selectedLanguage == languageCode
-                  ? Icons.radio_button_checked
-                  : Icons.radio_button_off,
-              color: _selectedLanguage == languageCode
-                  ? Theme.of(context).colorScheme.primary
-                  : Theme.of(context).colorScheme.outline,
-            ),
-          ],
+          ),
+          padding: const EdgeInsets.symmetric(
+            horizontal: AppDefaults.spacingMd,
+            vertical: AppDefaults.spacingMd,
+          ),
+          child: Row(
+            children: [
+              Text(flag, style: const TextStyle(fontSize: 48)),
+              const SizedBox(width: AppDefaults.spacingMd),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(language,
+                        style: Theme.of(context).textTheme.bodyLarge),
+                    Text(
+                      nativeName,
+                      style: Theme.of(context).textTheme.bodySmall,
+                    ),
+                  ],
+                ),
+              ),
+              Icon(
+                _selectedLanguage == languageCode
+                    ? Icons.radio_button_checked
+                    : Icons.radio_button_off,
+                color: _selectedLanguage == languageCode
+                    ? Theme.of(context).colorScheme.primary
+                    : Theme.of(context).colorScheme.outline,
+              ),
+            ],
+          ),
         ),
       ),
     );

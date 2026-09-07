@@ -41,7 +41,8 @@ final recentPurchasesProvider =
   }
 });
 
-final topProductsByPurchasesProvider = FutureProvider<List<String>>((ref) async {
+final topProductsByPurchasesProvider =
+    FutureProvider<List<String>>((ref) async {
   try {
     final firestore = FirebaseFirestore.instance;
     final thirtyDaysAgo = DateTime.now().subtract(const Duration(days: 30));
@@ -63,12 +64,10 @@ final topProductsByPurchasesProvider = FutureProvider<List<String>>((ref) async 
       }
     }
 
-    final topProducts = purchaseMap.entries
-        .toList()
-        ..sort((a, b) => b.value.compareTo(a.value));
+    final topProducts = purchaseMap.entries.toList()
+      ..sort((a, b) => b.value.compareTo(a.value));
 
-    final topProductIds =
-        topProducts.take(10).map((e) => e.key).toList();
+    final topProductIds = topProducts.take(10).map((e) => e.key).toList();
 
     Logger.info(
       'Loaded top products by purchases: ${topProductIds.length} products',

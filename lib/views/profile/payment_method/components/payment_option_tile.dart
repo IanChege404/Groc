@@ -33,43 +33,43 @@ class PaymentOptionTile extends StatelessWidget {
           onTap: onTap,
           borderRadius: AppDefaults.borderRadius,
           child: Container(
-          padding: const EdgeInsets.all(AppDefaults.padding),
-          decoration: BoxDecoration(
-            border: Border.all(width: 0.1, color: AppColors.placeholder),
-            borderRadius: AppDefaults.borderRadius,
-          ),
-          child: Row(
-            children: [
-              SizedBox(
-                width: 60,
-                height: 60,
-                child: AspectRatio(
-                  aspectRatio: 1 / 1,
-                  child: NetworkImageWithLoader(icon),
+            padding: const EdgeInsets.all(AppDefaults.padding),
+            decoration: BoxDecoration(
+              border: Border.all(width: 0.1, color: AppColors.placeholder),
+              borderRadius: AppDefaults.borderRadius,
+            ),
+            child: Row(
+              children: [
+                SizedBox(
+                  width: 60,
+                  height: 60,
+                  child: AspectRatio(
+                    aspectRatio: 1 / 1,
+                    child: NetworkImageWithLoader(icon),
+                  ),
                 ),
-              ),
-              const SizedBox(width: AppDefaults.padding),
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    label,
-                    style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                          color: Theme.of(context).colorScheme.onSurface,
-                        ),
-                  ),
-                  const SizedBox(height: AppDefaults.padding / 3),
-                  Text(
-                    accountName,
-                    style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                          color: Theme.of(context).colorScheme.onSurface,
-                        ),
-                  ),
-                ],
-              ),
-            ],
+                const SizedBox(width: AppDefaults.padding),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      label,
+                      style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                            color: Theme.of(context).colorScheme.onSurface,
+                          ),
+                    ),
+                    const SizedBox(height: AppDefaults.padding / 3),
+                    Text(
+                      accountName,
+                      style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                            color: Theme.of(context).colorScheme.onSurface,
+                          ),
+                    ),
+                  ],
+                ),
+              ],
+            ),
           ),
-        ),
         ),
       ),
     );

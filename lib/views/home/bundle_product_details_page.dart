@@ -7,6 +7,7 @@ import '../../core/components/price_and_quantity.dart';
 import '../../core/components/product_images_slider.dart';
 import '../../core/components/review_row_button.dart';
 import '../../core/constants/constants.dart';
+import '../../core/l10n/app_localizations.dart';
 import '../../core/models/bundle_model.dart';
 import '../../core/models/cart_item_model.dart';
 import '../../core/providers/cart_provider.dart';
@@ -46,18 +47,15 @@ class _BundleProductDetailsPageState
 
   bool _isBundleInCart(List<CartItemModel> items) {
     final bundle = _bundle;
-    if (bundle == null) {
-      return false;
-    }
-
+    if (bundle == null) return false;
     return items.any((item) => item.productId == bundle.id);
   }
 
   CartItemModel _buildCartItem({required int quantity}) {
     final bundle = _bundle!;
     return CartItemModel(
-      id: '', // Deterministic ID (userId_productId) is set by the provider
-      userId: '', // Will be set by the provider
+      id: '',
+      userId: '',
       productId: bundle.id,
       quantity: quantity,
       priceAtTimeOfAdd: bundle.price,
@@ -68,8 +66,9 @@ class _BundleProductDetailsPageState
 
   Future<void> _addBundleToCart({required int quantity}) async {
     final bundle = _bundle;
+    final l10n = AppLocalizations.of(context)!;
     if (bundle == null) {
-      _showSnackBar('Bundle information is missing');
+      _showSnackBar(l10n.bundleInformationMissing);
       return;
     }
 
@@ -80,8 +79,9 @@ class _BundleProductDetailsPageState
 
   Future<void> _toggleCart() async {
     final bundle = _bundle;
+    final l10n = AppLocalizations.of(context)!;
     if (bundle == null) {
-      _showSnackBar('Bundle information is missing');
+      _showSnackBar(l10n.bundleInformationMissing);
       return;
     }
 
@@ -96,7 +96,7 @@ class _BundleProductDetailsPageState
           .read(cartItemsProvider.notifier)
           .removeFromCart(existingItem.id);
       if (mounted) {
-        _showSnackBar('${bundle.name} removed from cart');
+        _showSnackBar('${bundle.name} ${l10n.removedFromWishlist}');
       }
       return;
     }
@@ -104,13 +104,13 @@ class _BundleProductDetailsPageState
     try {
       await _addBundleToCart(quantity: _selectedQuantity);
       if (mounted) {
-        _showSnackBar('${bundle.name} added to cart');
+        _showSnackBar('${bundle.name} ${l10n.addToCart}');
       }
     } catch (e) {
       if (mounted) {
         _showSnackBar(
-          'Failed to add item to cart: $e',
-          backgroundColor: Colors.red,
+          l10n.failedToLoadProducts,
+          backgroundColor: AppColors.error,
         );
       }
     }
@@ -118,8 +118,9 @@ class _BundleProductDetailsPageState
 
   Future<void> _buyNow() async {
     final bundle = _bundle;
+    final l10n = AppLocalizations.of(context)!;
     if (bundle == null) {
-      _showSnackBar('Bundle information is missing');
+      _showSnackBar(l10n.bundleInformationMissing);
       return;
     }
 
@@ -135,16 +136,13 @@ class _BundleProductDetailsPageState
         await _addBundleToCart(quantity: _selectedQuantity);
       }
 
-      if (!mounted) {
-        return;
-      }
-
+      if (!mounted) return;
       context.push('/checkoutPage');
     } catch (e) {
       if (mounted) {
         _showSnackBar(
-          'Unable to start checkout: $e',
-          backgroundColor: Colors.red,
+          l10n.failedToLoadProducts,
+          backgroundColor: AppColors.error,
         );
       }
     }
@@ -153,6 +151,7 @@ class _BundleProductDetailsPageState
   @override
   Widget build(BuildContext context) {
     final bundle = _bundle;
+    final l10n = AppLocalizations.of(context)!;
     final hasBundle = bundle != null;
     final cartState = ref.watch(cartItemsProvider);
     final isInCart = cartState.maybeWhen(
@@ -169,7 +168,7 @@ class _BundleProductDetailsPageState
       return Scaffold(
         appBar: AppBar(
           leading: const AppBackButton(),
-          title: const Text('Bundle Details'),
+          title: Text(l10n.bundleDetails),
         ),
         body: Center(
           child: Padding(
@@ -184,7 +183,7 @@ class _BundleProductDetailsPageState
                 ),
                 const SizedBox(height: 16),
                 Text(
-                  'Bundle information is missing',
+                  l10n.bundleInformationMissing,
                   textAlign: TextAlign.center,
                   style: Theme.of(context).textTheme.titleMedium,
                 ),

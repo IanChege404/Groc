@@ -4,7 +4,9 @@ import 'package:flutter_svg/svg.dart';
 
 import '../../core/components/app_back_button.dart';
 import '../../core/components/bundle_tile_square.dart';
+import '../../core/components/retryable_error_view.dart';
 import '../../core/constants/constants.dart';
+import '../../core/l10n/app_localizations.dart';
 import '../../core/providers/catalog_provider.dart';
 import 'package:go_router/go_router.dart';
 
@@ -13,11 +15,12 @@ class PopularPackPage extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final l10n = AppLocalizations.of(context)!;
     final bundlesAsync = ref.watch(featuredBundlesProvider);
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Popular Packs'),
+        title: Text(l10n.popularPacks),
         leading: const AppBackButton(),
       ),
       body: SafeArea(
@@ -25,11 +28,14 @@ class PopularPackPage extends ConsumerWidget {
           children: [
             bundlesAsync.when(
               loading: () => const Center(child: CircularProgressIndicator()),
-              error: (error, _) =>
-                  Center(child: Text('Failed to load bundles: $error')),
+              error: (error, _) => RetryableErrorView(
+                title: l10n.failedToLoadBundles,
+                message: l10n.checkConnectionAndRetry,
+                onRetry: () => ref.invalidate(featuredBundlesProvider),
+              ),
               data: (bundles) {
                 if (bundles.isEmpty) {
-                  return const Center(child: Text('No bundles found'));
+                  return Center(child: Text(l10n.noBundlesFound));
                 }
                 return Padding(
                   padding: const EdgeInsets.symmetric(
@@ -59,21 +65,36 @@ class PopularPackPage extends ConsumerWidget {
               child: Container(
                 padding: const EdgeInsets.all(AppDefaults.padding * 2),
                 decoration: BoxDecoration(
-                  color: Theme.of(
-                    context,
-                  ).colorScheme.surface.withValues(alpha: 0.80),
-                ),
-                child: ElevatedButton(
-                  onPressed: () {
-                    context.push('/createMyPack');
-                  },
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      SvgPicture.asset(AppIcons.shoppingBag),
-                      const SizedBox(width: AppDefaults.padding),
-                      const Text('Create Own Pack'),
+                  gradient: LinearGradient(
+                    begin: Alignment.topCenter,
+                    end: Alignment.bottomCenter,
+                    colors: [
+                      Theme.of(context)
+                          .colorScheme
+                          .surface
+                          .withValues(alpha: 0.0),
+                      Theme.of(context)
+                          .colorScheme
+                          .surface
+                          .withValues(alpha: 0.80),
                     ],
+                  ),
+                ),
+                child: Semantics(
+                  button: true,
+                  label: l10n.createOwnPack,
+                  child: ElevatedButton(
+                    onPressed: () {
+                      context.push('/createMyPack');
+                    },
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        SvgPicture.asset(AppIcons.shoppingBag),
+                        const SizedBox(width: AppDefaults.padding),
+                        Text(l10n.createOwnPack),
+                      ],
+                    ),
                   ),
                 ),
               ),

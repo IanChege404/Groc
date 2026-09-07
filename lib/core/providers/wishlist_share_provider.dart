@@ -33,18 +33,21 @@ final createWishlistShareLinkProvider = FutureProvider.family<
 
     return shareCode;
   } catch (e) {
-    Logger.error('Error creating share link: $e', 'createWishlistShareLinkProvider');
+    Logger.error(
+        'Error creating share link: $e', 'createWishlistShareLinkProvider');
     rethrow;
   }
 });
 
 final getSharedWishlistProvider =
-    FutureProvider.family<Map<String, dynamic>?, String>((ref, shareCode) async {
+    FutureProvider.family<Map<String, dynamic>?, String>(
+        (ref, shareCode) async {
   try {
     final service = ref.read(wishlistShareServiceProvider);
     return await service.getSharedWishlist(shareCode);
   } catch (e) {
-    Logger.error('Error getting shared wishlist: $e', 'getSharedWishlistProvider');
+    Logger.error(
+        'Error getting shared wishlist: $e', 'getSharedWishlistProvider');
     return null;
   }
 });
@@ -64,7 +67,8 @@ final userShareLinksProvider = FutureProvider((ref) async {
     final service = ref.read(wishlistShareServiceProvider);
     return await service.getUserShareLinks(userId);
   } catch (e) {
-    Logger.error('Error getting user share links: $e', 'userShareLinksProvider');
+    Logger.error(
+        'Error getting user share links: $e', 'userShareLinksProvider');
     return <Map<String, dynamic>>[];
   }
 });
@@ -95,7 +99,8 @@ final importSharedWishlistProvider = FutureProvider.family<void, String>((
       'importSharedWishlistProvider',
     );
   } catch (e) {
-    Logger.error('Error importing shared wishlist: $e', 'importSharedWishlistProvider');
+    Logger.error(
+        'Error importing shared wishlist: $e', 'importSharedWishlistProvider');
     rethrow;
   }
 });

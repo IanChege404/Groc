@@ -2,12 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_credit_card/flutter_credit_card.dart';
 import '../../core/components/app_back_button.dart';
-import '../../core/constants/app_colors.dart';
 import '../../core/constants/app_defaults.dart';
 import '../../core/l10n/app_localizations.dart';
 import '../../core/services/flutterwave_service.dart';
 import '../../core/utils/logger.dart';
 import 'package:go_router/go_router.dart';
+import 'package:url_launcher/url_launcher.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 class CardPaymentScreen extends ConsumerStatefulWidget {
   final double amount;
@@ -102,19 +103,24 @@ class _CardPaymentScreenState extends ConsumerState<CardPaymentScreen> {
                   Container(
                     padding: const EdgeInsets.all(14),
                     decoration: BoxDecoration(
-                      color: Colors.grey.shade50,
+                      color: Theme.of(context)
+                          .colorScheme
+                          .surfaceContainerHighest
+                          .withValues(alpha: 0.3),
                       borderRadius: BorderRadius.circular(AppDefaults.radius),
-                      border: Border.all(color: Colors.grey.shade200),
+                      border: Border.all(
+                        color: Theme.of(context).colorScheme.outlineVariant,
+                      ),
                     ),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        const Text('Total to pay:'),
+                        Text(l10n.totalToPay),
                         Text(
                           'KES ${widget.amount.toStringAsFixed(2)}',
-                          style: const TextStyle(
+                          style: TextStyle(
                             fontWeight: FontWeight.w800,
-                            color: AppColors.primary,
+                            color: Theme.of(context).colorScheme.primary,
                             fontSize: 16,
                           ),
                         ),
@@ -124,44 +130,42 @@ class _CardPaymentScreenState extends ConsumerState<CardPaymentScreen> {
                   const SizedBox(height: 20),
                   ElevatedButton(
                     onPressed: _isProcessing ? null : _processPayment,
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: AppColors.primary,
-                      foregroundColor: Colors.white,
-                      minimumSize: const Size(double.infinity, 52),
-                    ),
                     child: _isProcessing
-                        ? const Row(
+                        ? Row(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
-                              SizedBox(
+                              const SizedBox(
                                 width: 20,
                                 height: 20,
                                 child: CircularProgressIndicator(
-                                  color: Colors.white,
                                   strokeWidth: 2,
                                 ),
                               ),
-                              SizedBox(width: 10),
-                              Text('Processing...'),
+                              const SizedBox(width: 10),
+                              Text(l10n.processingPaymentLabel),
                             ],
                           )
-                        : const Text(
-                            'Pay Now',
-                            style: TextStyle(
+                        : Text(
+                            l10n.payNowButton,
+                            style: const TextStyle(
                               fontWeight: FontWeight.w700,
                               fontSize: 16,
                             ),
                           ),
                   ),
                   const SizedBox(height: 12),
-                  const Row(
+                  Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Icon(Icons.lock, size: 14, color: Colors.grey),
-                      SizedBox(width: 4),
+                      Icon(Icons.lock,
+                          size: 14,
+                          color: Theme.of(context).colorScheme.outline),
+                      const SizedBox(width: 4),
                       Text(
-                        'Secured by Flutterwave',
-                        style: TextStyle(color: Colors.grey, fontSize: 12),
+                        l10n.securedByFlutterwave,
+                        style: TextStyle(
+                            color: Theme.of(context).colorScheme.outline,
+                            fontSize: 12),
                       ),
                     ],
                   ),
@@ -177,6 +181,7 @@ class _CardPaymentScreenState extends ConsumerState<CardPaymentScreen> {
   Future<void> _processPayment() async {
     if (!(_formKey.currentState?.validate() ?? false)) return;
 
+    final l10n = AppLocalizations.of(context)!;
     setState(() => _isProcessing = true);
 
     try {
@@ -188,7 +193,8 @@ class _CardPaymentScreenState extends ConsumerState<CardPaymentScreen> {
         amount: widget.amount,
         currency: 'KES',
         redirectUrl: 'https://groc.app/payment/callback',
-        customerEmail: 'customer@groc.app',
+        customerEmail:
+            FirebaseAuth.instance.currentUser?.email ?? 'customer@groc.app',
         customerName: _cardHolderName,
         paymentTitle: 'Groc Order Payment',
         paymentDescription: 'Order #${widget.orderId}',
@@ -196,8 +202,16 @@ class _CardPaymentScreenState extends ConsumerState<CardPaymentScreen> {
 
       if (!mounted) return;
 
-      if (response.isSuccessful) {
-        context.go('/orderSuccessfull');
+      if (response.isSuccessful && response.paymentLink != null) {
+        final uri = Uri.parse(response.paymentLink!);
+        if (await canLaunchUrl(uri)) {
+          await launchUrl(uri, mode: LaunchMode.externalApplication);
+        }
+        if (!mounted) return;
+        context.go('/orderSuccessfull', extra: {
+          'orderId': widget.orderId,
+          'totalAmount': 'KES ${widget.amount.toStringAsFixed(2)}',
+        });
       } else {
         context.go('/orderFailed');
       }
@@ -205,7 +219,7 @@ class _CardPaymentScreenState extends ConsumerState<CardPaymentScreen> {
       Logger.error('Card payment error: $e', 'CardPaymentScreen');
       if (!mounted) return;
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Payment failed: $e')),
+        SnackBar(content: Text(l10n.paymentFailedError(e.toString()))),
       );
     } finally {
       if (mounted) setState(() => _isProcessing = false);

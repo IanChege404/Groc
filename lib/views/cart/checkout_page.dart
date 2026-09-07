@@ -10,31 +10,65 @@ import '../../core/providers/auth_provider.dart';
 import '../../core/providers/cart_provider.dart';
 import '../../core/providers/order_provider.dart';
 import '../../core/services/firestore_product_service.dart';
+import '../../core/services/firestore_service.dart';
 import 'components/checkout_address_selector.dart';
-import 'components/checkout_card_details.dart';
 import 'components/checkout_payment_systems.dart';
 import 'package:go_router/go_router.dart';
 
 /// Kenyan phone numbers in E.164 format, e.g. +254712345678
 final RegExp _kenyanPhoneRegExp = RegExp(r'^\+254[17]\d{8}$');
 
-class CheckoutPage extends ConsumerWidget {
+const double _deliveryFeeStandard = 150;
+
+class CheckoutPage extends ConsumerStatefulWidget {
   const CheckoutPage({super.key});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  ConsumerState<CheckoutPage> createState() => _CheckoutPageState();
+}
+
+class _CheckoutPageState extends ConsumerState<CheckoutPage> {
+  PaymentMethodType _selectedPayment = PaymentMethodType.mpesa;
+  String? _selectedAddressId;
+  String _selectedAddressFull = '';
+  double? _selectedLatitude;
+  double? _selectedLongitude;
+
+  @override
+  Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     return Scaffold(
       appBar: AppBar(
         leading: const AppBackButton(),
-        title: const Text('Checkout'),
+        title: Text(l10n.checkout),
       ),
       body: SingleChildScrollView(
         child: Column(
           children: [
-            const AddressSelector(),
-            const PaymentSystem(),
-            const CardDetails(),
-            PayNowButton(ref: ref),
+            AddressSelector(
+              selectedAddressId: _selectedAddressId,
+              onAddressSelected: (id, label, full, {latitude, longitude}) {
+                setState(() {
+                  _selectedAddressId = id;
+                  _selectedAddressFull = full;
+                  _selectedLatitude = latitude;
+                  _selectedLongitude = longitude;
+                });
+              },
+            ),
+            PaymentSystem(
+              selectedMethod: _selectedPayment,
+              onMethodChanged: (method) {
+                setState(() => _selectedPayment = method);
+              },
+            ),
+            PayNowButton(
+              selectedPayment: _selectedPayment,
+              selectedAddressFull: _selectedAddressFull,
+              selectedLatitude: _selectedLatitude,
+              selectedLongitude: _selectedLongitude,
+              deliveryFee: _deliveryFeeStandard,
+            ),
             const SizedBox(height: 16),
           ],
         ),
@@ -44,9 +78,20 @@ class CheckoutPage extends ConsumerWidget {
 }
 
 class PayNowButton extends ConsumerStatefulWidget {
-  const PayNowButton({super.key, required this.ref});
+  const PayNowButton({
+    super.key,
+    required this.selectedPayment,
+    required this.selectedAddressFull,
+    this.selectedLatitude,
+    this.selectedLongitude,
+    required this.deliveryFee,
+  });
 
-  final WidgetRef ref;
+  final PaymentMethodType selectedPayment;
+  final String selectedAddressFull;
+  final double? selectedLatitude;
+  final double? selectedLongitude;
+  final double deliveryFee;
 
   @override
   ConsumerState<PayNowButton> createState() => _PayNowButtonState();
@@ -79,10 +124,23 @@ class _PayNowButtonState extends ConsumerState<PayNowButton> {
     return confirmed ?? false;
   }
 
-  Future<void> _onPayNow() async {
-    if (_isSubmitting) {
-      return;
+  String get _paymentMethodName {
+    switch (widget.selectedPayment) {
+      case PaymentMethodType.mpesa:
+        return 'mpesa';
+      case PaymentMethodType.card:
+        return 'card';
+      case PaymentMethodType.stripe:
+        return 'stripe';
+      case PaymentMethodType.paypal:
+        return 'paypal';
+      case PaymentMethodType.cod:
+        return 'cash_on_delivery';
     }
+  }
+
+  Future<void> _onPayNow() async {
+    if (_isSubmitting) return;
 
     final l10n = AppLocalizations.of(context)!;
     final authState = ref.read(authProvider);
@@ -91,7 +149,7 @@ class _PayNowButtonState extends ConsumerState<PayNowButton> {
     final userId = authState.maybeWhen(data: (uid) => uid, orElse: () => null);
     if (userId == null || userId.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Please log in to continue')),
+        SnackBar(content: Text(l10n.pleaseLogIn)),
       );
       return;
     }
@@ -102,37 +160,52 @@ class _PayNowButtonState extends ConsumerState<PayNowButton> {
     );
 
     if (cartItems.isEmpty) {
-      ScaffoldMessenger.of(
-        context,
-      ).showSnackBar(const SnackBar(content: Text('Your cart is empty')));
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text(l10n.cartIsEmpty)),
+      );
+      return;
+    }
+
+    if (widget.selectedAddressFull.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Please select a delivery address')),
+      );
       return;
     }
 
     final phoneNumber = FirebaseAuth.instance.currentUser?.phoneNumber;
-    if (phoneNumber == null || !_kenyanPhoneRegExp.hasMatch(phoneNumber)) {
+    if (widget.selectedPayment == PaymentMethodType.mpesa &&
+        (phoneNumber == null || !_kenyanPhoneRegExp.hasMatch(phoneNumber))) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text(l10n.invalidPhoneNumber)),
       );
       return;
     }
 
-    final totalAmount = cartItems.fold<double>(
+    final subtotal = cartItems.fold<double>(
       0,
       (sum, item) => sum + (item.priceAtTimeOfAdd * item.quantity),
     );
+    final totalAmount = subtotal + widget.deliveryFee;
 
-    final confirmed = await _confirmPayment(totalAmount, phoneNumber);
-    if (!confirmed || !mounted) {
-      return;
-    }
+    final confirmed = await _confirmPayment(
+      widget.selectedPayment == PaymentMethodType.mpesa
+          ? totalAmount
+          : totalAmount,
+      phoneNumber ?? '',
+    );
+    if (!confirmed || !mounted) return;
+
+    setState(() => _isSubmitting = true);
 
     final orderId = 'ord_${DateTime.now().microsecondsSinceEpoch}';
 
-    // Fetch product details for each cart item
     final List<OrderItemModel> orderItems = [];
     final productService = FirestoreProductService();
+
     for (final item in cartItems) {
       final productResult = await productService.getProductById(item.productId);
+
       if (productResult.success && productResult.data != null) {
         final product = productResult.data!;
         orderItems.add(OrderItemModel(
@@ -143,14 +216,16 @@ class _PayNowButtonState extends ConsumerState<PayNowButton> {
           image: product.image,
         ));
       } else {
-        // Fallback if product fetch fails
-        orderItems.add(OrderItemModel(
-          productId: item.productId,
-          quantity: item.quantity,
-          priceAtTimeOfOrder: item.priceAtTimeOfAdd,
-          productName: 'Unknown Product',
-          image: '',
-        ));
+        if (!mounted) return;
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(
+                'Product "${item.productId}" not found. Please try again.'),
+            action: SnackBarAction(label: l10n.retry, onPressed: _onPayNow),
+          ),
+        );
+        setState(() => _isSubmitting = false);
+        return;
       }
     }
 
@@ -160,32 +235,56 @@ class _PayNowButtonState extends ConsumerState<PayNowButton> {
       items: orderItems,
       totalAmount: totalAmount,
       status: 'pending',
-      paymentMethod: 'mpesa',
-      shippingAddress: 'Office Address',
+      paymentMethod: _paymentMethodName,
+      shippingAddress: widget.selectedAddressFull,
       createdAt: DateTime.now(),
       updatedAt: DateTime.now(),
+      latitude: widget.selectedLatitude,
+      longitude: widget.selectedLongitude,
     );
-
-    setState(() {
-      _isSubmitting = true;
-    });
 
     try {
       await ref.read(ordersProvider.notifier).createOrder(order);
 
-      if (!mounted) {
-        return;
-      }
+      if (!mounted) return;
 
-      context.push('/mpesaProcessing', extra: {
-        'amount': totalAmount,
-        'phoneNumber': phoneNumber,
-        'orderId': orderId,
-      });
-    } catch (e) {
-      if (!mounted) {
-        return;
+      switch (widget.selectedPayment) {
+        case PaymentMethodType.mpesa:
+          context.push('/mpesaProcessing', extra: {
+            'amount': totalAmount,
+            'phoneNumber': phoneNumber,
+            'orderId': orderId,
+          });
+          break;
+        case PaymentMethodType.card:
+          context.push('/cardPayment', extra: {
+            'amount': totalAmount,
+            'orderId': orderId,
+          });
+          break;
+        case PaymentMethodType.stripe:
+          context.push('/stripePayment', extra: {
+            'amount': totalAmount,
+            'orderId': orderId,
+          });
+          break;
+        case PaymentMethodType.paypal:
+          context.push('/paypalPayment', extra: {
+            'amount': totalAmount,
+            'orderId': orderId,
+          });
+          break;
+        case PaymentMethodType.cod:
+          await FirestoreService().updateOrderStatus(orderId, 'confirmed');
+          if (!mounted) return;
+          context.go('/orderSuccessfull', extra: {
+            'orderId': orderId,
+            'totalAmount': 'KES ${totalAmount.toStringAsFixed(2)}',
+          });
+          break;
       }
+    } catch (e) {
+      if (!mounted) return;
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text(l10n.orderCreationFailed),
@@ -193,11 +292,7 @@ class _PayNowButtonState extends ConsumerState<PayNowButton> {
         ),
       );
     } finally {
-      if (mounted) {
-        setState(() {
-          _isSubmitting = false;
-        });
-      }
+      if (mounted) setState(() => _isSubmitting = false);
     }
   }
 

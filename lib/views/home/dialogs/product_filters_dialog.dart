@@ -359,7 +359,7 @@ class _PriceRangeState extends State<_PriceRange> {
             padding: EdgeInsets.symmetric(horizontal: 20.0),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [Text('\$0'), Text('\$50'), Text('\$100')],
+              children: [Text('KES 0'), Text('KES 50'), Text('KES 100')],
             ),
           ),
         ],

@@ -47,5 +47,9 @@
 		<true/>
 		<key>UIStatusBarHidden</key>
 		<false/>
+		<key>NSLocationWhenInUseUsageDescription</key>
+		<string>Groc needs your location to help you set delivery addresses accurately on the map.</string>
+		<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
+		<string>Groc needs your location to help you set delivery addresses accurately on the map.</string>
 	</dict>
 </plist>

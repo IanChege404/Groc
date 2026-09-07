@@ -4,6 +4,7 @@ import 'package:flutter_svg/svg.dart';
 import '../../../core/components/app_back_button.dart';
 import '../../../core/constants/constants.dart';
 import '../../../core/components/app_settings_tile.dart';
+import '../../../core/l10n/app_localizations.dart';
 import 'package:go_router/go_router.dart';
 
 class SettingsPage extends StatelessWidget {
@@ -11,10 +12,11 @@ class SettingsPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     return Scaffold(
       appBar: AppBar(
         leading: const AppBackButton(),
-        title: const Text('Settings'),
+        title: Text(l10n.settings),
       ),
       backgroundColor: AppColors.cardColor,
       body: Container(
@@ -30,51 +32,37 @@ class SettingsPage extends StatelessWidget {
         child: Column(
           children: [
             AppSettingsListTile(
-              label: 'Language',
-              trailing: SvgPicture.asset(AppIcons.right),
-              onTap: () =>
-                  context.push('/settingsLanguage')
-            ),
+                label: l10n.language,
+                trailing: SvgPicture.asset(AppIcons.right),
+                onTap: () => context.push('/settingsLanguage')),
             AppSettingsListTile(
-              label: 'Notification',
-              trailing: SvgPicture.asset(AppIcons.right),
-              onTap: () =>
-                  context.push('/settingsNotifications')
-            ),
+                label: l10n.notificationSettings,
+                trailing: SvgPicture.asset(AppIcons.right),
+                onTap: () => context.push('/settingsNotifications')),
             AppSettingsListTile(
-              label: 'Change Password',
-              trailing: SvgPicture.asset(AppIcons.right),
-              onTap: () =>
-                  context.push('/changePassword')
-            ),
+                label: l10n.changePassword,
+                trailing: SvgPicture.asset(AppIcons.right),
+                onTap: () => context.push('/changePassword')),
             AppSettingsListTile(
-              label: 'Change Phone Number',
-              trailing: SvgPicture.asset(AppIcons.right),
-              onTap: () =>
-                  context.push('/changePhoneNumber')
-            ),
+                label: l10n.changePhoneNumber,
+                trailing: SvgPicture.asset(AppIcons.right),
+                onTap: () => context.push('/changePhoneNumber')),
             AppSettingsListTile(
-              label: 'Edit Home Address',
-              trailing: SvgPicture.asset(AppIcons.right),
-              onTap: () =>
-                  context.push('/deliveryAddress')
-            ),
+                label: l10n.editHomeAddress,
+                trailing: SvgPicture.asset(AppIcons.right),
+                onTap: () => context.push('/deliveryAddress')),
             AppSettingsListTile(
-              label: 'Location',
-              trailing: SvgPicture.asset(AppIcons.right),
-              onTap: () =>
-                  context.push('/settingsLocation')
-            ),
+                label: l10n.location,
+                trailing: SvgPicture.asset(AppIcons.right),
+                onTap: () => context.push('/settingsLocation')),
             AppSettingsListTile(
-              label: 'Profile Setting',
-              trailing: SvgPicture.asset(AppIcons.right),
-              onTap: () => context.push('/profileEdit')
-            ),
+                label: l10n.profileSetting,
+                trailing: SvgPicture.asset(AppIcons.right),
+                onTap: () => context.push('/profileEdit')),
             AppSettingsListTile(
-              label: 'Deactivate Account',
-              trailing: SvgPicture.asset(AppIcons.right),
-              onTap: () => context.push('/intro_login')
-            ),
+                label: l10n.deactivateAccount,
+                trailing: SvgPicture.asset(AppIcons.right),
+                onTap: () => context.push('/intro_login')),
           ],
         ),
       ),

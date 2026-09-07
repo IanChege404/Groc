@@ -17,24 +17,28 @@ class ProfileSqureTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Material(
-      color: Colors.transparent,
-      child: InkWell(
-        onTap: onTap,
-        borderRadius: AppDefaults.borderRadius,
-        child: Padding(
-          padding: const EdgeInsets.all(AppDefaults.padding),
-          child: Column(
-            children: [
-              SvgPicture.asset(icon),
-              const SizedBox(height: 8),
-              Text(
-                label,
-                style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                      color: Theme.of(context).colorScheme.onSurface,
-                    ),
-              ),
-            ],
+    return Semantics(
+      button: true,
+      label: label,
+      child: Material(
+        color: Colors.transparent,
+        child: InkWell(
+          onTap: onTap,
+          borderRadius: AppDefaults.borderRadius,
+          child: Padding(
+            padding: const EdgeInsets.all(AppDefaults.padding),
+            child: Column(
+              children: [
+                SvgPicture.asset(icon),
+                const SizedBox(height: 8),
+                Text(
+                  label,
+                  style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                        color: Theme.of(context).colorScheme.onSurface,
+                      ),
+                ),
+              ],
+            ),
           ),
         ),
       ),

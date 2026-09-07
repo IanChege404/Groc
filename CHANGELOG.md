@@ -8,181 +8,132 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Added
-- New features in development
-
-### Changed
-- Changes to existing functionality
-
-### Fixed
-- Bug fixes
-
-### Deprecated
-- Soon-to-be removed features
-
-### Removed
-- Now removed features
+- Admin dashboard authentication middleware (T1)
+- Firestore rules for admin-only collections (T2)
+- Admin CI/CD pipeline (T3)
+- Sentry error monitoring for Flutter and admin (T4)
+- Dependabot configuration for dependency scanning (T5)
+- Terraform infrastructure as code (T7)
+- Versioning and rollback strategy documentation (T8)
+- Centralized logging and monitoring setup (T9)
+- Rate limiting on auth endpoints via Cloud Functions (T10)
+- Semantic versioning and changelog (T11)
+- Incident response runbook (T12)
 
 ### Security
-- Security vulnerability fixes
+- Fixed: Admin dashboard now requires authentication
+- Fixed: Products, categories, bundles, coupons, recipes, offers now require admin role for writes
+- Added: Rate limiting on login, signup, and password reset endpoints
+- Added: Password strength validation
+- Added: Account lockout protection
 
-## [1.0.0] - 2026-04-07
+### Changed
+- Updated Firestore rules to use `isAdmin()` function
+- Updated admin dashboard to use Firebase Admin SDK for auth verification
+
+### Fixed
+- Security vulnerability: Any user could access admin dashboard
+- Security vulnerability: Any authenticated user could modify products
+- Security vulnerability: No rate limiting on auth endpoints
+
+## [1.0.0] - 2026-07-22
 
 ### Added
-- ✨ Complete multi-vendor e-commerce platform built with Flutter
-- 🛍️ Public vendor store listing with featured vendors and categories
-- 🏪 Vendor dashboard for store management and analytics
-- 🛒 Shopping cart with item customization and quantity management
-- 💳 Checkout flow with address management and order summary
-- 📱 M-Pesa mobile money payment integration (Kenyan focus)
-- 👤 User profile with order history and saved addresses
-- ❤️ Wishlist functionality with favorite tracking
-- 🌙 Dark mode support across entire application
-- 🌍 Multi-language support: English, Swahili
-- ♿ WCAG 2.1 Level AA accessibility compliance
-- 📱 Responsive design across all device sizes (360px - 768px tablets)
-- 🎨 Smooth animations and micro-interactions throughout app
-- 🔔 Push notifications for orders and promotions
-- 💾 Local data persistence with SQLite
-- 🌐 Real-time data sync with Firebase
-- 📊 Analytics tracking with user behavior insights
-- 🔐 Secure authentication with Firebase Auth
-- 🗺️ Google Maps integration for location-based services
-- 🎯 Geofencing for location-based promotions
+- Initial release of Pro Grocery
+- Flutter e-commerce template for African markets
+- M-Pesa integration
+- Swahili localization (237+ strings)
+- WCAG 2.1 Level AA accessibility compliance
+- Dark mode support
+- Responsive design for mobile/tablet/desktop
+- Firebase authentication (email/password, Google)
+- Firestore database integration
+- Push notifications via FCM
+- Hive local cache for offline support
+- Admin dashboard with Next.js
+- Product management
+- Order management
+- User management
+- Coupon management
+- Analytics dashboard
 
-### Components
-- 🧩 20+ reusable UI components with consistent design language
-- ✏️ Customizable product cards with favorites, ratings, prices
-- 📦 Bundle product support with bulk pricing
-- ⭐ 5-star rating system with user reviews
-- 🖼️ Product image slider with pinch-zoom support
-- 🏷️ Dynamic pricing with discount badges
-- 🎬 Product animation effects (pop, slide, fade)
-- ♿ Accessible button components with proper touch targets
-- 🎨 Theme-aware components (auto light/dark mode)
-
-### Features
-- ✅ Real-time inventory tracking
-- ✅ Cart persistence across sessions
-- ✅ Order confirmation and tracking
-- ✅ User account management
-- ✅ Vendor verification system
-- ✅ Customer reviews and ratings
-- ✅ Search and filter functionality
-- ✅ Category browsing with lazy loading
-- ✅ Promotional banners and featured sections
-- ✅ Push notification system
-- ✅ Address book management
-- ✅ Payment method management
-- ✅ Refund and return tracking
-- ✅ Support ticket system
-
-### UI/UX
-- 🎨 Modern, clean design system
-- 📐 Consistent spacing and typography
-- 🔤 10+ reusable text styles
-- 🎨 15+ pre-defined color themes
-- 🌈 Light and dark mode variants
-- 📱 Touch-friendly UI with 48x48dp targets
-- ⌨️ Full keyboard navigation support
-- 🔍 Semantic HTML structure for accessibility
-
-### Performance
-- ⚡ 60fps smooth animations
-- 🚀 Sub-3-second app launch time
-- 💾 Efficient image caching with CachedNetworkImage
-- 📦 Code splitting and lazy loading
-- 🔋 Battery-optimized background tasks
-- 📊 Comprehensive performance monitoring
-
-### Testing & Quality
-- ✅ 100+ widget tests with full coverage
-- ✅ Integration tests for critical flows
-- ✅ Responsive testing framework for 4 device sizes
-- ✅ Accessibility compliance audit with WCAG 2.1 checklist
-- ✅ Dark mode validation across all components
-- ✅ 0 lint violations with very_good_analysis 6.0
-- ✅ Performance profiling and optimization
+### Security
+- Firebase security rules for all collections
+- Role-based access control (admin/customer/vendor)
+- Environment variable protection
+- Secure payment processing
 
 ### Documentation
-- 📖 Comprehensive README with setup instructions
-- 🔧 Contributing guidelines for open source contributors
-- 📚 Component library documentation
-- 🎯 API integration guide
-- ♿ Accessibility guidelines
-- 📱 Responsive design documentation
-- 🚀 Deployment guide
-- 🆔 Architecture overview
-- 📋 Troubleshooting guide
+- Comprehensive CLAUDE.md
+- Firebase setup guide
+- Accessibility audit checklist
+- Responsive testing guide
+- Firestore collections contract
 
-### Build & Deployment
-- 🤖 GitHub Actions CI/CD pipeline
-- ✅ Automated lint checking on PR
-- ✅ Automated testing on PR
-- 📦 Android APK build automation
-- 📊 Code coverage reporting
-- 🔒 Security scanning with Snyk
-- 🚀 One-command deployment script
+## [0.9.0] - 2026-07-15
 
-### Dependencies
-- flutter: ^3.9.0
-- provider: ^6.1.0
-- go_router: ^13.0.0
-- sqflite: ^2.3.0
-- firebase_core: latest
-- google_maps_flutter: latest
-- intl: latest
-- path_provider: latest
-- shared_preferences: latest
-- cached_network_image: latest
+### Added
+- Beta release for internal testing
+- Basic authentication flow
+- Product catalog
+- Shopping cart
+- Checkout process
+- Order history
+
+### Fixed
+- Various bug fixes and improvements
+
+## [0.8.0] - 2026-07-01
+
+### Added
+- Alpha release for development team
+- Core app structure
+- Basic UI components
+- Theme system
+- Localization framework
 
 ---
 
-## How to Upgrade
+## Version History
 
-### From Previous Versions
-Run: `flutter pub upgrade`
-
-### Breaking Changes
-None in this release - backward compatible with previous versions.
-
----
-
-## Future Roadmap (Phase 4+)
-
-### Planned Features
-- [ ] Vendor commission management
-- [ ] Advanced analytics dashboard
-- [ ] AI-powered product recommendations
-- [ ] Chat system between vendors and customers
-- [ ] Video product demonstrations
-- [ ] Augmented Reality product preview
-- [ ] Cryptocurrency payment option
-- [ ] NFT loyalty program
-
-### Planned Improvements
-- [ ] Performance optimization for low-end devices
-- [ ] Advanced filtering and search
-- [ ] Voice search capability
-- [ ] Offline mode with sync
-- [ ] Enhanced push notifications with rich media
-- [ ] Backend admin dashboard
-- [ ] Vendor mobile app (mirror interface)
+| Version | Date | Description |
+|---------|------|-------------|
+| 1.0.0 | 2026-07-22 | Production release |
+| 0.9.0 | 2026-07-15 | Beta release |
+| 0.8.0 | 2026-07-01 | Alpha release |
 
 ---
 
-## Support
+## Release Process
 
-For questions about changes, see:
-- 📖 [README.md](README.md)
-- 🤝 [CONTRIBUTING.md](CONTRIBUTING.md)
-- ⚖️ [LICENSE.md](LICENSE.md)
+See [VERSIONING_ROLLBACK.md](./docs/VERSIONING_ROLLBACK.md) for detailed release and rollback procedures.
 
----
+### Quick Release Commands
 
-## Contributors
+```bash
+# Update version
+flutter pub get
+cd admin && npm version patch
 
-See [CONTRIBUTORS.md](CONTRIBUTORS.md) for the list of all contributors.
+# Create release branch
+git checkout -b release/v1.0.0
 
----
+# Run quality checks
+dart analyze lib
+dart format --set-exit-if-changed lib
+flutter test --coverage
 
-**Generated**: April 7, 2026
+# Build release
+flutter build apk --release
+flutter build ios --release
+flutter build web --release
+cd admin && npm run build
+
+# Tag and push
+git tag -a v1.0.0 -m "Release v1.0.0"
+git push origin v1.0.0
+
+# Deploy
+firebase deploy --only hosting
+cd admin && vercel --prod
+```

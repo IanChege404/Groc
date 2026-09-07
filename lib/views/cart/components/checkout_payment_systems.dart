@@ -4,23 +4,47 @@ import '../../../core/constants/constants.dart';
 import '../../../core/l10n/app_localizations.dart';
 import 'checkout_payment_card_tile.dart';
 
-class PaymentSystem extends StatefulWidget {
-  const PaymentSystem({super.key});
+enum PaymentMethodType { mpesa, card, cod, stripe, paypal }
 
-  @override
-  State<PaymentSystem> createState() => _PaymentSystemState();
-}
+class PaymentSystem extends StatelessWidget {
+  const PaymentSystem({
+    super.key,
+    required this.selectedMethod,
+    required this.onMethodChanged,
+  });
 
-class _PaymentSystemState extends State<PaymentSystem> {
-  int _selectedIndex = 0;
+  final PaymentMethodType selectedMethod;
+  final ValueChanged<PaymentMethodType> onMethodChanged;
 
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
     final options = [
-      (label: l10n.mPesa, icon: AppIcons.masterCard),
-      (label: l10n.debitCard, icon: AppIcons.paypal),
-      (label: l10n.cashOnDelivery, icon: AppIcons.cashOnDelivery),
+      (
+        type: PaymentMethodType.mpesa,
+        label: l10n.mPesa,
+        icon: AppIcons.cashOnDelivery
+      ),
+      (
+        type: PaymentMethodType.card,
+        label: l10n.debitCard,
+        icon: AppIcons.masterCard
+      ),
+      (
+        type: PaymentMethodType.stripe,
+        label: l10n.stripePayment,
+        icon: AppIcons.masterCard
+      ),
+      (
+        type: PaymentMethodType.paypal,
+        label: l10n.paypalPayment,
+        icon: AppIcons.paypal
+      ),
+      (
+        type: PaymentMethodType.cod,
+        label: l10n.cashOnDelivery,
+        icon: AppIcons.paypal
+      ),
     ];
 
     return Column(
@@ -45,12 +69,12 @@ class _PaymentSystemState extends State<PaymentSystem> {
           scrollDirection: Axis.horizontal,
           child: Row(
             children: [
-              for (var i = 0; i < options.length; i++)
+              for (final option in options)
                 PaymentCardTile(
-                  label: options[i].label,
-                  icon: options[i].icon,
-                  onTap: () => setState(() => _selectedIndex = i),
-                  isActive: _selectedIndex == i,
+                  label: option.label,
+                  icon: option.icon,
+                  onTap: () => onMethodChanged(option.type),
+                  isActive: selectedMethod == option.type,
                 ),
             ],
           ),

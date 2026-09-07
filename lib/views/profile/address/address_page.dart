@@ -10,6 +10,7 @@ import '../../../core/mixins/refresh_on_return_mixin.dart';
 import '../../../core/providers/auth_provider.dart';
 import '../../../core/providers/user_data_provider.dart';
 import '../../../core/services/firestore_service.dart';
+import '../../../views/profile/address/components/map_preview_widget.dart';
 import 'package:go_router/go_router.dart';
 
 class AddressPage extends ConsumerStatefulWidget {
@@ -94,6 +95,9 @@ class _AddressPageState extends ConsumerState<AddressPage>
                             address: (address['line1'] as String?) ?? '',
                             number: (address['phone'] as String?) ?? '',
                             isActive: address['isDefault'] == true,
+                            latitude: (address['latitude'] as num?)?.toDouble(),
+                            longitude:
+                                (address['longitude'] as num?)?.toDouble(),
                             onTap: () => _setDefault(address['id'] as String),
                             onDelete: () =>
                                 _deleteAddress(address['id'] as String),
@@ -131,6 +135,8 @@ class AddressTile extends StatelessWidget {
     required this.label,
     required this.number,
     required this.isActive,
+    this.latitude,
+    this.longitude,
     required this.onTap,
     required this.onDelete,
   });
@@ -139,6 +145,8 @@ class AddressTile extends StatelessWidget {
   final String label;
   final String number;
   final bool isActive;
+  final double? latitude;
+  final double? longitude;
   final VoidCallback onTap;
   final VoidCallback onDelete;
 
@@ -154,27 +162,37 @@ class AddressTile extends StatelessWidget {
             child: AppRadio(isActive: isActive),
           ),
           const SizedBox(width: AppDefaults.padding),
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                label,
-                style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                      color: Theme.of(context).colorScheme.onSurface,
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  label,
+                  style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                        color: Theme.of(context).colorScheme.onSurface,
+                      ),
+                ),
+                const SizedBox(height: 4),
+                Text(address),
+                const SizedBox(height: 4),
+                Text(
+                  number,
+                  style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                        color: Theme.of(context).colorScheme.onSurface,
+                      ),
+                ),
+                if (latitude != null && longitude != null)
+                  Padding(
+                    padding: const EdgeInsets.only(top: 8),
+                    child: MapPreviewWidget(
+                      latitude: latitude,
+                      longitude: longitude,
+                      height: 80,
                     ),
-              ),
-              const SizedBox(height: 4),
-              Text(address),
-              const SizedBox(height: 4),
-              Text(
-                number,
-                style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                      color: Theme.of(context).colorScheme.onSurface,
-                    ),
-              ),
-            ],
+                  ),
+              ],
+            ),
           ),
-          const Spacer(),
           Column(
             children: [
               IconButton(

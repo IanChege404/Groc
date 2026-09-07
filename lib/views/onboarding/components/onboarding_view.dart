@@ -14,42 +14,44 @@ class OnboardingView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        SizedBox(
-          width: MediaQuery.of(context).size.width,
-          height: MediaQuery.of(context).size.width,
-          child: Padding(
-            padding: const EdgeInsets.all(AppDefaults.padding * 2),
-            child: NetworkImageWithLoader(
-              data.imageUrl,
-              fit: BoxFit.contain,
+    return SingleChildScrollView(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          SizedBox(
+            width: MediaQuery.of(context).size.width,
+            height: MediaQuery.of(context).size.width,
+            child: Padding(
+              padding: const EdgeInsets.all(AppDefaults.padding * 2),
+              child: NetworkImageWithLoader(
+                data.imageUrl,
+                fit: BoxFit.contain,
+              ),
             ),
           ),
-        ),
-        Padding(
-          padding: const EdgeInsets.all(AppDefaults.padding),
-          child: Column(
-            children: [
-              Text(
-                data.headline,
-                style: Theme.of(context)
-                    .textTheme
-                    .titleLarge
-                    ?.copyWith(fontWeight: FontWeight.bold),
-              ),
-              Padding(
-                padding: const EdgeInsets.all(AppDefaults.padding),
-                child: Text(
-                  data.description,
-                  textAlign: TextAlign.center,
+          Padding(
+            padding: const EdgeInsets.all(AppDefaults.padding),
+            child: Column(
+              children: [
+                Text(
+                  data.headline,
+                  style: Theme.of(context)
+                      .textTheme
+                      .titleLarge
+                      ?.copyWith(fontWeight: FontWeight.bold),
                 ),
-              ),
-            ],
+                Padding(
+                  padding: const EdgeInsets.all(AppDefaults.padding),
+                  child: Text(
+                    data.description,
+                    textAlign: TextAlign.center,
+                  ),
+                ),
+              ],
+            ),
           ),
-        ),
-      ],
+        ],
+      ),
     );
   }
 }

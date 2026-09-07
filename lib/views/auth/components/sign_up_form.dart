@@ -210,8 +210,8 @@ class _SignUpFormState extends State<SignUpForm> {
                         child: Semantics(
                           button: true,
                           label: isPasswordVisible
-                              ? 'Hide password'
-                              : 'Show password',
+                              ? l10n.hidePassword
+                              : l10n.showPassword,
                           child: IconButton(
                             onPressed: () {
                               setState(() {

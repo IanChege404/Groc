@@ -32,6 +32,35 @@ class _PaymentMethodPageState extends ConsumerState<PaymentMethodPage>
     }
   }
 
+  Future<void> _confirmDeleteMethod(String methodId) async {
+    final confirmed = await showDialog<bool>(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: const Text('Delete Payment Method'),
+        content: const Text(
+          'Are you sure you want to remove this payment method? This action cannot be undone.',
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context, false),
+            child: const Text('Cancel'),
+          ),
+          TextButton(
+            onPressed: () => Navigator.pop(context, true),
+            style: TextButton.styleFrom(
+              foregroundColor: Theme.of(context).colorScheme.error,
+            ),
+            child: const Text('Delete'),
+          ),
+        ],
+      ),
+    );
+
+    if (confirmed == true) {
+      await _deleteMethod(methodId);
+    }
+  }
+
   Future<void> _deleteMethod(String methodId) async {
     final userId = ref.read(authProvider).value;
     if (userId == null || userId.isEmpty) return;
@@ -66,7 +95,15 @@ class _PaymentMethodPageState extends ConsumerState<PaymentMethodPage>
             children: [
               const SizedBox(height: AppDefaults.padding),
               const AddNewCardRow(),
-              if (methods.isNotEmpty) const PaymentDefaultCard(),
+              if (methods.isNotEmpty) ...[
+                PaymentDefaultCard(
+                  cardNumber:
+                      '••••••••••••${(methods.first['last4'] as String?) ?? '0000'}',
+                  expiryDate: (methods.first['expiryDate'] as String?) ?? '',
+                  cardHolderName: (methods.first['label'] as String?) ?? 'Card',
+                ),
+                const SizedBox(height: AppDefaults.padding),
+              ],
               Padding(
                 padding: const EdgeInsets.all(AppDefaults.padding),
                 child: Text(
@@ -90,7 +127,7 @@ class _PaymentMethodPageState extends ConsumerState<PaymentMethodPage>
                         : 'https://i.imgur.com/lLUcMC1.png',
                     label: (method['label'] as String?) ?? 'Card',
                     accountName: '•••• ${method['last4'] as String? ?? '0000'}',
-                    onTap: () => _deleteMethod(method['id'] as String),
+                    onTap: () => _confirmDeleteMethod(method['id'] as String),
                   ),
                 ),
             ],

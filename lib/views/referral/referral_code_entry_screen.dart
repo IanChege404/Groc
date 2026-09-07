@@ -53,8 +53,7 @@ class _ReferralCodeEntryScreenState
                 Text(
                   'Enter a referral code to get rewards',
                   style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                        color:
-                            Theme.of(context).colorScheme.onSurfaceVariant,
+                        color: Theme.of(context).colorScheme.onSurfaceVariant,
                       ),
                 ),
                 const SizedBox(height: 24),
@@ -120,12 +119,11 @@ class _ReferralCodeEntryScreenState
     setState(() => _isLoading = true);
 
     try {
-      final referral = await ref
-          .read(getReferralByCodeProvider(code).future)
-          .timeout(
-            const Duration(seconds: 5),
-            onTimeout: () => null,
-          );
+      final referral =
+          await ref.read(getReferralByCodeProvider(code).future).timeout(
+                const Duration(seconds: 5),
+                onTimeout: () => null,
+              );
 
       if (!mounted) return;
 

@@ -5,14 +5,16 @@ class OrderModel {
   final String userId;
   final List<OrderItemModel> items;
   final double totalAmount;
-  final String status; // pending, completed, cancelled, refunded
-  final String paymentMethod; // mpesa, card, wallet
+  final String status;
+  final String paymentMethod;
   final String? shippingAddress;
   final String? trackingNumber;
   final DateTime createdAt;
   final DateTime updatedAt;
-  final DateTime? deletedAt; // Soft delete: null = active, set = archived
-  final String? deletionReason; // why order was deleted (refund, user request, etc)
+  final DateTime? deletedAt;
+  final String? deletionReason;
+  final double? latitude;
+  final double? longitude;
 
   OrderModel({
     required this.id,
@@ -27,6 +29,8 @@ class OrderModel {
     required this.updatedAt,
     this.deletedAt,
     this.deletionReason,
+    this.latitude,
+    this.longitude,
   });
 
   bool get isDeleted => deletedAt != null;
@@ -52,6 +56,8 @@ class OrderModel {
       updatedAt: (data['updatedAt'] as Timestamp?)?.toDate() ?? DateTime.now(),
       deletedAt: (data['deletedAt'] as Timestamp?)?.toDate(),
       deletionReason: data['deletionReason'],
+      latitude: (data['latitude'] as num?)?.toDouble(),
+      longitude: (data['longitude'] as num?)?.toDouble(),
     );
   }
 
@@ -68,6 +74,8 @@ class OrderModel {
       'updatedAt': Timestamp.fromDate(updatedAt),
       if (deletedAt != null) 'deletedAt': Timestamp.fromDate(deletedAt!),
       if (deletionReason != null) 'deletionReason': deletionReason,
+      if (latitude != null) 'latitude': latitude,
+      if (longitude != null) 'longitude': longitude,
     };
   }
 
@@ -84,6 +92,8 @@ class OrderModel {
     DateTime? updatedAt,
     DateTime? deletedAt,
     String? deletionReason,
+    double? latitude,
+    double? longitude,
   }) {
     return OrderModel(
       id: id ?? this.id,
@@ -98,6 +108,8 @@ class OrderModel {
       updatedAt: updatedAt ?? this.updatedAt,
       deletedAt: deletedAt ?? this.deletedAt,
       deletionReason: deletionReason ?? this.deletionReason,
+      latitude: latitude ?? this.latitude,
+      longitude: longitude ?? this.longitude,
     );
   }
 

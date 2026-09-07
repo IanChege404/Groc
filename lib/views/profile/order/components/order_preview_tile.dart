@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../../../../core/constants/constants.dart';
 import '../../../../core/l10n/app_localizations.dart';
+import '../../../../core/utils/order_status_utils.dart';
 
 class OrderPreviewTile extends StatelessWidget {
   const OrderPreviewTile({
@@ -59,8 +60,7 @@ class OrderPreviewTile extends StatelessWidget {
                 ),
                 const SizedBox(height: 8),
                 Semantics(
-                  label:
-                      '${l10n.statusLabel}: $statusLabel, ${_stepLabel(sliderValue)}',
+                  label: '${l10n.statusLabel}: $statusLabel',
                   child: Row(
                     children: [
                       Text(l10n.statusLabel),
@@ -143,69 +143,12 @@ class OrderPreviewTile extends StatelessWidget {
     );
   }
 
-  String _stepLabel(double value) {
-    if (value <= 0) return '1 of 4';
-    if (value <= 1) return '2 of 4';
-    if (value <= 2) return '3 of 4';
-    return '4 of 4';
-  }
+  String _normalizedStatus() => OrderStatusHelper.normalizeStatus(status);
 
-  String _normalizedStatus() {
-    return status.toLowerCase().trim();
-  }
+  double _orderSliderValue() => OrderStatusHelper.progressValue(status);
 
-  double _orderSliderValue() {
-    switch (_normalizedStatus()) {
-      case 'pending':
-        return 0;
-      case 'processing':
-        return 1;
-      case 'shipped':
-        return 2;
-      case 'delivery':
-      case 'completed':
-        return 3;
-      case 'cancelled':
-        return 3;
-      default:
-        return 0;
-    }
-  }
+  Color _orderColor() => OrderStatusHelper.colorFromStatus(status);
 
-  Color _orderColor() {
-    switch (_normalizedStatus()) {
-      case 'pending':
-        return const Color(0xFF4044AA);
-      case 'processing':
-        return const Color(0xFF41A954);
-      case 'shipped':
-        return const Color(0xFFE19603);
-      case 'delivery':
-      case 'completed':
-        return const Color(0xFF41AA55);
-      case 'cancelled':
-        return const Color(0xFFFF1F1F);
-      default:
-        return AppColors.primary;
-    }
-  }
-
-  String _statusLabel(AppLocalizations l10n) {
-    switch (_normalizedStatus()) {
-      case 'pending':
-        return l10n.orderStatusPending;
-      case 'processing':
-        return l10n.orderStatusProcessing;
-      case 'shipped':
-        return l10n.orderStatusShipped;
-      case 'delivery':
-        return l10n.orderStatusDelivery;
-      case 'completed':
-        return l10n.orderStatusCompleted;
-      case 'cancelled':
-        return l10n.orderStatusCancelled;
-      default:
-        return status;
-    }
-  }
+  String _statusLabel(AppLocalizations l10n) =>
+      OrderStatusHelper.labelFromStatus(status, l10n);
 }

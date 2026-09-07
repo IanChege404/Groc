@@ -60,7 +60,9 @@ class ProductFilterState {
     }
 
     // Filter by price range
-    result = result.where((p) => p.price >= priceMin && p.price <= priceMax).toList();
+    result = result
+        .where((p) => p.price >= priceMin && p.price <= priceMax)
+        .toList();
 
     // Filter by rating
     if (minRating > 0) {

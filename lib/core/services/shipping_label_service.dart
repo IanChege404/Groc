@@ -67,8 +67,7 @@ class ShippingLabelService {
           'GRC${DateTime.now().millisecondsSinceEpoch.toString().substring(0, 10)}';
 
       // Warehouse address (default - should be configurable)
-      const warehouseAddress =
-          'Groc Warehouse\nNairobi, Kenya\nP.O. Box 12345';
+      const warehouseAddress = 'Groc Warehouse\nNairobi, Kenya\nP.O. Box 12345';
 
       final label = ShippingLabel(
         id: '',
@@ -119,7 +118,8 @@ class ShippingLabelService {
     });
   }
 
-  Future<void> updateLabelUrl(String returnId, String labelId, String url) async {
+  Future<void> updateLabelUrl(
+      String returnId, String labelId, String url) async {
     try {
       await _firestore
           .collection('return_requests')

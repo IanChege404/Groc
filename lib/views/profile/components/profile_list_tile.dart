@@ -17,26 +17,30 @@ class ProfileListTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Material(
-      color: Colors.transparent,
-      child: InkWell(
-        onTap: onTap,
-        borderRadius: AppDefaults.borderRadius,
-        child: Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Row(
-            children: [
-              SvgPicture.asset(icon),
-              const SizedBox(width: 16),
-              Text(
-                title,
-                style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                      color: Theme.of(context).colorScheme.onSurface,
-                    ),
-              ),
-              const Spacer(),
-              SvgPicture.asset(AppIcons.right),
-            ],
+    return Semantics(
+      button: true,
+      label: title,
+      child: Material(
+        color: Colors.transparent,
+        child: InkWell(
+          onTap: onTap,
+          borderRadius: AppDefaults.borderRadius,
+          child: Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Row(
+              children: [
+                SvgPicture.asset(icon),
+                const SizedBox(width: 16),
+                Text(
+                  title,
+                  style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                        color: Theme.of(context).colorScheme.onSurface,
+                      ),
+                ),
+                const Spacer(),
+                SvgPicture.asset(AppIcons.right),
+              ],
+            ),
           ),
         ),
       ),

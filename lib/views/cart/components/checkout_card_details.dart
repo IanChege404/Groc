@@ -48,7 +48,8 @@ class _CardDetailsState extends State<CardDetails> {
             controller: cardNameController,
             keyboardType: TextInputType.text,
             decoration: InputDecoration(labelText: l10n.cardName),
-            // validator: Validators.requiredWithFieldName('Card'),
+            validator: (v) =>
+                (v == null || v.trim().isEmpty) ? l10n.cardName : null,
             textInputAction: TextInputAction.next,
           ),
           const SizedBox(height: AppDefaults.padding),
@@ -58,7 +59,8 @@ class _CardDetailsState extends State<CardDetails> {
             controller: cardNumberController,
             keyboardType: TextInputType.number,
             decoration: InputDecoration(labelText: l10n.cardNumber),
-            // validator: Validators.requiredWithFieldName('Card Number'),
+            validator: (v) =>
+                (v == null || v.trim().length < 13) ? l10n.cardNumber : null,
             textInputAction: TextInputAction.next,
           ),
           const SizedBox(height: AppDefaults.padding),
@@ -71,7 +73,9 @@ class _CardDetailsState extends State<CardDetails> {
                   controller: expirationDateController,
                   keyboardType: TextInputType.number,
                   decoration: InputDecoration(labelText: l10n.expirationDate),
-                  // validator: Validators.requiredWithFieldName('Card'),
+                  validator: (v) => (v == null || v.trim().length < 4)
+                      ? l10n.expirationDate
+                      : null,
                   textInputAction: TextInputAction.next,
                 ),
               ),
@@ -80,8 +84,10 @@ class _CardDetailsState extends State<CardDetails> {
                 child: TextFormField(
                   controller: cvvController,
                   keyboardType: TextInputType.number,
+                  obscureText: true,
                   decoration: InputDecoration(labelText: l10n.cvv),
-                  // validator: Validators.requiredWithFieldName('Card'),
+                  validator: (v) =>
+                      (v == null || v.trim().length < 3) ? l10n.cvv : null,
                   textInputAction: TextInputAction.next,
                 ),
               ),

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../../../core/l10n/app_localizations.dart';
 import '../../../core/models/bundle_model.dart';
 
 class BundleMetaData extends StatelessWidget {
@@ -7,11 +8,12 @@ class BundleMetaData extends StatelessWidget {
 
   final BundleModel bundle;
 
-  String _formatCurrency(double value) => 'Ksh ${value.toStringAsFixed(2)}';
+  String _formatCurrency(double value) => 'KES ${value.toStringAsFixed(2)}';
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    final l10n = AppLocalizations.of(context)!;
     final itemCount = bundle.itemNames.length;
     final savings = (bundle.mainPrice - bundle.price).clamp(
       0.0,
@@ -32,7 +34,7 @@ class BundleMetaData extends StatelessWidget {
                   color: theme.colorScheme.onSurface,
                 ),
               ),
-              Text('Items', style: theme.textTheme.bodyLarge),
+              Text(l10n.itemsLabel, style: theme.textTheme.bodyLarge),
             ],
           ),
           Column(
@@ -44,7 +46,7 @@ class BundleMetaData extends StatelessWidget {
                   color: theme.colorScheme.onSurface,
                 ),
               ),
-              Text('Reviews', style: theme.textTheme.bodyLarge),
+              Text(l10n.reviewsLabel, style: theme.textTheme.bodyLarge),
             ],
           ),
           Column(
@@ -56,7 +58,7 @@ class BundleMetaData extends StatelessWidget {
                   color: theme.colorScheme.onSurface,
                 ),
               ),
-              Text('Save', style: theme.textTheme.bodyLarge),
+              Text(l10n.saveLabel, style: theme.textTheme.bodyLarge),
             ],
           ),
         ],

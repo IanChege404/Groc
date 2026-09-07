@@ -63,6 +63,14 @@ GoogleService-Info.plist
 .platform_backups_*/
 .cloudinary-map.json
 
+# Temporary logs and generated images
+*.log
+logs.txt
+flutter_logs_*.txt
+g_0.png
+g_1.png
+gif.gif
+
 .github/Analyse_Codebase_skill.md
 screens.md
 roadmap.md

@@ -1,22 +1,22 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_credit_card/flutter_credit_card.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../core/constants/app_colors.dart';
 import '../../../core/constants/app_defaults.dart';
-
 import '../../../core/components/app_back_button.dart';
+import '../../../core/providers/auth_provider.dart';
 import '../../../core/services/firestore_service.dart';
 
-class AddNewCardPage extends StatefulWidget {
+class AddNewCardPage extends ConsumerStatefulWidget {
   const AddNewCardPage({super.key});
 
   @override
-  State<AddNewCardPage> createState() => _AddNewCardPageState();
+  ConsumerState<AddNewCardPage> createState() => _AddNewCardPageState();
 }
 
-class _AddNewCardPageState extends State<AddNewCardPage> {
+class _AddNewCardPageState extends ConsumerState<AddNewCardPage> {
   final _firestoreService = FirestoreService();
   late TextEditingController cardNumber;
   late TextEditingController expireDate;
@@ -57,9 +57,12 @@ class _AddNewCardPageState extends State<AddNewCardPage> {
   }
 
   Future<void> _saveCard() async {
-    final user = FirebaseAuth.instance.currentUser;
+    final userId = ref.read(authProvider).value;
     final number = cardNumber.text.replaceAll(RegExp(r'\D'), '');
-    if (user == null || number.length < 4 || holderName.text.trim().isEmpty) {
+    if (userId == null ||
+        userId.isEmpty ||
+        number.length < 4 ||
+        holderName.text.trim().isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text('Enter card holder name and card number')),
       );
@@ -68,7 +71,7 @@ class _AddNewCardPageState extends State<AddNewCardPage> {
 
     setState(() => _isSaving = true);
     final last4 = number.substring(number.length - 4);
-    await _firestoreService.addPaymentMethod(user.uid, {
+    await _firestoreService.addPaymentMethod(userId, {
       'label': holderName.text.trim(),
       'brand': _brandFromNumber(number),
       'last4': last4,
